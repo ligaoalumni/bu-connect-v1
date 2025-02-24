@@ -42,7 +42,9 @@ export const readEvent = async (
 
 	if (!event) return null;
 
-	return event;
+	return {
+		...event,
+	};
 };
 
 export const createEvent = async (
@@ -53,6 +55,7 @@ export const createEvent = async (
 	const createdEvent = await prisma.event.create({
 		data: {
 			...data,
+			endDate: data.endDate || data.startDate,
 			slug: generatedSlug,
 		},
 	});
@@ -82,6 +85,7 @@ export const readEvents = async ({
 		where,
 		skip: pagination ? pagination.limit * pagination?.page : undefined,
 		take: pagination ? pagination.limit : undefined,
+
 		include: {
 			alumni: true,
 			interested: true,

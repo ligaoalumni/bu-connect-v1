@@ -42,8 +42,7 @@ model Alumni {
   qrCode         String         @unique // Unique QR code for alumni
   user           User           @relation(fields: [userId], references: [id])
   userId         Int            @unique
-  startTime     DateTime        // Time when the alumni checked in
-  endTime       DateTime      // Time when the alumni checked out
+
   interested     Event[]        @relation("InterestEvent") // Many-to-many relationship with events
   events         Event[]        @relation("EventAttendees") // Many-to-many relationship with events
   notifications  Notification[] // Alumni can have multiple notifications
@@ -60,6 +59,9 @@ model Event {
   coverImg  String?
   startDate DateTime
   endDate   DateTime
+
+  startTime     DateTime        // Time when the alumni checked in
+  endTime       DateTime      // Time when the alumni checked out
 
   location String
 

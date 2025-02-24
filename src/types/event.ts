@@ -7,8 +7,11 @@ export interface Event {
 	content: string;
 	coverImg: string | null;
 	startDate: Date;
-
 	endDate: Date | null;
+
+	startTime: Date;
+	endTime: Date;
+
 	location: string;
 
 	interested: Alumni[];
