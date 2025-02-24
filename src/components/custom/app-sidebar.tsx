@@ -31,6 +31,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarRail,
+	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 

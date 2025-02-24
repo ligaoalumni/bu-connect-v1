@@ -37,7 +37,7 @@ export const AvatarDropdown = () => {
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem asChild>
-					<Link href="account-info">
+					<Link href="/account-info">
 						<User className="mr-2 h-4 w-4" />
 						<span>Profile</span>
 					</Link>
