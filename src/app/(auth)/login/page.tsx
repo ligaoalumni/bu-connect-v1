@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Form,
@@ -40,6 +39,8 @@ const LoginForm = () => {
 	const onSubmit = async (data: LoginFormData) => {
 		try {
 			const response = await login(data.email, data.password);
+
+			console.log(response, " qqq");
 
 			if (response.error.message) {
 				throw new Error(response.error.message);
@@ -128,7 +129,7 @@ const LoginForm = () => {
 
 			<CardFooter className="flex justify-center">
 				<p className="text-sm text-gray-600">
-					Don't have an account?{" "}
+					Don&apos;t have an account?{" "}
 					<Button variant="link" className="px-0 font-normal" type="button">
 						Sign up
 					</Button>
@@ -136,20 +137,6 @@ const LoginForm = () => {
 			</CardFooter>
 		</Card>
 	);
-};
-
-// Mock login function - replace with your actual API call
-const loginUser = async (data: LoginFormData) => {
-	// Simulate API call
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			if (data.email === "test@example.com") {
-				resolve({ success: true });
-			} else {
-				reject(new Error("Invalid credentials"));
-			}
-		}, 1000);
-	});
 };
 
 export default LoginForm;

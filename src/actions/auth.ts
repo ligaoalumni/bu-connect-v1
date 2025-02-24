@@ -2,7 +2,7 @@
 
 import { SignupFormSchema } from "@/lib/definitions";
 import prisma from "@/lib/prisma";
-import { createSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 import { readUser } from "@/models";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
@@ -33,7 +33,7 @@ export async function signup(
 			data: {
 				email,
 				password: hashedPassword,
-				role: "SUPER_ADMIN",
+				role: userRole,
 			},
 		});
 
@@ -53,6 +53,7 @@ export async function signup(
 
 		redirect("/");
 	} catch (error) {
+		console.log(`Error signing up: ${error}`);
 		throw error;
 	}
 }
@@ -82,6 +83,18 @@ export async function login(email: string, password: string) {
 
 		redirect("/");
 	} catch (error) {
+		console.log(`Error signing up: ${error}`);
+		throw error;
+	}
+}
+
+export async function logout() {
+	try {
+		await deleteSession();
+		// Redirect after logout
+		redirect("/");
+	} catch (error) {
+		console.log(`Error logging out: ${error}`);
 		throw error;
 	}
 }

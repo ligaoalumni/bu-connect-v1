@@ -17,7 +17,6 @@ const alumniRoutes = ["/account"];
 const protectedRoutes = adminRoutes
 	.concat(superAdminRoutes)
 	.concat(alumniRoutes);
-const publicRoutes = ["/"];
 const authRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {
