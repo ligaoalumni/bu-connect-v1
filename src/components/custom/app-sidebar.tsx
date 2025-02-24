@@ -1,5 +1,18 @@
 import * as React from "react";
-import { LayoutDashboard, Minus, Plus, QrCode } from "lucide-react";
+import {
+	CalendarDays,
+	CalendarPlus,
+	ChevronDown,
+	ChevronUp,
+	Cog,
+	GraduationCap,
+	LayoutDashboard,
+	ListOrdered,
+	QrCode,
+	UserCog,
+	UserPlus,
+	Users,
+} from "lucide-react";
 
 import {
 	Collapsible,
@@ -30,19 +43,55 @@ const data = {
 			url: "/dashboard",
 		},
 		{
-			title: "Community",
+			icon: CalendarDays,
+			title: "Events",
 			url: "#",
 			items: [
 				{
-					title: "Contribution Guide",
-					url: "#",
+					icon: CalendarPlus,
+					title: "Add New Event",
+					url: "/events/add-new-event",
+				},
+				{
+					icon: ListOrdered,
+					title: "List",
+					url: "/events",
 				},
 			],
+		},
+		{
+			icon: GraduationCap,
+			title: "Alumni",
+			url: "/alumni",
+		},
+		{
+			icon: UserCog,
+			title: "Admins",
+			url: "#",
+			items: [
+				{
+					icon: UserPlus,
+					title: "Add New	Admin",
+					url: "/admins/add-new-admin",
+				},
+				{
+					icon: Users,
+					title: "List",
+					url: "/admins",
+				},
+			],
+		},
+		{
+			icon: Cog,
+			title: "Settings",
+			url: "/settings",
 		},
 	],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+	...props
+}: React.ComponentProps<typeof Sidebar> & { pathname: string }) {
 	return (
 		<Sidebar {...props}>
 			<SidebarHeader>
@@ -76,26 +125,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 										<SidebarMenuItem>
 											<CollapsibleTrigger asChild>
 												<SidebarMenuButton>
+													<item.icon />
 													{item.title}
-													<Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
-													<Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+													<ChevronDown className="ml-auto group-data-[state=open]/collapsible:hidden" />
+													<ChevronUp className="ml-auto group-data-[state=closed]/collapsible:hidden" />
 												</SidebarMenuButton>
 											</CollapsibleTrigger>
 											{item.items?.length ? (
 												<CollapsibleContent>
 													<SidebarMenuSub>
 														{item.items.map((item) => (
-															<SidebarMenuSubItem key={item.title}>
-																<SidebarMenuSubButton
-																	asChild
-																	// isActive={item.isActive}
-																>
-																	<div>
-																		{/* TODO: ADD ICON */}
-																		<Link href={item.url}>{item.title}</Link>
-																	</div>
-																</SidebarMenuSubButton>
-															</SidebarMenuSubItem>
+															<Link href={item.url} key={item.title}>
+																<SidebarMenuSubItem>
+																	<SidebarMenuSubButton
+																		asChild
+																		isActive={item.url === props.pathname}>
+																		<div>
+																			{<item.icon />}
+																			{item.title}
+																		</div>
+																	</SidebarMenuSubButton>
+																</SidebarMenuSubItem>
+															</Link>
 														))}
 													</SidebarMenuSub>
 												</CollapsibleContent>
@@ -105,9 +156,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 								);
 							} else {
 								return (
-									<SidebarMenuItem key={index}>
-										<SidebarMenuButton>{item.title}</SidebarMenuButton>
-									</SidebarMenuItem>
+									<Link href={item.url} key={index}>
+										<SidebarMenuItem>
+											<SidebarMenuButton
+												asChild
+												isActive={item.url === props.pathname}>
+												<div>
+													{<item.icon />}
+													{item.title}
+												</div>
+											</SidebarMenuButton>
+										</SidebarMenuItem>
+									</Link>
 								);
 							}
 						})}

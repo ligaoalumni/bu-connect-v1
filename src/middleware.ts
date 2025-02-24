@@ -8,11 +8,11 @@ const adminRoutes = [
 	"/dashboard",
 	"/alumni",
 	"/events",
+	"/events/add-new-event",
 	"/settings",
-	"/add",
-	"/events/add",
+	"/account-info",
 ];
-const superAdminRoutes = ["/admins", "/admins/add"];
+const superAdminRoutes = ["/admins", "/admins/add-new-admin"];
 const alumniRoutes = ["/account"];
 const protectedRoutes = adminRoutes
 	.concat(superAdminRoutes)
@@ -31,8 +31,6 @@ export default async function middleware(req: NextRequest) {
 	// 3. Decrypt the session from the cookie
 	const cookie = (await cookies()).get("session")?.value;
 	const session = await decrypt(cookie);
-
-	console.log(cookie, session);
 
 	// 4. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !cookie && !session) {

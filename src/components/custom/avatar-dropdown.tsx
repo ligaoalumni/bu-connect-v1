@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Settings, User, Bell } from "lucide-react";
 import { LogoutButton } from "./logout-button";
+import Link from "next/link";
 
 export const AvatarDropdown = () => {
 	return (
@@ -35,9 +36,11 @@ export const AvatarDropdown = () => {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 
-				<DropdownMenuItem>
-					<User className="mr-2 h-4 w-4" />
-					<span>Profile</span>
+				<DropdownMenuItem asChild>
+					<Link href="account-info">
+						<User className="mr-2 h-4 w-4" />
+						<span>Profile</span>
+					</Link>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem>
