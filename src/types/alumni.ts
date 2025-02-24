@@ -11,6 +11,9 @@ export interface Alumni {
 	user: User<"ALUMNI">;
 	userId: number;
 
+	interested: Event[];
+	events: Event[];
+
 	createdAt: Date;
 	updatedAt: Date;
 }

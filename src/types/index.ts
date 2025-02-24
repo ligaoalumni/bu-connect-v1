@@ -3,6 +3,21 @@ import { z } from "zod";
 
 export * from "./alumni";
 export * from "./user";
+export * from "./event";
+
+export interface PaginationResult<T> {
+	count: number;
+	data: T[];
+	hasMore: boolean;
+}
+
+export type PaginationArgs = {
+	filter: string | number;
+	pagination?: {
+		limit: number;
+		page: number;
+	};
+};
 
 export type FormState =
 	| {

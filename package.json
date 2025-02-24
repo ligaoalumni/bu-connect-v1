@@ -36,6 +36,7 @@
     "react-hook-form": "^7.54.2",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
+    "unique-slug": "^5.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -43,6 +44,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/unique-slug": "^4.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
