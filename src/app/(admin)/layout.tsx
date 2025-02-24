@@ -44,16 +44,16 @@ export default function AdminLayout({
 
 		return (
 			<Fragment key={segment}>
-				<BreadcrumbItem>
+				<BreadcrumbItem className="">
 					{isLastSegment ? (
 						<BreadcrumbPage>{formattedSegment}</BreadcrumbPage>
 					) : (
-						<BreadcrumbLink href={href} asChild>
+						<BreadcrumbLink className="hidden md:block" href={href} asChild>
 							<Link href={href}>{formattedSegment}</Link>
 						</BreadcrumbLink>
 					)}
 				</BreadcrumbItem>
-				{!isLastSegment && <BreadcrumbSeparator />}
+				{!isLastSegment && <BreadcrumbSeparator className="hidden md:block" />}
 			</Fragment>
 		);
 	});
@@ -62,18 +62,18 @@ export default function AdminLayout({
 		<SidebarProvider>
 			<AppSidebar pathname={pathname} />
 			<SidebarInset>
-				<header className="flex h-16 shrink-0  sticky top-0 w-full items-center justify-between border-b px-4">
+				<header className="flex h-16 shrink-0 backdrop-blur-lg sticky top-0 w-full items-center justify-between border-b px-4">
 					<div className="flex items-center gap-2">
 						<SidebarTrigger className="-ml-1" />
 						<Separator orientation="vertical" className="mr-2 h-4" />
 						<Breadcrumb>
 							<BreadcrumbList>
-								<BreadcrumbItem>
+								<BreadcrumbItem className="hidden md:block">
 									<BreadcrumbLink href="/" asChild>
 										<Link href="/">Home</Link>
 									</BreadcrumbLink>
 								</BreadcrumbItem>
-								<BreadcrumbSeparator />
+								<BreadcrumbSeparator className="hidden md:block" />
 								{breadcrumbItems}
 							</BreadcrumbList>
 						</Breadcrumb>
@@ -83,7 +83,9 @@ export default function AdminLayout({
 						<AvatarDropdown />
 					</div>
 				</header>
-				<main className="flex flex-1 flex-col gap-4 p-4  ">{children}</main>
+				<main className="flex flex-1 flex-col gap-4 p-4 lg:p-8 xl:px-12  ">
+					{children}
+				</main>
 			</SidebarInset>
 		</SidebarProvider>
 	);
