@@ -114,3 +114,40 @@ export const readEvents = async ({
 		})),
 	};
 };
+
+export const updateEvent = async (
+	data: Omit<
+		Event,
+		"createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
+	>
+) => {
+	const isExists = await prisma.event.findUnique({
+		where: { id: data.id },
+	});
+
+	if (!isExists) {
+		throw new Error("Event not found");
+	}
+
+	let generatedSlug: string | undefined = undefined;
+
+	if (isExists.name !== data.name) {
+		const timestamp = Date.now(); // current timestamp
+		const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
+		const name = data.name.toLowerCase().replace(/ /g, "-");
+		generatedSlug = `${name}-${timestamp}-${randomPart}-${slug(name)}`;
+	}
+
+	const updatedEvent = await prisma.event.update({
+		data: {
+			...data,
+			endDate: data.endDate || data.startDate,
+			slug: generatedSlug,
+		},
+		where: {
+			id: isExists.id,
+		},
+	});
+
+	return updatedEvent;
+};

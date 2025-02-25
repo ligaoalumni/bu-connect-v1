@@ -76,6 +76,13 @@ RichTextEditorProps) => {
 					BulletExe,
 					ListItemExe,
 					OrderedListExe,
+					Image.configure({
+						allowBase64: true,
+						inline: true,
+						HTMLAttributes: {
+							class: "",
+						},
+					}),
 					StarterKit.configure({
 						heading: {
 							levels: [1, 2, 3],

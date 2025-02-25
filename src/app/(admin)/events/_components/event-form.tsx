@@ -1,6 +1,6 @@
 "use client";
 
-import { createEventAction } from "@/actions";
+import { createEventAction, updateEventAction } from "@/actions";
 import {
 	Button,
 	DatePickerWithRange,
@@ -52,26 +52,35 @@ export default function EventForm({ edit = false, event }: EventFormProps) {
 			});
 			return;
 		}
-		if (edit) {
-		} else {
-			try {
-				const event = await createEventAction(values);
 
-				toast.success("Success", {
-					description: "Event created successfully",
-					position: "top-center",
-					richColors: true,
-					duration: 5000,
-				});
-				router.push(`/events/${event.slug}/info`);
-			} catch (error) {
-				toast.error("Failed to create event", {
-					description: (error as Error).message,
-					richColors: true,
-					position: "top-center",
-					duration: 5000,
-				});
+		try {
+			let slug = "";
+			if (edit) {
+				const updatedEvent = await updateEventAction(
+					values,
+					event?.id as number
+				);
+				slug = updatedEvent.slug;
+			} else {
+				const newEvent = await createEventAction(values);
+				slug = newEvent.slug;
 			}
+
+			toast.success("Success", {
+				description: `Event ${edit ? "updated" : "created"} successfully`,
+				position: "top-center",
+				richColors: true,
+				duration: 5000,
+			});
+
+			router.push(`/events/${slug}/info`);
+		} catch (error) {
+			toast.error(`Failed to ${edit ? "update" : "create"} event`, {
+				description: (error as Error).message,
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
 		}
 	};
 
@@ -84,11 +93,24 @@ export default function EventForm({ edit = false, event }: EventFormProps) {
 					<h1 className="text-2xl md:text-3xl font-medium ">
 						{edit ? "Edit" : "Create New"} Event
 					</h1>
-					{edit && (
-						<Link href={`/events/${event?.slug}/info`}>
-							<Button variant="destructive">Cancel</Button>
-						</Link>
-					)}
+					<div className="flex gap-2">
+						{edit && (
+							<Link href={`/events/${event?.slug}/info`}>
+								<Button variant="destructive">Cancel</Button>
+							</Link>
+						)}
+						<Button
+							className="min-w-[200px]"
+							disabled={form.formState.isSubmitting}>
+							{form.formState.isSubmitting ? (
+								<Loader2 className="animate-spin" />
+							) : edit ? (
+								"Update Event"
+							) : (
+								"Create Event"
+							)}
+						</Button>
+					</div>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-5">
 					<div className="md:col-span-6 space-y-4">
@@ -230,18 +252,6 @@ export default function EventForm({ edit = false, event }: EventFormProps) {
 								</FormItem>
 							)}
 						/>
-
-						<div className="flex items-center justify-end">
-							<Button
-								className="min-w-[200px]"
-								disabled={form.formState.isSubmitting}>
-								{form.formState.isSubmitting ? (
-									<Loader2 className="animate-spin" />
-								) : (
-									"Create Event"
-								)}
-							</Button>
-						</div>
 					</div>
 				</div>
 			</form>
