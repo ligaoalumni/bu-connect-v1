@@ -1,4 +1,5 @@
-import { AspectRatio, Button, RichTextEditor } from "@/components";
+import { AspectRatio, Badge, Button, RichTextEditor } from "@/components";
+import { getEventStatus } from "@/lib/event";
 import { readEvent } from "@/models";
 import { format, formatDate, isSameDay } from "date-fns";
 import Image from "next/image";
@@ -34,7 +35,17 @@ export default async function Event({ params }: { params: { slug: string } }) {
 	return (
 		<div className="space-y-3">
 			<div className="flex justify-between items-center">
-				<h1 className="text-3xl font-medium">{event.name}</h1>
+				<h1 className="text-3xl font-medium">
+					{event.name}{" "}
+					<Badge className="text-lg text-gray-600 bg-white">
+						{getEventStatus({
+							endDate: event.endDate || event.startDate,
+							startDate: event.startDate,
+							endTime: event.endTime,
+							startTime: event.startTime,
+						})}
+					</Badge>
+				</h1>
 				<Link href={`/events/${event.slug}/edit`}>
 					<Button>Edit</Button>
 				</Link>

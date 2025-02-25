@@ -24,6 +24,7 @@ export * from "./ui/pagination";
 export * from "./ui/select";
 export * from "./ui/scroll-area";
 export * from "./ui/aspect-ratio";
+export * from "./ui/badge";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
