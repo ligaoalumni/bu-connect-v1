@@ -9,7 +9,7 @@ import * as bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-export async function signup(
+export async function signUpAction(
 	formData: z.infer<typeof SignupFormSchema>,
 	userRole: UserRole = "ALUMNI"
 ) {
@@ -58,7 +58,7 @@ export async function signup(
 	}
 }
 
-export async function login(email: string, password: string) {
+export async function loginAction(email: string, password: string) {
 	try {
 		const user = await readUser({ id: email });
 
