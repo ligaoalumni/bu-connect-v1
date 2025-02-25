@@ -3,7 +3,12 @@ import { z } from "zod";
 export const EventFormSchema = z.object({
 	name: z.string().nonempty("Name is required"),
 	coverImg: z.string().optional(),
-	content: z.string().nonempty("Content is required"),
+	content: z
+		.string()
+		.refine(
+			(value) => value !== `{"type":"doc","content":[{"type":"paragraph"}]}`,
+			"Content is required"
+		),
 	startDate: z.date(),
 	endDate: z.date().optional(),
 	location: z.string().nonempty("Location is required"),
