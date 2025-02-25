@@ -2,6 +2,7 @@
 import React from "react";
 import { ThemeProvider } from "./theme-provider";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
 	return (
@@ -13,6 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 				enableSystem
 				disableTransitionOnChange>
 				{children}
+				<Toaster />
 			</ThemeProvider>
 		</>
 	);

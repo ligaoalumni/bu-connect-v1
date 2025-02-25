@@ -3,6 +3,8 @@ import {
 	LoginFormSchema,
 	SignupFormSchema,
 } from "@/lib/definitions";
+import { ColumnDef } from "@tanstack/react-table";
+import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
 export * from "./alumni";
@@ -16,7 +18,7 @@ export interface PaginationResult<T> {
 }
 
 export type PaginationArgs = {
-	filter: string | number;
+	filter?: string | number;
 	pagination?: {
 		limit: number;
 		page: number;
@@ -46,3 +48,19 @@ export type UserRole = "ADMIN" | "SUPER_ADMIN" | "ALUMNI";
 export type LoginFormData = z.infer<typeof LoginFormSchema>;
 export type EventFormData = z.infer<typeof EventFormSchema>;
 export type SignUpFormData = z.infer<typeof SignupFormSchema>;
+
+type DataTablePagination = {
+	pageIndex: number;
+	pageSize: number;
+};
+
+export interface DataTableProps<TData, TValue> {
+	columns: ColumnDef<TData, TValue>[];
+	data: TData[];
+	rowCount: number;
+	loading?: boolean;
+	handleRefresh?: VoidFunction;
+	filterName?: string;
+	pagination: DataTablePagination;
+	setPagination: Dispatch<SetStateAction<DataTablePagination>>;
+}

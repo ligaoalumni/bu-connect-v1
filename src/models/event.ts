@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+
 import {
 	Event,
 	EventPartialRelation,
@@ -48,15 +49,22 @@ export const readEvent = async (
 };
 
 export const createEvent = async (
-	data: Omit<Event, "id" | "createdAt" | "updatedAt" | "interested" | "alumni">
+	data: Omit<
+		Event,
+		"id" | "createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
+	>
 ) => {
-	const generatedSlug = slug(data.name.toLowerCase().replace(/ /g, "-"));
+	const timestamp = Date.now(); // current timestamp
+	const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
+	const name = data.name.toLowerCase().replace(/ /g, "-");
+	const generatedSlug = slug(name);
 
 	const createdEvent = await prisma.event.create({
 		data: {
 			...data,
 			endDate: data.endDate || data.startDate,
-			slug: generatedSlug,
+			slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
+			// slug: "test-7-1740444042069-yoje5jym-394d791c",
 		},
 	});
 
@@ -66,7 +74,7 @@ export const createEvent = async (
 export const readEvents = async ({
 	filter,
 	pagination,
-}: PaginationArgs): Promise<PaginationResult<EventWithPagination>> => {
+}: PaginationArgs = {}): Promise<PaginationResult<EventWithPagination>> => {
 	let where: Prisma.EventWhereInput = {};
 
 	if (filter && typeof filter === "number") {
@@ -85,7 +93,9 @@ export const readEvents = async ({
 		where,
 		skip: pagination ? pagination.limit * pagination?.page : undefined,
 		take: pagination ? pagination.limit : undefined,
-
+		orderBy: {
+			id: "asc",
+		},
 		include: {
 			alumni: true,
 			interested: true,
