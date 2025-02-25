@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "./table";
 import { ColumnDef } from "@tanstack/react-table";
 import { EventWithPagination } from "@/types";
@@ -12,41 +12,45 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@/components";
-import { Info, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { getEventStatus } from "@/lib/event";
+import { readEventsAction } from "@/actions";
+import { toast } from "sonner";
 
-export default function EventsDataTable({
-	currentPage = 0,
-	pageSize = 10,
-	data,
-	total,
-}: {
-	currentPage: number;
-	pageSize: number;
-	total: number;
-	data: EventWithPagination[];
-}) {
+export default function EventsDataTable() {
+	const [data, setData] = useState<EventWithPagination[]>([]);
+	const [total, setTotal] = useState(0);
 	const [pagination, setPagination] = React.useState({
-		pageIndex: currentPage, //initial page index
-		pageSize: pageSize, //default page size
+		pageIndex: 0, //initial page index
+		pageSize: 10, //default page size
 	});
-	const router = useRouter();
+	const [loading, setLoading] = useState(false);
 
 	const columns: ColumnDef<EventWithPagination>[] = [
-		// {
-		// 	id: "id",
-		// 	header: "#",
-		// 	cell: ({ row }) => row.index + 1,
-		// 	enableHiding: false,
-		// 	enableSorting: true,
-		// },
 		{
-			accessorKey: "name",
-			header: "Event Name",
+			id: "id",
+			header: "#",
+			cell: ({ row }) => row.index + 1,
 			enableHiding: false,
 			enableSorting: true,
+		},
+		{
+			accessorKey: "name",
+			enableHiding: false,
+			enableSorting: true,
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() =>
+							column.toggleSorting(column.getIsSorted() === "asc")
+						}>
+						Event
+						<ArrowUpDown />
+					</Button>
+				);
+			},
 			cell: ({ row }) => {
 				return <p className="min-w-[100px]">{row.original.name}</p>;
 			},
@@ -144,16 +148,46 @@ export default function EventsDataTable({
 		},
 	];
 
+	const handleFetchData = async (filter?: string) => {
+		try {
+			setLoading(true);
+			const events = await readEventsAction({
+				filter,
+				pagination: {
+					limit: pagination.pageSize,
+					page: pagination.pageIndex,
+				},
+			});
+
+			setData(events.data);
+			setTotal(events.count);
+		} catch (error) {
+			toast.error(`Failed to fetch events`, {
+				description: (error as Error).message,
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		handleFetchData();
+	}, [pagination]);
+
 	return (
 		<DataTable
 			pagination={pagination}
 			setPagination={setPagination}
 			columns={columns}
-			filterName="name"
 			data={data}
+			filterName="events"
 			rowCount={total}
-			handleFilterChange={(queries) => {
-				router.push(`/events?${queries}`);
+			loading={loading}
+			handleSearch={(filter) => {
+				handleFetchData(filter);
 			}}
 		/>
 	);

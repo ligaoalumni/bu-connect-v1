@@ -12,16 +12,21 @@ import {
 
 interface DataTablePaginationProps<TData> {
 	table: Table<TData>;
+	loading?: boolean;
+	total: number;
 }
 
 export function DataTablePagination<TData>({
 	table,
+	loading,
+	total,
 }: DataTablePaginationProps<TData>) {
 	return (
 		<div className="flex py-2 items-center justify-between px-2">
 			<div className="flex items-center space-x-2">
 				<p className="text-sm font-medium">Rows per page</p>
 				<Select
+					disabled={loading}
 					value={`${table.getState().pagination.pageSize}`}
 					onValueChange={(value) => {
 						table.setPageSize(Number(value));
@@ -32,7 +37,7 @@ export function DataTablePagination<TData>({
 					<SelectContent side="top">
 						{[10, 25, 50, 100].map((pageSize) => (
 							<SelectItem
-								disabled={pageSize > table.getPageCount()}
+								disabled={total < pageSize}
 								key={pageSize}
 								value={`${pageSize}`}>
 								{pageSize}

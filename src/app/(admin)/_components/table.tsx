@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import {
+	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
@@ -28,39 +30,35 @@ import {
 	TableRow,
 } from "@/components";
 import { DataTableProps } from "@/types";
-import { PaginationButton } from "./data-table-pagination";
-import { PageSizeSelector } from "./page-size-selector";
-import { useSearchParams } from "next/navigation";
-import { never } from "zod";
+import { DataTablePagination } from "./pagination";
+import { LoadingOverlay } from "./loading-overlay";
 
 export default function DataTable<TData, TValue>({
 	columns,
 	data,
 	rowCount,
 	pagination,
-	filterName = "name",
-	handleFilterChange,
+	setPagination,
+	loading,
+	handleSearch,
+	filterName,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-	const searchParams = useSearchParams();
-
-	const currentPage = Number(searchParams.get("page")) || 1;
-	const pageSize = Number(searchParams.get("limit")) || 10;
-	const filter = searchParams.get("filter") || "";
-	const orderBy = searchParams.get("orderBy");
-	const order = searchParams.get("order");
-
-	const [filterInput, setFilterInput] = useState(filter);
+	const [filterInput, setFilterInput] = useState("");
 
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
 		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
+		onPaginationChange: setPagination,
 		manualPagination: true,
 		rowCount,
 		initialState: {
@@ -68,33 +66,11 @@ export default function DataTable<TData, TValue>({
 		},
 		state: {
 			sorting,
-			// columnFilters,
+			columnFilters,
 			columnVisibility,
 			pagination,
 		},
 	});
-
-	const handleSearch = (removeFilter?: boolean) => {
-		if (handleFilterChange) {
-			const query = new URLSearchParams();
-			if (!removeFilter) {
-				query.set("filter", filterInput);
-			} else {
-				setFilterInput("");
-				query.delete("filter");
-			}
-
-			if (orderBy) {
-				query.set("orderBy", orderBy);
-			}
-
-			if (order) {
-				query.set("order", order);
-			}
-
-			handleFilterChange(query.toString());
-		}
-	};
 
 	return (
 		<ScrollArea className="w-full border md:border p-2 md:p-2 rounded-lg max-w-[320px]  sm:min-w-[600px] sm:max-w-full mx-auto whitespace-nowrap overflow-x-auto">
@@ -109,7 +85,10 @@ export default function DataTable<TData, TValue>({
 									<X
 										className="h-4 w-4"
 										onClick={() => {
-											handleSearch(true);
+											if (handleSearch) {
+												handleSearch("");
+												setFilterInput("");
+											}
 										}}
 									/>
 								) : undefined
@@ -120,21 +99,25 @@ export default function DataTable<TData, TValue>({
 								value: filterInput,
 								onChange: (e) => setFilterInput(e.target.value),
 								onKeyUp: (e) => {
-									if (e.key === "Enter") {
-										handleSearch();
+									if (e.key === "Enter" && handleSearch && filterInput) {
+										handleSearch(filterInput);
 									}
 								},
 							}}
 						/>
 						<Button
-							onClick={handleSearch.bind(never, false)}
+							onClick={() => {
+								if (handleSearch && filterInput) {
+									handleSearch(filterInput);
+								}
+							}}
 							size="icon"
 							className="px-5">
 							<Search />
 						</Button>
 					</div>
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
+						<DropdownMenuTrigger disabled={loading} asChild>
 							<Button variant="outline" className="ml-auto">
 								Columns <ChevronDown />
 							</Button>
@@ -160,67 +143,57 @@ export default function DataTable<TData, TValue>({
 					</DropdownMenu>
 				</div>
 				<div className="rounded-md border">
-					<Table>
-						<TableHeader>
-							{table.getHeaderGroups().map((headerGroup) => (
-								<TableRow key={headerGroup.id}>
-									{headerGroup.headers.map((header) => {
-										return (
-											<TableHead key={header.id}>
-												{header.isPlaceholder
-													? null
-													: flexRender(
-															header.column.columnDef.header,
-															header.getContext()
-													  )}
-											</TableHead>
-										);
-									})}
-								</TableRow>
-							))}
-						</TableHeader>
-						<TableBody>
-							{table.getRowModel().rows?.length ? (
-								table.getRowModel().rows.map((row) => (
-									<TableRow
-										key={row.id}
-										data-state={row.getIsSelected() && "selected"}>
-										{row.getVisibleCells().map((cell) => (
-											<TableCell key={cell.id}>
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext()
-												)}
-											</TableCell>
-										))}
+					<LoadingOverlay isLoading={loading}>
+						<Table>
+							<TableHeader>
+								{table.getHeaderGroups().map((headerGroup) => (
+									<TableRow key={headerGroup.id}>
+										{headerGroup.headers.map((header) => {
+											return (
+												<TableHead key={header.id}>
+													{header.isPlaceholder
+														? null
+														: flexRender(
+																header.column.columnDef.header,
+																header.getContext()
+														  )}
+												</TableHead>
+											);
+										})}
 									</TableRow>
-								))
-							) : (
-								<TableRow>
-									<TableCell
-										colSpan={columns.length}
-										className="h-24 text-center">
-										No results.
-									</TableCell>
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
+								))}
+							</TableHeader>
+
+							<TableBody>
+								{table.getRowModel().rows?.length ? (
+									table.getRowModel().rows.map((row) => (
+										<TableRow
+											key={row.id}
+											data-state={row.getIsSelected() && "selected"}>
+											{row.getVisibleCells().map((cell) => (
+												<TableCell key={cell.id}>
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext()
+													)}
+												</TableCell>
+											))}
+										</TableRow>
+									))
+								) : (
+									<TableRow>
+										<TableCell
+											colSpan={columns.length}
+											className="h-24 text-center">
+											No results.
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</LoadingOverlay>
 				</div>
-				<div className="flex mt-5  gap-2 justify-center sm:justify-between   flex-wrap sm:flex-nowrap    items-center">
-					<PageSizeSelector currentPageSize={pageSize} total={rowCount} />
-					<div>
-						<PaginationButton
-							currentPage={currentPage}
-							pageSize={pageSize}
-							totalPages={
-								pagination.pageSize > 0
-									? Math.floor(rowCount / pagination.pageSize)
-									: 0
-							}
-						/>
-					</div>
-				</div>
+				<DataTablePagination total={rowCount} table={table} />
 			</div>
 
 			<ScrollBar className="md:hidden block " orientation="horizontal" />

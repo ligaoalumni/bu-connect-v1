@@ -1,8 +1,8 @@
 "use server";
 
 import { EventFormSchema } from "@/lib/definitions";
-import { createEvent, updateEvent } from "@/models";
-import { EventFormData } from "@/types";
+import { createEvent, readEvents, updateEvent } from "@/models";
+import { EventFormData, PaginationArgs } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const createEventAction = async (data: EventFormData) => {
@@ -45,5 +45,15 @@ export const updateEventAction = async (data: EventFormData, id: number) => {
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to create event");
+	}
+};
+
+export const readEventsAction = async (args: PaginationArgs = {}) => {
+	try {
+		const events = await readEvents(args);
+		return events;
+	} catch (error) {
+		console.log(error);
+		throw new Error("Failed to fetch events");
 	}
 };
