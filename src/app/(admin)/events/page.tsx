@@ -10,10 +10,12 @@ export default async function Page({
 }) {
 	const params = await searchParams;
 
-	const page = params.page ? Number(params.page) : 1;
+	const page = params.page ? Number(params.page) : 0;
 	const limit = params.limit ? Number(params.limit) : 10;
+	const filter = params.filter ? String(params.filter) : undefined;
 
 	const data = await readEvents({
+		filter,
 		pagination: { page, limit },
 	});
 

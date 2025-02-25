@@ -2,24 +2,22 @@
 
 import { useState } from "react";
 import {
-	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
 	flexRender,
 	getCoreRowModel,
-	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import {
 	Button,
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuTrigger,
-	Input,
+	InputWithIcon,
 	ScrollArea,
 	ScrollBar,
 	Table,
@@ -33,6 +31,7 @@ import { DataTableProps } from "@/types";
 import { PaginationButton } from "./data-table-pagination";
 import { PageSizeSelector } from "./page-size-selector";
 import { useSearchParams } from "next/navigation";
+import { never } from "zod";
 
 export default function DataTable<TData, TValue>({
 	columns,
@@ -40,24 +39,27 @@ export default function DataTable<TData, TValue>({
 	rowCount,
 	pagination,
 	filterName = "name",
+	handleFilterChange,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const searchParams = useSearchParams();
 
 	const currentPage = Number(searchParams.get("page")) || 1;
 	const pageSize = Number(searchParams.get("limit")) || 10;
+	const filter = searchParams.get("filter") || "";
+	const orderBy = searchParams.get("orderBy");
+	const order = searchParams.get("order");
+
+	const [filterInput, setFilterInput] = useState(filter);
 
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
 		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		manualPagination: true,
 		rowCount,
@@ -66,26 +68,71 @@ export default function DataTable<TData, TValue>({
 		},
 		state: {
 			sorting,
-			columnFilters,
+			// columnFilters,
 			columnVisibility,
 			pagination,
 		},
 	});
 
+	const handleSearch = (removeFilter?: boolean) => {
+		if (handleFilterChange) {
+			const query = new URLSearchParams();
+			if (!removeFilter) {
+				query.set("filter", filterInput);
+			} else {
+				setFilterInput("");
+				query.delete("filter");
+			}
+
+			if (orderBy) {
+				query.set("orderBy", orderBy);
+			}
+
+			if (order) {
+				query.set("order", order);
+			}
+
+			handleFilterChange(query.toString());
+		}
+	};
+
 	return (
 		<ScrollArea className="w-full border md:border p-2 md:p-2 rounded-lg max-w-[320px]  sm:min-w-[600px] sm:max-w-full mx-auto whitespace-nowrap overflow-x-auto">
-			<div className="w-full">
+			<div className="w-full p-1">
 				<div className="flex items-center py-4">
-					<Input
-						placeholder={`Filter ${filterName}...`}
-						value={
-							(table.getColumn(filterName)?.getFilterValue() as string) ?? ""
-						}
-						onChange={(event) =>
-							table.getColumn(filterName)?.setFilterValue(event.target.value)
-						}
-						className="max-w-sm"
-					/>
+					<div className="flex items-center gap-2">
+						<InputWithIcon
+							className=""
+							hasPadding
+							endIcon={
+								filterInput ? (
+									<X
+										className="h-4 w-4"
+										onClick={() => {
+											handleSearch(true);
+										}}
+									/>
+								) : undefined
+							}
+							inputProps={{
+								placeholder: `Filter ${filterName}...`,
+								className: "max-w-sm",
+								value: filterInput,
+								onChange: (e) => setFilterInput(e.target.value),
+								onKeyUp: (e) => {
+									if (e.key === "Enter") {
+										handleSearch();
+									}
+								},
+							}}
+						/>
+						<Button
+							onClick={handleSearch.bind(never, false)}
+							size="icon"
+							className="px-5">
+							<Search />
+						</Button>
+					</div>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline" className="ml-auto">

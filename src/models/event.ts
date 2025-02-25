@@ -74,6 +74,8 @@ export const createEvent = async (
 export const readEvents = async ({
 	filter,
 	pagination,
+	order,
+	orderBy,
 }: PaginationArgs = {}): Promise<PaginationResult<EventWithPagination>> => {
 	let where: Prisma.EventWhereInput = {};
 
@@ -85,17 +87,17 @@ export const readEvents = async ({
 
 	if (typeof filter === "string") {
 		where = {
-			OR: [{ slug: { contains: filter } }, { name: { contains: filter } }],
+			OR: [{ name: { contains: filter, mode: "insensitive" } }],
 		};
 	}
 
+	console.log(pagination, "qq");
+
 	const events = await prisma.event.findMany({
 		where,
-		skip: pagination ? pagination.limit * pagination?.page : undefined,
+		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
-		orderBy: {
-			id: "asc",
-		},
+		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
 		include: {
 			alumni: true,
 			interested: true,

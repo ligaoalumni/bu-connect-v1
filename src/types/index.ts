@@ -29,7 +29,16 @@ export type PaginationArgs = {
 		limit: number;
 		page: number;
 	};
+	orderBy?: string;
+	order?: "asc" | "desc";
 };
+
+export interface EventDateTime {
+	startDate: Date; // Date object
+	endDate: Date; // Date object
+	startTime: Date; // Time is part of the Date object
+	endTime: Date; // Time is part of the Date object
+}
 
 export type FormState =
 	| {
@@ -69,4 +78,5 @@ export interface DataTableProps<TData, TValue> {
 	filterName?: string;
 	pagination: DataTablePagination;
 	setPagination: Dispatch<SetStateAction<DataTablePagination>>;
+	handleFilterChange?: (value: string) => void;
 }

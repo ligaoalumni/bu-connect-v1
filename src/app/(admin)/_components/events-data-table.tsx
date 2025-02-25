@@ -12,8 +12,10 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@/components";
-import { Info, MoreHorizontal } from "lucide-react";
+import { Info, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { getEventStatus } from "@/lib/event";
 
 export default function EventsDataTable({
 	currentPage = 0,
@@ -30,6 +32,7 @@ export default function EventsDataTable({
 		pageIndex: currentPage, //initial page index
 		pageSize: pageSize, //default page size
 	});
+	const router = useRouter();
 
 	const columns: ColumnDef<EventWithPagination>[] = [
 		// {
@@ -56,6 +59,17 @@ export default function EventsDataTable({
 			cell: ({ row }) => {
 				return <p className="min-w-[100px]">{row.original.location}</p>;
 			},
+		},
+		{
+			accessorKey: "endDate",
+			header: "Status",
+			cell: ({ row }) =>
+				getEventStatus({
+					endDate: row.original.endDate || row.original.startDate,
+					startDate: row.original.startDate,
+					startTime: row.original.startTime,
+					endTime: row.original.endTime,
+				}),
 		},
 		{
 			accessorKey: "startDate",
@@ -113,11 +127,16 @@ export default function EventsDataTable({
 									View Details
 								</Link>
 							</DropdownMenuItem>
-							{/* <DropdownMenuItem
-								onClick={() => setSelectedToDelete(admin)}
-								className="text-destructive cursor-pointer dark:text-white">
-								<Ban /> {admin.status === "DELETED" ? "Unban" : "Ban"}  
-							</DropdownMenuItem> */}
+							<DropdownMenuItem
+								asChild
+								className="  cursor-pointer flex items-center dark:text-white">
+								<Link
+									href={`/events/${row.original.slug}/edit`}
+									className="text-blue-500   ">
+									<Pencil />
+									Edit Event
+								</Link>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);
@@ -133,6 +152,9 @@ export default function EventsDataTable({
 			filterName="name"
 			data={data}
 			rowCount={total}
+			handleFilterChange={(queries) => {
+				router.push(`/events?${queries}`);
+			}}
 		/>
 	);
 }
