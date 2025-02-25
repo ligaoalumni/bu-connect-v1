@@ -1,7 +1,8 @@
-import { AspectRatio, RichTextEditor } from "@/components";
+import { AspectRatio, Button, RichTextEditor } from "@/components";
 import { readEvent } from "@/models";
 import { format, formatDate, isSameDay } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -32,7 +33,12 @@ export default async function Event({ params }: { params: { slug: string } }) {
 
 	return (
 		<div className="space-y-3">
-			<h1 className="text-3xl font-medium">{event.name}</h1>
+			<div className="flex justify-between items-center">
+				<h1 className="text-3xl font-medium">{event.name}</h1>
+				<Link href={`/events/${event.slug}/edit`}>
+					<Button>Edit</Button>
+				</Link>
+			</div>
 			<div className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10">
 				<div className="md:col-span-6  ">
 					{event?.coverImg && (

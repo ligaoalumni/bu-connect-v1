@@ -6,10 +6,16 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
+import { EventPartialRelation } from "./event";
 
 export * from "./alumni";
 export * from "./user";
 export * from "./event";
+
+export interface EventFormProps {
+	edit?: boolean;
+	event?: EventPartialRelation;
+}
 
 export interface PaginationResult<T> {
 	count: number;

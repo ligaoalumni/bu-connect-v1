@@ -61,10 +61,17 @@ export function DateTimePicker() {
 export function DatePickerWithRange({
 	className,
 	handleValue,
+	fromDefault,
+	toDefault,
 }: React.HTMLAttributes<HTMLDivElement> & {
 	handleValue: (date: DateRange) => void;
+	fromDefault?: Date;
+	toDefault?: Date;
 }) {
-	const [date, setDate] = React.useState<DateRange | undefined>(undefined);
+	const [date, setDate] = React.useState<DateRange | undefined>({
+		from: fromDefault,
+		to: toDefault,
+	});
 
 	return (
 		<div className={cn("grid gap-2", className)}>
