@@ -44,11 +44,16 @@ export function TimePicker({ date, setDate, className }: TimePickerProps) {
 		[]
 	);
 
-	// Generate minutes (00-59)
+	// Generate minutes (00, 15, 30, 45)
 	const minutes = React.useMemo(
-		() => Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0")),
+		() =>
+			Array.from({ length: 4 }, (_, i) => (i * 15).toString().padStart(2, "0")),
 		[]
 	);
+	// const minutes = React.useMemo(
+	// 	() => Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0")),
+	// 	[]
+	// );
 
 	const updateDate = React.useCallback(
 		(hour: string, minute: string, period: "AM" | "PM") => {

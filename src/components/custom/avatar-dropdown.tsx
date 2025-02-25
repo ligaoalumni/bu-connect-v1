@@ -19,7 +19,7 @@ export const AvatarDropdown = () => {
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="relative h-8 w-8 rounded-full">
 					<Avatar className="h-8 w-8">
-						<AvatarImage src="/api/placeholder/32/32" alt="@johndoe" />
+						<AvatarImage src="#" alt="@johndoe" />
 						<AvatarFallback>JD</AvatarFallback>
 					</Avatar>
 				</Button>

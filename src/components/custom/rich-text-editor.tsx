@@ -1,3 +1,4 @@
+"use client";
 import { useEditor, EditorContent, Editor, generateHTML } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -24,7 +25,7 @@ import { Button } from "@/components";
 import { ChangeEvent, useCallback } from "react";
 
 interface RichTextEditorProps {
-	handleValue: (editor: Editor) => void;
+	handleValue?: (editor: Editor) => void;
 	editable?: boolean;
 	content?: string;
 	isEditing?: boolean;
@@ -40,7 +41,11 @@ RichTextEditorProps) => {
 		autofocus: false,
 		immediatelyRender: false,
 		extensions: [
-			BulletExe,
+			BulletExe.configure({
+				HTMLAttributes: {
+					class: "pl-5 ml-5",
+				},
+			}),
 			ListItemExe,
 			OrderedListExe,
 			UnderlineExe,
@@ -64,7 +69,7 @@ RichTextEditorProps) => {
 			},
 		},
 		editable: editable,
-		// injectCSS: true,
+		injectCSS: true,
 		content: content
 			? `${generateHTML(JSON.parse(String(content)), [
 					UnderlineExe,
@@ -78,7 +83,7 @@ RichTextEditorProps) => {
 					}),
 			  ])}`
 			: "",
-		onTransaction: ({ editor }) => handleValue(editor),
+		onTransaction: ({ editor }) => handleValue && handleValue(editor),
 	});
 
 	const addImage = useCallback(
@@ -106,7 +111,7 @@ RichTextEditorProps) => {
 			className={`${
 				editable &&
 				"bg-blue-50/50   border dark:bg-zinc-900  dark:border-transparent border-stone-200 "
-			}  rounded-lg overflow-hidden w-full`}>
+			}  rounded-lg overflow-hidden w-full shrink`}>
 			{editable && (
 				<div className="space-x-0.5  p-1.5 dark:bg-zinc-900 dark:border-zinc-950  bg-white border-b pb-1.5 flex items-center">
 					<Button

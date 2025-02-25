@@ -31,7 +31,6 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarRail,
-	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
@@ -94,7 +93,7 @@ export function AppSidebar({
 	...props
 }: React.ComponentProps<typeof Sidebar> & { pathname: string }) {
 	return (
-		<Sidebar {...props}>
+		<Sidebar {...props} className="">
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>

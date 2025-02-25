@@ -7,29 +7,51 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import Image from "next/image";
+import { uploadImageAction } from "@/actions";
 
-export function ImageUpload() {
-	const [file, setFile] = useState<File | null>(null);
-	const [preview, setPreview] = useState<string | null>(null);
+export function ImageUpload({
+	handleValueChange,
+	defaultValue,
+}: {
+	handleValueChange: (value: string) => void;
+	defaultValue?: string;
+}) {
+	const [preview, setPreview] = useState<string | null>(defaultValue || null);
 	const [loading, setLoading] = useState(false);
 
-	const onDrop = useCallback((acceptedFiles: File[]) => {
+	const onDrop = useCallback(async (acceptedFiles: File[]) => {
 		const file = acceptedFiles[0];
-		if (file) {
-			if (file.type.startsWith("image/")) {
-				setFile(file);
-				const reader = new FileReader();
-				reader.onloadend = () => {
-					setPreview(reader.result as string);
-				};
-				reader.readAsDataURL(file);
-			} else {
-				toast.error("Invalid file type", {
-					richColors: true,
-					description: "Please upload an image file",
-					position: "top-center",
-				});
+		try {
+			setLoading(true);
+			if (file) {
+				if (file.type.startsWith("image/")) {
+					const img = await uploadImageAction(file);
+					if (!img) {
+						throw new Error("Failed to upload image");
+					}
+					console.log(img, "qqq");
+
+					setPreview(img);
+					handleValueChange(img);
+
+					toast.success("Success", {
+						richColors: true,
+						description: "Image uploaded successfully",
+						position: "top-center",
+						duration: 5000,
+					});
+				} else {
+					throw new Error("Invalid file type");
+				}
 			}
+		} catch (error) {
+			toast.error("Error uploading file", {
+				richColors: true,
+				description: (error as Error).message || "Please try again",
+				position: "top-center",
+			});
+		} finally {
+			setLoading(false);
 		}
 	}, []);
 
@@ -41,66 +63,37 @@ export function ImageUpload() {
 		maxFiles: 1,
 	});
 
-	const handleUpload = async () => {
-		if (!file) return;
-
-		setLoading(true);
-		try {
-			// Simulate upload delay
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-
-			// Here you would typically upload the file to your server
-			// const formData = new FormData()
-			// formData.append("file", file)
-			// await fetch("/api/upload", { method: "POST", body: formData })
-
-			toast.success("Success", {
-				richColors: true,
-				description: "Image uploaded successfully",
-				position: "top-center",
-			});
-			// Reset the form
-			setFile(null);
-			setPreview(null);
-		} catch (error) {
-			console.error(error);
-			toast.error("Error", {
-				richColors: true,
-				description: "Failed to upload image",
-				position: "top-center",
-			});
-		} finally {
-			setLoading(false);
-		}
-	};
-
 	const handleRemove = () => {
-		setFile(null);
 		setPreview(null);
 	};
 
 	return (
-		<Card className="w-full min-h-[200px] lg:min-h-[300px]">
+		<Card className="w-full min-h-[200px]  lg:min-h-[300px]">
 			<CardContent className="pt-6">
 				<div
 					{...getRootProps()}
-					className={`relative flex min-h-[200px] lg:min-h-[300px] w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center ${
+					className={`relative flex min-h-[200px] dark:bg-zinc-800 lg:min-h-[300px] w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center ${
 						isDragActive
 							? "border-primary bg-muted/50"
 							: "border-muted-foreground/25"
 					}`}>
 					<input {...getInputProps()} />
-					{preview ? (
+					{loading ? (
+						<Loader2 className="absolute  z-50  h-8 w-8 animate-spin" />
+					) : preview ? (
 						<>
 							<Image
 								src={preview}
 								alt="Preview"
 								fill
-								className=" w-full rounded object-contain"
+								className={`w-full rounded  object-contain ${
+									loading && "backdrop-blur-md opacity-50"
+								}`}
 							/>
 							<Button
 								size="icon"
 								variant="destructive"
+								disabled={loading}
 								className="absolute -right-2 -top-2 h-6 w-6"
 								onClick={(e) => {
 									e.stopPropagation();
@@ -122,17 +115,14 @@ export function ImageUpload() {
 						</div>
 					)}
 				</div>
-				{file && (
+				{/* {file && (
 					<div className="mt-4">
-						<Button
-							onClick={handleUpload}
-							disabled={loading}
-							className="w-full">
+						<Button onClick={() => {}} disabled={loading} className="w-full">
 							{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 							{loading ? "Uploading..." : "Upload"}
 						</Button>
 					</div>
-				)}
+				)} */}
 			</CardContent>
 		</Card>
 	);
