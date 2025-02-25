@@ -23,7 +23,7 @@ import {
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib/definitions";
 import { LoginFormData } from "@/types";
-import { login } from "@/actions/auth";
+import { loginAction } from "@/actions";
 
 const LoginForm = () => {
 	const [serverError, setServerError] = React.useState<string | null>(null);
@@ -38,7 +38,7 @@ const LoginForm = () => {
 
 	const onSubmit = async (data: LoginFormData) => {
 		try {
-			const response = await login(data.email, data.password);
+			const response = await loginAction(data.email, data.password);
 
 			console.log(response, " qqq");
 

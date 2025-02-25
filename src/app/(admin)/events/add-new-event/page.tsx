@@ -1,5 +1,6 @@
 "use client";
 
+import { createEventAction } from "@/actions";
 import {
 	Button,
 	DatePickerWithRange,
@@ -17,10 +18,14 @@ import {
 import { EventFormSchema } from "@/lib/definitions";
 import { EventFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function CreateEventPage() {
+	const router = useRouter();
 	const form = useForm<EventFormData>({
 		resolver: zodResolver(EventFormSchema),
 		defaultValues: {
@@ -28,14 +33,44 @@ export default function CreateEventPage() {
 			coverImg: "",
 			location: "",
 			name: "",
+			startTime: new Date(new Date().setMinutes(0, 0, 0)),
+			endTime: new Date(new Date().setMinutes(0, 0, 0)),
 			startDate: undefined,
 			endDate: undefined,
 		},
 	});
 
-	const handleCreateEvent = () => {};
+	const handleCreateEvent = async (values: EventFormData) => {
+		if (
+			`{"type":"doc","content":[{"type":"paragraph"}]}` ===
+			form.getValues("content")
+		) {
+			form.setError("content", {
+				type: "manual",
+				message: "Content is required",
+			});
+			return;
+		}
 
-	console.log(form.getValues(), "qq");
+		try {
+			const event = await createEventAction(values);
+
+			toast.success("Success", {
+				description: "Event created successfully",
+				position: "top-center",
+				richColors: true,
+				duration: 5000,
+			});
+			router.push(`/events/${event.slug}/info`);
+		} catch (error) {
+			toast.error("Failed to create event", {
+				description: (error as Error).message,
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
+		}
+	};
 
 	return (
 		<Form {...form}>
@@ -66,7 +101,16 @@ export default function CreateEventPage() {
 								<FormItem>
 									<FormLabel>Content</FormLabel>
 									<FormControl>
-										<RichTextEditor editable handleValue={() => {}} />
+										<RichTextEditor
+											editable
+											handleValue={(editor) => {
+												form.setValue(
+													"content",
+													JSON.stringify(editor.getJSON())
+												);
+												form.clearErrors("content");
+											}}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -81,7 +125,12 @@ export default function CreateEventPage() {
 								<FormItem className="w-full">
 									<FormLabel>Event Name</FormLabel>
 									<FormControl>
-										<ImageUpload />
+										<ImageUpload
+											defaultValue={form.getValues().coverImg}
+											handleValueChange={(img) =>
+												form.setValue("coverImg", img)
+											}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -98,8 +147,8 @@ export default function CreateEventPage() {
 											handleValue={(value) => {
 												if (value.from) {
 													form.setValue("startDate", value.from);
-
 													form.setValue("endDate", value?.to || value.from);
+													form.clearErrors("startDate");
 												}
 											}}
 										/>
@@ -168,7 +217,15 @@ export default function CreateEventPage() {
 						/>
 
 						<div className="flex items-center justify-end">
-							<Button>Create Event</Button>
+							<Button
+								className="min-w-[200px]"
+								disabled={form.formState.isSubmitting}>
+								{form.formState.isSubmitting ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									"Create Event"
+								)}
+							</Button>
 						</div>
 					</div>
 				</div>

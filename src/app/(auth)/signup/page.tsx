@@ -15,7 +15,7 @@ import {
 	Input,
 	InputWithIcon,
 } from "@/components";
-import { signup } from "@/actions/auth";
+import { signUpAction } from "@/actions";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
@@ -33,7 +33,7 @@ export default function SignupForm() {
 
 	const handleSignUp = async (values: z.infer<typeof SignupFormSchema>) => {
 		try {
-			const data = await signup(values);
+			const data = await signUpAction(values);
 		} catch (error) {
 			console.error(error);
 		}
