@@ -3,7 +3,7 @@ import EventForm from "../_components/event-form";
 import { getDisabledEvents } from "@/models";
 
 export default async function CreateEventPage() {
-	const disabledDates = await getDisabledEvents();
+	const events = await getDisabledEvents();
 
-	return <EventForm disabledDates={disabledDates} />;
+	return <EventForm events={events} />;
 }

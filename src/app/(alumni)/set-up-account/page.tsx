@@ -14,7 +14,7 @@ async function getInfo() {
 	}
 
 	if (user && user.role !== "ALUMNI") {
-		redirect("/dashboard", RedirectType.replace);
+		redirect("/admin", RedirectType.replace);
 	}
 
 	return user;

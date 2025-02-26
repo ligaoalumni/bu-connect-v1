@@ -40,7 +40,7 @@ const data = {
 		{
 			icon: LayoutDashboard,
 			title: "Dashboard",
-			url: "/dashboard",
+			url: "/admin",
 		},
 		{
 			icon: CalendarDays,
@@ -50,19 +50,19 @@ const data = {
 				{
 					icon: CalendarPlus,
 					title: "Add New Event",
-					url: "/events/add-new-event",
+					url: "/admin/events/add-new-event",
 				},
 				{
 					icon: ListOrdered,
 					title: "List",
-					url: "/events",
+					url: "/admin/events",
 				},
 			],
 		},
 		{
 			icon: GraduationCap,
 			title: "Alumni",
-			url: "/alumni",
+			url: "/admin/alumni",
 		},
 		{
 			icon: UserCog,
@@ -72,19 +72,19 @@ const data = {
 				{
 					icon: UserPlus,
 					title: "Add New	Admin",
-					url: "/admins/add-new-admin",
+					url: "/admin/admins/add-new-admin",
 				},
 				{
 					icon: Users,
 					title: "List",
-					url: "/admins",
+					url: "/admin/admins",
 				},
 			],
 		},
 		{
 			icon: Cog,
 			title: "Settings",
-			url: "/settings",
+			url: "/admin/settings",
 		},
 	],
 };

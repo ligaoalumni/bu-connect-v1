@@ -45,7 +45,7 @@ export default function SignupForm() {
 			});
 
 			if (data && data.role !== "ALUMNI") {
-				return router.replace("/dashboard");
+				return router.replace("/admin");
 			} else router.replace("/set-up-account");
 		} catch (error) {
 			toast.error(`Failed to sign up`, {

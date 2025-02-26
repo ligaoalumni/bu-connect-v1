@@ -5,14 +5,14 @@ import { decrypt } from "@/lib/session";
 
 // 1. Specify protected and public routes
 const adminRoutes = [
-	"/dashboard",
-	"/alumni",
-	"/events",
-	"/events/add-new-event",
-	"/settings",
-	"/account-info",
+	"/admin",
+	"/admin/alumni",
+	"/admin/events",
+	"/admin/events/add-new-event",
+	"/admin/settings",
+	"/admin/account-info",
 ];
-const superAdminRoutes = ["/admins", "/admins/add-new-admin"];
+const superAdminRoutes = ["/admin/admins", "/admin/admins/add-new-admin"];
 const alumniRoutes = ["/account"];
 const protectedRoutes = adminRoutes
 	.concat(superAdminRoutes)
@@ -49,7 +49,7 @@ export default async function middleware(req: NextRequest) {
 
 	// 5. Redirect to /dashboard if the user is authenticated
 	if (isAuthRoute && !!session) {
-		const url = session.role === "ADMIN" ? "/" : "/dashboard";
+		const url = session.role === "ADMIN" ? "/" : "/admin";
 		return NextResponse.redirect(new URL(url, req.nextUrl));
 	}
 
