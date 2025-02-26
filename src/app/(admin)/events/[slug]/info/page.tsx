@@ -1,4 +1,4 @@
-import { AspectRatio, Badge, Button, RichTextEditor } from "@/components";
+import { AspectRatio, Button, RichTextEditor } from "@/components";
 import { getEventStatus } from "@/lib/event";
 import { readEvent } from "@/models";
 import { format, formatDate, isSameDay } from "date-fns";
@@ -32,23 +32,22 @@ export default async function Event({ params }: { params: { slug: string } }) {
 	const endDate = formatDate(event!.endDate!, "- MMMM dd, yyyy");
 	const date = `${startDate}${isOneDay ? "" : endDate}`;
 
+	const status = getEventStatus({
+		endDate: event.endDate || event.startDate,
+		startDate: event.startDate,
+		endTime: event.endTime,
+		startTime: event.startTime,
+	});
+
 	return (
 		<div className="space-y-3">
 			<div className="flex justify-between items-center">
-				<h1 className="text-3xl font-medium">
-					{event.name}{" "}
-					<Badge className="text-lg text-gray-600 bg-white">
-						{getEventStatus({
-							endDate: event.endDate || event.startDate,
-							startDate: event.startDate,
-							endTime: event.endTime,
-							startTime: event.startTime,
-						})}
-					</Badge>
-				</h1>
-				<Link href={`/events/${event.slug}/edit`}>
-					<Button>Edit</Button>
-				</Link>
+				<h1 className="text-3xl font-medium">{event.name} =</h1>
+				{status === "Upcoming Event" && (
+					<Link href={`/events/${event.slug}/edit`}>
+						<Button>Edit</Button>
+					</Link>
+				)}
 			</div>
 			<div className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10">
 				<div className="md:col-span-6  ">
@@ -65,6 +64,10 @@ export default async function Event({ params }: { params: { slug: string } }) {
 					<RichTextEditor content={event.content} />
 				</div>
 				<div className="md:col-span-4 space-y-4">
+					<div>
+						<h3 className="text-gray-600 dark:text-gray-200">Status:</h3>
+						<p className="font-medium text-lg">{status}</p>
+					</div>
 					<div>
 						<h3 className="text-gray-600 dark:text-gray-200">When:</h3>
 						<p className="font-medium text-lg">{date}</p>
