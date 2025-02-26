@@ -25,7 +25,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function EventForm({ edit = false, event }: EventFormProps) {
+export default function EventForm({
+	edit = false,
+	event,
+	disabledDates,
+}: EventFormProps) {
 	const router = useRouter();
 	const form = useForm<EventFormData>({
 		resolver: zodResolver(EventFormSchema),
@@ -179,6 +183,7 @@ export default function EventForm({ edit = false, event }: EventFormProps) {
 									<FormLabel>Date</FormLabel>
 									<FormControl>
 										<DatePickerWithRange
+											disabledDates={disabledDates}
 											fromDefault={edit ? event?.startDate : undefined}
 											toDefault={edit ? event?.endDate || undefined : undefined}
 											handleValue={(value) => {

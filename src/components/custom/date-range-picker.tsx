@@ -1,8 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { add, addDays, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import {
+	add,
+	addDays,
+	eachDayOfInterval,
+	format,
+	isSameDay,
+	isWithinInterval,
+} from "date-fns";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,6 +20,13 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { DateRange } from "react-day-picker";
+import { EventFormProps } from "@/types";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 export function DateTimePicker() {
 	const [date, setDate] = React.useState<Date>();
@@ -63,15 +77,76 @@ export function DatePickerWithRange({
 	handleValue,
 	fromDefault,
 	toDefault,
+	disabledDates,
 }: React.HTMLAttributes<HTMLDivElement> & {
 	handleValue: (date: DateRange) => void;
 	fromDefault?: Date;
 	toDefault?: Date;
+	disabledDates?: EventFormProps["disabledDates"];
 }) {
+	const [error, setError] = React.useState<string | null>(null);
 	const [date, setDate] = React.useState<DateRange | undefined>({
 		from: fromDefault,
 		to: toDefault,
 	});
+
+	const getEventForDate = (date: Date) => {
+		return (disabledDates ?? []).find((event) =>
+			isWithinInterval(date, {
+				start: event.startDate,
+				end: event.endDate,
+			})
+		);
+	};
+
+	const isDateDisabled = (date: Date) => {
+		return (disabledDates || []).some((event) =>
+			isWithinInterval(date, {
+				start: event.startDate,
+				end: event.endDate,
+			})
+		);
+	};
+
+	const hasDisabledDatesInRange = (range: DateRange) => {
+		if (!range.from || !range.to) return false;
+
+		const datesInRange = eachDayOfInterval({
+			start: range.from,
+			end: range.to,
+		});
+
+		return datesInRange.some((date) => isDateDisabled(date));
+	};
+
+	const DayContent = ({ date }: { date: Date }) => {
+		const event = getEventForDate(date);
+
+		if (!event) {
+			return <span className=" ">{format(date, "d")}</span>;
+		}
+
+		return (
+			<TooltipProvider delayDuration={100}>
+				<Tooltip>
+					<TooltipTrigger asChild className="   text-red-600">
+						<span className="relative opacity-50  flex h-8 w-8 items-center justify-center rounded  ">
+							<X className="absolute h-20 w-20" />
+							{format(date, "d")}
+						</span>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p className="font-semibold">Event: {event.title}</p>
+						<p className="text-xs text-muted-foreground">
+							{format(event.startDate, "PPP")}
+							{!isSameDay(event.startDate, event.endDate) &&
+								` - ${format(event.endDate, "PPP")}`}
+						</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
+		);
+	};
 
 	return (
 		<div className={cn("grid gap-2", className)}>
@@ -105,16 +180,39 @@ export function DatePickerWithRange({
 						mode="range"
 						defaultMonth={date?.from}
 						fromDate={addDays(new Date(), 7)}
-						// disabled={{}}
+						// disabled={(day) => {
+						// 	if (disabledDates) {
+						// 		return disabledDates.some((date) =>
+						// 			isWithinInterval(day, {
+						// 				start: date.startDate,
+						// 				end: date.endDate,
+						// 			})
+						// 		);
+						// 	}
+						// 	return false;
+						// }}
 						selected={date}
 						onSelect={(value) => {
 							if (value) {
+								setError(null);
+								// Check if the range contains any disabled dates
+								if (hasDisabledDatesInRange(value)) {
+									setError("Cannot select a range that includes booked dates");
+									return;
+								}
+
 								setDate(value);
 								handleValue(value);
 							}
 						}}
 						numberOfMonths={2}
+						components={{
+							DayContent,
+						}}
 					/>
+					{error && (
+						<p className="mt-2 px-4 pb-4 text-sm text-destructive">{error}</p>
+					)}
 				</PopoverContent>
 			</Popover>
 		</div>

@@ -8,6 +8,7 @@ import {
 	PaginationResult,
 } from "@/types";
 import { Prisma } from "@prisma/client";
+import { isFuture } from "date-fns";
 import slug from "unique-slug";
 
 export const readEvent = async (
@@ -152,4 +153,17 @@ export const updateEvent = async (
 	});
 
 	return updatedEvent;
+};
+
+export const disableEvents = async () => {
+	const allEvents = await readEvents();
+	const futureEvents = allEvents.data.filter((event) =>
+		isFuture(event.startDate)
+	);
+
+	return futureEvents.map((event) => ({
+		startDate: event.startDate,
+		endDate: event.endDate || event.startDate,
+		title: event.name,
+	}));
 };

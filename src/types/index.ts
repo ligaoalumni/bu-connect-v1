@@ -15,6 +15,11 @@ export * from "./event";
 export interface EventFormProps {
 	edit?: boolean;
 	event?: EventPartialRelation;
+	disabledDates?: {
+		startDate: Date;
+		endDate: Date;
+		title: string;
+	}[];
 }
 
 export interface PaginationResult<T> {
