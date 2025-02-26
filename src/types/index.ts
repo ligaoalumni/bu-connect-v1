@@ -56,6 +56,7 @@ export type SessionPayload = {
 	role: UserRole;
 	expiresAt: Date;
 	email: string;
+	alumniId?: number;
 };
 
 export type UserRole = "ADMIN" | "SUPER_ADMIN" | "ALUMNI";

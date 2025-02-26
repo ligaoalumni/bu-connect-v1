@@ -5,7 +5,7 @@ export interface Event {
 	slug: string;
 	name: string;
 	content: string;
-	coverImg: string | null;
+	coverImg: string;
 	startDate: Date;
 	endDate: Date | null;
 

@@ -3,6 +3,8 @@ export interface User<T> {
 	email: string;
 	role: UserRole;
 	password: string;
+	firstName: string;
+	lastName: string;
 
 	alumniData: T extends "ALUMNI"
 		? { graduationYear: number; major: string }
