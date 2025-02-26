@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { add, format } from "date-fns";
+import { add, addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -104,6 +104,8 @@ export function DatePickerWithRange({
 						initialFocus
 						mode="range"
 						defaultMonth={date?.from}
+						fromDate={addDays(new Date(), 7)}
+						// disabled={{}}
 						selected={date}
 						onSelect={(value) => {
 							if (value) {

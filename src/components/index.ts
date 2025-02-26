@@ -37,3 +37,6 @@ export * from "./custom/image-uploader";
 export * from "./custom/date-range-picker";
 export * from "./custom/time-picker";
 export * from "./custom/empty-state";
+
+// ACETERNITY UI
+export * from "./custom/animated-testimonials";
