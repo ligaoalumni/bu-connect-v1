@@ -99,7 +99,7 @@ export default function EventForm({
 					</h1>
 					<div className="flex gap-2">
 						{edit && (
-							<Link href={`/events/${event?.slug}/info`}>
+							<Link href={`/admin/events/${event?.slug}/info`}>
 								<Button variant="destructive">Cancel</Button>
 							</Link>
 						)}

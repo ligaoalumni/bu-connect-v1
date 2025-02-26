@@ -18,8 +18,8 @@ const nextConfig: NextConfig = {
 	redirects: async () => {
 		return [
 			{
-				source: "/events/:slug",
-				destination: "/events/:slug/info",
+				source: "/admin/events/:slug",
+				destination: "/admin/events/:slug/info",
 				has: [
 					{
 						type: "query",

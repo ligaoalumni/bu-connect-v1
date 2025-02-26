@@ -19,41 +19,44 @@ export function ImageUpload({
 	const [preview, setPreview] = useState<string | null>(defaultValue || null);
 	const [loading, setLoading] = useState(false);
 
-	const onDrop = useCallback(async (acceptedFiles: File[]) => {
-		const file = acceptedFiles[0];
-		try {
-			setLoading(true);
-			if (file) {
-				if (file.type.startsWith("image/")) {
-					const img = await uploadImageAction(file);
-					if (!img) {
-						throw new Error("Failed to upload image");
+	const onDrop = useCallback(
+		async (acceptedFiles: File[]) => {
+			const file = acceptedFiles[0];
+			try {
+				setLoading(true);
+				if (file) {
+					if (file.type.startsWith("image/")) {
+						const img = await uploadImageAction(file);
+						if (!img) {
+							throw new Error("Failed to upload image");
+						}
+						console.log(img, "qqq");
+
+						setPreview(img);
+						handleValueChange(img);
+
+						toast.success("Success", {
+							richColors: true,
+							description: "Image uploaded successfully",
+							position: "top-center",
+							duration: 5000,
+						});
+					} else {
+						throw new Error("Invalid file type");
 					}
-					console.log(img, "qqq");
-
-					setPreview(img);
-					handleValueChange(img);
-
-					toast.success("Success", {
-						richColors: true,
-						description: "Image uploaded successfully",
-						position: "top-center",
-						duration: 5000,
-					});
-				} else {
-					throw new Error("Invalid file type");
 				}
+			} catch (error) {
+				toast.error("Error uploading file", {
+					richColors: true,
+					description: (error as Error).message || "Please try again",
+					position: "top-center",
+				});
+			} finally {
+				setLoading(false);
 			}
-		} catch (error) {
-			toast.error("Error uploading file", {
-				richColors: true,
-				description: (error as Error).message || "Please try again",
-				position: "top-center",
-			});
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+		},
+		[handleValueChange]
+	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		onDrop,

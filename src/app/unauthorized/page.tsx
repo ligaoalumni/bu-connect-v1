@@ -29,7 +29,7 @@ const UnauthorizedAccess = () => {
 					<Alert variant="destructive">
 						<AlertTitle>Unauthorized Access</AlertTitle>
 						<AlertDescription>
-							You don't have permission to access this resource.
+							You don&apos;t have permission to access this resource.
 						</AlertDescription>
 					</Alert>
 

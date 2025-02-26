@@ -1,4 +1,4 @@
-import { WIPBanner, FCalendarSkeleton } from "@/components";
+import { FCalendarSkeleton } from "@/components";
 import { getDisabledEvents } from "@/models";
 import { Metadata } from "next";
 import { lazy, Suspense } from "react";

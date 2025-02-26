@@ -17,7 +17,11 @@ async function getEvent(slug: string) {
 	return event;
 }
 
-export default async function Event({ params }: { params: { slug: string } }) {
+export default async function Event({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
 	const { slug } = await params;
 	const event = await getEvent(slug);
 
@@ -44,7 +48,7 @@ export default async function Event({ params }: { params: { slug: string } }) {
 			<div className="flex justify-between items-center">
 				<h1 className="text-3xl font-medium">{event.name} =</h1>
 				{status === "Upcoming Event" && (
-					<Link href={`/events/${event.slug}/edit`}>
+					<Link href={`/admin/events/${event.slug}/edit`}>
 						<Button>Edit</Button>
 					</Link>
 				)}

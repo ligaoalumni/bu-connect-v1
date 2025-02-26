@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "./table";
 import { ColumnDef } from "@tanstack/react-table";
 import { EventWithPagination } from "@/types";
@@ -148,34 +148,37 @@ export default function EventsDataTable() {
 		},
 	];
 
-	const handleFetchData = async (filter?: string) => {
-		try {
-			setLoading(true);
-			const events = await readEventsAction({
-				filter,
-				pagination: {
-					limit: pagination.pageSize,
-					page: pagination.pageIndex,
-				},
-			});
+	const handleFetchData = useCallback(
+		async (filter?: string) => {
+			try {
+				setLoading(true);
+				const events = await readEventsAction({
+					filter,
+					pagination: {
+						limit: pagination.pageSize,
+						page: pagination.pageIndex,
+					},
+				});
 
-			setData(events.data);
-			setTotal(events.count);
-		} catch (error) {
-			toast.error(`Failed to fetch events`, {
-				description: (error as Error).message,
-				richColors: true,
-				position: "top-center",
-				duration: 5000,
-			});
-		} finally {
-			setLoading(false);
-		}
-	};
+				setData(events.data);
+				setTotal(events.count);
+			} catch (error) {
+				toast.error(`Failed to fetch events`, {
+					description: (error as Error).message,
+					richColors: true,
+					position: "top-center",
+					duration: 5000,
+				});
+			} finally {
+				setLoading(false);
+			}
+		},
+		[pagination]
+	);
 
 	useEffect(() => {
 		handleFetchData();
-	}, [pagination]);
+	}, [handleFetchData]);
 
 	return (
 		<DataTable
@@ -186,9 +189,7 @@ export default function EventsDataTable() {
 			filterName="events"
 			rowCount={total}
 			loading={loading}
-			handleSearch={(filter) => {
-				handleFetchData(filter);
-			}}
+			handleSearch={handleFetchData}
 		/>
 	);
 }
