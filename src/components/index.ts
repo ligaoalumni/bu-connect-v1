@@ -42,6 +42,7 @@ export * from "./custom/time-picker";
 export * from "./custom/empty-state";
 export * from "./custom/full-calendar";
 export * from "./custom/full-calendar-skeleton";
+export * from "./custom/qr-code-scanner";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";

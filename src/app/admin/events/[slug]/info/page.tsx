@@ -1,4 +1,9 @@
-import { AspectRatio, Button, RichTextEditor } from "@/components";
+import {
+	AspectRatio,
+	Button,
+	QRCodeScanner,
+	RichTextEditor,
+} from "@/components";
 import { getEventStatus } from "@/lib/event";
 import { readEvent } from "@/models";
 import { format, formatDate, isSameDay } from "date-fns";
@@ -52,6 +57,7 @@ export default async function Event({
 						<Button>Edit</Button>
 					</Link>
 				)}
+				{status === "Ongoing Event" && <QRCodeScanner />}
 			</div>
 			<div className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10">
 				<div className="md:col-span-6  ">
