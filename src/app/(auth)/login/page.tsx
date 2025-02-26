@@ -17,16 +17,16 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-	Alert,
-	AlertDescription,
 } from "@/components";
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib/definitions";
 import { LoginFormData } from "@/types";
 import { loginAction } from "@/actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const LoginForm = () => {
-	const [serverError, setServerError] = React.useState<string | null>(null);
+	const router = useRouter();
 
 	const form = useForm<LoginFormData>({
 		resolver: zodResolver(LoginFormSchema),
@@ -40,13 +40,24 @@ const LoginForm = () => {
 		try {
 			const response = await loginAction(data.email, data.password);
 
-			console.log(response, " qqq");
-
-			if (response.error.message) {
+			if (response?.error.message) {
 				throw new Error(response.error.message);
 			}
+
+			router.replace("/");
+			toast.success("Success", {
+				description: "Welcome back!",
+				position: "top-center",
+				richColors: true,
+				duration: 5000,
+			});
 		} catch (err) {
-			setServerError((err as Error).message);
+			toast.error("Log in Error", {
+				description: (err as Error).message,
+				position: "top-center",
+				richColors: true,
+				duration: 5000,
+			});
 		}
 	};
 
@@ -62,12 +73,6 @@ const LoginForm = () => {
 			<CardContent>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						{serverError && (
-							<Alert variant="destructive">
-								<AlertDescription>{serverError}</AlertDescription>
-							</Alert>
-						)}
-
 						<FormField
 							control={form.control}
 							name="email"

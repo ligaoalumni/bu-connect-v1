@@ -1,12 +1,11 @@
 "use server";
 
 import { SignupFormSchema } from "@/lib/definitions";
-import { createSession, decrypt, deleteSession, encrypt } from "@/lib/session";
+import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, readUser } from "@/models";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export async function signUpAction(
@@ -92,10 +91,17 @@ export async function loginAction(email: string, password: string) {
 
 		// Create user session
 		const { email: userEmail, id, role } = user;
+		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+		const session = await encrypt({ id, role, email: userEmail, expiresAt });
+		const cookieStore = await cookies();
 
-		createSession({ email: userEmail, id, role, alumniId: user.alumni?.id });
-
-		redirect("/");
+		cookieStore.set("session", session, {
+			httpOnly: true,
+			secure: true,
+			expires: expiresAt,
+			sameSite: "lax",
+			path: "/",
+		});
 	} catch (error) {
 		console.log(`Error signing up: ${error}`);
 		throw error;
@@ -105,8 +111,6 @@ export async function loginAction(email: string, password: string) {
 export async function logout() {
 	try {
 		await deleteSession();
-		// Redirect after logout
-		redirect("/");
 	} catch (error) {
 		console.log(`Error logging out: ${error}`);
 		throw error;
