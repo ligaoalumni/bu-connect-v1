@@ -126,7 +126,7 @@ export default function EventsDataTable() {
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
 							<DropdownMenuItem asChild className="cursor-pointer">
-								<Link href={`/events/${row.original.slug}/info`}>
+								<Link href={`/admin/events/${row.original.slug}/info`}>
 									<Info />
 									View Details
 								</Link>
@@ -135,7 +135,7 @@ export default function EventsDataTable() {
 								asChild
 								className="  cursor-pointer flex items-center dark:text-white">
 								<Link
-									href={`/events/${row.original.slug}/edit`}
+									href={`/admin/events/${row.original.slug}/edit`}
 									className="text-blue-500   ">
 									<Pencil />
 									Edit Event

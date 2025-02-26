@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-import { cookies } from "next/headers";
+import { getInformation } from "@/actions";
+import { MainNav } from "@/components";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -23,11 +24,26 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const user = await getInformation();
+
+	const userInfo = user?.id
+		? {
+				email: user.email,
+				firstName: user.firstName,
+				id: user.id,
+				lastName: user.lastName,
+				role: user.role,
+		  }
+		: null;
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<Providers>{children}</Providers>
+				className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
+				<Providers>
+					<MainNav user={userInfo} />
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);

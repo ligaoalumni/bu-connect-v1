@@ -5,10 +5,12 @@ export interface Alumni {
 	email: string;
 	firstName: string;
 	lastName: string;
+
 	graduationYear: number;
 	major: string;
+
 	qrCode: string;
-	user: User<"ALUMNI">;
+	user: User;
 	userId: number;
 
 	interested: Event[];

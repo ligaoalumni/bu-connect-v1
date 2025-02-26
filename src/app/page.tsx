@@ -1,24 +1,23 @@
-import { FCalendar, WIPBanner } from "@/components";
+import { WIPBanner, FCalendarSkeleton } from "@/components";
 import { getDisabledEvents } from "@/models";
 import { Metadata } from "next";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 // either Static metadata
 export const metadata: Metadata = {
 	title: "LNHS | Alumni Tracking",
 };
 
+const FCalendar = lazy(() => import("@/components/custom/full-calendar"));
+
 export default async function Home() {
 	const events = await getDisabledEvents();
 
 	return (
 		<div className="container mx-auto">
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<FCalendarSkeleton />}>
 				<FCalendar events={events} />
 			</Suspense>
-			<div className="flex  items-center justify-center h-screen">
-				<WIPBanner />
-			</div>
 		</div>
 	);
 }
