@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Settings, User, Bell } from "lucide-react";
+import { Settings, User, Bell, LayoutDashboard } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
 
-export const AvatarDropdown = () => {
+export const AvatarDropdown = ({ isAdmin }: { isAdmin?: boolean }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -37,12 +37,20 @@ export const AvatarDropdown = () => {
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem asChild>
-					<Link href="/account-info">
+					<Link href={isAdmin ? "/admin/profile" : "/profile"}>
 						<User className="mr-2 h-4 w-4" />
 						<span>Profile</span>
 					</Link>
 				</DropdownMenuItem>
 
+				{isAdmin && (
+					<DropdownMenuItem asChild>
+						<Link href="/admin">
+							<LayoutDashboard className="mr-2 h-4 w-4" />
+							<span>Dashboard</span>
+						</Link>
+					</DropdownMenuItem>
+				)}
 				<DropdownMenuItem>
 					<Bell className="mr-2 h-4 w-4" />
 					<span>Notifications</span>

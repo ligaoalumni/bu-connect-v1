@@ -6,9 +6,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { GripVertical } from "lucide-react";
-
-import { cn } from "@/lib/utils";
 import {
 	Card,
 	CardContent,
@@ -22,13 +19,12 @@ import { CustomButtonInput } from "@fullcalendar/core/index.js";
 import { Events, EventWithPagination } from "@/types";
 import Link from "next/link";
 import { getEventDescription } from "@/lib/event";
-import { getHours, getMinutes } from "date-fns";
+import { getHours, getMinutes, isSameMonth } from "date-fns";
 
 // Sample events data
 
 export function FCalendar({ events }: { events: Events }) {
 	const calendarRef = React.useRef<any>(null);
-	const [viewMode, setViewMode] = React.useState("dayGridMonth");
 	const [weekends, setWeekends] = React.useState(true);
 
 	// Custom toolbar component
@@ -45,6 +41,10 @@ export function FCalendar({ events }: { events: Events }) {
 			icon: "chevron-left",
 			click: () => {
 				if (calendarRef.current) {
+					if (isSameMonth(new Date(), calendarRef.current.getApi().getDate())) {
+						return;
+					}
+
 					calendarRef.current.getApi().prev();
 				}
 			},
@@ -115,13 +115,27 @@ export function FCalendar({ events }: { events: Events }) {
 		);
 	};
 
+	const memoizedEvents = React.useMemo(() => {
+		return (
+			events.map((event) => ({
+				...event,
+				id: String(event.id),
+				editable: false,
+				durationEditable: false,
+				interactive: true,
+			})) ?? []
+		);
+	}, [events]);
+
 	return (
 		<Card>
 			<CardHeader>
 				<div className="flex items-center justify-between">
 					<div className="space-y-1">
-						<CardTitle>Calendar</CardTitle>
-						<CardDescription>Plan and manage your events</CardDescription>
+						<CardTitle className="text-2xl">Event Calendar</CardTitle>
+						<CardDescription>
+							Manage and view upcoming and past events seamlessly.
+						</CardDescription>
 					</div>
 					<div className="flex items-center gap-4">
 						<div className="flex items-center space-x-2">
@@ -268,23 +282,7 @@ export function FCalendar({ events }: { events: Events }) {
 					initialView="dayGridMonth"
 					headerToolbar={renderToolbar}
 					customButtons={customButtons}
-					events={
-						events.map((event) => ({
-							...event,
-							id: String(event.id),
-							editable: false,
-							durationEditable: false,
-							interactive: true,
-						})) ?? []
-						// [
-						// 	{
-						// 		start: events[0].start,
-						// 		end: events[0].end,
-						// 		title: events[0].title,
-						// 		allDay: true,
-						// 	},
-						// ]
-					}
+					events={memoizedEvents}
 					eventContent={renderEvent}
 					weekends={weekends}
 					editable={false}
@@ -292,7 +290,7 @@ export function FCalendar({ events }: { events: Events }) {
 					selectMirror={true}
 					dayMaxEvents={true}
 					weekNumbers={true}
-					nowIndicator={true}
+					// nowIndicator={true}
 					height={"80vh"}
 					stickyHeaderDates={true}
 					views={{
@@ -314,3 +312,5 @@ export function FCalendar({ events }: { events: Events }) {
 		</Card>
 	);
 }
+
+export default FCalendar;
