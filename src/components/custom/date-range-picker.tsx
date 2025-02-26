@@ -77,12 +77,12 @@ export function DatePickerWithRange({
 	handleValue,
 	fromDefault,
 	toDefault,
-	disabledDates,
+	events,
 }: React.HTMLAttributes<HTMLDivElement> & {
 	handleValue: (date: DateRange) => void;
 	fromDefault?: Date;
 	toDefault?: Date;
-	disabledDates?: EventFormProps["disabledDates"];
+	events?: EventFormProps["events"];
 }) {
 	const [error, setError] = React.useState<string | null>(null);
 	const [date, setDate] = React.useState<DateRange | undefined>({
@@ -91,19 +91,19 @@ export function DatePickerWithRange({
 	});
 
 	const getEventForDate = (date: Date) => {
-		return (disabledDates ?? []).find((event) =>
+		return (events ?? []).find((event) =>
 			isWithinInterval(date, {
-				start: event.startDate,
-				end: event.endDate,
+				start: event.start,
+				end: event.end,
 			})
 		);
 	};
 
 	const isDateDisabled = (date: Date) => {
-		return (disabledDates || []).some((event) =>
+		return (events || []).some((event) =>
 			isWithinInterval(date, {
-				start: event.startDate,
-				end: event.endDate,
+				start: event.start,
+				end: event.end,
 			})
 		);
 	};
@@ -138,9 +138,9 @@ export function DatePickerWithRange({
 					<TooltipContent>
 						<p className="font-semibold">Event: {event.title}</p>
 						<p className="text-xs text-muted-foreground">
-							{format(event.startDate, "PPP")}
-							{!isSameDay(event.startDate, event.endDate) &&
-								` - ${format(event.endDate, "PPP")}`}
+							{format(event.start, "PPP")}
+							{!isSameDay(event.start, event.end) &&
+								` - ${format(event.end, "PPP")}`}
 						</p>
 					</TooltipContent>
 				</Tooltip>
@@ -180,17 +180,6 @@ export function DatePickerWithRange({
 						mode="range"
 						defaultMonth={date?.from}
 						fromDate={addDays(new Date(), 7)}
-						// disabled={(day) => {
-						// 	if (disabledDates) {
-						// 		return disabledDates.some((date) =>
-						// 			isWithinInterval(day, {
-						// 				start: date.startDate,
-						// 				end: date.endDate,
-						// 			})
-						// 		);
-						// 	}
-						// 	return false;
-						// }}
 						selected={date}
 						onSelect={(value) => {
 							if (value) {

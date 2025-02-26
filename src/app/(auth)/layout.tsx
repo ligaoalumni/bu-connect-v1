@@ -1,7 +1,7 @@
 import { readEventsAction } from "@/actions";
 import { AnimatedTestimonials } from "@/components";
-import { getEventStatus } from "@/lib/event";
-import { formatDate, isFuture, isSameDay } from "date-fns";
+import { getEventDescription, getEventStatus } from "@/lib/event";
+import { isFuture } from "date-fns";
 import React, { Suspense } from "react";
 
 async function getEvents() {
@@ -20,36 +20,10 @@ async function getEvents() {
 			endTime: event.endTime,
 		});
 
-		const oneDay = isSameDay(event.startDate, event.endDate || event.startDate);
-		const startDate = formatDate(
-			new Date(event.startDate),
-			oneDay ? "MMM dd, yyyy" : "MMM dd "
-		);
-		const endDate = formatDate(new Date(event.endDate!), "MMM dd, yyyy");
-		let label = "";
-
-		if (oneDay) {
-			if (status === "Upcoming Event") {
-				label = `Event will be held on ${startDate} at ${event.location}`;
-			} else if (status === "Ongoing Event") {
-				label = `Event is ongoing at ${event.location}`;
-			} else if (status === "Past Event") {
-				label = `Event was held on ${startDate} at ${event.location}`;
-			}
-		} else {
-			if (status === "Upcoming Event") {
-				label = `Event will be held from ${startDate} to ${endDate} at ${event.location}`;
-			} else if (status === "Ongoing Event") {
-				label = `Event is ongoing from ${startDate} to ${endDate} at ${event.location}`;
-			} else if (status === "Past Event") {
-				label = `Event was held from ${startDate} to ${endDate} at ${event.location}`;
-			}
-		}
-
 		return {
 			name: event.name,
 			designation: status,
-			quote: label,
+			quote: getEventDescription(event),
 			src:
 				event.coverImg ||
 				"https://nkmkpzzqjrewuynxaftt.supabase.co/storage/v1/object/public/event_covers/Group%201(1).png-adb8ef80-bb32-477d-8a7a-f49f6c0bbbe7",

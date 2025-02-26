@@ -25,6 +25,7 @@ export * from "./ui/select";
 export * from "./ui/scroll-area";
 export * from "./ui/aspect-ratio";
 export * from "./ui/badge";
+export * from "./ui/switch";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
@@ -37,6 +38,7 @@ export * from "./custom/image-uploader";
 export * from "./custom/date-range-picker";
 export * from "./custom/time-picker";
 export * from "./custom/empty-state";
+export * from "./custom/full-calendar";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";

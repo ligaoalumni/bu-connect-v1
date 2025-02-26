@@ -1,9 +1,9 @@
 import React from "react";
 import EventForm from "../_components/event-form";
-import { disableEvents } from "@/models";
+import { getDisabledEvents } from "@/models";
 
 export default async function CreateEventPage() {
-	const disabledDates = await disableEvents();
+	const disabledDates = await getDisabledEvents();
 
 	return <EventForm disabledDates={disabledDates} />;
 }

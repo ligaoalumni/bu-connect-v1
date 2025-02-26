@@ -12,14 +12,20 @@ export * from "./alumni";
 export * from "./user";
 export * from "./event";
 
+export type Events = {
+	start: Date;
+	end: Date;
+	title: string;
+	id: string;
+	location: string;
+	backgroundColor?: string;
+	borderColor?: string;
+}[];
+
 export interface EventFormProps {
 	edit?: boolean;
 	event?: EventPartialRelation;
-	disabledDates?: {
-		startDate: Date;
-		endDate: Date;
-		title: string;
-	}[];
+	events?: Events;
 }
 
 export interface PaginationResult<T> {

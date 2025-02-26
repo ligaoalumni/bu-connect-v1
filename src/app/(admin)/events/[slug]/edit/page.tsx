@@ -1,16 +1,16 @@
-import { disableEvents, readEvent } from "@/models";
+import { getDisabledEvents, readEvent } from "@/models";
 import { notFound } from "next/navigation";
 import EventForm from "../../_components/event-form";
 
 async function getEvent(slug: string) {
 	const event = await readEvent(slug);
-	const disabledDates = await disableEvents();
+	const events = await getDisabledEvents();
 
 	if (!event) {
 		notFound();
 	}
 
-	return { event, disabledDates };
+	return { event, events };
 }
 
 export default async function EditEvent({
@@ -19,7 +19,7 @@ export default async function EditEvent({
 	params: { slug: string };
 }) {
 	const { slug } = await params;
-	const { event, disabledDates } = await getEvent(slug);
+	const { event, events } = await getEvent(slug);
 
-	return <EventForm edit event={event} disabledDates={disabledDates} />;
+	return <EventForm edit event={event} events={events} />;
 }

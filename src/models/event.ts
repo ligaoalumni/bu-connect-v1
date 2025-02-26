@@ -3,12 +3,13 @@ import prisma from "@/lib/prisma";
 import {
 	Event,
 	EventPartialRelation,
+	Events,
 	EventWithPagination,
 	PaginationArgs,
 	PaginationResult,
 } from "@/types";
 import { Prisma } from "@prisma/client";
-import { isFuture } from "date-fns";
+import { format, isFuture } from "date-fns";
 import slug from "unique-slug";
 
 export const readEvent = async (
@@ -155,15 +156,41 @@ export const updateEvent = async (
 	return updatedEvent;
 };
 
-export const disableEvents = async () => {
+export const getDisabledEvents = async (): Promise<Events> => {
 	const allEvents = await readEvents();
 	const futureEvents = allEvents.data.filter((event) =>
 		isFuture(event.startDate)
 	);
 
-	return futureEvents.map((event) => ({
-		startDate: event.startDate,
-		endDate: event.endDate || event.startDate,
-		title: event.name,
-	}));
+	const setTimeOnDate = (date: Date, timeString: string) => {
+		// Split the timeString into hours and minutes
+		const [hours, minutes] = timeString.split(":").map(Number);
+
+		// Set the hours and minutes on the provided date
+		date.setHours(hours, minutes, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+		return date;
+	};
+
+	return futureEvents.map((event) => {
+		// Start Date & Time
+		const start = setTimeOnDate(
+			event.startDate,
+			format(event.startTime, "HH:mm")
+		);
+
+		// End Date & Time
+		const endDate = event.endDate || event.startDate; // Use startDate if no endDate is provided
+		const end = setTimeOnDate(endDate, format(event.endTime, "HH:mm"));
+
+		return {
+			id: event.slug,
+			start,
+			end,
+			location: event.location,
+
+			title: event.name,
+			backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
+			borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`,
+		};
+	});
 };

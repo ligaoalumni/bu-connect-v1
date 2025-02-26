@@ -1,10 +1,10 @@
-import { EventDateTime } from "@/types";
-import { isAfter, isBefore, isEqual } from "date-fns";
+import { EventWithPagination, EventDateTime } from "@/types";
+import { formatDate, isAfter, isBefore, isEqual, isSameDay } from "date-fns";
 
 export const getEventStatus = (event: EventDateTime) => {
 	const now = new Date();
 
-	const startDateTime = new Date(event.startDate);
+	const startDateTime = event.startDate;
 
 	startDateTime.setHours(
 		event.startTime.getHours(),
@@ -13,7 +13,7 @@ export const getEventStatus = (event: EventDateTime) => {
 		0
 	); // Set correct time
 
-	const endDateTime = new Date(event?.endDate || event.startDate);
+	const endDateTime = event?.endDate || event.startDate;
 
 	endDateTime.setHours(
 		event.endTime.getHours(),
@@ -40,8 +40,42 @@ export const getEventStatus = (event: EventDateTime) => {
 		return "Ongoing Event";
 	}
 
-	console.log(startDateTime);
-	console.log(endDateTime);
-
 	return "Unknown Status";
+};
+
+export const getEventDescription = (event: EventWithPagination) => {
+	const status = getEventStatus({
+		endDate: event.endDate || event.startDate,
+		startDate: event.startDate,
+		startTime: event.startTime,
+		endTime: event.endTime,
+	});
+
+	const oneDay = isSameDay(event.startDate, event.endDate || event.startDate);
+	const startDate = formatDate(
+		event.startDate,
+		oneDay ? "MMM dd, yyyy" : "MMM dd "
+	);
+	const endDate = formatDate(event.endDate || event.startDate, "MMM dd, yyyy");
+	let label = "";
+
+	if (oneDay) {
+		if (status === "Upcoming Event") {
+			label = `Event will be held on ${startDate} at ${event.location}`;
+		} else if (status === "Ongoing Event") {
+			label = `Event is ongoing at ${event.location}`;
+		} else if (status === "Past Event") {
+			label = `Event was held on ${startDate} at ${event.location}`;
+		}
+	} else {
+		if (status === "Upcoming Event") {
+			label = `Event will be held from ${startDate} to ${endDate} at ${event.location}`;
+		} else if (status === "Ongoing Event") {
+			label = `Event is ongoing from ${startDate} to ${endDate} at ${event.location}`;
+		} else if (status === "Past Event") {
+			label = `Event was held from ${startDate} to ${endDate} at ${event.location}`;
+		}
+	}
+
+	return label;
 };

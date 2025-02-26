@@ -28,7 +28,7 @@ import { toast } from "sonner";
 export default function EventForm({
 	edit = false,
 	event,
-	disabledDates,
+	events,
 }: EventFormProps) {
 	const router = useRouter();
 	const form = useForm<EventFormData>({
@@ -183,7 +183,7 @@ export default function EventForm({
 									<FormLabel>Date</FormLabel>
 									<FormControl>
 										<DatePickerWithRange
-											disabledDates={disabledDates}
+											events={events}
 											fromDefault={edit ? event?.startDate : undefined}
 											toDefault={edit ? event?.endDate || undefined : undefined}
 											handleValue={(value) => {
