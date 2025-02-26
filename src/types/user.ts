@@ -1,14 +1,15 @@
-export interface User<T> {
+import { Alumni } from "./alumni";
+
+export interface User {
 	readonly id: number;
 	email: string;
 	role: UserRole;
 	password: string;
 	firstName: string;
 	lastName: string;
+	avatar?: string;
 
-	alumniData: T extends "ALUMNI"
-		? { graduationYear: number; major: string }
-		: never;
+	alumni: Alumni | null;
 
 	createdAt: Date;
 	updatedAt: Date;

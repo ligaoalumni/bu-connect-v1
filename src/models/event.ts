@@ -182,15 +182,16 @@ export const getDisabledEvents = async (): Promise<Events> => {
 		const endDate = event.endDate || event.startDate; // Use startDate if no endDate is provided
 		const end = setTimeOnDate(endDate, format(event.endTime, "HH:mm"));
 
+		const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`;
+
 		return {
 			id: event.slug,
 			start,
 			end,
 			location: event.location,
-
 			title: event.name,
-			backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
-			borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`,
+			backgroundColor: color,
+			borderColor: color,
 		};
 	});
 };

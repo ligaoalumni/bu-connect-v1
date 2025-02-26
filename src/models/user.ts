@@ -26,10 +26,7 @@ export const readUser = async ({
 };
 
 export const createUser = async (
-	user: Pick<
-		User<never>,
-		"email" | "password" | "role" | "firstName" | "lastName"
-	>
+	user: Pick<User, "email" | "password" | "role" | "firstName" | "lastName">
 ) => {
 	const createdUser = await prisma.user.create({
 		data: {

@@ -2,22 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
+import {
+	adminRoutes,
+	alumniRoutes,
+	authRoutes,
+	superAdminRoutes,
+} from "./app/constant";
 
-// 1. Specify protected and public routes
-const adminRoutes = [
-	"/admin",
-	"/admin/alumni",
-	"/admin/events",
-	"/admin/events/add-new-event",
-	"/admin/settings",
-	"/admin/account-info",
-];
-const superAdminRoutes = ["/admin/admins", "/admin/admins/add-new-admin"];
-const alumniRoutes = ["/account"];
 const protectedRoutes = adminRoutes
 	.concat(superAdminRoutes)
 	.concat(alumniRoutes);
-const authRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {
 	// 2. Check if the current route is protected or public
