@@ -1,5 +1,4 @@
 import "server-only";
-
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { SessionPayload } from "@/types";
@@ -11,9 +10,10 @@ export async function createSession({
 	email,
 	id,
 	role,
+	alumniId,
 }: Omit<SessionPayload, "expiresAt">) {
 	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-	const session = await encrypt({ id, role, email, expiresAt });
+	const session = await encrypt({ id, role, email, expiresAt, alumniId });
 	const cookieStore = await cookies();
 
 	cookieStore.set("session", session, {
@@ -40,8 +40,8 @@ export async function decrypt(session: string | undefined = "") {
 		});
 		return payload as SessionPayload;
 	} catch (error) {
-		console.log(error);
-		console.log("Failed to verify session");
+		console.log("Failed to verify session:", error);
+		return null; // Return null instead of undefined for clarity
 	}
 }
 
@@ -53,13 +53,16 @@ export async function updateSession() {
 		return null;
 	}
 
-	const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	payload.expiresAt = expiresAt;
+
+	const updatedSession = await encrypt(payload);
 
 	const cookieStore = await cookies();
-	cookieStore.set("session", session, {
+	cookieStore.set("session", updatedSession, {
 		httpOnly: true,
 		secure: true,
-		expires: expires,
+		expires: expiresAt,
 		sameSite: "lax",
 		path: "/",
 	});

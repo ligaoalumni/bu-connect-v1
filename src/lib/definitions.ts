@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const EventFormSchema = z.object({
 	name: z.string().nonempty("Name is required"),
-	coverImg: z.string().optional(),
+	coverImg: z.string().nonempty("Cover Image is required"),
 	content: z
 		.string()
 		.refine(

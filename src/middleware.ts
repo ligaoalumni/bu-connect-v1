@@ -32,6 +32,16 @@ export default async function middleware(req: NextRequest) {
 	const cookie = (await cookies()).get("session")?.value;
 	const session = await decrypt(cookie);
 
+	if (
+		session &&
+		session.role === "ALUMNI" &&
+		isAlumniRoute &&
+		!session.alumniId
+	) {
+		console.log("asdasd");
+		return NextResponse.redirect(new URL("/set-up-account", req.nextUrl));
+	}
+
 	// 4. Redirect to /login if the user is not authenticated
 	if (isProtectedRoute && !cookie && !session) {
 		return NextResponse.redirect(new URL("/login", req.nextUrl));

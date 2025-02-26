@@ -45,6 +45,7 @@ export const readEvent = async (
 
 	return {
 		...event,
+		coverImg: event.coverImg || "",
 	};
 };
 
@@ -91,8 +92,6 @@ export const readEvents = async ({
 		};
 	}
 
-	console.log(pagination, "qq");
-
 	const events = await prisma.event.findMany({
 		where,
 		skip: pagination ? pagination.limit * pagination.page : undefined,
@@ -113,6 +112,7 @@ export const readEvents = async ({
 			...event,
 			alumni: event.alumni.length,
 			interested: event.interested.length,
+			coverImg: event.coverImg || "",
 		})),
 	};
 };

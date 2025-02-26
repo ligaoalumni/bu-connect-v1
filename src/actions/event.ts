@@ -14,7 +14,6 @@ export const createEventAction = async (data: EventFormData) => {
 
 		const event = await createEvent({
 			...data,
-			coverImg: data.coverImg ?? "",
 			endDate: data.endDate || data.startDate,
 		});
 
