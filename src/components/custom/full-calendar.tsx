@@ -81,7 +81,7 @@ export function FCalendar({ events }: { events: Events }) {
 		return (
 			<Link
 				href={`/events/${eventInfo.event.id}/info`}
-				className="relative overflow-hidden"
+				className="relative overflow-hidden p-2"
 				suppressHydrationWarning>
 				{/* <GripVertical className="h-3 w-3" /> */}
 				<h1 className="block  ">{eventInfo.event.title}</h1>

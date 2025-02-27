@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
-import { publicRoutes } from "@/app/constant";
+import { publicRoutes } from "@/constant";
 import { User } from "@/types";
 import { AvatarDropdown } from "./avatar-dropdown";
 import { ThemeSwitcher } from "./theme-switcher";
@@ -33,11 +33,11 @@ const components: { title: string; href: string; description: string }[] = [
 		href: "/past-events",
 		description: "Review past events and notable highlights.",
 	},
-	{
-		title: "Ongoing Events",
-		href: "/ongoing-events",
-		description: "See events currently in progress with live updates.",
-	},
+	// {
+	// 	title: "Ongoing Events",
+	// 	href: "/ongoing-events",
+	// 	description: "See events currently in progress with live updates.",
+	// },
 ];
 
 export function MainNav({

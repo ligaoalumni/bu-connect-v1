@@ -7,7 +7,7 @@ import {
 	alumniRoutes,
 	authRoutes,
 	superAdminRoutes,
-} from "./app/constant";
+} from "./constant";
 
 const protectedRoutes = adminRoutes
 	.concat(superAdminRoutes)

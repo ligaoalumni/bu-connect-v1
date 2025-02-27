@@ -1,17 +1,13 @@
 import { Calendar, GraduationCap, MessageSquare, Users } from "lucide-react";
-import { format } from "date-fns";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "@/components";
-import { readOngoingEvent } from "@/models";
-import DashboardEventCard, {
-	NoCurrentEvent,
-} from "./_components/dashboard-card-event";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components";
+import { DashboardEventSectionSkeleton } from "./_components/dashboard-event-section";
+import { lazy, Suspense } from "react";
+
+const DashboardEventSection = lazy(
+	() => import("./_components/dashboard-event-section")
+);
 
 export default async function Dashboard() {
-	const events = await readOngoingEvent();
-	const today = new Date();
-	const currentDate = format(today, "MMMM d, yyyy");
-	const dayName = format(today, "EEEE");
-
 	// const recentAlumni = [
 	// 	{
 	// 		id: 1,
@@ -64,36 +60,10 @@ export default async function Dashboard() {
 			<div className="flex-1">
 				<div className="grid gap-5">
 					{/* Today's Events Section */}
-					<section>
-						<div className="flex items-center justify-between mb-4">
-							<div className="flex items-end gap-2">
-								<h2 className="text-2xl font-bold tracking-tight">
-									Today&apos;s Events
-								</h2>
-								<div className="hidden md:block h-8 w-[2px] bg-black/50" />
-								<span className="hidden md:block  text-md text-black/50">
-									{dayName}, {currentDate}
-								</span>
-							</div>
-							<Button variant="outline" size="sm">
-								<Calendar className="mr-2 h-4 w-4" />
-								View All Events
-							</Button>
-						</div>
-
-						<div className="grid gap-4 md:grid-cols-2">
-							{events.ongoing ? (
-								<DashboardEventCard {...events.ongoing} />
-							) : (
-								<NoCurrentEvent />
-							)}
-							{events.nextEvent ? (
-								<DashboardEventCard {...events.nextEvent} upcoming />
-							) : (
-								<NoCurrentEvent upcoming />
-							)}
-						</div>
-					</section>
+					<Suspense fallback={<DashboardEventSectionSkeleton />}>
+						<DashboardEventSection />
+					</Suspense>
+					{/* <DashboardEventSectionSkeleton /> */}
 
 					{/* Stats Overview */}
 					<section className="mt-6">

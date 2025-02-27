@@ -15,4 +15,9 @@ export const alumniRoutes = ["/account"];
 
 export const authRoutes = ["/login", "/signup"];
 
-export const publicRoutes = alumniRoutes.concat(["/"]);
+export const publicRoutes = alumniRoutes.concat([
+	"/",
+	"/all-events",
+	"/past-events",
+	"/ongoing-events",
+]);
