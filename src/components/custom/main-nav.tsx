@@ -48,9 +48,9 @@ export function MainNav({
 	const path = usePathname();
 
 	return publicRoutes.includes(path) ? (
-		<header className="sticky container mx-auto top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-			<div className="container flex h-14 items-center">
-				<div className="mr-4 hidden md:flex">
+		<header className="sticky  container mx-auto top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+			<div className="container px-5 md:px-0 flex h-14 items-center">
+				<div className="mr-4  hidden md:flex">
 					<Link href="/" className="mr-6 flex items-center space-x-2">
 						<span className="hidden font-bold sm:inline-block">
 							LNHS | Alumni Tracker
@@ -174,7 +174,7 @@ export function MainNav({
 						</div>
 					</SheetContent>
 				</Sheet>
-				<div className="flex flex-1 items-center justify-end space-x-4">
+				<div className="flex flex-1 items-center justify-end space-x-2">
 					<ThemeSwitcher />
 					{user && user.id ? (
 						<AvatarDropdown isAdmin={user.role !== "ALUMNI"} />
