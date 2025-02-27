@@ -32,3 +32,13 @@ export type EventWithPagination = Omit<Event, "interested" | "alumni"> & {
 	interested: number;
 	alumni: number;
 };
+
+export interface DashboardEvent {
+	id: number;
+	slug: string;
+	location: string;
+	attendees: number;
+	time: string;
+	date: string;
+	name: string;
+}

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 
 import {
+	DashboardEvent,
 	Event,
 	EventPartialRelation,
 	Events,
@@ -197,3 +198,87 @@ export const getDisabledEvents = async (): Promise<Events> => {
 		};
 	});
 };
+
+export const readOngoingEvent = async () => {
+	const event = await prisma.event.findFirst({
+		where: {
+			startDate: {
+				lte: new Date(),
+			},
+			endDate: {
+				gte: new Date(),
+			},
+		},
+
+		include: {
+			_count: {
+				select: {
+					alumni: true,
+				},
+			},
+		},
+	});
+
+	const upcomingEvent = await prisma.event.findFirst({
+		where: {
+			startDate: {
+				gt: new Date(),
+			},
+		},
+		orderBy: {
+			startDate: "asc",
+		},
+		include: {
+			_count: {
+				select: {
+					interested: true,
+				},
+			},
+		},
+	});
+
+	return {
+		ongoing: event
+			? formatDashboardEvent({
+					...event,
+					alumni: event._count.alumni,
+					interested: 0,
+			  })
+			: null,
+		nextEvent: upcomingEvent
+			? formatDashboardEvent({
+					...upcomingEvent,
+					alumni: 0,
+					interested: upcomingEvent._count.interested,
+			  })
+			: null,
+	};
+};
+
+function formatDashboardEvent(event: EventWithPagination): DashboardEvent {
+	let oneDay = false;
+
+	if (event && event.startDate === event.endDate) {
+		oneDay = true;
+	} else {
+		oneDay = false;
+	}
+
+	return {
+		id: event.id,
+		slug: event.slug,
+		name: event.name,
+		location: event.location,
+		attendees: event.alumni,
+		time: `${format(event.startTime, "h:mm a")} - ${format(
+			event.endTime,
+			"h:mm a"
+		)}`,
+		date: oneDay
+			? format(event.startDate, "MMMM d, yyyy")
+			: `${format(event.startDate, "MMMM d ")} - ${format(
+					event.endDate || event.startDate,
+					"MMMM d, yyyy"
+			  )}`,
+	};
+}
