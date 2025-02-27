@@ -32,7 +32,6 @@ export default async function middleware(req: NextRequest) {
 		isAlumniRoute &&
 		!session.alumniId
 	) {
-		console.log("asdasd");
 		return NextResponse.redirect(new URL("/set-up-account", req.nextUrl));
 	}
 

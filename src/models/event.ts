@@ -119,15 +119,11 @@ export const readEvents = async ({
 		};
 	}
 
-	console.log("STATUS: ", status);
-
 	if (typeof filter === "string") {
 		where = {
 			OR: [{ name: { contains: filter, mode: "insensitive" } }],
 		};
 	}
-
-	console.log("WHERE: ", where);
 
 	const events = await prisma.event.findMany({
 		where,
@@ -141,8 +137,6 @@ export const readEvents = async ({
 	});
 
 	const count = await prisma.event.count({ where });
-
-	console.log(events.length);
 
 	return {
 		count,

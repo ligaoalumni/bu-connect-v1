@@ -30,7 +30,6 @@ export function ImageUpload({
 						if (!img) {
 							throw new Error("Failed to upload image");
 						}
-						console.log(img, "qqq");
 
 						setPreview(img);
 						handleValueChange(img);
