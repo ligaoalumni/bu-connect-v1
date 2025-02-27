@@ -26,6 +26,8 @@ export * from "./ui/scroll-area";
 export * from "./ui/aspect-ratio";
 export * from "./ui/badge";
 export * from "./ui/switch";
+export * from "./ui/progress";
+export * from "./ui/tabs";
 export * from "./ui/navigation-menu";
 
 // CUSTOM
