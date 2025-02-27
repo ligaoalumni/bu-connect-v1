@@ -79,7 +79,9 @@ export const readEvents = async ({
 	pagination,
 	order,
 	orderBy,
-}: PaginationArgs = {}): Promise<PaginationResult<EventWithPagination>> => {
+}: PaginationArgs<never> = {}): Promise<
+	PaginationResult<EventWithPagination>
+> => {
 	let where: Prisma.EventWhereInput = {};
 
 	if (filter && typeof filter === "number") {

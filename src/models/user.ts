@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { User } from "@/types";
+import { PaginationArgs, PaginationResult, User } from "@/types";
 import { Prisma } from "@prisma/client";
 
 export const readUser = async ({
@@ -39,4 +39,66 @@ export const createUser = async (
 	});
 
 	return createdUser;
+};
+
+export const readUsers = async (
+	{
+		filter,
+		order,
+		orderBy,
+		pagination,
+		role = ["ADMIN", "ALUMNI"],
+	}: PaginationArgs<never> = {},
+	includeAlumni?: boolean
+): Promise<PaginationResult<User>> => {
+	let where: Prisma.UserWhereInput = {};
+
+	if (filter && typeof filter === "number") {
+		where = {
+			id: filter,
+		};
+	}
+
+	if (typeof filter === "string") {
+		where = {
+			OR: [
+				{
+					email: { contains: filter, mode: "insensitive" },
+				},
+				{
+					firstName: { contains: filter, mode: "insensitive" },
+				},
+				{
+					lastName: { contains: filter, mode: "insensitive" },
+				},
+			],
+		};
+	}
+
+	where.role = {
+		in: role,
+	};
+
+	const users = await prisma.user.findMany({
+		where,
+		skip: pagination ? pagination.limit * pagination.page : undefined,
+		take: pagination ? pagination.limit : undefined,
+		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+		include: {
+			alumni: includeAlumni,
+		},
+	});
+
+	const count = await prisma.user.count({ where });
+
+	return {
+		count,
+		hasMore: users.length === pagination?.limit,
+		data: users.map((user) => ({
+			...user,
+			alumni: user.alumni
+				? { ...user.alumni, userId: user.id, interested: [], events: [] }
+				: null,
+		})),
+	};
 };

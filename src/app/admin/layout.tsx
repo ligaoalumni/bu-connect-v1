@@ -37,10 +37,14 @@ export default function AdminLayout({
 		const isLastSegment = index === segments.length - 1;
 
 		// Format the segment text (capitalize and replace hyphens with spaces)
-		const formattedSegment = segment
+		let formattedSegment = segment
 			.split("-")
 			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(" ");
+
+		if (formattedSegment.toLowerCase() === "admin") {
+			formattedSegment = "Dashboard";
+		}
 
 		return (
 			<Fragment key={segment}>

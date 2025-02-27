@@ -1,5 +1,3 @@
-import { User } from "./user";
-
 export interface Alumni {
 	readonly id: number;
 	email: string;
@@ -10,8 +8,6 @@ export interface Alumni {
 	major: string;
 
 	qrCode: string;
-	user: User;
-	userId: number;
 
 	interested: Event[];
 	events: Event[];

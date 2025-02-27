@@ -34,7 +34,7 @@ export interface PaginationResult<T> {
 	hasMore: boolean;
 }
 
-export type PaginationArgs = {
+export type PaginationArgs<TStatus> = {
 	filter?: string | number;
 	pagination?: {
 		limit: number;
@@ -42,6 +42,8 @@ export type PaginationArgs = {
 	};
 	orderBy?: string;
 	order?: "asc" | "desc";
+	status?: TStatus[];
+	role?: UserRole[];
 };
 
 export interface EventDateTime {
