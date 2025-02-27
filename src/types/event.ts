@@ -42,3 +42,5 @@ export interface DashboardEvent {
 	date: string;
 	name: string;
 }
+
+export type EventStatus = "Upcoming Event" | "Ongoing Event" | "Past Event";

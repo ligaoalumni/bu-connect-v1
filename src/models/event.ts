@@ -5,6 +5,7 @@ import {
 	Event,
 	EventPartialRelation,
 	Events,
+	EventStatus,
 	EventWithPagination,
 	PaginationArgs,
 	PaginationResult,
@@ -80,7 +81,8 @@ export const readEvents = async ({
 	pagination,
 	order,
 	orderBy,
-}: PaginationArgs<never> = {}): Promise<
+	status,
+}: PaginationArgs<EventStatus> = {}): Promise<
 	PaginationResult<EventWithPagination>
 > => {
 	let where: Prisma.EventWhereInput = {};
@@ -91,11 +93,41 @@ export const readEvents = async ({
 		};
 	}
 
+	if (status && status?.includes("Ongoing Event")) {
+		where = {
+			...where,
+			startDate: {
+				lte: new Date(),
+			},
+			endDate: {
+				gte: new Date(),
+			},
+		};
+	} else if (status && status?.includes("Upcoming Event")) {
+		where = {
+			...where,
+			startDate: {
+				gt: new Date(),
+			},
+		};
+	} else if (status && status?.includes("Past Event")) {
+		where = {
+			...where,
+			endDate: {
+				lt: new Date(),
+			},
+		};
+	}
+
+	console.log("STATUS: ", status);
+
 	if (typeof filter === "string") {
 		where = {
 			OR: [{ name: { contains: filter, mode: "insensitive" } }],
 		};
 	}
+
+	console.log("WHERE: ", where);
 
 	const events = await prisma.event.findMany({
 		where,
@@ -109,6 +141,8 @@ export const readEvents = async ({
 	});
 
 	const count = await prisma.event.count({ where });
+
+	console.log(events.length);
 
 	return {
 		count,

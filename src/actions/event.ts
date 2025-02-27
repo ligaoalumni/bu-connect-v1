@@ -2,7 +2,7 @@
 
 import { EventFormSchema } from "@/lib/definitions";
 import { createEvent, readEvents, updateEvent } from "@/models";
-import { EventFormData, PaginationArgs } from "@/types";
+import { EventFormData, EventStatus, PaginationArgs } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const createEventAction = async (data: EventFormData) => {
@@ -47,7 +47,9 @@ export const updateEventAction = async (data: EventFormData, id: number) => {
 	}
 };
 
-export const readEventsAction = async (args: PaginationArgs<never> = {}) => {
+export const readEventsAction = async (
+	args: PaginationArgs<EventStatus> = {}
+) => {
 	try {
 		const events = await readEvents(args);
 		return events;
