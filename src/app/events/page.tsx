@@ -10,7 +10,7 @@ export default async function AllEvents() {
 	});
 
 	return (
-		<div className="container mx-auto pt-10 px-5 md:px-0">
+		<div className="container mx-auto pt-5 px-5 md:px-0">
 			<InfiniteScroll defaultData={events.data} moreData={events.hasMore} />
 		</div>
 	);
