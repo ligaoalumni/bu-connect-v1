@@ -6,20 +6,22 @@ import { z } from "zod";
 import { SignupFormSchema } from "@/lib/definitions";
 import {
 	Button,
+	Checkbox,
 	Form,
 	FormControl,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 	Input,
 	InputWithIcon,
 } from "@/components";
 import { signUpAction } from "@/actions";
-import { Eye, EyeOff, GraduationCap, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function SignupForm() {
 	const form = useForm<z.infer<typeof SignupFormSchema>>({
@@ -27,6 +29,7 @@ export default function SignupForm() {
 		defaultValues: {
 			email: "",
 			firstName: "",
+			middleName: "",
 			lastName: "",
 			password: "",
 		},
@@ -80,127 +83,231 @@ export default function SignupForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(handleSignUp)}
-				className="max-w-sm lg:min-w-[24rem]  w-full border border-black/5 p-5 rounded-lg shadow-sm pb-10 flex flex-col justify-between">
-				<div className="flex flex-col items-center mb-5">
-					<GraduationCap className="h-20 w-20" />
-					<h1 className="text-2xl font-medium">Sign in</h1>
-					<h5 className="text-sm text-gray-600">LNHS - Alumni Tracker</h5>
+				className="max-w-xl lg:min-w-[24rem] bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65 pt-14  w-full border border-black/5 p-5   shadow-sm pb-10 flex flex-col justify-between">
+				<Image
+					src="/icon.svg"
+					height={120}
+					width={120}
+					alt="LNHS Logo"
+					className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
+				/>
+				<div className="flex flex-col mt-8 px-5 md:flex-row gap-5 justify-between">
+					<div className="space-y-4">
+						<FormField
+							control={form.control}
+							name="firstName"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter first name"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="middleName"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter middle name"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="lastName"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter last name"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="lrn"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter LRN"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+					<div className="space-y-4">
+						<FormField
+							control={form.control}
+							name="batchYear"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Batch Year"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Your email"
+											className="bg-white border-none h-12 rounded-md"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<InputWithIcon
+											className="bg-white border-none h-12 rounded-md"
+											inputProps={{
+												readOnly: form.formState.isSubmitting,
+												placeholder: "Your password",
+												type: !showPassword ? "password" : "text",
+												...field,
+											}}
+											endIcon={
+												showPassword ? (
+													<Eye
+														className="h-5 w-5 cursor-pointer"
+														onClick={handleShowPassword}
+													/>
+												) : (
+													<EyeOff
+														className="h-5 w-5 cursor-pointer"
+														onClick={handleShowPassword}
+													/>
+												)
+											}
+										/>
+									</FormControl>
+									{form.formState.errors.password && (
+										<div className="space-y-2">
+											<p className="text-sm font-medium">
+												Password requirements:
+											</p>
+											{getPasswordValidationState().map((validation, index) => (
+												<div key={index} className="flex items-center gap-2">
+													<span
+														className={
+															validation.test
+																? "text-green-500"
+																: "text-red-500"
+														}>
+														{validation.test ? "✓" : "×"}
+													</span>
+													<span className="text-sm text-gray-600">
+														{validation.message}
+													</span>
+												</div>
+											))}
+										</div>
+									)}
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="confirmPassword"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<InputWithIcon
+											className="bg-white border-none h-12 rounded-md"
+											inputProps={{
+												readOnly: form.formState.isSubmitting,
+												placeholder: "Confirm password",
+												type: !showPassword ? "password" : "text",
+												...field,
+											}}
+											endIcon={
+												showPassword ? (
+													<Eye
+														className="h-5 w-5 cursor-pointer"
+														onClick={handleShowPassword}
+													/>
+												) : (
+													<EyeOff
+														className="h-5 w-5 cursor-pointer"
+														onClick={handleShowPassword}
+													/>
+												)
+											}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 				</div>
-				<div className="space-y-4">
-					<FormField
-						control={form.control}
-						name="firstName"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>First Name</FormLabel>
-								<FormControl>
-									<Input
-										readOnly={form.formState.isSubmitting}
-										placeholder="Your first name"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="lastName"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Last Name</FormLabel>
-								<FormControl>
-									<Input
-										readOnly={form.formState.isSubmitting}
-										placeholder="Your last name"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input
-										readOnly={form.formState.isSubmitting}
-										placeholder="Your email"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<InputWithIcon
-										className=""
-										inputProps={{
-											readOnly: form.formState.isSubmitting,
-											placeholder: "Your password",
-											type: !showPassword ? "password" : "text",
-											...field,
-										}}
-										endIcon={
-											showPassword ? (
-												<Eye
-													className="h-5 w-5 cursor-pointer"
-													onClick={handleShowPassword}
-												/>
-											) : (
-												<EyeOff
-													className="h-5 w-5 cursor-pointer"
-													onClick={handleShowPassword}
-												/>
-											)
-										}
-									/>
-								</FormControl>
-								{form.formState.errors.password && (
-									<div className="space-y-2">
-										<p className="text-sm font-medium">
-											Password requirements:
-										</p>
-										{getPasswordValidationState().map((validation, index) => (
-											<div key={index} className="flex items-center gap-2">
-												<span
-													className={
-														validation.test ? "text-green-500" : "text-red-500"
-													}>
-													{validation.test ? "✓" : "×"}
-												</span>
-												<span className="text-sm text-gray-600">
-													{validation.message}
-												</span>
-											</div>
-										))}
-									</div>
-								)}
-							</FormItem>
-						)}
-					/>
+				<div className="flex items-center mt-5 gap-2 justify-center">
+					<Checkbox className="rounded-none data-[state=checked]:bg-black border-black data-[state=checked]:text-white" />
+					<p className="text-white text-xs">
+						Agree to our terms and have read and acknowledge our privacy policy
+					</p>
 				</div>
 				<Button
 					disabled={form.formState.isSubmitting}
 					type="submit"
-					className={`w-full mt-5 ${
+					size="lg"
+					className={`max-w-fit mx-auto  mt-5 ${
 						form.formState.isSubmitting && "cursor-wait"
 					}`}>
 					{form.formState.isSubmitting && <Loader2 className="animate-spin" />}
 					{form.formState.isSubmitting ? "Signing up..." : "Sign up"}
 				</Button>
+				<div className="flex gap-2 items-center justify-center text-xs mt-5">
+					<p className="text-white">Already have an account?</p>
+					<Link href="/login" className="text-primary hover:underline">
+						Log in here
+					</Link>
+				</div>
 			</form>
 		</Form>
 	);

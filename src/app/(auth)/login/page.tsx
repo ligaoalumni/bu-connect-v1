@@ -13,10 +13,8 @@ import {
 	Button,
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
-	CardHeader,
-	CardTitle,
+	Checkbox,
 } from "@/components";
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib/definitions";
@@ -24,6 +22,8 @@ import { LoginFormData } from "@/types";
 import { loginAction } from "@/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Image from "next/image";
+import Link from "next/link";
 
 const LoginForm = () => {
 	const router = useRouter();
@@ -33,6 +33,7 @@ const LoginForm = () => {
 		defaultValues: {
 			email: "",
 			password: "",
+			rememberMe: false,
 		},
 	});
 
@@ -62,85 +63,114 @@ const LoginForm = () => {
 	};
 
 	return (
-		<Card className="w-full max-w-md mx-auto">
-			<CardHeader className="space-y-1">
-				<CardTitle className="text-2xl font-bold">Login</CardTitle>
-				<CardDescription>
-					Enter your email and password to access your account
-				</CardDescription>
-			</CardHeader>
+		<div className=" bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65  ">
+			<Card className="w-full md:min-w-[400px] pt-16 max-w-md mx-auto border-none bg-transparent relative">
+				<Image
+					src="/icon.svg"
+					height={120}
+					width={120}
+					alt="LNHS Logo"
+					className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
+				/>
+				<CardContent>
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<div className="relative mt-8">
+												<Mail className="absolute left-2 top-[50%] translate-y-[-50%] h-4 w-4 text-muted-foreground" />
+												<Input
+													placeholder="Enter email address"
+													className="pl-8 bg-white border-none h-10 rounded-none"
+													{...field}
+												/>
+											</div>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-			<CardContent>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<div className="relative">
-											<Mail className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-											<Input
-												placeholder="Enter your email"
-												className="pl-8"
-												{...field}
-											/>
-										</div>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<div className="relative ">
+												<Lock className="absolute left-2 top-[50%] translate-y-[-50%] h-4 w-4 text-muted-foreground" />
+												<Input
+													type="password"
+													placeholder="Enter password"
+													className="pl-8 rounded-none bg-white border-none h-10"
+													{...field}
+												/>
+											</div>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Password</FormLabel>
-									<FormControl>
-										<div className="relative">
-											<Lock className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-											<Input
-												type="password"
-												placeholder="Enter your password"
-												className="pl-8"
-												{...field}
-											/>
-										</div>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+							<div className="flex items-center justify-between">
+								<div>
+									<FormField
+										control={form.control}
+										name="rememberMe"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<div className="flex gap-2">
+														<Checkbox
+															className="rounded-none data-[state=checked]:text-white  border-black data-[state=checked]:bg-black"
+															onCheckedChange={field.onChange}
+															type="button"
+														/>
+														<FormLabel className="text-white ">
+															Remember me
+														</FormLabel>
+													</div>
+												</FormControl>
+											</FormItem>
+										)}
+									/>
+								</div>
+								<Button
+									variant="link"
+									className="px-0 font-normal text-white italic"
+									type="button">
+									Forgot password?
+								</Button>
+							</div>
 
-						<div className="flex items-center justify-end">
-							<Button variant="link" className="px-0 font-normal" type="button">
-								Forgot password?
+							<Button
+								type="submit"
+								className="w-full"
+								disabled={form.formState.isSubmitting}>
+								{form.formState.isSubmitting ? "Logging in..." : "Login"}
 							</Button>
-						</div>
+						</form>
+					</Form>
+				</CardContent>
 
+				<CardFooter className="flex justify-center">
+					<p className="text-sm text-white">
+						Don&apos;t have an account?{" "}
 						<Button
-							type="submit"
-							className="w-full"
-							disabled={form.formState.isSubmitting}>
-							{form.formState.isSubmitting ? "Logging in..." : "Login"}
+							variant="link"
+							className="px-0 font-normal text-primary hover:underline"
+							type="button"
+							asChild>
+							<Link href="signup">Sign up </Link>
 						</Button>
-					</form>
-				</Form>
-			</CardContent>
-
-			<CardFooter className="flex justify-center">
-				<p className="text-sm text-gray-600">
-					Don&apos;t have an account?{" "}
-					<Button variant="link" className="px-0 font-normal" type="button">
-						Sign up
-					</Button>
-				</p>
-			</CardFooter>
-		</Card>
+					</p>
+				</CardFooter>
+			</Card>
+		</div>
 	);
 };
 

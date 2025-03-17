@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import { getInformation } from "@/actions";
-import { MainNav } from "@/components";
+import { Footer, MainNav } from "@/components";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -16,7 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "LNHS - ALUMNI TRACKING",
+	title: {
+		template: "%s | LNHS Alumni Tracking",
+		default: "LNHS Alumni Tracking",
+	},
+	icons: { icon: "/icon.svg" },
 };
 
 export default async function RootLayout({
@@ -43,6 +47,7 @@ export default async function RootLayout({
 				<Providers>
 					<MainNav user={userInfo} />
 					{children}
+					<Footer />
 				</Providers>
 			</body>
 		</html>

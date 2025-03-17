@@ -13,6 +13,12 @@ import {
 } from "@/components";
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Unauthorized",
+};
+
 const UnauthorizedAccess = () => {
 	// Function to handle redirect to login
 
