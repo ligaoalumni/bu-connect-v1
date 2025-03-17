@@ -11,7 +11,9 @@ import {
 	QrCode,
 	UserCog,
 	UserPlus,
+	UserPlus2,
 	Users,
+	Users2,
 } from "lucide-react";
 
 import {
@@ -62,7 +64,24 @@ const data = {
 		{
 			icon: GraduationCap,
 			title: "Alumni",
-			url: "/admin/alumni",
+			url: "#",
+			items: [
+				{
+					icon: UserPlus2,
+					title: "Add Record",
+					url: "/admin/alumni/records/add",
+				},
+				{
+					icon: Users2,
+					title: "Records",
+					url: "/admin/alumni/records",
+				},
+				{
+					icon: Users,
+					title: "Registered",
+					url: "/admin/alumni",
+				},
+			],
 		},
 		{
 			icon: UserCog,

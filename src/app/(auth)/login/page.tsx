@@ -84,6 +84,7 @@ const LoginForm = () => {
 											<div className="relative mt-8">
 												<Mail className="absolute left-2 top-[50%] translate-y-[-50%] h-4 w-4 text-muted-foreground" />
 												<Input
+													readOnly={form.formState.isSubmitting}
 													placeholder="Enter email address"
 													className="pl-8 bg-white border-none h-10 rounded-none"
 													{...field}
@@ -104,6 +105,7 @@ const LoginForm = () => {
 											<div className="relative ">
 												<Lock className="absolute left-2 top-[50%] translate-y-[-50%] h-4 w-4 text-muted-foreground" />
 												<Input
+													readOnly={form.formState.isSubmitting}
 													type="password"
 													placeholder="Enter password"
 													className="pl-8 rounded-none bg-white border-none h-10"

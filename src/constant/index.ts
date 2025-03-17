@@ -5,6 +5,8 @@ export * from "./blur-data";
 export const adminRoutes = [
 	"/admin",
 	"/admin/alumni",
+	"/admin/alumni/records",
+	"/admin/alumni/records/add",
 	"/admin/events",
 	"/admin/events/add-new-event",
 	"/admin/settings",
