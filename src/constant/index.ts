@@ -1,4 +1,5 @@
 import { getEventStatus } from "@/lib/event";
+export * from "./blur-data";
 
 // 1. Specify protected and public routes
 export const adminRoutes = [
