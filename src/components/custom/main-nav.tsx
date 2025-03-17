@@ -2,43 +2,35 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
-	NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicRoutes } from "@/constant";
 import { User } from "@/types";
 import { AvatarDropdown } from "./avatar-dropdown";
-import { ThemeSwitcher } from "./theme-switcher";
+import Image from "next/image";
 
-const components: { title: string; href: string; description: string }[] = [
-	{
-		title: "All Events",
-		href: "/all-events",
-		description: "Browse all events with comprehensive details.",
-	},
-	{
-		title: "Upcoming Events",
-		href: "/upcoming-events",
-		description: "Discover upcoming events and their schedules.",
-	},
-	{
-		title: "Past Events",
-		href: "/past-events",
-		description: "Review past events and notable highlights.",
-	},
-	// {
-	// 	title: "Ongoing Events",
-	// 	href: "/ongoing-events",
-	// 	description: "See events currently in progress with live updates.",
-	// },
-];
+// const components: { title: string; href: string; description: string }[] = [
+// 	{
+// 		title: "All Events",
+// 		href: "/all-events",
+// 		description: "Browse all events with comprehensive details.",
+// 	},
+// 	{
+// 		title: "Upcoming Events",
+// 		href: "/upcoming-events",
+// 		description: "Discover upcoming events and their schedules.",
+// 	},
+// 	{
+// 		title: "Past Events",
+// 		href: "/past-events",
+// 		description: "Review past events and notable highlights.",
+// 	},
+// 	// {
+// 	// 	title: "Ongoing Events",
+// 	// 	href: "/ongoing-events",
+// 	// 	description: "See events currently in progress with live updates.",
+// 	// },
+// ];
 
 export function MainNav({
 	user,
@@ -48,110 +40,20 @@ export function MainNav({
 	const path = usePathname();
 
 	return publicRoutes.includes(path) ? (
-		<header className="sticky  container mx-auto top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-			<div className="container px-5 md:px-0 flex h-14 items-center">
+		<header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
+			<div className="mx-auto container px-5 md:px-0 flex h-14  items-center">
 				<div className="mr-4  hidden md:flex">
 					<Link href="/" className="mr-6 flex items-center space-x-2">
-						<span className="hidden font-bold sm:inline-block">
-							LNHS | Alumni Tracker
-						</span>
+						<Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
 					</Link>
-					<NavigationMenu>
-						<NavigationMenuList>
-							<NavigationMenuItem>
-								<Link href="/" legacyBehavior passHref>
-									<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-										Home
-									</NavigationMenuLink>
-								</Link>
-							</NavigationMenuItem>
-							{/*<NavigationMenuItem>
-								<NavigationMenuTrigger>Events</NavigationMenuTrigger>
-								
-								 <NavigationMenuContent>
-									<ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-										<li className="row-span-3">
-											<NavigationMenuLink asChild>
-												<Link
-													className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-													href="/">
-													<div className="mb-2 mt-4 text-lg font-medium">
-														Getting Started
-													</div>
-													<p className="text-sm leading-tight text-muted-foreground">
-														Learn about our products and services.
-													</p>
-												</Link>
-											</NavigationMenuLink>
-										</li>
-										<li>
-											<NavigationMenuLink asChild>
-												<a
-													className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-													href="/docs">
-													<div className="text-sm font-medium leading-none">
-														Documentation
-													</div>
-													<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-														Start integrating our products and services.
-													</p>
-												</a>
-											</NavigationMenuLink>
-										</li>
-										<li>
-											<NavigationMenuLink asChild>
-												<a
-													className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-													href="/guides">
-													<div className="text-sm font-medium leading-none">
-														Guides
-													</div>
-													<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-														Best practices and examples to get you started.
-													</p>
-												</a>
-											</NavigationMenuLink>
-										</li>
-									</ul>
-								</NavigationMenuContent> 
-							</NavigationMenuItem>*/}
-							<NavigationMenuItem>
-								<NavigationMenuTrigger>Events</NavigationMenuTrigger>
-								<NavigationMenuContent>
-									<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-										{components.map((component) => (
-											<li key={component.title}>
-												<NavigationMenuLink asChild>
-													<a
-														className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-														href={component.href}>
-														<div className="text-sm font-medium leading-none">
-															{component.title}
-														</div>
-														<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-															{component.description}
-														</p>
-													</a>
-												</NavigationMenuLink>
-											</li>
-										))}
-									</ul>
-								</NavigationMenuContent>
-							</NavigationMenuItem>
-							<NavigationMenuItem>
-								<Link href="/about" legacyBehavior passHref>
-									<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-										About
-									</NavigationMenuLink>
-								</Link>
-							</NavigationMenuItem>
-						</NavigationMenuList>
-					</NavigationMenu>
 				</div>
 				<Sheet>
 					<SheetTrigger asChild>
-						<Button variant="outline" size="icon" className="md:hidden">
-							<Menu className="h-5 w-5" />
+						<Button
+							variant="outline"
+							size="icon"
+							className="md:hidden border-none bg-primary ">
+							<Menu className="h-5 w-5 text-white" />
 							<span className="sr-only">Toggle navigation menu</span>
 						</Button>
 					</SheetTrigger>
@@ -175,12 +77,15 @@ export function MainNav({
 					</SheetContent>
 				</Sheet>
 				<div className="flex flex-1 items-center justify-end space-x-2">
-					<ThemeSwitcher />
+					{/* <ThemeSwitcher /> */}
 					{user && user.id ? (
 						<AvatarDropdown isAdmin={user.role !== "ALUMNI"} />
 					) : (
 						<nav className="flex items-center space-x-2">
-							<Button asChild>
+							<Button
+								asChild
+								variant="outline"
+								className="bg-transparent text-white border-white rounded-sm">
 								<Link href="/login">Log In</Link>
 							</Button>
 						</nav>

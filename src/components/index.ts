@@ -26,6 +26,7 @@ export * from "./ui/scroll-area";
 export * from "./ui/aspect-ratio";
 export * from "./ui/badge";
 export * from "./ui/switch";
+export * from "./ui/separator";
 export * from "./ui/progress";
 export * from "./ui/tabs";
 export * from "./ui/navigation-menu";
@@ -47,6 +48,8 @@ export * from "./custom/full-calendar-skeleton";
 export * from "./custom/qr-code-scanner";
 export * from "./custom/event-card";
 export * from "./custom/infinite-scroll";
+export * from "./custom/back-to-top-btn";
+export * from "./custom/footer";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";

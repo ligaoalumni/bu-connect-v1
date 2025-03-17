@@ -186,6 +186,7 @@ export function DatePickerWithRange({
 								setError(null);
 								// Check if the range contains any disabled dates
 								if (hasDisabledDatesInRange(value)) {
+									setDate(undefined);
 									setError("Cannot select a range that includes booked dates");
 									return;
 								}
