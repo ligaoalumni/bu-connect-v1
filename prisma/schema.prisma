@@ -10,6 +10,22 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+
+
+model Student {
+  id        Int     @id @default(autoincrement())
+  studentId String @unique
+  lrn      String  @unique
+  firstName String  
+  middleName String
+  lastName  String  
+  graduationYear Int
+  birthDate DateTime
+
+  @@map("students")
+}
+
+
 // User model: Handles both alumni and admin/super admin login.
 model User {
   id        Int     @id @default(autoincrement())
@@ -25,6 +41,9 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+
+  @@map("users")
 }
 
 enum Role {
@@ -50,7 +69,11 @@ model Alumni {
   notifications Notification[] // Alumni can have multiple notifications
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+
+  @@map("alumni")
 }
+
+
 
 // Event model: Represents the alumni events (like homecoming).
 model Event {
@@ -73,6 +96,8 @@ model Event {
   // Notifications related to the event
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("events")
 }
 
 // Notification model: Stores notifications for alumni.
@@ -83,6 +108,8 @@ model Notification {
   alumniId   Int
   alumni     Alumni   @relation(fields: [alumniId], references: [id])
   createdAt  DateTime @default(now())
+
+  @@map("notifications")
 }
 
 model Session {
