@@ -136,3 +136,12 @@ model Session {
 
   @@map("sessions")
 }
+
+model Token {
+ 
+  email String @unique @id
+  token String 
+  validUntil DateTime
+
+  @@map("tokens")
+}
