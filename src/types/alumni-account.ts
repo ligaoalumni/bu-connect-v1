@@ -1,11 +1,11 @@
-export interface Alumni {
+export interface AlumniAccount {
 	readonly id: number;
 	email: string;
 	firstName: string;
 	lastName: string;
+	middleName: string | null;
 
 	graduationYear: number;
-	major: string;
 
 	qrCode: string;
 

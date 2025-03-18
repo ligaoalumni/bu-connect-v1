@@ -1,4 +1,5 @@
 import {
+	AlumniSchema,
 	EventFormSchema,
 	LoginFormSchema,
 	SignupFormSchema,
@@ -8,7 +9,7 @@ import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
 
-export * from "./alumni";
+export * from "./alumni-account";
 export * from "./user";
 export * from "./event";
 
@@ -77,6 +78,7 @@ export type UserRole = "ADMIN" | "SUPER_ADMIN" | "ALUMNI";
 export type LoginFormData = z.infer<typeof LoginFormSchema>;
 export type EventFormData = z.infer<typeof EventFormSchema>;
 export type SignUpFormData = z.infer<typeof SignupFormSchema>;
+export type AlumniFormData = z.infer<typeof AlumniSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;

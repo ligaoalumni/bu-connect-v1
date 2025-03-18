@@ -1,4 +1,4 @@
-import { Alumni } from "./alumni";
+import { AlumniAccount } from "./alumni-account";
 
 export interface Event {
 	readonly id: number;
@@ -14,16 +14,16 @@ export interface Event {
 
 	location: string;
 
-	interested: Alumni[];
-	alumni: Alumni[];
+	interested: AlumniAccount[];
+	alumni: AlumniAccount[];
 
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type EventPartialRelation = Omit<Event, "interested" | "alumni"> & {
-	alumni: Pick<Alumni, "id" | "firstName" | "lastName" | "email">[];
-	interested: Pick<Alumni, "id" | "firstName" | "lastName" | "email">[];
+	alumni: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
+	interested: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
 };
 
 export type EventWithoutRelations = Omit<Event, "interested" | "alumni">;
