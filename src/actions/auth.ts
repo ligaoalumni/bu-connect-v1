@@ -3,6 +3,7 @@
 import { SignupFormSchema } from "@/lib/definitions";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, readUser } from "@/models";
+import { createToken } from "@/models/token";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -46,21 +47,6 @@ export async function signUpAction(
 			throw new Error("An error occurred while creating your account.");
 		}
 
-		// TODO:
-		// 4. Create user session
-		const { email: userEmail, id, role } = user;
-		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		const session = await encrypt({ id, role, email: userEmail, expiresAt });
-		const cookieStore = await cookies();
-
-		cookieStore.set("session", session, {
-			httpOnly: true,
-			secure: true,
-			expires: expiresAt,
-			sameSite: "lax",
-			path: "/",
-		});
-
 		return user;
 	} catch (error) {
 		console.log(`Error signing up: ${error}`);
@@ -82,10 +68,26 @@ export async function loginAction(email: string, password: string) {
 			};
 		}
 
-		if (user.status === "PENDING" || user.status === "BLOCKED") {
+		if (user.status === "DELETED" || user.status === "BLOCKED") {
 			return {
-				error: { message: "Account inactive. Please contact support." },
+				error: {
+					message:
+						"Your account has been suspended. Please contact support for assistance.",
+				},
 			};
+		}
+
+		if (user.status === "PENDING" && user.role === "ALUMNI") {
+			return {
+				error: {
+					message:
+						"Your account is pending for admin verification. Please wait for approval.",
+				},
+			};
+		}
+
+		if (user.status === "ACTIVE" && !user.verifiedAt) {
+			await createToken(user.email);
 		}
 
 		const passwordMatch = await bcrypt.compare(password, user.password);
@@ -99,7 +101,13 @@ export async function loginAction(email: string, password: string) {
 		// Create user session
 		const { email: userEmail, id, role } = user;
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		const session = await encrypt({ id, role, email: userEmail, expiresAt });
+		const session = await encrypt({
+			id,
+			role,
+			email: userEmail,
+			expiresAt,
+			verified: !!user.verifiedAt,
+		});
 		const cookieStore = await cookies();
 
 		cookieStore.set("session", session, {

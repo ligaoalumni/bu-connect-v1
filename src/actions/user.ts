@@ -2,11 +2,14 @@
 
 import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
-import { createUser, readUser, updateUserStatus } from "@/models";
+import { encrypt } from "@/lib/session";
+import { createUser, readUser, updateUser, updateUserStatus } from "@/models";
+import { validateToken } from "@/models/token";
 import { AdminFormData } from "@/types";
 import type { User } from "@/types";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const createAdmin = async (
 	data: Pick<
@@ -83,4 +86,46 @@ export const updateUserStatusAction = async (
 ) => {
 	await updateUserStatus(id, status);
 	revalidatePath("/admin/list");
+};
+
+export const verifyAccount = async (
+	userId: number,
+	email: string,
+	token: string
+) => {
+	try {
+		const isValid = await validateToken(email, token);
+
+		if (!isValid) {
+			throw new Error("OTP is expired or invalid!");
+		}
+
+		const user = await updateUser(userId, { verifiedAt: new Date() });
+
+		const { email: userEmail, id, role } = user;
+		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+		const session = await encrypt({
+			id,
+			role,
+			email: userEmail,
+			expiresAt,
+			verified: !!user.verifiedAt,
+		});
+
+		const cookieStore = await cookies();
+
+		cookieStore.set("session", session, {
+			httpOnly: true,
+			secure: true,
+			expires: expiresAt,
+			sameSite: "lax",
+			path: "/",
+		});
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while creating the admin."
+		);
+	}
 };
