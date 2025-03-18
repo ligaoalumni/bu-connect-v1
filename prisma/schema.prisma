@@ -10,21 +10,21 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-
-
-model Student {
-  id        Int     @id @default(autoincrement())
-  studentId String @unique
-  lrn      String  @unique
-  firstName String  
-  middleName String
-  lastName  String  
+model Alumni {
+  id             Int      @id @default(autoincrement())
+  studentId      String   @unique
+  lrn            String   @unique
+  firstName      String
+  middleName     String
+  lastName       String
   graduationYear Int
-  birthDate DateTime
+  birthDate      DateTime
 
-  @@map("students")
+  alumniAccount  AlumniAccount? @relation(fields: [alumniId], references: [id])
+  alumniId       Int? @unique
+
+  @@map("alumni")
 }
-
 
 // User model: Handles both alumni and admin/super admin login.
 model User {
@@ -33,17 +33,30 @@ model User {
   password  String
   firstName String  @default("")
   lastName  String  @default("")
+  middleName String? @default("")
   role      Role
-  alumni    Alumni?
+  alumni    AlumniAccount?
   avatar    String?
 
   sessions Session[]
 
+  verifiedAt DateTime?
+  status     UserStatus @default(PENDING)
+
+  notifications Notification[] // Alumni can have multiple notifications
+
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
   @@map("users")
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  BLOCKED
+  DELETED
 }
 
 enum Role {
@@ -53,27 +66,31 @@ enum Role {
 }
 
 // Alumni model: Stores the alumni's personal information and their QR code.
-model Alumni {
-  id             Int    @id @default(autoincrement())
-  firstName      String
-  lastName       String
-  graduationYear Int
-  major          String
-  email          String @unique
-  qrCode         String @unique // Unique QR code for alumni
-  user           User   @relation(fields: [userId], references: [id])
-  userId         Int    @unique
+model AlumniAccount {
+  id         Int     @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  middleName String?
+
+  graduationYear Int 
+
+  email  String @unique
+  qrCode String @unique // Unique QR code for alumni
+
+  alumni Alumni? 
+  alumniId      Int? @unique
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 
   interested    Event[]        @relation("InterestEvent") // Many-to-many relationship with events
   events        Event[]        @relation("EventAttendees") // Many-to-many relationship with events
-  notifications Notification[] // Alumni can have multiple notifications
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
 
-  @@map("alumni")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("alumni_accounts")
 }
-
-
 
 // Event model: Represents the alumni events (like homecoming).
 model Event {
@@ -90,8 +107,8 @@ model Event {
 
   location String
 
-  interested Alumni[] @relation("InterestEvent") // Many-to-many with alumni
-  alumni     Alumni[] @relation("EventAttendees") // Many-to-many with alumni
+  interested AlumniAccount[] @relation("InterestEvent") // Many-to-many with alumni
+  alumni     AlumniAccount[] @relation("EventAttendees") // Many-to-many with alumni
 
   // Notifications related to the event
   createdAt DateTime @default(now())
@@ -105,8 +122,8 @@ model Notification {
   id         Int      @id @default(autoincrement())
   message    String
   readStatus Boolean  @default(false) // Whether the notification has been read
-  alumniId   Int
-  alumni     Alumni   @relation(fields: [alumniId], references: [id])
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
 
   @@map("notifications")
