@@ -1,4 +1,5 @@
 import {
+	AdminSchema,
 	AlumniSchema,
 	EventFormSchema,
 	LoginFormSchema,
@@ -79,6 +80,7 @@ export type LoginFormData = z.infer<typeof LoginFormSchema>;
 export type EventFormData = z.infer<typeof EventFormSchema>;
 export type SignUpFormData = z.infer<typeof SignupFormSchema>;
 export type AlumniFormData = z.infer<typeof AlumniSchema>;
+export type AdminFormData = z.infer<typeof AdminSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;

@@ -74,3 +74,23 @@ export const AlumniSchema = z.object({
 		.max(2100, { message: "Year must be at most 2100" }),
 	lrn: z.string().length(12, { message: "LRN must be exactly 12 characters" }),
 });
+
+export const AdminSchema = z.object({
+	firstName: z
+		.string()
+		.min(2, { message: "First name must be at least 2 characters" }),
+	middleName: z.string().optional(),
+	lastName: z
+		.string()
+		.min(2, { message: "Last name must be at least 2 characters" }),
+	email: z.string().email({ message: "Please enter a valid email address" }),
+	role: z.enum(["ADMIN", "SUPER_ADMIN"]),
+	password: z
+		.string()
+		.min(8, { message: "Password must be at least 8 characters" }),
+	passwordLength: z.number().min(8).max(32),
+	includeUppercase: z.boolean().default(true),
+	includeLowercase: z.boolean().default(true),
+	includeNumbers: z.boolean().default(true),
+	includeSymbols: z.boolean().default(true),
+});
