@@ -13,6 +13,9 @@ export const adminRoutes = [
 	"/admin/settings",
 	"/admin/account-info",
 ];
+
+export const sharedRoutes = ["/verify-account"];
+
 export const superAdminRoutes = [
 	"/admin/admins",
 	"/admin/admins/add-new-admin",
