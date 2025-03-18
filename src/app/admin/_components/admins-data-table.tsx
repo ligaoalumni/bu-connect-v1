@@ -131,7 +131,7 @@ export default function AdminsDataTable() {
 			cell: ({ row }) => {
 				return (
 					<Badge
-						className="capitalize min-w-[80px] max-w-[80px]  flex justify-center "
+						className="capitalize min-w-[80px] rounded-sm max-w-[80px]  flex justify-center "
 						variant={userStatusColorMap[row.original.status]}>
 						{row.original.status.toLowerCase()}
 					</Badge>
@@ -272,7 +272,20 @@ export default function AdminsDataTable() {
 			{updateAdmin && (
 				<UpdateStatusModal
 					user={updateAdmin}
-					closeModal={() => setUpdateAdmin(null)}
+					closeModal={() => {
+						setUpdateAdmin(null);
+					}}
+					handleUpdateStatus={(id, status) => {
+						setData((prev) =>
+							prev.map((user) => {
+								if (user.id === id) {
+									return { ...user, status };
+								}
+								return user;
+							})
+						);
+						// handleFetchData();
+					}}
 				/>
 			)}
 		</>

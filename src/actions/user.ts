@@ -2,9 +2,11 @@
 
 import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
-import { createUser, readUser } from "@/models";
+import { createUser, readUser, updateUserStatus } from "@/models";
 import { AdminFormData } from "@/types";
+import type { User } from "@/types";
 import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 
 export const createAdmin = async (
 	data: Pick<
@@ -73,4 +75,12 @@ export const createAdmin = async (
 				: "An error occurred while creating the admin."
 		);
 	}
+};
+
+export const updateUserStatusAction = async (
+	id: number,
+	status: User["status"]
+) => {
+	await updateUserStatus(id, status);
+	revalidatePath("/admin/list");
 };

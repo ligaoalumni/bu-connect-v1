@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { AlertTriangle } from "lucide-react";
 import { User } from "@/types";
 import { userStatusColorMap } from "@/constant";
+import { updateUserStatusAction } from "@/actions";
 
 interface UpdateStatusModalProps {
 	user: {
@@ -30,11 +31,13 @@ interface UpdateStatusModalProps {
 		status: User["status"];
 	};
 	closeModal: () => void;
+	handleUpdateStatus: (id: number, status: User["status"]) => void;
 }
 
 export default function UpdateStatusModal({
 	user,
 	closeModal,
+	handleUpdateStatus,
 }: UpdateStatusModalProps) {
 	const [status, setStatus] = useState<User["status"]>(user.status);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,6 +52,10 @@ export default function UpdateStatusModal({
 		setIsSubmitting(true);
 		try {
 			//
+			await updateUserStatusAction(user.id, status);
+			handleUpdateStatus(user.id, status);
+
+			closeModal();
 			toast("Status updated", {
 				description: `User status has been updated to ${status}`,
 				richColors: true,

@@ -90,7 +90,7 @@ const data = {
 			items: [
 				{
 					icon: UserPlus,
-					title: "Add New	Admin",
+					title: "Add",
 					url: "/admin/list/add-new",
 				},
 				{

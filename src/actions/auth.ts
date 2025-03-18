@@ -82,6 +82,12 @@ export async function loginAction(email: string, password: string) {
 			};
 		}
 
+		if (user.status === "PENDING" || user.status === "BLOCKED") {
+			return {
+				error: { message: "Account inactive. Please contact support." },
+			};
+		}
+
 		const passwordMatch = await bcrypt.compare(password, user.password);
 
 		if (!passwordMatch) {

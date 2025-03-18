@@ -114,3 +114,12 @@ export const readUsers = async (
 		})),
 	};
 };
+
+export const updateUserStatus = async (id: number, status: User["status"]) => {
+	const updatedUser = await prisma.user.update({
+		where: { id },
+		data: { status },
+	});
+
+	return updatedUser;
+};
