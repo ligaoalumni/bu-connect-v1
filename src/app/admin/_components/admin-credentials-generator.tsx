@@ -100,7 +100,13 @@ export function AdminCredentialsGenerator() {
 
 			// Reset form
 			form.reset();
-			generatePassword();
+			generatePassword({
+				length: form.getValues().passwordLength,
+				uppercase: form.getValues().includeUppercase,
+				lowercase: form.getValues().includeLowercase,
+				numbers: form.getValues().includeNumbers,
+				symbols: form.getValues().includeSymbols,
+			});
 		} catch (error) {
 			toast.error("An error occurred", {
 				description:

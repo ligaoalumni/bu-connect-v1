@@ -20,6 +20,7 @@ export * from "./ui/calendar";
 export * from "./ui/collapsible";
 export * from "./ui/sonner";
 export * from "./ui/table";
+export * from "./ui/input-otp";
 export * from "./ui/pagination";
 export * from "./ui/select";
 export * from "./ui/scroll-area";

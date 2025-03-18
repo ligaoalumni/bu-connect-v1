@@ -3,17 +3,15 @@ import { logout } from "@/actions/auth";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { revalidatePathAction } from "@/actions";
 
 export function LogoutButton() {
-	const router = useRouter();
 	return (
 		<DropdownMenuItem
 			onClick={async () => {
 				try {
 					await logout();
-
-					router.replace("/");
+					revalidatePathAction("/", "/");
 				} catch (error) {
 					toast.error("Failed to logout", {
 						description: (error as Error).message,

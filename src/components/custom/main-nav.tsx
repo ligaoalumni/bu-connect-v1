@@ -32,6 +32,8 @@ import Image from "next/image";
 // 	// },
 // ];
 
+const showMainNavRoutes = publicRoutes.concat(["/verify-account"]);
+
 export function MainNav({
 	user,
 }: {
@@ -39,7 +41,7 @@ export function MainNav({
 }) {
 	const path = usePathname();
 
-	return publicRoutes.includes(path) ? (
+	return showMainNavRoutes.includes(path) ? (
 		<header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
 			<div className="mx-auto container px-5 md:px-0 flex h-14  items-center">
 				<div className="mr-4  hidden md:flex">
