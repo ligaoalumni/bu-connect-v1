@@ -94,7 +94,7 @@ export default function DataTable<TData, TValue>({
 								) : undefined
 							}
 							inputProps={{
-								placeholder: `Filter ${filterName}...`,
+								placeholder: `Filter by ${filterName}...`,
 								className: "max-w-sm",
 								value: filterInput,
 								onChange: (e) => setFilterInput(e.target.value),

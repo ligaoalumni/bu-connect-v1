@@ -91,12 +91,12 @@ const data = {
 				{
 					icon: UserPlus,
 					title: "Add New	Admin",
-					url: "/admin/admins/add-new-admin",
+					url: "/admin/list/add-new",
 				},
 				{
 					icon: Users,
 					title: "List",
-					url: "/admin/admins",
+					url: "/admin/list",
 				},
 			],
 		},

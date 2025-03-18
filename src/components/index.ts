@@ -30,6 +30,7 @@ export * from "./ui/separator";
 export * from "./ui/progress";
 export * from "./ui/tabs";
 export * from "./ui/navigation-menu";
+export * from "./ui/dialog";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
