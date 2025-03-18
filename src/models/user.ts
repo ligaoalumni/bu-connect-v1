@@ -28,7 +28,10 @@ export const readUser = async ({
 };
 
 export const createUser = async (
-	user: Pick<User, "email" | "password" | "role" | "firstName" | "lastName">
+	user: Pick<
+		User,
+		"email" | "password" | "role" | "firstName" | "lastName" | "middleName"
+	>
 ) => {
 	const createdUser = await prisma.user.create({
 		data: {
@@ -36,6 +39,7 @@ export const createUser = async (
 			role: user.role,
 			firstName: user.firstName,
 			lastName: user.lastName,
+			middleName: user.middleName,
 			password: user.password,
 		},
 	});

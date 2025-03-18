@@ -38,6 +38,7 @@ export async function signUpAction(
 			password: hashedPassword,
 			firstName,
 			lastName,
+			middleName: validatedFields.data.middleName || "",
 			role: userRole,
 		});
 
