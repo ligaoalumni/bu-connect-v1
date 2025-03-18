@@ -1,4 +1,5 @@
 import { getEventStatus } from "@/lib/event";
+import { User } from "@prisma/client";
 export * from "./blur-data";
 
 // 1. Specify protected and public routes
@@ -30,4 +31,14 @@ export const eventStatusColorMap: Record<
 	"Upcoming Event": "default",
 	"Past Event": "secondary",
 	"Unknown Status": "destructive",
+};
+
+export const userStatusColorMap: Record<
+	User["status"],
+	"default" | "destructive" | "secondary" | "outline"
+> = {
+	ACTIVE: "default",
+	BLOCKED: "destructive",
+	PENDING: "outline",
+	DELETED: "destructive",
 };

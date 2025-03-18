@@ -60,3 +60,17 @@ export const LoginFormSchema = z.object({
 		.min(8, "Password must be at least 8 characters"),
 	rememberMe: z.boolean().optional(),
 });
+
+export const AlumniSchema = z.object({
+	studentId: z.string().min(1, { message: "Student ID is required" }),
+	firstName: z.string().min(1, { message: "First name is required" }),
+	lastName: z.string().min(1, { message: "Last name is required" }),
+	middleName: z.string().optional(),
+	birthDate: z.string().min(1, { message: "Birth date is required" }),
+	graduationYear: z.coerce
+		.number()
+		.int()
+		.min(2000, { message: "Year must be at least 2000" })
+		.max(2100, { message: "Year must be at most 2100" }),
+	lrn: z.string().length(12, { message: "LRN must be exactly 12 characters" }),
+});
