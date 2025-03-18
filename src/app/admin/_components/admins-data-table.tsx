@@ -15,16 +15,20 @@ import {
 	DropdownMenuTrigger,
 } from "@/components";
 import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
-import Link from "next/link";
 import { toast } from "sonner";
 import { UserTableData } from "@/types";
 import { readUsers } from "@/models";
 import { userStatusColorMap } from "@/constant";
 import AdminDetailsModal from "./admin-details-modal";
+import UpdateStatusModal from "./update-user-status-modal";
 
 export default function AdminsDataTable() {
 	const [data, setData] = useState<UserTableData[]>([]);
 	const [total, setTotal] = useState(0);
+	const [updateAdmin, setUpdateAdmin] = useState<Pick<
+		UserTableData,
+		"id" | "firstName" | "lastName" | "status"
+	> | null>(null);
 	const [pagination, setPagination] = React.useState({
 		pageIndex: 0, //initial page index
 		pageSize: 10, //default page size
@@ -202,15 +206,10 @@ export default function AdminsDataTable() {
 								View Details
 							</DropdownMenuItem>
 							<DropdownMenuItem
-								asChild
+								onClick={() => setUpdateAdmin(row.original)}
 								className="  cursor-pointer flex items-center dark:text-white">
-								<Link
-									// href={`/admin/events/${row.original.slug}/edit`}
-									href={"#"}
-									className="text-blue-500   ">
-									<Pencil />
-									Edit Event
-								</Link>
+								<Pencil />
+								Update Status
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -268,6 +267,12 @@ export default function AdminsDataTable() {
 				<AdminDetailsModal
 					user={viewAdmin}
 					closeModal={() => setViewAdmin(null)}
+				/>
+			)}
+			{updateAdmin && (
+				<UpdateStatusModal
+					user={updateAdmin}
+					closeModal={() => setUpdateAdmin(null)}
 				/>
 			)}
 		</>

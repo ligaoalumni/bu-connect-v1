@@ -31,6 +31,7 @@ export * from "./ui/progress";
 export * from "./ui/tabs";
 export * from "./ui/navigation-menu";
 export * from "./ui/dialog";
+export * from "./ui/slider";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
