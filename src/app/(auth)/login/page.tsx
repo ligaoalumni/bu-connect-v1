@@ -19,7 +19,7 @@ import {
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib/definitions";
 import { LoginFormData } from "@/types";
-import { loginAction } from "@/actions";
+import { loginAction, revalidatePathAction } from "@/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -45,7 +45,7 @@ const LoginForm = () => {
 				throw new Error(response.error.message);
 			}
 
-			router.replace("/");
+			await revalidatePathAction("/");
 			toast.success("Success", {
 				description: "Welcome back!",
 				position: "top-center",
