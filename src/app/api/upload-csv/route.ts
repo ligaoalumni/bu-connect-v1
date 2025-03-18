@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 					const validatedData = AlumniSchema.parse(parsedData);
 
 					// Check if the record already exists (using email as unique identifier)
-					const existingStudent = await tx.student.findUnique({
+					const existingStudent = await tx.alumni.findUnique({
 						where: { lrn: validatedData.lrn },
 					});
 
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 						results.alreadyExists++;
 					} else {
 						// Create new user
-						await tx.student.create({
+						await tx.alumni.create({
 							data: {
 								lrn: validatedData.lrn,
 								firstName: validatedData.firstName,
