@@ -40,6 +40,7 @@ export const createUser = async (
 			firstName: user.firstName,
 			lastName: user.lastName,
 			middleName: user.middleName,
+
 			password: user.password,
 		},
 	});
@@ -122,4 +123,35 @@ export const updateUserStatus = async (id: number, status: User["status"]) => {
 	});
 
 	return updatedUser;
+};
+
+export const updateUser = async (
+	id: number,
+	data: Partial<
+		Pick<
+			User,
+			"avatar" | "firstName" | "lastName" | "middleName" | "verifiedAt"
+		>
+	>
+) => {
+	const isExists = await prisma.user.findUnique({
+		where: {
+			id,
+		},
+	});
+
+	if (!isExists) {
+		throw new Error("Account not found!");
+	}
+
+	const updatedAccount = await prisma.user.update({
+		data,
+		where: { id },
+	});
+
+	if (!updatedAccount) {
+		throw new Error("Failed to update account");
+	}
+
+	return updatedAccount;
 };
