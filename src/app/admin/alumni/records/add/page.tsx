@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { toast } from "sonner";
 import {
 	Button,
@@ -34,24 +33,11 @@ import {
 } from "@/components";
 import { Users } from "lucide-react";
 import CSVUploader from "@/app/admin/_components/csv-uploader";
-
-// Define the form schema
-const FormSchema = z.object({
-	studentId: z.string().min(1, { message: "Student ID is required" }),
-	firstName: z.string().min(1, { message: "First name is required" }),
-	lastName: z.string().min(1, { message: "Last name is required" }),
-	middleName: z.string().optional(),
-	birthDate: z.string().min(1, { message: "Birth date is required" }),
-	graduationYear: z.coerce
-		.number()
-		.int()
-		.min(2000, { message: "Year must be at least 2000" })
-		.max(2100, { message: "Year must be at most 2100" }),
-	lrn: z.string().length(12, { message: "LRN must be exactly 12 characters" }),
-});
+import { AlumniSchema } from "@/lib/definitions";
+import { AlumniFormData } from "@/types";
+import { addAlumniData } from "@/actions";
 
 // Define the form's type
-type FormValues = z.infer<typeof FormSchema>;
 const currentYear = new Date().getFullYear(); // Get the current year
 const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
@@ -60,8 +46,8 @@ export default function StudentDataUpload() {
 	const [isSaving, setIsSaving] = useState(false);
 
 	// Initialize the form
-	const form = useForm<FormValues>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<AlumniFormData>({
+		resolver: zodResolver(AlumniSchema),
 		defaultValues: {
 			studentId: "",
 			firstName: "",
@@ -74,12 +60,16 @@ export default function StudentDataUpload() {
 	});
 
 	// Handle single student form submission
-	const onSubmit = async (data: FormValues) => {
+	const onSubmit = async (data: AlumniFormData) => {
 		setIsSaving(true);
 
 		try {
 			// For demo purposes, simulate an API call
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			const student = await addAlumniData({
+				...data,
+				middleName: data.middleName || "",
+				birthDate: new Date(data.birthDate),
+			});
 
 			// Show success message with Sonner toast
 			toast.success("Student Added", {
@@ -87,6 +77,8 @@ export default function StudentDataUpload() {
 				richColors: true,
 				position: "top-center",
 			});
+
+			console.log(student, "qq");
 
 			// Reset form
 			form.reset({
@@ -113,8 +105,12 @@ export default function StudentDataUpload() {
 	return (
 		<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full  ">
 			<TabsList className="grid w-full grid-cols-2">
-				<TabsTrigger value="single">Single Student</TabsTrigger>
-				<TabsTrigger value="batch">Batch Upload</TabsTrigger>
+				<TabsTrigger value="single" disabled={isSaving}>
+					Single Student
+				</TabsTrigger>
+				<TabsTrigger value="batch" disabled={isSaving}>
+					Batch Upload
+				</TabsTrigger>
 			</TabsList>
 
 			<TabsContent value="single">
@@ -231,10 +227,14 @@ export default function StudentDataUpload() {
 											<FormItem>
 												<FormLabel>Graduation Year</FormLabel>
 												<FormControl>
-													<Select>
+													<Select
+														onValueChange={(value: string) =>
+															field.onChange(Number(value))
+														}
+														value={field.value.toString()}>
 														{/* Option to prompt user */}
 														<SelectTrigger className="w-full h-12">
-															<SelectValue placeholder="Select a fruit" />
+															<SelectValue placeholder="Select a year" />
 														</SelectTrigger>
 														<SelectContent>
 															<SelectGroup>
