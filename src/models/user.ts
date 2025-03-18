@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 import { PaginationArgs, PaginationResult, User } from "@/types";
 import { Prisma } from "@prisma/client";
@@ -50,7 +52,9 @@ export const readUsers = async (
 		role = ["ADMIN", "ALUMNI"],
 	}: PaginationArgs<never> = {},
 	includeAlumni?: boolean
-): Promise<PaginationResult<User>> => {
+): Promise<
+	PaginationResult<Omit<User, "password" | "notifications" | "alumni">>
+> => {
 	let where: Prisma.UserWhereInput = {};
 
 	if (filter && typeof filter === "number") {
@@ -83,6 +87,9 @@ export const readUsers = async (
 		where,
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
+		omit: {
+			password: true,
+		},
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
 		include: {
 			alumni: includeAlumni,
@@ -99,6 +106,7 @@ export const readUsers = async (
 			alumni: user.alumni
 				? { ...user.alumni, userId: user.id, interested: [], events: [] }
 				: null,
+			notifications: [],
 		})),
 	};
 };

@@ -6,7 +6,7 @@ import { z } from "zod";
 
 // Define a schema for validation based on your data model
 // Example: If you're importing users
-const StudentSchema = z.object({
+const AlumniSchema = z.object({
 	lrn: z.string().length(12),
 	firstName: z.string(),
 	lastName: z.string(),
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 			alreadyExists: 0,
 			errors: [] as string[],
 		};
-		// const validatedData = StudentSchema.parse(records[0]);
+		// const validatedData = AlumniSchema.parse(records[0]);
 
 		// console.log(validatedData);
 
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
 					const parsedData = parseCSV(record);
 
 					// Validate the record against your schema
-					const validatedData = StudentSchema.parse(parsedData);
+					const validatedData = AlumniSchema.parse(parsedData);
 
 					// Check if the record already exists (using email as unique identifier)
 					const existingStudent = await tx.student.findUnique({
