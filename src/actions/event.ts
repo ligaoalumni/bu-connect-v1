@@ -48,7 +48,7 @@ export const updateEventAction = async (data: EventFormData, id: number) => {
 };
 
 export const readEventsAction = async (
-	args: PaginationArgs<EventStatus> = {}
+	args: PaginationArgs<EventStatus, never> = {}
 ) => {
 	try {
 		const events = await readEvents(args);

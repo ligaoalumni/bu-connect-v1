@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult, User } from "@/types";
+import { PaginationArgs, PaginationResult, User, UserRole } from "@/types";
 import { Prisma } from "@prisma/client";
 
 export const readUser = async ({
@@ -31,7 +31,9 @@ export const createUser = async (
 	user: Pick<
 		User,
 		"email" | "password" | "role" | "firstName" | "lastName" | "middleName"
-	>
+	> & {
+		alumniData?: { batchYear: number; lrn: string };
+	}
 ) => {
 	const createdUser = await prisma.user.create({
 		data: {
@@ -40,8 +42,20 @@ export const createUser = async (
 			firstName: user.firstName,
 			lastName: user.lastName,
 			middleName: user.middleName,
-
 			password: user.password,
+			alumni: !!user.alumniData
+				? {
+						create: {
+							email: user.email,
+							firstName: user.firstName,
+							lastName: user.lastName,
+							graduationYear: user.alumniData.batchYear,
+							lrn: user.alumniData.lrn,
+							qrCode: " sd",
+							middleName: user.middleName,
+						},
+				  }
+				: undefined,
 		},
 	});
 
@@ -55,11 +69,9 @@ export const readUsers = async (
 		orderBy,
 		pagination,
 		role = ["ADMIN", "ALUMNI"],
-	}: PaginationArgs<never> = {},
+	}: PaginationArgs<never, UserRole> = {},
 	includeAlumni?: boolean
-): Promise<
-	PaginationResult<Omit<User, "password" | "notifications" | "alumni">>
-> => {
+): Promise<PaginationResult<Omit<User, "password" | "notifications">>> => {
 	let where: Prisma.UserWhereInput = {};
 
 	if (filter && typeof filter === "number") {

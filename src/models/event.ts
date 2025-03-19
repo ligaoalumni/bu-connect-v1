@@ -82,7 +82,7 @@ export const readEvents = async ({
 	order,
 	orderBy,
 	status,
-}: PaginationArgs<EventStatus> = {}): Promise<
+}: PaginationArgs<EventStatus, never> = {}): Promise<
 	PaginationResult<EventWithPagination>
 > => {
 	let where: Prisma.EventWhereInput = {};
