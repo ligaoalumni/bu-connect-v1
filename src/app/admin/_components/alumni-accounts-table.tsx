@@ -10,16 +10,15 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, ShieldEllipsis } from "lucide-react";
 import { toast } from "sonner";
-import VerifyAlumniModal from "./verify-alumni-modal";
+import VerifyAlumniSheet from "./verify-alumni-sheet";
 import { readAlumniAccounts } from "@/actions/alumni-account";
 import { AlumniAccount } from "@prisma/client";
 
 export default function AlumniAccountsDataTable() {
 	const [data, setData] = useState<AlumniAccount[]>([]);
 	const [total, setTotal] = useState(0);
-	const [verifyAlumni, setVerifyAlumni] = useState<AlumniAccount | null>(null);
 	const [pagination, setPagination] = React.useState({
 		pageIndex: 0, //initial page index
 		pageSize: 10, //default page size
@@ -137,26 +136,26 @@ export default function AlumniAccountsDataTable() {
 				return <p className="min-w-[100px]">{row.original.graduationYear}</p>;
 			},
 		},
-		{
-			accessorKey: "alumniId",
+		// {
+		// 	accessorKey: "alumniId",
 
-			enableSorting: false,
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() =>
-							column.toggleSorting(column.getIsSorted() === "asc")
-						}>
-						Batch
-						<ArrowUpDown />
-					</Button>
-				);
-			},
-			cell: ({ row }) => {
-				return <p className="min-w-[100px]">{row.original.graduationYear}</p>;
-			},
-		},
+		// 	enableSorting: false,
+		// 	header: ({ column }) => {
+		// 		return (
+		// 			<Button
+		// 				variant="ghost"
+		// 				onClick={() =>
+		// 					column.toggleSorting(column.getIsSorted() === "asc")
+		// 				}>
+		// 				Batch
+		// 				<ArrowUpDown />
+		// 			</Button>
+		// 		);
+		// 	},
+		// 	cell: ({ row }) => {
+		// 		return <p className="min-w-[100px]">{row.original.graduationYear}</p>;
+		// 	},
+		// },
 
 		// {
 		// 	accessorKey: "endDate",
@@ -219,17 +218,17 @@ export default function AlumniAccountsDataTable() {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuItem
+							{/* <DropdownMenuItem
 								onClick={() => setAlumniAccount(row.original)}
 								className="cursor-pointer">
 								<Info />
 								View Details
-							</DropdownMenuItem>
+							</DropdownMenuItem> */}
 							<DropdownMenuItem
-								onClick={() => setVerifyAlumni(row.original)}
+								onClick={() => setAlumniAccount(row.original)}
 								className="  cursor-pointer flex items-center dark:text-white">
-								<Pencil />
-								Update Status
+								<ShieldEllipsis />
+								Verify
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -285,18 +284,10 @@ export default function AlumniAccountsDataTable() {
 				loading={loading}
 				handleSearch={handleFetchData}
 			/>
-			{/* {viewAdmin && (
-				<AdminDetailsModal
-					user={viewAdmin}
-					closeModal={() => setAlumniAccount(null)}
-				/>
-			)} */}
-			{verifyAlumni && (
-				<VerifyAlumniModal
-					alumni={verifyAlumni}
-					closeModal={() => {
-						setVerifyAlumni(null);
-					}}
+			{alumniAccount && (
+				<VerifyAlumniSheet
+					alumni={alumniAccount}
+					closeSheet={() => setAlumniAccount(null)}
 				/>
 			)}
 		</>
