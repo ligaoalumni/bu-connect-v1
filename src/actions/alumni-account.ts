@@ -33,6 +33,8 @@ export const readAlumniAccounts = async (
 		};
 	}
 
+	where.alumniId = null;
+
 	const alumniAccounts = await prisma.alumniAccount.findMany({
 		where,
 		skip: pagination ? pagination.limit * pagination.page : undefined,
@@ -110,4 +112,21 @@ export const readAlumniRecords = async ({
 			...record,
 		})),
 	};
+};
+
+export const readAlumniRecord = async ({
+	id,
+	lrn,
+	studentId,
+}: {
+	id?: number;
+	studentId?: string;
+	lrn?: string;
+}) => {
+	const record = await prisma.alumni.findFirst({
+		where: {
+			OR: [{ id: id }, { lrn: lrn }, { studentId: studentId }],
+		},
+	});
+	return record;
 };
