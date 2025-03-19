@@ -23,7 +23,7 @@ import {
 	SelectValue,
 } from "@/components";
 import { signUpAction } from "@/actions";
-import { CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -106,7 +106,7 @@ export default function SignupForm() {
 					alt="LNHS Logo"
 					className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
 				/>
-				{success ? (
+				{!success ? (
 					<>
 						{/* <div className="flex flex-col items-center mb-6">
 							<div className="rounded-full bg-green-200 p-4 shadow-lg">

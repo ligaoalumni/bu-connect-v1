@@ -41,8 +41,8 @@ export const SignupFormSchema = z
 		confirmPassword: z.string().trim(),
 		batchYear: z
 			.string()
-			.min(4, { message: "Batch Year is Invalid" })
-			.max(4, { message: "Batch Year is Invalid" }),
+			.regex(/^\d+$/, { message: "Batch Year must only contain digits." })
+			.length(4, { message: "Batch Year must be exactly 4 digits." }),
 		middleName: z.string().optional(),
 		lrn: z.string().min(12, { message: "LRN must be 12 characters long." }),
 	})

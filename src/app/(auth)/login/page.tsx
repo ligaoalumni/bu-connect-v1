@@ -38,6 +38,7 @@ const LoginForm = () => {
 	});
 
 	const onSubmit = async (data: LoginFormData) => {
+		let success = false;
 		try {
 			const response = await loginAction(data.email, data.password);
 
@@ -46,6 +47,7 @@ const LoginForm = () => {
 			}
 
 			await revalidatePathAction("/");
+			success = true;
 			toast.success("Success", {
 				description: "Welcome back!",
 				position: "top-center",
@@ -53,12 +55,16 @@ const LoginForm = () => {
 				duration: 5000,
 			});
 		} catch (err) {
+			success = false;
 			toast.error("Log in Error", {
 				description: (err as Error).message,
 				position: "top-center",
 				richColors: true,
 				duration: 5000,
 			});
+		}
+		if (success) {
+			router.replace("/");
 		}
 	};
 
