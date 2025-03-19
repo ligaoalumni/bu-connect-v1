@@ -6,6 +6,7 @@ export interface AlumniAccount {
 	middleName: string | null;
 
 	graduationYear: number;
+	lrn: string;
 
 	qrCode: string;
 

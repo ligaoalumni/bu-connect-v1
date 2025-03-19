@@ -23,4 +23,4 @@ export interface User {
 
 export type UserRole = "ADMIN" | "SUPER_ADMIN" | "ALUMNI";
 
-export type UserTableData = Omit<User, "password" | "notifications" | "alumni">;
+export type UserTableData = Omit<User, "password" | "notifications">;
