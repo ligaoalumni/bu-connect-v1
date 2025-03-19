@@ -17,13 +17,13 @@ export const Footer = () => {
 	return publicRoutes.includes(path) ? (
 		<footer className="bg-[#313131] py-14">
 			<div className="container space-y-4 mx-auto py-5">
-				<div className="grid mb-14 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+				<div className="grid mb-14 grid-cols-2 px-5 sm:px-0 sm:grid-cols-2 md:grid-cols-4 gap-5">
 					<div className="flex justify-center items-start">
 						<Link href="/" className="mr-6  flex items-center space-x-2">
 							<Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
 						</Link>
 					</div>
-					<div className="space-y-3">
+					<div className="space-y-3  ">
 						<h3 className="text-white font-semibold">Strand</h3>
 						<ul className="  flex flex-col gap-3">
 							<Link href="#">

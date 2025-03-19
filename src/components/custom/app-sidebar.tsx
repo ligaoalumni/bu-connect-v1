@@ -78,7 +78,7 @@ const data = {
 				},
 				{
 					icon: Users,
-					title: "Registered",
+					title: "Verify Account",
 					url: "/admin/alumni",
 				},
 			],
