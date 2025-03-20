@@ -287,6 +287,11 @@ export default function AlumniAccountsDataTable() {
 			{alumniAccount && (
 				<VerifyAlumniSheet
 					alumni={alumniAccount}
+					handleComplete={() =>
+						setData((items) =>
+							items.filter((item) => item.id !== alumniAccount.id)
+						)
+					}
 					closeSheet={() => setAlumniAccount(null)}
 				/>
 			)}

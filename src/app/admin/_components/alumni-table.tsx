@@ -14,21 +14,19 @@ import {
 import { ArrowUpDown, Info, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { readAlumniRecords } from "@/actions/alumni-account";
-import { Alumni } from "@prisma/client";
+import { AlumniWithRelation } from "@/types";
 
 export default function AlumniDataTable() {
-	const [data, setData] = useState<Alumni[]>([]);
+	const [data, setData] = useState<AlumniWithRelation[]>([]);
 	const [total, setTotal] = useState(0);
 	const [pagination, setPagination] = React.useState({
 		pageIndex: 0, //initial page index
 		pageSize: 10, //default page size
 	});
-	const [alumni, setAlumni] = useState<Alumni | null>(null);
+	const [alumni, setAlumni] = useState<AlumniWithRelation | null>(null);
 	const [loading, setLoading] = useState(false);
 
-	console.log(JSON.stringify(data, null, 2));
-
-	const columns: ColumnDef<Alumni>[] = [
+	const columns: ColumnDef<AlumniWithRelation>[] = [
 		{
 			id: "id",
 			header: "#",
@@ -138,16 +136,20 @@ export default function AlumniDataTable() {
 			},
 		},
 		{
-			accessorKey: "alumniId",
-			enableHiding: false,
+			accessorKey: "alumniAccount",
+			enableHiding: true,
 			enableSorting: false,
 			header: ({ column }) => {
 				return <p>Account</p>;
 			},
 			cell: ({ row }) => {
-				if (!row.original.alumniId)
+				if (!row.original.alumniAccount?.id)
 					return <p className="italic  text-gray-500">No data</p>;
-				return <p className="min-w-[100px]">{row.original.alumniId}</p>;
+				return (
+					<Button size="sm" type="button">
+						View Full Details
+					</Button>
+				);
 			},
 		},
 

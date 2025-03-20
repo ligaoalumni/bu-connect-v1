@@ -110,7 +110,10 @@ const data = {
 
 export function AppSidebar({
 	...props
-}: React.ComponentProps<typeof Sidebar> & { pathname: string }) {
+}: React.ComponentProps<typeof Sidebar> & {
+	pathname: string;
+	isSuperAdmin?: false;
+}) {
 	return (
 		<Sidebar {...props} className="">
 			<SidebarHeader>
