@@ -9,10 +9,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
+import { Alumni, AlumniAccount } from "@prisma/client";
 
 export * from "./alumni-account";
 export * from "./user";
 export * from "./event";
+export * from "./alumni-record";
+
+export interface AlumniWithRelation extends Alumni {
+	alumniAccount: AlumniAccount | null;
+}
 
 export type Events = {
 	start: Date;

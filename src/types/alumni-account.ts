@@ -7,6 +7,7 @@ export interface AlumniAccount {
 
 	graduationYear: number;
 	lrn: string;
+	major: string;
 
 	qrCode: string;
 
