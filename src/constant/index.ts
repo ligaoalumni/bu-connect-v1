@@ -16,10 +16,7 @@ export const adminRoutes = [
 
 export const sharedRoutes = ["/verify-account"];
 
-export const superAdminRoutes = [
-	"/admin/admins",
-	"/admin/admins/add-new-admin",
-];
+export const superAdminRoutes = ["/admin/list", "/admin/list/add-new"];
 export const alumniRoutes = ["/account"];
 
 export const authRoutes = ["/login", "/signup"];

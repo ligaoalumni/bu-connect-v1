@@ -62,3 +62,42 @@ export const updateAlumniData = async (data: {
 		throw new Error("INTERNAL_SERVER_ERROR");
 	}
 };
+
+export const verifyAlumniAccount = async (
+	alumniAccountId: number,
+	alumniRecordId: number
+) => {
+	try {
+		const isAccountAlreadyAssociated = await prisma.alumni.findFirst({
+			where: {
+				alumniAccount: {
+					id: alumniAccountId,
+				},
+				id: alumniRecordId,
+			},
+		});
+
+		if (isAccountAlreadyAssociated)
+			throw new Error("Alumni already associated with other account.");
+
+		await prisma.alumniAccount.update({
+			data: {
+				alumni: {
+					connect: {
+						id: alumniRecordId,
+					},
+				},
+			},
+			where: {
+				id: alumniAccountId,
+			},
+		});
+
+		revalidatePath("/admin/alumni");
+	} catch (err) {
+		console.error(err);
+		throw new Error(
+			err instanceof Error ? err.message : "INTERNAL_SERVER_ERROR"
+		);
+	}
+};

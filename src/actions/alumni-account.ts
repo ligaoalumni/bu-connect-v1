@@ -1,8 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult } from "@/types";
-import { Alumni, AlumniAccount, Prisma } from "@prisma/client";
+import { AlumniWithRelation, PaginationArgs, PaginationResult } from "@/types";
+import { AlumniAccount, Prisma } from "@prisma/client";
 
 export const readAlumniAccounts = async (
 	{ filter, order, orderBy, pagination }: PaginationArgs<never, never> = {},
@@ -73,7 +73,9 @@ export const readAlumniRecords = async ({
 	order,
 	orderBy,
 	pagination,
-}: PaginationArgs<never, never> = {}): Promise<PaginationResult<Alumni>> => {
+}: PaginationArgs<never, never> = {}): Promise<
+	PaginationResult<AlumniWithRelation>
+> => {
 	let where: Prisma.AlumniWhereInput = {};
 
 	if (filter && typeof filter === "number") {
@@ -101,6 +103,9 @@ export const readAlumniRecords = async ({
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+		include: {
+			alumniAccount: true,
+		},
 	});
 
 	const count = await prisma.alumni.count({ where });
@@ -122,11 +127,15 @@ export const readAlumniRecord = async ({
 	id?: number;
 	studentId?: string;
 	lrn?: string;
-}) => {
+}): Promise<AlumniWithRelation | null> => {
 	const record = await prisma.alumni.findFirst({
 		where: {
 			OR: [{ id: id }, { lrn: lrn }, { studentId: studentId }],
 		},
+		include: {
+			alumniAccount: true,
+		},
 	});
+
 	return record;
 };
