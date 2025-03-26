@@ -44,11 +44,13 @@ export default async function Home() {
 						</div>
 						<div className="flex gap-4">
 							<Button className="rounded-[5px]">Join Us</Button>
-							<Button
-								className="rounded-[5px] bg-transparent border-white text-white"
-								variant="outline">
-								Learn More
-							</Button>
+							<a href="#welcome">
+								<Button
+									className="rounded-[5px] bg-transparent border-white text-white"
+									variant="outline">
+									Learn More
+								</Button>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -56,7 +58,9 @@ export default async function Home() {
 			{/* HERO SECTION */}
 
 			{/* Welcome Section */}
-			<section className=" min-h-screen min-w-screen flex items-center bg-[#EAF4FD]">
+			<section
+				id="welcome"
+				className=" min-h-screen min-w-screen flex items-center bg-[#EAF4FD]">
 				<div className="container px-5 gap-0 md:gap-5 py-5 mx-auto flex md:flex-row flex-col-reverse items-center">
 					<div className="w-full space-y-5">
 						<h2 className="text-2xl md:text-5xl font-semibold">
