@@ -19,10 +19,19 @@ model Alumni {
   lastName       String
   graduationYear Int
   birthDate      DateTime
+  strand  String?
+  educationLevel String?
 
-  alumniAccount  AlumniAccount? 
- 
- 
+  // POST GRADUATION INFORMATION
+  furtherEducation String?
+  course String?
+  schoolName String?
+  // JOB INFORMATION
+  status String?
+  companyName String?
+  jobTitle String?
+  
+  alumniAccount  AlumniAccount?  
 
   @@map("alumni")
 }
@@ -38,7 +47,7 @@ model AlumniAccount {
 
   major String?
   email  String @unique
-  qrCode String @unique // Unique QR code for alumni
+  qrCode String  // Unique QR code for alumni
  
   alumniId      Int? @unique
   alumni Alumni? @relation(   fields: [alumniId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -52,10 +61,19 @@ model AlumniAccount {
   interested    Event[]        @relation("InterestEvent") // Many-to-many relationship with events
   events        Event[]        @relation("EventAttendees") // Many-to-many relationship with events
 
+  eventComments EventComment[]
+  // announcementComments AnnouncementComment[] // Alumni can have multiple announcements
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("alumni_accounts")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  PREFER_NOT_TO_SAY
 }
 
 // User model: Handles both alumni and admin/super admin login.
@@ -69,6 +87,13 @@ model User {
   role      Role
   avatar    String?
 
+  nationality String? @default("")
+  religion String? @default("")
+  gender Gender @default(PREFER_NOT_TO_SAY)
+  address String? @default("")
+  contactNumber String? @default("")
+
+
   alumni    AlumniAccount?
   sessions Session[]
 
@@ -76,7 +101,6 @@ model User {
   status     UserStatus @default(PENDING)
 
   notifications Notification[] // Alumni can have multiple notifications
-
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -97,7 +121,6 @@ enum Role {
   SUPER_ADMIN
 }
 
-
 // Event model: Represents the alumni events (like homecoming).
 model Event {
   id        Int      @id @default(autoincrement())
@@ -115,6 +138,8 @@ model Event {
 
   interested AlumniAccount[] @relation("InterestEvent") // Many-to-many with alumni
   alumni     AlumniAccount[] @relation("EventAttendees") // Many-to-many with alumni
+
+  comments EventComment[]
 
   // Notifications related to the event
   createdAt DateTime @default(now())
@@ -151,3 +176,46 @@ model Token {
 
   @@map("tokens")
 }
+
+model EventComment {
+  id Int @id @default(autoincrement())
+  comment String
+
+  eventId Int
+  event Event @relation(fields: [eventId], references: [id])
+  commentBy AlumniAccount @relation(fields: [commentById],references: [id])
+  commentById Int   
+
+  createdAt DateTime @default(now())
+
+  @@map("event_comments")
+}
+
+
+// model AnnouncementComment { 
+//   id Int @id @default(autoincrement())
+
+//   comment String
+//   announcementId Int
+//   announcement Announcement @relation(fields: [announcementId], references: [id])
+//   commentBy AlumniAccount @relation(fields: [commentById], references: [id])
+//   commentById Int
+
+//   createdAt DateTime @default(now())
+
+//   @@map("announcement_comments")
+// }
+
+// model Announcement {
+
+//   id        Int      @id @default(autoincrement())
+//   slug      String   @unique
+//   name      String
+//   content   String
+//   coverImg  String
+
+//   comments AnnouncementComment[]
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
