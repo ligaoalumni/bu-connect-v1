@@ -73,6 +73,8 @@ export const AlumniSchema = z.object({
 		.min(2000, { message: "Year must be at least 2000" })
 		.max(2100, { message: "Year must be at most 2100" }),
 	lrn: z.string().length(12, { message: "LRN must be exactly 12 characters" }),
+	strand: z.string().optional(),
+	educationLevel: z.string().min(1, { message: "Education level is required" }),
 });
 
 export const AdminSchema = z.object({

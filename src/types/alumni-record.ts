@@ -7,6 +7,16 @@ export interface Alumni {
 	middleName: string;
 	graduationYear: number;
 	birthDate: Date;
+	strand: string | null;
+	educationLevel: string | null;
+
+	furtherEducation: string | null;
+	course: string | null;
+	schoolName: string | null;
+	// JOB INFORMATION
+	status: string | null;
+	companyName: string | null;
+	jobTitle: string | null;
 }
 
 export interface AlumniRecord extends Alumni {

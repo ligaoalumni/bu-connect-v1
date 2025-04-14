@@ -51,7 +51,7 @@ export const createUser = async (
 							lastName: user.lastName,
 							graduationYear: user.alumniData.batchYear,
 							lrn: user.alumniData.lrn,
-							qrCode: " sd",
+							qrCode: "",
 							middleName: user.middleName,
 						},
 				  }
@@ -121,7 +121,13 @@ export const readUsers = async (
 		data: users.map((user) => ({
 			...user,
 			alumni: user.alumni
-				? { ...user.alumni, userId: user.id, interested: [], events: [] }
+				? {
+						...user.alumni,
+						major: user.alumni.major || "",
+						userId: user.id,
+						interested: [],
+						events: [],
+				  }
 				: null,
 			notifications: [],
 		})),

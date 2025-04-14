@@ -42,3 +42,23 @@ export const userStatusColorMap: Record<
 	PENDING: "outline",
 	DELETED: "destructive",
 };
+
+export const seniorHighStrands = [
+	"NA - Not Applicable",
+	"ACADEMIC - ABM",
+	"ACADEMIC - HUMSS",
+	"ACADEMIC - STEM",
+	"ACADEMIC - GAS",
+	"TVL - ICT",
+	"TVL - Home Economics",
+	"TVL - Agri-Fishery Arts",
+	"TVL - Industrial Arts",
+	"SPORTS - Sports Track",
+	"ARTS AND DESIGN - Arts and Design Track",
+];
+
+export const alumniLabel: Record<User["gender"], string> = {
+	FEMALE: "Alumna",
+	MALE: "Alumnus",
+	PREFER_NOT_TO_SAY: "Alumnus",
+};
