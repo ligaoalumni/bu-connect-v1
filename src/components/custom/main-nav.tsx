@@ -8,6 +8,8 @@ import { publicRoutes } from "@/constant";
 import { User } from "@/types";
 import { AvatarDropdown } from "./avatar-dropdown";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useAuth } from "@/contexts/auth-context";
 
 // const components: { title: string; href: string; description: string }[] = [
 // 	{
@@ -40,6 +42,15 @@ export function MainNav({
 	user: Pick<User, "firstName" | "lastName" | "email" | "role" | "id"> | null;
 }) {
 	const path = usePathname();
+	const { login, logout } = useAuth();
+
+	useEffect(() => {
+		if (user) {
+			login(user);
+		} else {
+			logout();
+		}
+	}, [user]);
 
 	return showMainNavRoutes.includes(path) ? (
 		<header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
