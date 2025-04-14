@@ -19,6 +19,26 @@ const AlumniSchema = z.object({
 	// Add other fields as needed
 });
 
+const parseCSV = (item: any) => {
+	const values = Object.values(item);
+
+	// Map the values to the correct fields
+	return {
+		studentId: values[0],
+		firstName: values[1],
+		middleName: values[2],
+		lastName: values[3],
+		birthDate:
+			values[4] instanceof Date
+				? new Date(values[4]).toISOString()
+				: new Date().toISOString(),
+		graduationYear: Number(values[5]), // Convert to number
+		lrn: values[6],
+		educationLevel: values[7],
+		strand: values[8],
+	};
+};
+
 export async function POST(request: NextRequest) {
 	try {
 		// Check if the request is multipart form data
@@ -157,23 +177,3 @@ export async function POST(request: NextRequest) {
 		);
 	}
 }
-
-export const parseCSV = (item: any) => {
-	const values = Object.values(item);
-
-	// Map the values to the correct fields
-	return {
-		studentId: values[0],
-		firstName: values[1],
-		middleName: values[2],
-		lastName: values[3],
-		birthDate:
-			values[4] instanceof Date
-				? new Date(values[4]).toISOString()
-				: new Date().toISOString(),
-		graduationYear: Number(values[5]), // Convert to number
-		lrn: values[6],
-		educationLevel: values[7],
-		strand: values[8],
-	};
-};

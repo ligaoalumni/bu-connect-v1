@@ -5,7 +5,7 @@ import { AlumniRecordForm } from "../../../__components";
 export default async function EditAlumniRecord({
 	params,
 }: {
-	params: { slug: string };
+	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
 	const alumni = await readAlumniRecord({ lrn: slug });
