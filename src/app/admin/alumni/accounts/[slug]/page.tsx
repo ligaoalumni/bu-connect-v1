@@ -1,11 +1,11 @@
 import { readAlumniAccount } from "@/actions/alumni-account";
 import {
 	Badge,
-	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
+	QRCodeViewer,
 } from "@/components";
 import React from "react";
 import { AlumniData } from "../../__components";
@@ -36,9 +36,22 @@ export default async function AlumniAccountPage({
 					{/* <Button asChild variant="secondary" className="max-w-fit ">
 						<Link href={`${alumni.lrn}/edit`}>Edit</Link>
 					</Button> */}
-					<Button disabled={!alumni.qrCode} className="max-w-fit ">
-						View QR Code
-					</Button>
+
+					<QRCodeViewer
+						data={{
+							batch: alumni.graduationYear,
+							educationLevel: alumni.alumni?.educationLevel || "N/A",
+							firstName: alumni.firstName,
+							middleName: alumni.middleName || "",
+							lastName: alumni.lastName,
+							lrn: alumni.lrn,
+							strand: alumni.alumni?.strand || "N/A",
+						}}
+						buttonLabel="View QR Code"
+						buttonProps={{
+							disabled: !alumni.user.verifiedAt,
+						}}
+					/>
 				</div>
 			</div>
 

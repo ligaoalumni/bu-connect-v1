@@ -310,3 +310,41 @@ function formatDashboardEvent(event: EventWithPagination): DashboardEvent {
 			  )}`,
 	};
 }
+
+export const addEventAttendant = async ({
+	attendantLrn,
+	eventId,
+}: {
+	eventId: number;
+	attendantLrn: string;
+}) => {
+	return await prisma.$transaction(async (tx) => {
+		const attendantAlreadyExists = await tx.event.findFirst({
+			where: {
+				id: eventId,
+				alumni: {
+					some: {
+						lrn: attendantLrn,
+					},
+				},
+			},
+		});
+
+		if (attendantAlreadyExists) {
+			throw new Error("Attendant already exists");
+		}
+
+		await tx.event.update({
+			data: {
+				alumni: {
+					connect: {
+						lrn: attendantLrn,
+					},
+				},
+			},
+			where: {
+				id: eventId,
+			},
+		});
+	});
+};

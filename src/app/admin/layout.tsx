@@ -66,7 +66,7 @@ export default function AdminLayout({
 			<SidebarProvider className="z-[1002] bg-gradient-to-b from-[#001E54] via-[#005CA1] to-[#00BFFF] dark:from-[#000814] dark:via-[#001d3d] dark:to-[#003566] shadow-none">
 				<AppSidebar className="z-[1002]" pathname={pathname} />
 				<SidebarInset className=" overflow-hidden min-h-[calc(100dvh)] max-h-[calc(100dvh)]   bg-transparent">
-					<div className="max-w-[98%] min-w-[98%] overflow-x-hidden min-h-[calc(100dvh-4dvh)] max-h-[calc(100dvh-4dvh)]  overscroll-none bg-white  dark:bg-[#00356690] dark:shadow-2xl dark:shadow-black/30 relative scroll-smooth overflow-y-auto scrollbar-hide rounded-t-3xl mx-auto rounded-b-2xl   my-4">
+					<div className="max-w-[98%] min-w-[98%] overflow-x-hidden min-h-[calc(100dvh-4dvh)] max-h-[calc(100dvh-4dvh)]  overscroll-none bg-white  dark:bg-[#00356690] dark:shadow-2xl dark:shadow-black/30 relative scroll-smooth overflow-y-auto scrollbar-hide rounded-t-2xl mx-auto rounded-b-2xl   my-4">
 						<header className="flex bg-[#2F61A0]  dark:bg-[#5473a8] rounded-2xl h-16 z-[1] shrink-0 backdrop-blur-lg sticky top-0 w-full px-4">
 							<div className="flex items-center justify-between container mx-auto">
 								<div className="flex items-center gap-2">

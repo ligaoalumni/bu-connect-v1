@@ -20,6 +20,16 @@ export interface AlumniWithRelation extends Alumni {
 	alumniAccount: AlumniAccount | null;
 }
 
+export interface QRCodeValues {
+	lrn: string;
+	middleName?: string;
+	lastName: string;
+	firstName: string;
+	batch: number;
+	strand?: string;
+	educationLevel: string;
+}
+
 export type Events = {
 	start: Date;
 	end: Date;

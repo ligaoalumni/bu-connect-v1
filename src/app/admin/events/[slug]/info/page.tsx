@@ -57,9 +57,11 @@ export default async function Event({
 						<Button>Edit</Button>
 					</Link>
 				)}
-				{status === "Ongoing Event" && <QRCodeScanner />}
+				{status === "Ongoing Event" && <QRCodeScanner eventId={event.id} />}
 			</div>
-			<div className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10">
+			<div
+				className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10"
+				style={{ gridAutoFlow: "dense" }}>
 				<div className="md:col-span-6  ">
 					{event?.coverImg && (
 						<AspectRatio
@@ -75,7 +77,7 @@ export default async function Event({
 					)}
 					<RichTextEditor content={event.content} />
 				</div>
-				<div className="md:col-span-4 space-y-4">
+				<div className="md:col-span-4 space-y-4   max-h-fit  ">
 					<div>
 						<h3 className="text-gray-600 dark:text-gray-200">Status:</h3>
 						<p className="font-medium text-lg">{status}</p>
@@ -95,6 +97,13 @@ export default async function Event({
 						<h3 className="text-gray-600 dark:text-gray-200">Where:</h3>
 						<p className="font-medium text-lg">{event.location}</p>
 					</div>
+				</div>
+
+				<div className="md:col-span-6 md:order-1 order-2 ">
+					<h3>Comments</h3>
+				</div>
+				<div className="md:col-span-4  ">
+					<h4>Attendants</h4>
 				</div>
 			</div>
 		</div>

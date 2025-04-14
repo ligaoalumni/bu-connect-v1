@@ -1,7 +1,12 @@
 "use server";
 
 import { EventFormSchema } from "@/lib/definitions";
-import { createEvent, readEvents, updateEvent } from "@/models";
+import {
+	addEventAttendant,
+	createEvent,
+	readEvents,
+	updateEvent,
+} from "@/models";
 import { EventFormData, EventStatus, PaginationArgs } from "@/types";
 import { revalidatePath } from "next/cache";
 
@@ -56,5 +61,30 @@ export const readEventsAction = async (
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to fetch events");
+	}
+};
+
+export const addEventAttendantAction = async ({
+	eventId,
+	lrn,
+}: {
+	eventId: number;
+	lrn: string;
+}) => {
+	// const;
+	try {
+		await addEventAttendant({
+			eventId,
+			attendantLrn: lrn,
+		});
+
+		revalidatePath("/events");
+
+		return { success: true, message: "Attendant added successfully" };
+	} catch (error) {
+		const errorMessage =
+			error instanceof Error ? error.message : "Failed to add attendant";
+
+		return { success: false, message: errorMessage };
 	}
 };

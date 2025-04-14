@@ -27,8 +27,10 @@ export default async function Page({
 					<Button asChild variant="secondary" className="max-w-fit ">
 						<Link href={`${alumni.lrn}/edit`}>Edit</Link>
 					</Button>
-					<Button disabled={!hasAccount} className="max-w-fit ">
-						{hasAccount ? "View Account Details" : "No account connected"}
+					<Button disabled={!hasAccount} asChild className="max-w-fit ">
+						<Link href={`/admin/alumni/accounts/${alumni.lrn}`}>
+							{hasAccount ? "View Account Details" : "No account connected"}
+						</Link>
 					</Button>
 				</div>
 			</div>

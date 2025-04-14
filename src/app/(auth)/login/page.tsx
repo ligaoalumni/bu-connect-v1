@@ -112,7 +112,7 @@ const LoginForm = () => {
 														<Input
 															readOnly={form.formState.isSubmitting}
 															placeholder="Enter email address"
-															className="pl-8 bg-white border-none h-10 rounded-none"
+															className="pl-8 bg-white dark:text-black  dark:selection:bg-black/15 border-none h-10 rounded-none"
 															{...field}
 														/>
 													</div>
@@ -134,7 +134,7 @@ const LoginForm = () => {
 															readOnly={form.formState.isSubmitting}
 															type="password"
 															placeholder="Enter password"
-															className="pl-8 rounded-none bg-white border-none h-10"
+															className="pl-8 rounded-none dark:text-black dark:selection:bg-black/15 bg-white border-none h-10"
 															{...field}
 														/>
 													</div>
@@ -154,11 +154,11 @@ const LoginForm = () => {
 														<FormControl>
 															<div className="flex gap-2">
 																<Checkbox
-																	className="rounded-none data-[state=checked]:text-white  border-black data-[state=checked]:bg-black"
+																	className="rounded-none data-[state=checked]:text-white dark:text-black  border-black data-[state=checked]:bg-black"
 																	onCheckedChange={field.onChange}
 																	type="button"
 																/>
-																<FormLabel className="text-white ">
+																<FormLabel className="text-white dark:text-black ">
 																	Remember me
 																</FormLabel>
 															</div>
@@ -169,7 +169,7 @@ const LoginForm = () => {
 										</div>
 										<Button
 											variant="link"
-											className="px-0 font-normal text-white italic"
+											className="px-0 font-normal text-white    italic"
 											type="button">
 											Forgot password?
 										</Button>
@@ -186,7 +186,7 @@ const LoginForm = () => {
 						</CardContent>
 
 						<CardFooter className="flex justify-center">
-							<p className="text-sm text-white">
+							<p className="text-sm text-white ">
 								Don&apos;t have an account?{" "}
 								<Button
 									variant="link"
