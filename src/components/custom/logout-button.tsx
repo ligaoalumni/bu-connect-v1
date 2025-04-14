@@ -21,7 +21,7 @@ export function LogoutButton() {
 					});
 				}
 			}}
-			className="text-red-600">
+			className="text-red-600 dark:hover:text-red-600  dark:hover:bg-red-600/10">
 			<LogOut className="mr-2 h-4 w-4" />
 			<span>Log out</span>
 		</DropdownMenuItem>

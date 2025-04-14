@@ -115,10 +115,10 @@ export function AppSidebar({
 	isSuperAdmin?: false;
 }) {
 	return (
-		<Sidebar {...props} className="">
+		<Sidebar {...props} className="border-none">
 			<SidebarHeader>
 				<SidebarMenu>
-					<SidebarMenuItem>
+					<SidebarMenuItem className="text-white ">
 						<SidebarMenuButton size="lg" asChild>
 							<a href="#">
 								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
@@ -144,7 +144,7 @@ export function AppSidebar({
 										key={item.title}
 										defaultOpen={index === 1}
 										className="group/collapsible">
-										<SidebarMenuItem>
+										<SidebarMenuItem className="text-white">
 											<CollapsibleTrigger asChild>
 												<SidebarMenuButton>
 													<item.icon />
@@ -154,7 +154,7 @@ export function AppSidebar({
 												</SidebarMenuButton>
 											</CollapsibleTrigger>
 											{item.items?.length ? (
-												<CollapsibleContent>
+												<CollapsibleContent className="">
 													<SidebarMenuSub>
 														{item.items.map((item) => (
 															<Link href={item.url} key={item.title}>
@@ -178,7 +178,7 @@ export function AppSidebar({
 								);
 							} else {
 								return (
-									<Link href={item.url} key={index}>
+									<Link href={item.url} key={index} className="text-white">
 										<SidebarMenuItem>
 											<SidebarMenuButton
 												asChild
