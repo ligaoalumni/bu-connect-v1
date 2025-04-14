@@ -3,7 +3,6 @@
 import { SignupFormSchema } from "@/lib/definitions";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, readUser } from "@/models";
-import { createToken } from "@/models/token";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";

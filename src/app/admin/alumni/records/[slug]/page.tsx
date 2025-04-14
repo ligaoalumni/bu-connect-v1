@@ -5,7 +5,11 @@ import Link from "next/link";
 import React from "react";
 import { AlumniData } from "../../__components";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
 	const { slug } = await params;
 	const alumni = await readAlumniRecord({ lrn: slug });
 

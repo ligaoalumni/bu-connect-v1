@@ -35,7 +35,7 @@ export default function VerifyAlumniSheet({
 	const [alumniRecord, setAlumniRecord] = useState<AlumniWithRelation | null>(
 		null
 	);
-	const [error, setError] = useState(false);
+	const [, setError] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [connecting, setConnecting] = useState(false);
 
