@@ -4,27 +4,14 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner"; // Import toast component
 import { Loader2 } from "lucide-react"; // For loading icon
+import { addEventAttendantAction } from "@/actions";
+import { QRCodeValues } from "@/types";
 
-// Function to handle database operations (replace with your actual DB function)
-async function updateDatabase(code: string) {
-	// Replace this with your actual database update/insert logic
-	try {
-		// Example implementation:
-		// await db.insert({ code, timestamp: new Date() });
-		console.log("Processing code:", code);
-
-		// Simulate network delay for demonstration
-		await new Promise((resolve) => setTimeout(resolve, 2000));
-
-		// Return success or error based on your logic
-		return { success: true, message: "QR code processed successfully" };
-	} catch (error) {
-		console.error("Database error:", error);
-		return { success: false, message: "Failed to process QR code" };
-	}
+interface QRCodeScannerProps {
+	eventId: number;
 }
 
-export function QRCodeScanner() {
+export function QRCodeScanner({ eventId }: QRCodeScannerProps) {
 	const [showQRScanner, setShowQRScanner] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [scanComplete, setScanComplete] = useState(false);
@@ -41,15 +28,26 @@ export function QRCodeScanner() {
 
 			// Skip if we've already processed this code
 			if (qrCode === lastProcessedCode && scanComplete) {
+				toast.success("Already scanned", {
+					description: "This QR code has already been processed.",
+					richColors: true,
+					duration: 5000,
+					position: "top-center",
+				});
 				return;
 			}
+
+			const values: QRCodeValues = JSON.parse(qrCode);
 
 			setLastProcessedCode(qrCode);
 			setLoading(true);
 
 			try {
 				// Process the QR code with database
-				const result = await updateDatabase(qrCode);
+				const result = await addEventAttendantAction({
+					eventId,
+					lrn: values.lrn,
+				});
 
 				// Update status and show toast
 				setProcessingStatus(result);
@@ -96,8 +94,13 @@ export function QRCodeScanner() {
 		if (lastProcessedCode) {
 			setLoading(true);
 
+			const values: QRCodeValues = JSON.parse(lastProcessedCode);
+
 			try {
-				const result = await updateDatabase(lastProcessedCode);
+				const result = await addEventAttendantAction({
+					eventId,
+					lrn: values.lrn,
+				});
 				setProcessingStatus(result);
 				setScanComplete(result.success);
 				toast.success("Success", {
@@ -185,8 +188,8 @@ export function QRCodeScanner() {
 										{processingStatus.success ? (
 											<>
 												<Button
-													variant="outline"
-													className="text-white border-white hover:bg-white/20"
+													variant="secondary"
+													// className="text-white border-white hover:bg-white/20"
 													onClick={handleScanAgain}>
 													Scan Again
 												</Button>

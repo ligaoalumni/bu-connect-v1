@@ -72,8 +72,8 @@ RichTextEditorProps) => {
 		injectCSS: true,
 		content: content
 			? `${generateHTML(JSON.parse(String(content)), [
-					UnderlineExe,
-					BulletExe,
+					// UnderlineExe,
+					// BulletExe,
 					ListItemExe,
 					OrderedListExe,
 					Image.configure({
@@ -280,9 +280,9 @@ RichTextEditorProps) => {
 				name="description"
 				onClick={() => editor?.chain().focus()}
 				style={{}}
-				className={` cursor-text  p-1.5 rounded-md ${
-					editable && " "
-				} min-h-[300px] lg:min-h-[400px] w-full   `}
+				className={` cursor-text  p-1.5 rounded-md ${editable && " "} ${
+					!content && "min-h-[300px] lg:min-h-[400px]"
+				} w-full   `}
 			/>
 		</div>
 	);

@@ -1,4 +1,5 @@
 // SHADCN
+export * from "./ui/alert-dialog";
 export * from "./ui/button";
 export * from "./ui/dropdown-menu";
 export * from "./ui/form";
@@ -53,6 +54,7 @@ export * from "./custom/event-card";
 export * from "./custom/infinite-scroll";
 export * from "./custom/back-to-top-btn";
 export * from "./custom/footer";
+export * from "./custom/qr-code-viewer";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
