@@ -14,6 +14,8 @@ const AlumniSchema = z.object({
 	birthDate: z.string(),
 	graduationYear: z.number(),
 	studentId: z.string(),
+	educationLevel: z.string(),
+	strand: z.string().optional(),
 	// Add other fields as needed
 });
 
@@ -56,6 +58,8 @@ export async function POST(request: NextRequest) {
 			trim: true,
 		});
 
+		console.log(records, "qqq");
+
 		if (!records.length) {
 			return NextResponse.json(
 				{ message: "CSV file is empty" },
@@ -79,7 +83,12 @@ export async function POST(request: NextRequest) {
 			for (const record of records) {
 				try {
 					// Parse the CSV record
+
+					console.log(record, "UNPARSED RECORD");
+
 					const parsedData = parseCSV(record);
+
+					console.log(parsedData, "PARSED RECORD");
 
 					// Validate the record against your schema
 					const validatedData = AlumniSchema.parse(parsedData);
@@ -102,7 +111,8 @@ export async function POST(request: NextRequest) {
 								birthDate: validatedData.birthDate,
 								graduationYear: validatedData.graduationYear,
 								studentId: validatedData.studentId,
-								// Add other fields as needed
+								strand: validatedData.strand || "",
+								educationLevel: validatedData.educationLevel || "",
 							},
 						});
 
@@ -149,10 +159,7 @@ export async function POST(request: NextRequest) {
 }
 
 export const parseCSV = (item: any) => {
-	const combinedString = Object.keys(item)[0];
-
-	// Split the string by semicolons
-	const values = item[combinedString].split(";");
+	const values = Object.values(item);
 
 	// Map the values to the correct fields
 	return {
@@ -164,7 +171,9 @@ export const parseCSV = (item: any) => {
 			values[4] instanceof Date
 				? new Date(values[4]).toISOString()
 				: new Date().toISOString(),
-		graduationYear: parseInt(values[5], 10), // Convert to number
+		graduationYear: Number(values[5]), // Convert to number
 		lrn: values[6],
+		educationLevel: values[7],
+		strand: values[8],
 	};
 };
