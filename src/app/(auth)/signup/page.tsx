@@ -28,12 +28,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
+import Approval from "../__components/approval";
+import { useRouter } from "next/navigation";
 
 // Define the form's type
-const currentYear = new Date().getFullYear(); // Get the current year
+const currentYear = new Date().getFullYear() - 1; // Get the current year
 const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 export default function SignupForm() {
+	const router = useRouter();
+
 	const form = useForm<z.infer<typeof SignupFormSchema>>({
 		resolver: zodResolver(SignupFormSchema),
 		defaultValues: {
@@ -98,7 +102,7 @@ export default function SignupForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(handleSignUp)}
-				className="max-w-xl lg:min-w-[24rem] bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65 pt-14  w-full border border-black/5 p-5   shadow-sm pb-10 flex flex-col justify-between">
+				className="max-w-xl mt-20 md:mt-0 lg:min-w-[24rem] bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65 pt-14  w-full border border-black/5 p-5   shadow-sm pb-10 flex flex-col justify-between">
 				<Image
 					src="/icon.svg"
 					height={120}
@@ -106,41 +110,8 @@ export default function SignupForm() {
 					alt="LNHS Logo"
 					className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
 				/>
-				{!success ? (
-					<>
-						{/* <div className="flex flex-col items-center mb-6">
-							<div className="rounded-full bg-green-200 p-4 shadow-lg">
-								<CheckCircle2 className="h-16 w-16 text-green-700" />
-							</div>
-						</div> */}
-						<h1 className="text-2xl mt-4 font-bold text-center text-white">
-							Registration Successful
-						</h1>
-						<p className="text-lg text-center text-white">
-							Your account is pending approval
-						</p>
-						<p className="text-white text-center mt-2">
-							Thank you for registering! Your account is currently under review
-							by our administrators.
-						</p>
-						<div className="bg-gray-100 rounded-lg p-6 shadow-md mt-4">
-							<h3 className="font-semibold text-lg text-gray-800">
-								What happens next?
-							</h3>
-							<ul className="text-sm text-gray-600 list-disc list-inside space-y-1 mt-2">
-								<li>Our admin team will review your registration</li>
-								<li>You will receive an email once your account is approved</li>
-								<li>After approval, you can log in to your account</li>
-							</ul>
-						</div>
-						<p className="text-sm text-white text-center mt-4">
-							This process typically takes 1-2 business days. Please check your
-							email for updates.
-						</p>
-						<Button asChild variant="link" className="mt-3">
-							<Link href="/login">Back to log in</Link>
-						</Button>
-					</>
+				{success ? (
+					<Approval handleClick={() => router.replace("/login")} />
 				) : (
 					<>
 						<div className="flex flex-col mt-8 px-5 md:flex-row gap-5 justify-between">

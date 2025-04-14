@@ -62,7 +62,9 @@ export default async function Event({
 			<div className="grid md:grid-cols-10 md:gap-5 lg:gap-8 gap-3 xl:gap-10">
 				<div className="md:col-span-6  ">
 					{event?.coverImg && (
-						<AspectRatio ratio={16 / 9} className="bg-muted   shrink  ">
+						<AspectRatio
+							ratio={16 / 9}
+							className="bg-black/5 rounded-lg dark:bg-white/5  shrink  ">
 							<Image
 								alt={`${event.name} cover`}
 								src={event.coverImg}

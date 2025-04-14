@@ -56,7 +56,7 @@ export default async function Dashboard() {
 	];
 
 	return (
-		<div className="flex min-h-screen w-full  ">
+		<div className="flex  w-full  ">
 			<div className="flex-1">
 				<div className="grid gap-5">
 					{/* Today's Events Section */}
