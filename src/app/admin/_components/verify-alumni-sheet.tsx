@@ -83,7 +83,7 @@ export default function VerifyAlumniSheet({
 	};
 
 	const canConnect =
-		!alumniRecord?.alumniId && alumniRecord?.lrn === alumni.lrn;
+		!alumniRecord?.alumniAccount?.id && alumniRecord?.lrn === alumni.lrn;
 
 	return (
 		<Sheet open={!!alumni} onOpenChange={closeSheet}>
@@ -119,11 +119,7 @@ export default function VerifyAlumniSheet({
 						</div>
 						<div className="bg-gray-100 p-4 rounded-lg shadow-md">
 							<h3 className="text-lg font-semibold">
-								{loading ? (
-									<Skeleton className="w-1/4 h-9" />
-								) : (
-									"Alumni System Record"
-								)}
+								{loading ? <Skeleton className="w-1/4 h-9" /> : "System Record"}
 							</h3>
 							{loading ? (
 								<div className="space-y-2 mt-2">
@@ -254,7 +250,7 @@ export default function VerifyAlumniSheet({
 									? "This alumni record can be linked to an account."
 									: !alumniRecord
 									? "No record found for the specified account."
-									: alumniRecord?.alumniId
+									: alumniRecord?.alumniAccount?.id
 									? "This alumni already has an associated account."
 									: "This alumni record cannot be linked to an account."}
 							</AlertDescription>

@@ -17,8 +17,8 @@ export default async function DashboardEventSection() {
 					<h2 className="text-2xl font-bold tracking-tight">
 						Today&apos;s Events
 					</h2>
-					<div className="hidden md:block h-8 w-[2px] bg-black/50" />
-					<span className="hidden md:block  text-md text-black/50">
+					<div className="hidden md:block h-8 w-[2px] dark:bg-white/90  bg-black/50" />
+					<span className="hidden md:block  dark:text-white/90 text-md text-black/50">
 						{dayName}, {currentDate}
 					</span>
 				</div>

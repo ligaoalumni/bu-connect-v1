@@ -73,7 +73,7 @@ export default function DataTable<TData, TValue>({
 	});
 
 	return (
-		<ScrollArea className="w-full border md:border p-2 md:p-2 rounded-lg max-w-[90vw]  sm:min-w-[600px] sm:max-w-full mx-auto whitespace-nowrap overflow-x-auto">
+		<ScrollArea className="w-full border md:border p-2 md:p-2 rounded-lg max-w-[90vw]   mx-auto whitespace-nowrap overflow-x-auto">
 			<div className="w-full p-1">
 				<div className="flex items-center py-4">
 					<div className="flex items-center gap-2">

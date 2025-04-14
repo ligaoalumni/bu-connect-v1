@@ -207,7 +207,7 @@ export default function AdminsDataTable() {
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={() => setUpdateAdmin(row.original)}
-								className="  cursor-pointer flex items-center dark:text-white">
+								className="  cursor-pointer flex items-center ">
 								<Pencil />
 								Update Status
 							</DropdownMenuItem>

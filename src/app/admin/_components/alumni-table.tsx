@@ -11,10 +11,11 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { readAlumniRecords } from "@/actions/alumni-account";
 import { AlumniWithRelation } from "@/types";
+import Link from "next/link";
 
 export default function AlumniDataTable() {
 	const [data, setData] = useState<AlumniWithRelation[]>([]);
@@ -23,7 +24,6 @@ export default function AlumniDataTable() {
 		pageIndex: 0, //initial page index
 		pageSize: 10, //default page size
 	});
-	const [alumni, setAlumni] = useState<AlumniWithRelation | null>(null);
 	const [loading, setLoading] = useState(false);
 
 	const columns: ColumnDef<AlumniWithRelation>[] = [
@@ -139,15 +139,16 @@ export default function AlumniDataTable() {
 			accessorKey: "alumniAccount",
 			enableHiding: true,
 			enableSorting: false,
-			header: ({ column }) => {
-				return <p>Account</p>;
-			},
+			header: "Account",
 			cell: ({ row }) => {
 				if (!row.original.alumniAccount?.id)
 					return <p className="italic  text-gray-500">No data</p>;
 				return (
-					<Button size="sm" type="button">
-						View Full Details
+					<Button size="sm" asChild type="button">
+						<Link
+							href={`/admin/alumni/accounts/${row.original.alumniAccount.lrn}`}>
+							View Full Details
+						</Link>
 					</Button>
 				);
 			},
@@ -215,17 +216,19 @@ export default function AlumniDataTable() {
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
 							<DropdownMenuItem
-								onClick={() => setAlumni(row.original)}
-								className="cursor-pointer">
-								<Info />
-								View Details
+								asChild
+								className="cursor-pointer hover:bg-emerald">
+								<Link href={`/admin/alumni/records/${row.original.lrn}/edit`}>
+									<Pencil />
+									Edit
+								</Link>
 							</DropdownMenuItem>
-							{/* <DropdownMenuItem
-								onClick={() => setVerifyAlumni(row.original)}
-								className="  cursor-pointer flex items-center dark:text-white">
-								<Pencil />
-								Update Status
-							</DropdownMenuItem> */}
+							<DropdownMenuItem asChild className="cursor-pointer">
+								<Link href={`/admin/alumni/records/${row.original.lrn}`}>
+									<Info />
+									View Details
+								</Link>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);
@@ -272,7 +275,7 @@ export default function AlumniDataTable() {
 				setPagination={setPagination}
 				columns={columns}
 				data={data}
-				filterName="email"
+				filterName="lrn"
 				rowCount={total}
 				loading={loading}
 				handleSearch={handleFetchData}

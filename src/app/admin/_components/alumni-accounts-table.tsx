@@ -226,7 +226,7 @@ export default function AlumniAccountsDataTable() {
 							</DropdownMenuItem> */}
 							<DropdownMenuItem
 								onClick={() => setAlumniAccount(row.original)}
-								className="  cursor-pointer flex items-center dark:text-white">
+								className="  cursor-pointer flex items-center ">
 								<ShieldEllipsis />
 								Verify
 							</DropdownMenuItem>
