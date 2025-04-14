@@ -85,14 +85,11 @@ export async function loginAction(email: string, password: string) {
 		if (user.status === "PENDING" && user.role === "ALUMNI") {
 			return {
 				error: {
+					isPending: true,
 					message:
 						"Your account is pending for admin verification. Please wait for approval.",
 				},
 			};
-		}
-
-		if (user.status === "ACTIVE" && !user.verifiedAt) {
-			await createToken(user.email);
 		}
 
 		const passwordMatch = await bcrypt.compare(password, user.password);

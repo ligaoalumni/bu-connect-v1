@@ -56,16 +56,26 @@ export const readAlumniAccounts = async (
 	};
 };
 
-export const readAlumniAccount = async (id: number) => {
-	const alumniAccount = await prisma.alumniAccount.findUnique({
-		where: {
-			id,
+export const readAlumniAccount = async (id: string | number) => {
+	let where: Prisma.AlumniAccountWhereUniqueInput;
+
+	if (typeof id === "string") {
+		where = {
+			lrn: id,
+		};
+	} else {
+		where = {
+			id: id,
+		};
+	}
+
+	return await prisma.alumniAccount.findUnique({
+		where,
+		include: {
+			alumni: true,
+			user: true,
 		},
 	});
-
-	if (!alumniAccount) throw new Error("Alumni not found!");
-
-	return alumniAccount;
 };
 
 export const readAlumniRecords = async ({
