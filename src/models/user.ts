@@ -20,7 +20,11 @@ export const readUser = async ({
 	const user = await prisma.user.findUnique({
 		where,
 		include: {
-			alumni: isAlumni,
+			alumni: {
+				include: {
+					alumni: isAlumni,
+				},
+			},
 		},
 	});
 
