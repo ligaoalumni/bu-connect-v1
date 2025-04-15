@@ -1,9 +1,12 @@
+"use client";
+
 import { User } from "@/types";
+
 import { createContext, useState, useContext, ReactNode } from "react";
 
 type UserCredentials = Pick<
 	User,
-	"firstName" | "lastName" | "email" | "role" | "id"
+	"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
 > | null;
 
 interface AuthContextType {

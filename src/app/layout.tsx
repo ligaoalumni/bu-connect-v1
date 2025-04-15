@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "../providers";
 import { getInformation } from "@/actions";
 import { Footer, MainNav } from "@/components";
 
@@ -37,6 +37,7 @@ export default async function RootLayout({
 				id: user.id,
 				lastName: user.lastName,
 				role: user.role,
+				avatar: user.avatar,
 		  }
 		: null;
 
