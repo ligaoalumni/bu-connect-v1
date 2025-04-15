@@ -12,15 +12,22 @@ import { Button } from "@/components/ui/button";
 import { Settings, User, Bell, LayoutDashboard } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-context";
 
-export const AvatarDropdown = ({ isAdmin }: { isAdmin?: boolean }) => {
+export const AvatarDropdown = () => {
+	const { user } = useAuth();
+	const isAdmin = user?.role !== "ALUMNI";
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="relative h-8 w-8 rounded-full">
 					<Avatar className="h-8 w-8">
-						<AvatarImage src="#" alt="@johndoe" />
-						<AvatarFallback>JD</AvatarFallback>
+						<AvatarImage src={user?.avatar || ""} alt="@johndoe" />
+						<AvatarFallback>
+							{user?.firstName[0]}
+							{user?.lastName[0]}
+						</AvatarFallback>
 					</Avatar>
 				</Button>
 			</DropdownMenuTrigger>
