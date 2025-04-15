@@ -1,5 +1,7 @@
-import React from "react";
+interface CommentSectionProps {
+	eventSlug: string;
+}
 
-export function CommentSection() {
+export function CommentSection({ eventSlug }: CommentSectionProps) {
 	return <div>CommentSection</div>;
 }

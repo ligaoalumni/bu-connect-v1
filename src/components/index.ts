@@ -55,6 +55,8 @@ export * from "./custom/infinite-scroll";
 export * from "./custom/back-to-top-btn";
 export * from "./custom/footer";
 export * from "./custom/qr-code-viewer";
+export * from "./custom/comments-section";
+export * from "./custom/attendants-section";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";

@@ -64,10 +64,10 @@ export function EventInfo({ event, date, status }: EventInfoProps) {
 				</div>
 
 				<div className="md:col-span-6 md:order-1 order-2 ">
-					<CommentSection />
+					<CommentSection eventSlug={event.slug} />
 				</div>
 				<div className="md:col-span-4 order-1 md:order-2  ">
-					<AttendantsSection />
+					<AttendantsSection eventSlug={event.slug} />
 				</div>
 			</div>
 		</div>
