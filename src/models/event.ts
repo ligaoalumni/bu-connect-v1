@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 
 import {
+	Attendant,
 	DashboardEvent,
 	Event,
 	EventPartialRelation,
@@ -9,6 +10,7 @@ import {
 	EventWithPagination,
 	PaginationArgs,
 	PaginationResult,
+	TEventPagination,
 } from "@/types";
 import { Prisma } from "@prisma/client";
 import { format, isFuture } from "date-fns";
@@ -347,4 +349,81 @@ export const addEventAttendant = async ({
 			},
 		});
 	});
+};
+
+export const readAttendants = async ({
+	slug,
+	pagination,
+}: TEventPagination): Promise<PaginationResult<Attendant>> => {
+	const event = await prisma.event.findUnique({
+		where: {
+			slug,
+		},
+		select: {
+			alumni: {
+				skip: pagination ? pagination.limit * pagination.page : undefined,
+				take: pagination ? pagination.limit : undefined,
+				select: {
+					user: {
+						select: {
+							avatar: true,
+						},
+					},
+					firstName: true,
+					lastName: true,
+					email: true,
+					lrn: true,
+					graduationYear: true,
+					alumni: {
+						select: {
+							strand: true,
+						},
+					},
+				},
+			},
+		},
+	});
+
+	const total = await prisma.event.findUnique({
+		where: {
+			slug,
+		},
+		select: {
+			alumni: {
+				select: {
+					user: {
+						select: {
+							avatar: true,
+						},
+					},
+					firstName: true,
+					lastName: true,
+					email: true,
+					lrn: true,
+					graduationYear: true,
+				},
+			},
+		},
+	});
+
+	if (!event)
+		return {
+			count: 0,
+			data: [],
+			hasMore: false,
+		};
+
+	return {
+		count: total?.alumni.length || 0,
+		data: event.alumni.map((attendant) => ({
+			avatar: attendant.user.avatar || "",
+			firstName: attendant.firstName,
+			lastName: attendant.lastName,
+			email: attendant.email,
+			lrn: attendant.lrn,
+			strand: attendant.alumni?.strand || "",
+			batch: attendant.graduationYear,
+		})),
+		hasMore: event.alumni.length === pagination?.limit,
+	};
 };

@@ -4,10 +4,16 @@ import { EventFormSchema } from "@/lib/definitions";
 import {
 	addEventAttendant,
 	createEvent,
+	readAttendants,
 	readEvents,
 	updateEvent,
 } from "@/models";
-import { EventFormData, EventStatus, PaginationArgs } from "@/types";
+import {
+	EventFormData,
+	EventStatus,
+	PaginationArgs,
+	TEventPagination,
+} from "@/types";
 import { revalidatePath } from "next/cache";
 
 export const createEventAction = async (data: EventFormData) => {
@@ -86,5 +92,16 @@ export const addEventAttendantAction = async ({
 			error instanceof Error ? error.message : "Failed to add attendant";
 
 		return { success: false, message: errorMessage };
+	}
+};
+
+export const readAttendantsAction = async ({
+	slug,
+	pagination,
+}: TEventPagination) => {
+	try {
+		return await readAttendants({ slug, pagination });
+	} catch {
+		throw new Error("Failed to fetch attendants");
 	}
 };

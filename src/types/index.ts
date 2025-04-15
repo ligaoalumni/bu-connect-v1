@@ -20,6 +20,16 @@ export interface AlumniWithRelation extends Alumni {
 	alumniAccount: AlumniAccount | null;
 }
 
+export interface Attendant {
+	avatar: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	lrn: string;
+	strand?: string;
+	batch: number;
+}
+
 export interface QRCodeValues {
 	lrn: string;
 	middleName?: string;
@@ -51,6 +61,14 @@ export interface PaginationResult<T> {
 	data: T[];
 	hasMore: boolean;
 }
+
+export type TEventPagination = {
+	slug: string;
+	pagination?: {
+		limit: number;
+		page: number;
+	};
+};
 
 export type PaginationArgs<TStatus, SRole> = {
 	filter?: string | number;
