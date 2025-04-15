@@ -4,6 +4,7 @@ import {
 	Sheet,
 	SheetContent,
 	SheetTrigger,
+	ThemeSwitcher,
 } from "@/components";
 import { Menu } from "lucide-react";
 import Image from "next/image";
@@ -12,11 +13,11 @@ import React from "react";
 
 export function Header() {
 	return (
-		<header className="bg-[#2F61A0] dark:bg-[#5473a8] sticky top-0 py-2 z-50 w-screen   ">
-			<div className="mx-auto container px-5 md:px-0 flex   items-center">
+		<header className="bg-[#2F61A0] shadow-md dark:bg-[#5473a8] h-24 sticky top-0 py-2 z-50 w-screen   ">
+			<div className="mx-auto container px-5 md:px-0 flex justify-between   items-center">
 				<div className="mr-4  hidden md:flex">
 					<Link href="/" className="mr-6 flex items-center space-x-2">
-						<Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
+						<Image src="/icon.svg" height={80} width={80} alt="LNHS Logo" />
 					</Link>
 				</div>
 				<Sheet>
@@ -48,7 +49,31 @@ export function Header() {
 						</div>
 					</SheetContent>
 				</Sheet>
-				<div className="flex flex-1 items-center justify-end space-x-2">
+
+				<div className="hidden md:flex items-center ">
+					<Link
+						href="/"
+						className="mr-6 flex items-center space-x-2 text-white">
+						Home
+					</Link>
+					<Link
+						href="/batch"
+						className="mr-6 flex items-center space-x-2 text-white">
+						Batch
+					</Link>
+					<Link
+						href="/events"
+						className="mr-6 flex items-center space-x-2 text-white">
+						Events
+					</Link>
+					<Link
+						href="/announcements"
+						className="mr-6 flex items-center space-x-2 text-white">
+						Announcements
+					</Link>
+				</div>
+				<div className="flex   items-center justify-end space-x-2">
+					<ThemeSwitcher />
 					<AvatarDropdown />
 				</div>
 			</div>

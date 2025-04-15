@@ -10,6 +10,7 @@ import { AvatarDropdown } from "./avatar-dropdown";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
+import { ThemeSwitcher } from "./theme-switcher";
 
 // const components: { title: string; href: string; description: string }[] = [
 // 	{
@@ -39,7 +40,10 @@ const showMainNavRoutes = publicRoutes.concat(["/verify-account"]);
 export function MainNav({
 	user,
 }: {
-	user: Pick<User, "firstName" | "lastName" | "email" | "role" | "id"> | null;
+	user: Pick<
+		User,
+		"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
+	> | null;
 }) {
 	const path = usePathname();
 	const { login, logout } = useAuth();
@@ -89,10 +93,15 @@ export function MainNav({
 						</div>
 					</SheetContent>
 				</Sheet>
+
+				<div className="hidden md:flex items-center"></div>
 				<div className="flex flex-1 items-center justify-end space-x-2">
 					{/* <ThemeSwitcher /> */}
 					{user && user.id ? (
-						<AvatarDropdown isAdmin={user.role !== "ALUMNI"} />
+						<>
+							<ThemeSwitcher />
+							<AvatarDropdown />
+						</>
 					) : (
 						<nav className="flex items-center space-x-2">
 							<Button

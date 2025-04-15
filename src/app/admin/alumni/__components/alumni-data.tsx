@@ -10,7 +10,7 @@ export function AlumniData({
 			<p className="text-sm">{label}</p>
 			<p
 				className={`${
-					data ? "font-medium" : "italic text-gray-500"
+					data ? "font-medium" : "italic text-white/70 dark:text-white/70"
 				} break-words`}>
 				{data || "No Data"}
 			</p>
