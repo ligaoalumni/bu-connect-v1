@@ -92,6 +92,7 @@ model User {
   gender Gender @default(PREFER_NOT_TO_SAY)
   address String? @default("")
   contactNumber String? @default("")
+  birthDate DateTime? 
 
 
   alumni    AlumniAccount?
