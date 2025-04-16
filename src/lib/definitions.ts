@@ -96,3 +96,24 @@ export const AdminSchema = z.object({
 	includeNumbers: z.boolean().default(true),
 	includeSymbols: z.boolean().default(true),
 });
+
+export const ProfileSchema = z.object({
+	firstName: z.string().min(1, { message: "First name is required" }),
+	lastName: z.string().min(1, { message: "Last name is required" }),
+	middleName: z.string().optional(),
+	birthDate: z.string().min(1, { message: "Birth date is required" }),
+	contactNumber: z.string(),
+	address: z.string(),
+	religion: z.string(),
+	nationality: z.string(),
+	gender: z.string(),
+	avatar: z.string(),
+
+	// POST GRADUATION
+	furtherEducation: z.string(),
+	course: z.string(),
+	company: z.string(),
+	schoolName: z.string(),
+	occupation: z.string(),
+	jobTitle: z.string(),
+});

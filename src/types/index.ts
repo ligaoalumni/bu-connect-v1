@@ -3,6 +3,7 @@ import {
 	AlumniSchema,
 	EventFormSchema,
 	LoginFormSchema,
+	ProfileSchema,
 	SignupFormSchema,
 } from "@/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
@@ -116,6 +117,7 @@ export type EventFormData = z.infer<typeof EventFormSchema>;
 export type SignUpFormData = z.infer<typeof SignupFormSchema>;
 export type AlumniFormData = z.infer<typeof AlumniSchema>;
 export type AdminFormData = z.infer<typeof AdminSchema>;
+export type ProfileFormData = z.infer<typeof ProfileSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;
