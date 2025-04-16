@@ -12,10 +12,13 @@ import {
 	QRCodeViewer,
 } from "@/components";
 import { formatDate } from "date-fns";
+import Link from "next/link";
 import React from "react";
 
 export default async function Page() {
 	const user = await getInformation();
+
+	const alumniSystemRecord = user?.alumni?.alumni;
 
 	return (
 		<div className="space-y-3">
@@ -35,14 +38,15 @@ export default async function Page() {
 						</h2>
 						<p className="text-sm text-white">
 							{user?.alumni?.graduationYear}{" "}
-							{user?.alumni?.alumni?.strand &&
-								`| ${user?.alumni?.alumni?.strand}`}
+							{alumniSystemRecord?.strand && `| ${alumniSystemRecord?.strand}`}
 						</p>
 					</div>
 				</div>
 
 				<div className="flex justify-between items-center">
-					<Button variant="default"> Edit Profile</Button>
+					<Button variant="default" asChild>
+						<Link href={"profile/edit"}>Edit Profile</Link>
+					</Button>
 					<QRCodeViewer
 						buttonProps={{
 							variant: "secondary",
@@ -50,10 +54,10 @@ export default async function Page() {
 						buttonLabel="My QR Code"
 						data={{
 							batch: Number(user?.alumni?.graduationYear),
-							educationLevel: user?.alumni?.alumni?.educationLevel || "",
+							educationLevel: alumniSystemRecord?.educationLevel || "",
 							firstName: user?.firstName || "",
 							lastName: user?.lastName || "",
-							strand: String(user?.alumni?.alumni?.strand || ""),
+							strand: String(alumniSystemRecord?.strand || ""),
 							lrn: String(user?.alumni?.lrn),
 							// email: user?.email || "",
 							middleName: user?.middleName || "",
@@ -72,8 +76,8 @@ export default async function Page() {
 						<AlumniData
 							label="Birth Date"
 							data={
-								user?.alumni?.alumni?.birthDate
-									? formatDate(user.alumni.alumni.birthDate, "MMMM dd, yyyy")
+								alumniSystemRecord?.birthDate
+									? formatDate(alumniSystemRecord.birthDate, "MMMM dd, yyyy")
 									: null
 							}
 						/>
@@ -98,16 +102,42 @@ export default async function Page() {
 						<CardTitle>Academic Information</CardTitle>
 					</CardHeader>
 					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-						<AlumniData label="LRN" data={user?.alumni?.alumni?.lrn} />
+						<AlumniData label="LRN" data={alumniSystemRecord?.lrn} />
 						<AlumniData
 							label="Batch"
-							data={user?.alumni?.alumni?.graduationYear?.toString()}
+							data={alumniSystemRecord?.graduationYear?.toString()}
 						/>
 						<AlumniData
 							label="Education Level"
-							data={user?.alumni?.alumni?.educationLevel}
+							data={alumniSystemRecord?.educationLevel}
 						/>
-						<AlumniData label="Strand" data={user?.alumni?.alumni?.strand} />
+						<AlumniData label="Strand" data={alumniSystemRecord?.strand} />
+					</CardContent>
+				</Card>
+
+				<Card className="bg-transparent text-white">
+					<CardHeader className="px-5 pb-2 pt-5 font-medium">
+						<CardTitle>Post - Graduation Information</CardTitle>
+					</CardHeader>
+					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+						<AlumniData
+							label="Further Education"
+							data={alumniSystemRecord?.furtherEducation}
+						/>
+						<AlumniData label="Course" data={alumniSystemRecord?.course} />
+						<AlumniData
+							label="Company"
+							data={alumniSystemRecord?.companyName}
+						/>
+						<AlumniData
+							label="Name of University/College"
+							data={alumniSystemRecord?.schoolName}
+						/>
+						<AlumniData
+							label="Current Occupation"
+							data={alumniSystemRecord?.status}
+						/>
+						<AlumniData label="Job Title" data={alumniSystemRecord?.jobTitle} />
 					</CardContent>
 				</Card>
 			</div>
