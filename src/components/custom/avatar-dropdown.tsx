@@ -21,13 +21,18 @@ export const AvatarDropdown = () => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+				<Button
+					variant="ghost"
+					className="relative h-8 w-8 bg-transparent hover:bg-red-400 rounded-full">
 					<Avatar className="h-8 w-8">
-						<AvatarImage src={user?.avatar || ""} alt="@johndoe" />
-						<AvatarFallback>
-							{user?.firstName[0]}
-							{user?.lastName[0]}
-						</AvatarFallback>
+						{user?.avatar ? (
+							<AvatarImage src={user.avatar} alt="@johndoe" />
+						) : (
+							<AvatarFallback>
+								{user?.firstName[0]}
+								{user?.lastName[0]}
+							</AvatarFallback>
+						)}
 					</Avatar>
 				</Button>
 			</DropdownMenuTrigger>
