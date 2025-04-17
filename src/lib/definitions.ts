@@ -117,3 +117,17 @@ export const ProfileSchema = z.object({
 	occupation: z.string(),
 	jobTitle: z.string(),
 });
+
+export const AdminProfileSchema = z.object({
+	firstName: z.string().min(1, { message: "First name is required" }),
+	lastName: z.string().min(1, { message: "Last name is required" }),
+	middleName: z.string().optional(),
+
+	nationality: z.string(),
+	religion: z.string(),
+	gender: z.string(),
+	address: z.string(),
+	contactNumber: z.string(),
+	avatar: z.string(),
+	birthDate: z.string().min(1, { message: "Birth date is required" }),
+});
