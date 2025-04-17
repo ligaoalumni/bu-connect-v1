@@ -1,6 +1,6 @@
 "use client";
 
-import { updateProfileActions, uploadAvatarImageAction } from "@/actions";
+import { updateProfileActions } from "@/actions";
 import { AlumniData } from "@/app/admin/alumni/__components";
 import {
 	Card,
@@ -25,18 +25,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Button,
-	Avatar,
-	AvatarImage,
-	AvatarFallback,
 } from "@/components";
+import AvatarUpload from "@/components/custom/avatar-upload";
 import { alumniLabel } from "@/constant";
 import { ProfileSchema } from "@/lib/definitions";
 import { ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon, ArrowLeft, Upload, X } from "lucide-react";
+import { AlertCircleIcon, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -75,7 +72,6 @@ export default function EditProfileForm({
 	user,
 	postInfo,
 }: EditProfileFormProps) {
-	const [isUploading, setIsUploading] = useState(false);
 	const router = useRouter();
 	const defaultValues = {
 		firstName: user.firstName,
@@ -136,38 +132,6 @@ export default function EditProfileForm({
 		</div>
 	);
 
-	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0];
-			try {
-				setIsUploading(true);
-				if (file.type.startsWith("image/")) {
-					const img = await uploadAvatarImageAction(file);
-					if (!img) {
-						throw new Error("Failed to upload image");
-					}
-
-					form.setValue("avatar", img);
-				} else {
-					throw new Error("Invalid file type");
-				}
-			} catch (err) {
-				console.log(err);
-				toast.error("Error uploading file", {
-					richColors: true,
-					description: "Please try again",
-					position: "top-center",
-				});
-			} finally {
-				setIsUploading(false);
-			}
-		}
-	};
-
-	const removeImage = () => {
-		form.resetField("avatar");
-	};
-
 	return (
 		<Form {...form}>
 			<form
@@ -185,68 +149,15 @@ export default function EditProfileForm({
 						</div>
 						<Actions />
 					</div>
-					<Card className="bg-[#2F61A0] text-white">
-						<CardHeader>
-							<CardTitle className="text-center">Avatar Upload</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="flex flex-col items-center gap-4">
-								<div className="relative">
-									<Avatar className="h-[120px] w-[120px] border-2 border-white">
-										{form.getValues("avatar") ? (
-											<AvatarImage
-												src={form.getValues("avatar") || ""}
-												alt="Profile picture"
-											/>
-										) : (
-											<AvatarFallback className="text-3xl bg-white/20">
-												{user.firstName.charAt(0).toUpperCase()}
-												{user.lastName.charAt(0).toUpperCase()}
-											</AvatarFallback>
-										)}
 
-										{isUploading && (
-											<div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-												<div className="h-8 w-8 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
-											</div>
-										)}
-
-										{form.getValues("avatar") && !isUploading && (
-											<button
-												onClick={removeImage}
-												className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 text-white hover:bg-red-600 transition-colors"
-												type="button">
-												<X className="h-4 w-4" />
-											</button>
-										)}
-									</Avatar>
-								</div>
-
-								<div className="flex gap-2">
-									<label htmlFor="avatar-upload-demo">
-										<Button
-											variant="outline"
-											className="bg-white/20 hover:bg-white/30 border-white/50"
-											disabled={isUploading || form.formState.isSubmitting}
-											asChild>
-											<div className="flex items-center gap-2 cursor-pointer">
-												<Upload className="h-4 w-4" />
-												{isUploading ? "Uploading..." : "Upload Photo"}
-											</div>
-										</Button>
-									</label>
-									<input
-										id="avatar-upload-demo"
-										type="file"
-										accept="image/*"
-										className="hidden"
-										onChange={handleFileChange}
-										disabled={isUploading}
-									/>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+					<AvatarUpload
+						avatarFallback={`${user.firstName[0]}${user.lastName[0]}`}
+						isDisabled={form.formState.isSubmitting}
+						handleSetValue={(value) => {
+							form.setValue("avatar", value || "");
+						}}
+						avatarImage={form.getValues("avatar")}
+					/>
 
 					<Card className="bg-transparent text-white">
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
