@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadAvatarImageAction } from "@/actions";
+import { updateProfileActions, uploadAvatarImageAction } from "@/actions";
 import { AlumniData } from "@/app/admin/alumni/__components";
 import {
 	Card,
@@ -35,12 +35,14 @@ import { ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircleIcon, ArrowLeft, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 interface EditProfileFormProps {
 	user: {
+		id: number;
 		firstName: string;
 		middleName: string;
 		lastName: string;
@@ -74,6 +76,7 @@ export default function EditProfileForm({
 	postInfo,
 }: EditProfileFormProps) {
 	const [isUploading, setIsUploading] = useState(false);
+	const router = useRouter();
 	const defaultValues = {
 		firstName: user.firstName,
 		lastName: user.lastName,
@@ -100,7 +103,22 @@ export default function EditProfileForm({
 	});
 
 	const handleSignUp = async (values: ProfileFormData) => {
-		console.log("VALUES: ", values);
+		try {
+			await updateProfileActions(user.id, alumniSystemRecord.lrn, values);
+
+			toast.success("Profile updated successfully", {
+				richColors: true,
+				description: "Your profile has been updated successfully",
+				position: "top-center",
+			});
+			router.push("/profile");
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : "Error uploading file", {
+				richColors: true,
+				description: "Please try again",
+				position: "top-center",
+			});
+		}
 	};
 
 	const Actions = () => (
@@ -112,7 +130,9 @@ export default function EditProfileForm({
 			>
 				Reset
 			</Button>
-			<Button variant="secondary">Save</Button>
+			<Button type="submit" variant="secondary">
+				{form.formState.isSubmitting ? "Saving..." : "Save"}
+			</Button>
 		</div>
 	);
 
@@ -207,7 +227,7 @@ export default function EditProfileForm({
 										<Button
 											variant="outline"
 											className="bg-white/20 hover:bg-white/30 border-white/50"
-											disabled={isUploading}
+											disabled={isUploading || form.formState.isSubmitting}
 											asChild>
 											<div className="flex items-center gap-2 cursor-pointer">
 												<Upload className="h-4 w-4" />

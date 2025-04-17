@@ -5,12 +5,14 @@ import { formatDate } from "date-fns";
 export default async function Page() {
 	const user = await getInformation();
 
-	console.log(user?.birthDate, "qqq");
+	if (!user) {
+		return <div>Loading...</div>;
+	}
 
-	const systemRecord = user?.alumni?.alumni;
+	const systemRecord = user.alumni?.alumni;
 
 	const alumniSystemRecord = {
-		lrn: user?.alumni?.lrn || "",
+		lrn: user.alumni?.lrn || "",
 		batch: systemRecord?.graduationYear?.toString() || "",
 		educationLevel: systemRecord?.educationLevel || "",
 		strand: systemRecord?.strand || "",
@@ -20,18 +22,19 @@ export default async function Page() {
 		<div>
 			<EditProfileForm
 				user={{
-					avatar: user?.avatar || "",
-					address: user?.address || "",
-					birthDate: user?.birthDate
+					id: user.id,
+					avatar: user.avatar || "",
+					address: user.address || "",
+					birthDate: user.birthDate
 						? formatDate(user.birthDate, "yyyy-MM-dd")
 						: "",
-					contactNumber: user?.contactNumber || "",
-					firstName: user?.firstName || "",
-					gender: user?.gender || "",
-					lastName: user?.lastName || "",
-					middleName: user?.middleName || "",
-					nationality: user?.nationality || "",
-					religion: user?.religion || "",
+					contactNumber: user.contactNumber || "",
+					firstName: user.firstName || "",
+					gender: user.gender || "",
+					lastName: user.lastName || "",
+					middleName: user.middleName || "",
+					nationality: user.nationality || "",
+					religion: user.religion || "",
 				}}
 				postInfo={{
 					furtherEducation: systemRecord?.furtherEducation || "",
