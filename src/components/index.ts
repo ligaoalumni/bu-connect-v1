@@ -34,6 +34,7 @@ export * from "./ui/tabs";
 export * from "./ui/navigation-menu";
 export * from "./ui/dialog";
 export * from "./ui/slider";
+export * from "./ui/textarea";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
