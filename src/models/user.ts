@@ -1,7 +1,13 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult, User, UserRole } from "@/types";
+import {
+	PaginationArgs,
+	PaginationResult,
+	UpdateProfileData,
+	User,
+	UserRole,
+} from "@/types";
 import { Prisma } from "@prisma/client";
 
 export const readUser = async ({
@@ -176,4 +182,96 @@ export const updateUser = async (
 	}
 
 	return updatedAccount;
+};
+
+export const updateProfile = async (
+	id: number,
+	lrn: string,
+	data: UpdateProfileData
+): Promise<void> => {
+	const {
+		address,
+		avatar,
+		birthDate,
+		company,
+		contactNumber,
+		course,
+		firstName,
+		furtherEducation,
+		gender,
+		jobTitle,
+		lastName,
+		middleName,
+		nationality,
+		occupation,
+		religion,
+		schoolName,
+	} = data;
+
+	// Input validation
+	if (!id) throw new Error("User ID is required.");
+	if (!lrn) throw new Error("LRN is required.");
+	if (!firstName || !lastName)
+		throw new Error("First and last names are required.");
+
+	let parsedBirthDate: Date | null = null;
+	if (birthDate) {
+		parsedBirthDate = new Date(birthDate);
+		if (isNaN(parsedBirthDate.getTime())) {
+			throw new Error("Invalid birth date format.");
+		}
+	}
+
+	try {
+		await prisma.$transaction(async (tx) => {
+			// Update user details
+			const user = await tx.user.update({
+				where: { id },
+				data: {
+					avatar,
+					religion,
+					address,
+					birthDate: parsedBirthDate,
+					contactNumber,
+					firstName,
+					middleName,
+					lastName,
+					nationality,
+					gender,
+				},
+			});
+			if (!user) throw new Error("Failed to update user profile.");
+
+			// Update alumni account
+			const alumniAccount = await tx.alumniAccount.update({
+				where: { lrn },
+				data: {
+					firstName,
+					middleName,
+					lastName,
+				},
+			});
+			if (!alumniAccount) throw new Error("Failed to update profile.");
+
+			// Update alumni details
+			const alumni = await tx.alumni.update({
+				where: { lrn },
+				data: {
+					companyName: company,
+					course,
+					furtherEducation,
+					jobTitle,
+					schoolName,
+					status: occupation,
+				},
+			});
+			if (!alumni) throw new Error("Failed to update profile.");
+		});
+	} catch (error) {
+		// Log the error (placeholder for actual logging)
+		console.error("Transaction failed:", error);
+		throw new Error(
+			"An error occurred while updating the profile. Please try again later."
+		);
+	}
 };

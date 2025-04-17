@@ -3,10 +3,16 @@
 import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
 import { encrypt } from "@/lib/session";
-import { createUser, readUser, updateUser, updateUserStatus } from "@/models";
+import {
+	createUser,
+	readUser,
+	updateProfile,
+	updateUser,
+	updateUserStatus,
+} from "@/models";
 import { validateToken } from "@/models/token";
 import { AdminFormData } from "@/types";
-import type { User } from "@/types";
+import type { UpdateProfileData, User } from "@/types";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -121,6 +127,24 @@ export const verifyAccount = async (
 			sameSite: "lax",
 			path: "/",
 		});
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while creating the admin."
+		);
+	}
+};
+
+export const updateProfileActions = async (
+	id: number,
+	lrn: string,
+	data: UpdateProfileData
+) => {
+	try {
+		await updateProfile(id, lrn, data);
+
+		revalidatePath("/profile");
 	} catch (err) {
 		throw new Error(
 			err instanceof Error
