@@ -133,7 +133,13 @@ export async function logout() {
 	}
 }
 
-export async function getInformation() {
+export async function getInformation(
+	{
+		isAlumni,
+	}: {
+		isAlumni: boolean;
+	} = { isAlumni: true }
+) {
 	const cookieStore = await cookies();
 
 	const session = await decrypt(cookieStore.get("session")?.value);
@@ -142,5 +148,5 @@ export async function getInformation() {
 		return null;
 	}
 
-	return await readUser({ id: session?.email, isAlumni: true });
+	return await readUser({ id: session?.email, isAlumni: isAlumni });
 }
