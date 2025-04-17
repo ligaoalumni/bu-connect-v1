@@ -100,7 +100,7 @@ export default function EditProfileForm({
 
 	const handleSignUp = async (values: ProfileFormData) => {
 		try {
-			await updateProfileActions(user.id, alumniSystemRecord.lrn, values);
+			await updateProfileActions(user.id, values, alumniSystemRecord.lrn);
 
 			toast.success("Profile updated successfully", {
 				richColors: true,

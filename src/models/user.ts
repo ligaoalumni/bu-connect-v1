@@ -186,8 +186,8 @@ export const updateUser = async (
 
 export const updateProfile = async (
 	id: number,
-	lrn: string,
-	data: UpdateProfileData
+	data: UpdateProfileData,
+	lrn?: string
 ): Promise<void> => {
 	const {
 		address,
@@ -210,7 +210,6 @@ export const updateProfile = async (
 
 	// Input validation
 	if (!id) throw new Error("User ID is required.");
-	if (!lrn) throw new Error("LRN is required.");
 	if (!firstName || !lastName)
 		throw new Error("First and last names are required.");
 
@@ -242,30 +241,32 @@ export const updateProfile = async (
 			});
 			if (!user) throw new Error("Failed to update user profile.");
 
-			// Update alumni account
-			const alumniAccount = await tx.alumniAccount.update({
-				where: { lrn },
-				data: {
-					firstName,
-					middleName,
-					lastName,
-				},
-			});
-			if (!alumniAccount) throw new Error("Failed to update profile.");
+			if (lrn) {
+				// Update alumni account
+				const alumniAccount = await tx.alumniAccount.update({
+					where: { lrn },
+					data: {
+						firstName,
+						middleName,
+						lastName,
+					},
+				});
+				if (!alumniAccount) throw new Error("Failed to update profile.");
 
-			// Update alumni details
-			const alumni = await tx.alumni.update({
-				where: { lrn },
-				data: {
-					companyName: company,
-					course,
-					furtherEducation,
-					jobTitle,
-					schoolName,
-					status: occupation,
-				},
-			});
-			if (!alumni) throw new Error("Failed to update profile.");
+				// Update alumni details
+				const alumni = await tx.alumni.update({
+					where: { lrn },
+					data: {
+						companyName: company,
+						course,
+						furtherEducation,
+						jobTitle,
+						schoolName,
+						status: occupation,
+					},
+				});
+				if (!alumni) throw new Error("Failed to update profile.");
+			}
 		});
 	} catch (error) {
 		// Log the error (placeholder for actual logging)

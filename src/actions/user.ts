@@ -138,13 +138,13 @@ export const verifyAccount = async (
 
 export const updateProfileActions = async (
 	id: number,
-	lrn: string,
-	data: UpdateProfileData
+	data: UpdateProfileData,
+	lrn?: string
 ) => {
 	try {
-		await updateProfile(id, lrn, data);
+		await updateProfile(id, data, lrn);
 
-		revalidatePath("/profile");
+		revalidatePath(lrn ? "/profile" : "/admin/profile");
 	} catch (err) {
 		throw new Error(
 			err instanceof Error
