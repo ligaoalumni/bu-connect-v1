@@ -44,3 +44,16 @@ export interface DashboardEvent {
 }
 
 export type EventStatus = "Upcoming Event" | "Ongoing Event" | "Past Event";
+
+export interface EventComment {
+	id: number;
+	comment: string;
+
+	// user who commented
+	avatar: string;
+	name: string;
+	lrn: string;
+	batch: string;
+
+	createdAt: string;
+}

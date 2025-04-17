@@ -4,6 +4,7 @@ import {
 	Attendant,
 	DashboardEvent,
 	Event,
+	EventComment,
 	EventPartialRelation,
 	Events,
 	EventStatus,
@@ -425,5 +426,58 @@ export const readAttendants = async ({
 			batch: attendant.graduationYear,
 		})),
 		hasMore: event.alumni.length === pagination?.limit,
+	};
+};
+
+export const readEventComments = async ({
+	slug,
+	pagination,
+}: TEventPagination): Promise<PaginationResult<EventComment>> => {
+	const comments = await prisma.eventComment.findMany({
+		where: {
+			event: {
+				slug,
+			},
+		},
+		include: {
+			commentBy: {
+				select: {
+					user: {
+						select: {
+							avatar: true,
+						},
+					},
+					firstName: true,
+					lastName: true,
+					email: true,
+					lrn: true,
+					graduationYear: true,
+				},
+			},
+		},
+		skip: pagination ? pagination.limit * pagination.page : undefined,
+		take: pagination ? pagination.limit : undefined,
+	});
+
+	const total = await prisma.eventComment.count({
+		where: {
+			event: {
+				slug,
+			},
+		},
+	});
+
+	return {
+		count: total || 0,
+		data: comments.map((comment) => ({
+			id: comment.id,
+			comment: comment.comment,
+			avatar: comment.commentBy.user.avatar || "",
+			name: `${comment.commentBy.firstName} ${comment.commentBy.lastName}`,
+			lrn: comment.commentBy.lrn,
+			batch: comment.commentBy.graduationYear.toString(),
+			createdAt: comment.createdAt.toISOString(),
+		})),
+		hasMore: comments.length === pagination?.limit,
 	};
 };

@@ -5,6 +5,7 @@ import {
 	addEventAttendant,
 	createEvent,
 	readAttendants,
+	readEventComments,
 	readEvents,
 	updateEvent,
 } from "@/models";
@@ -103,5 +104,17 @@ export const readAttendantsAction = async ({
 		return await readAttendants({ slug, pagination });
 	} catch {
 		throw new Error("Failed to fetch attendants");
+	}
+};
+
+export const readEventCommentsAction = async ({
+	slug,
+	pagination,
+}: TEventPagination) => {
+	try {
+		return await readEventComments({ slug, pagination });
+	} catch (err) {
+		console.log(err);
+		throw new Error("Failed to fetch comments");
 	}
 };
