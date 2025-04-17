@@ -25,12 +25,12 @@ const nextConfig: NextConfig = {
 			{
 				source: "/admin/events/:slug",
 				destination: "/admin/events/:slug/info",
-				// has: [
-				// 	{
-				// 		type: "query",
-				// 		key: "slug",
-				// 	},
-				// ],
+				has: [
+					{
+						type: "query",
+						key: "slug",
+					},
+				],
 				permanent: false, // Set to true for a permanent redirect (301), false for temporary (302)
 			},
 			{
