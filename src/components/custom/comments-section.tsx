@@ -1,4 +1,5 @@
 "use client";
+
 import { readEventCommentsAction } from "@/actions";
 import type { EventComment, PaginationResult } from "@/types";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import {
 	RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import CommentBox from "./comment-box-input";
 
 interface CommentsSectionProps {
 	eventSlug: string;
@@ -155,6 +157,9 @@ export function CommentsSection({ eventSlug }: CommentsSectionProps) {
 					{data.data.length > 0 ? (
 						<div className="space-y-3">
 							<div className="space-y-3 divide-y divide-gray-100">
+								<div>
+									<CommentBox onSubmit={async () => {}} />
+								</div>
 								{data.data.map((comment) => (
 									<div className="pt-3 first:pt-0" key={comment.id}>
 										<CommentCard {...comment} />
