@@ -12,30 +12,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { ThemeSwitcher } from "./theme-switcher";
 
-// const components: { title: string; href: string; description: string }[] = [
-// 	{
-// 		title: "All Events",
-// 		href: "/all-events",
-// 		description: "Browse all events with comprehensive details.",
-// 	},
-// 	{
-// 		title: "Upcoming Events",
-// 		href: "/upcoming-events",
-// 		description: "Discover upcoming events and their schedules.",
-// 	},
-// 	{
-// 		title: "Past Events",
-// 		href: "/past-events",
-// 		description: "Review past events and notable highlights.",
-// 	},
-// 	// {
-// 	// 	title: "Ongoing Events",
-// 	// 	href: "/ongoing-events",
-// 	// 	description: "See events currently in progress with live updates.",
-// 	// },
-// ];
-
-const showMainNavRoutes = publicRoutes.concat(["/verify-account"]);
+const showMainNavRoutes = publicRoutes.concat(["/verify-account", "/"]);
+const routes = ["#home", "#batch", "#about-us", "#events", "#contact-us"];
 
 export function MainNav({
 	user,
@@ -58,8 +36,8 @@ export function MainNav({
 
 	return showMainNavRoutes.includes(path) ? (
 		<header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
-			<div className="mx-auto container px-5 md:px-0 flex h-14  items-center">
-				<div className="mr-4  hidden md:flex">
+			<div className="mx-auto container  justify-between  px-5 md:px-0 flex h-14  items-center">
+				<div className="mr-4 hidden md:flex">
 					<Link href="/" className="mr-6 flex items-center space-x-2">
 						<Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
 					</Link>
@@ -94,8 +72,19 @@ export function MainNav({
 					</SheetContent>
 				</Sheet>
 
-				<div className="hidden md:flex items-center"></div>
-				<div className="flex flex-1 items-center justify-end space-x-2">
+				{path !== "/verify-account" && (
+					<div className="hidden md:flex gap-5 items-center ">
+						{routes.map((route) => (
+							<Link
+								key={route}
+								href={route}
+								className="text-sm font-medium leading-none text-white capitalize hover:text-primary transition-colors duration-200 ease-in-out">
+								{route.replace("#", "").replaceAll("-", " ").toLowerCase()}
+							</Link>
+						))}
+					</div>
+				)}
+				<div className="flex  items-center  justify-end space-x-2">
 					{/* <ThemeSwitcher /> */}
 					{user && user.id ? (
 						<>
