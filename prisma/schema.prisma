@@ -62,7 +62,8 @@ model AlumniAccount {
   events        Event[]        @relation("EventAttendees") // Many-to-many relationship with events
 
   eventComments EventComment[]
-  // announcementComments AnnouncementComment[] // Alumni can have multiple announcements
+  announcementComments AnnouncementComment[] // Alumni can have multiple announcements
+  likedAnnouncements Announcement[] @relation("AnnouncementLikes") // Alumni can like multiple announcements
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -193,30 +194,31 @@ model EventComment {
 }
 
 
-// model AnnouncementComment { 
-//   id Int @id @default(autoincrement())
+model AnnouncementComment { 
+  id Int @id @default(autoincrement())
 
-//   comment String
-//   announcementId Int
-//   announcement Announcement @relation(fields: [announcementId], references: [id])
-//   commentBy AlumniAccount @relation(fields: [commentById], references: [id])
-//   commentById Int
+  comment String
+  announcementId Int
+  announcement Announcement @relation(fields: [announcementId], references: [id])
+  commentBy AlumniAccount @relation(fields: [commentById], references: [id])
+  commentById Int
 
-//   createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-//   @@map("announcement_comments")
-// }
+  @@map("announcement_comments")
+}
 
-// model Announcement {
+model Announcement {
 
-//   id        Int      @id @default(autoincrement())
-//   slug      String   @unique
-//   name      String
-//   content   String
-//   coverImg  String
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title      String @db.Text
+  content String @db.Text
+  coverImg  String
 
-//   comments AnnouncementComment[]
+  likedBy AlumniAccount[] @relation("AnnouncementLikes") // Many-to-many with alumni
+  comments AnnouncementComment[]
 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
