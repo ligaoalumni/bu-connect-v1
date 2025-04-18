@@ -21,3 +21,15 @@ export const createAnnouncement = async ({
 		},
 	});
 };
+
+export const updateAnnouncement = async (
+	toUpdate: string,
+	values: Partial<Pick<Announcement, "title" | "content" | "coverImg">>
+) => {
+	return await prisma.announcement.update({
+		where: {
+			slug: toUpdate,
+		},
+		data: values,
+	});
+};
