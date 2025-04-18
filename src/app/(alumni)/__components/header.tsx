@@ -71,6 +71,16 @@ export function Header() {
 						className="mr-6 flex items-center space-x-2 text-white">
 						Announcements
 					</Link>
+					<Link
+						href="#contact-us"
+						className="mr-6 flex items-center space-x-2 text-white">
+						Contact us
+					</Link>
+					<Link
+						href="#about-us"
+						className="mr-6 flex items-center space-x-2 text-white">
+						About us
+					</Link>
 				</div>
 				<div className="flex   items-center justify-end space-x-2">
 					<ThemeSwitcher />

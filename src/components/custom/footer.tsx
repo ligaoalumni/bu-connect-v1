@@ -15,7 +15,7 @@ export const Footer = ({ show = false }: { show?: boolean }) => {
 	const path = usePathname();
 
 	return publicRoutes.includes(path) || show ? (
-		<footer className="bg-[#313131] py-14">
+		<footer id="about-us" className="bg-[#313131] py-14">
 			<div className="container space-y-4 mx-auto py-5">
 				<div className="grid mb-14 grid-cols-2 px-5 sm:px-0 sm:grid-cols-2 md:grid-cols-4 gap-5">
 					<div className="flex justify-center items-start">
