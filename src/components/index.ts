@@ -58,6 +58,9 @@ export * from "./custom/footer";
 export * from "./custom/qr-code-viewer";
 export * from "./custom/comments-section";
 export * from "./custom/attendants-section";
+export * from "./custom/contact-section";
+export * from "./custom/change-email";
+export * from "./custom/change-password";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";

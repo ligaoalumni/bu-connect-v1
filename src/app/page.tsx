@@ -1,4 +1,9 @@
-import { AspectRatio, BackToTopButton, Button } from "@/components";
+import {
+	AspectRatio,
+	BackToTopButton,
+	Button,
+	ContactSectionForm,
+} from "@/components";
 import { welcomeImageBlurData } from "@/constant";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -16,7 +21,9 @@ export default async function Home() {
 	return (
 		<div className=" ">
 			{/* HERO SECTION */}
-			<section className="min-h-screen min-w-screen items-center	bg-center  bg-[url('/images/hero-img.png')] bg-no-repeat bg-cover relative">
+			<section
+				id="#home"
+				className="min-h-screen min-w-screen items-center	bg-center  bg-[url('/images/hero-img.png')] bg-no-repeat bg-cover relative">
 				{/* <header className="z-50 absolute top-5 lef-0 w-full px-5">
 					<div className="container mx-auto flex items-center justify-end h-full">
 						<Button asChild>
@@ -113,10 +120,15 @@ export default async function Home() {
 			{/* Welcome Section */}
 
 			{/* Welcome Section */}
-			<section className=" min-h-screen min-w-screen flex items-center bg-[#D0E5EE]">
+			<section
+				id="batch"
+				className=" min-h-screen min-w-screen flex items-center bg-[#D0E5EE]">
 				<div className="container px-5  mx-auto "></div>
 			</section>
 			{/* Welcome Section */}
+
+			{/* Contact Us Section */}
+			<ContactSectionForm />
 
 			<BackToTopButton />
 		</div>

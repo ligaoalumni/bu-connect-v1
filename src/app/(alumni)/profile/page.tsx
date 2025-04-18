@@ -10,6 +10,8 @@ import {
 	CardHeader,
 	CardTitle,
 	QRCodeViewer,
+	ChangePassword,
+	ChangeEmail,
 } from "@/components";
 import { formatDate } from "date-fns";
 import Link from "next/link";
@@ -43,10 +45,15 @@ export default async function Page() {
 					</div>
 				</div>
 
-				<div className="flex justify-between items-center">
-					<Button variant="default" asChild>
-						<Link href={"profile/edit"}>Edit Profile</Link>
-					</Button>
+				<div className="flex justify-between items-end  md:items-center gap-3  ">
+					<div className="flex items-center gap-3 flex-wrap">
+						<Button variant="default" asChild>
+							<Link href={"profile/edit"}>Edit Profile</Link>
+						</Button>
+						<ChangeEmail />
+						<ChangePassword />
+					</div>
+
 					<QRCodeViewer
 						buttonProps={{
 							variant: "secondary",
