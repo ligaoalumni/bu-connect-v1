@@ -1,24 +1,21 @@
 "use client";
 
-import { User } from "@/types";
+import { UserCredentials } from "@/types";
 
 import { createContext, useState, useContext, ReactNode } from "react";
-
-type UserCredentials = Pick<
-	User,
-	"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
-> | null;
 
 interface AuthContextType {
 	user: UserCredentials;
 	login: (userData: UserCredentials) => void;
 	logout: VoidFunction;
+	setUser: React.Dispatch<React.SetStateAction<UserCredentials | null>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
 	user: null,
 	login: () => {},
 	logout: () => {},
+	setUser: () => {},
 });
 
 interface AuthProviderProps {
@@ -39,7 +36,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout }}>
+		<AuthContext.Provider value={{ user, login, logout, setUser }}>
 			{children}
 		</AuthContext.Provider>
 	);
