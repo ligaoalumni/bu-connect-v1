@@ -1,5 +1,6 @@
 "use server";
 
+import { generateEmailHTML } from "@/lib/generate-email";
 import prisma from "@/lib/prisma";
 import {
 	PaginationArgs,
@@ -9,6 +10,15 @@ import {
 	UserRole,
 } from "@/types";
 import { Prisma } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { addMinutes } from "date-fns";
+import { transporter } from "@/lib/email";
+
+const generateOTP = () => {
+	// Generate a 6-digit OTP
+	const newOTP = Math.floor(100000 + Math.random() * 900000).toString();
+	return newOTP;
+};
 
 export const readUser = async ({
 	id,
@@ -275,4 +285,96 @@ export const updateProfile = async (
 			"An error occurred while updating the profile. Please try again later."
 		);
 	}
+};
+
+export const updatePassword = async ({
+	currentPassword,
+	id,
+	newPassword,
+}: {
+	id: number;
+	currentPassword: string;
+	newPassword: string;
+}) => {
+	const user = await prisma.user.findUnique({
+		where: { id },
+		select: { password: true },
+	});
+
+	if (!user) throw new Error("User not found!");
+
+	const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+
+	if (!isPasswordMatch) throw new Error("Current Password is incorrect!");
+
+	const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+	await prisma.user.update({
+		data: {
+			password: hashedPassword,
+		},
+		where: { id },
+	});
+};
+
+export const changeEmail = async ({ email }: { email: string }) => {
+	const isEmailExists = await prisma.user.findUnique({ where: { email } });
+
+	if (isEmailExists) throw new Error("Email is already use");
+
+	const token = generateOTP();
+	const validUntil = addMinutes(new Date(), 5);
+
+	const mailOptions = {
+		from: process.env.EMAIL,
+		sender: {
+			name: "LNHS | Alumni Association",
+			address: process.env.EMAIL!,
+		},
+		to: email,
+		subject: "Verify Your New Email Address",
+		html: generateEmailHTML(`
+			<p>Hello,</p>
+
+			<p>You have requested to change your email address. Please use the verification code below to confirm your new email:</p>
+
+			<div style="background-color: #f4f4f4; padding: 20px; margin: 20px 0; text-align: center; font-size: 24px; letter-spacing: 5px; font-weight: bold;">
+				${token}
+			</div>
+
+			<p>This code will expire in 5 minutes.</p>
+
+			<p class="warning">Important: Never share this code with anyone. Our team will never ask for your verification code.</p>
+
+			<p>If you did not request this change, please contact our support immediately.</p>
+
+			<p>Thank you,<br>The Team</p>
+		`),
+	};
+
+	await prisma.token.upsert({
+		create: {
+			email,
+			token,
+			validUntil,
+		},
+		update: {
+			token,
+			validUntil,
+		},
+		where: {
+			email,
+		},
+	});
+
+	await transporter.sendMail(mailOptions);
+};
+
+export const updateEmail = async (id: number, email: string) => {
+	return await prisma.user.update({
+		where: {
+			id,
+		},
+		data: { email },
+	});
 };

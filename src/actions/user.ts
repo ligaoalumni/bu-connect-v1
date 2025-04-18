@@ -4,8 +4,10 @@ import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
 import { encrypt } from "@/lib/session";
 import {
+	changeEmail,
 	createUser,
 	readUser,
+	updatePassword,
 	updateProfile,
 	updateUser,
 	updateUserStatus,
@@ -150,6 +152,38 @@ export const updateProfileActions = async (
 			err instanceof Error
 				? err.message
 				: "An error occurred while creating the admin."
+		);
+	}
+};
+
+export const updatePasswordAction = async ({
+	currentPassword,
+	id,
+	newPassword,
+}: {
+	id: number;
+	currentPassword: string;
+	newPassword: string;
+}) => {
+	try {
+		await updatePassword({ currentPassword, id, newPassword });
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while updating your password."
+		);
+	}
+};
+
+export const changeEmailAction = async ({ email }: { email: string }) => {
+	try {
+		await changeEmail({ email });
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while sending OTP to your new email address."
 		);
 	}
 };
