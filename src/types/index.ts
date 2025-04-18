@@ -2,6 +2,7 @@ import {
 	AdminProfileSchema,
 	AdminSchema,
 	AlumniSchema,
+	ChangePasswordSchema,
 	EventFormSchema,
 	LoginFormSchema,
 	ProfileSchema,
@@ -11,7 +12,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
-import { Alumni, AlumniAccount } from "@prisma/client";
+import { Alumni, AlumniAccount, User } from "@prisma/client";
 
 export * from "./alumni-account";
 export * from "./user";
@@ -120,6 +121,7 @@ export type AlumniFormData = z.infer<typeof AlumniSchema>;
 export type AdminFormData = z.infer<typeof AdminSchema>;
 export type ProfileFormData = z.infer<typeof ProfileSchema>;
 export type AdminProfileFormData = z.infer<typeof AdminProfileSchema>;
+export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;
@@ -137,3 +139,8 @@ export interface DataTableProps<TData, TValue> {
 	setPagination: Dispatch<SetStateAction<DataTablePagination>>;
 	handleSearch?: (filter: string) => void;
 }
+
+export type UserCredentials = Pick<
+	User,
+	"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
+> | null;
