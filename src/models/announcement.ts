@@ -33,3 +33,11 @@ export const updateAnnouncement = async (
 		data: values,
 	});
 };
+
+export const deleteAnnouncement = async (toDelete: string) => {
+	return await prisma.announcement.delete({
+		where: {
+			slug: toDelete,
+		},
+	});
+};
