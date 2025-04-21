@@ -12,6 +12,8 @@ export const adminRoutes = [
 	"/admin/events/add-new-event",
 	"/admin/settings",
 	"/admin/account-info",
+	"/admin/announcements",
+	"/admin/announcements/add",
 ];
 
 export const sharedRoutes = ["/verify-account"];

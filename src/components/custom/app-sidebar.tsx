@@ -6,8 +6,10 @@ import {
 	ChevronUp,
 	Cog,
 	GraduationCap,
+	Info,
 	LayoutDashboard,
 	ListOrdered,
+	Plus,
 	QrCode,
 	UserCog,
 	UserPlus,
@@ -58,6 +60,23 @@ const data = {
 					icon: ListOrdered,
 					title: "List",
 					url: "/admin/events",
+				},
+			],
+		},
+		{
+			icon: Info,
+			title: "Announcements",
+			url: "#",
+			items: [
+				{
+					icon: Plus,
+					title: "Add Announcement",
+					url: "/admin/announcements/add",
+				},
+				{
+					icon: ListOrdered,
+					title: "List",
+					url: "/admin/announcements",
 				},
 			],
 		},
@@ -115,7 +134,7 @@ export function AppSidebar({
 	isSuperAdmin?: false;
 }) {
 	return (
-		<Sidebar {...props} className="border-none">
+		<Sidebar {...props}>
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem className="text-white ">
