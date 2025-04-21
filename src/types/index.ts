@@ -2,6 +2,7 @@ import {
 	AdminProfileSchema,
 	AdminSchema,
 	AlumniSchema,
+	AnnouncementSchema,
 	ChangePasswordSchema,
 	EventFormSchema,
 	LoginFormSchema,
@@ -122,6 +123,7 @@ export type AdminFormData = z.infer<typeof AdminSchema>;
 export type ProfileFormData = z.infer<typeof ProfileSchema>;
 export type AdminProfileFormData = z.infer<typeof AdminProfileSchema>;
 export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
+export type AnnouncementFormData = z.infer<typeof AnnouncementSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;

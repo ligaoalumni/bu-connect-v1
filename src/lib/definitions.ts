@@ -151,3 +151,8 @@ export const ChangePasswordSchema = z
 		message: "Passwords do not match",
 		path: ["confirmPassword"],
 	});
+
+export const AnnouncementSchema = z.object({
+	title: z.string().nonempty("Title is required"),
+	content: z.string().nonempty("Content is required"),
+});
