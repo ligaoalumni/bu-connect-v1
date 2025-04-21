@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { ThemeSwitcher } from "./theme-switcher";
 
 const showMainNavRoutes = publicRoutes.concat(["/verify-account", "/"]);
-const routes = ["#home", "#batch", "#about-us", "#events", "#contact-us"];
+const routes = ["#home", "#batch", "#about-us", "/events", "#contact-us"];
 
 export function MainNav({
 	user,

@@ -5,3 +5,5 @@ export * from "./alumni";
 export * from "./revalidate";
 export * from "./user";
 export * from "./token";
+export * from "./announcement";
+export * from "./dashboard";

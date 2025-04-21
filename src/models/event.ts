@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 
 import {
@@ -99,12 +101,16 @@ export const readEvents = async ({
 	if (status && status?.includes("Ongoing Event")) {
 		where = {
 			...where,
-			startDate: {
-				lte: new Date(),
-			},
-			endDate: {
-				gte: new Date(),
-			},
+			OR: [
+				{
+					startDate: {
+						lte: new Date(),
+					},
+					endDate: {
+						gte: new Date(),
+					},
+				},
+			],
 		};
 	} else if (status && status?.includes("Upcoming Event")) {
 		where = {
@@ -116,9 +122,13 @@ export const readEvents = async ({
 	} else if (status && status?.includes("Past Event")) {
 		where = {
 			...where,
-			endDate: {
-				lt: new Date(),
-			},
+			OR: [
+				{
+					endDate: {
+						lt: new Date(),
+					},
+				},
+			],
 		};
 	}
 

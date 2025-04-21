@@ -4,6 +4,7 @@ import {
 	Button,
 	ContactSectionForm,
 } from "@/components";
+import BatchSection from "@/components/custom/batch-section";
 import { welcomeImageBlurData } from "@/constant";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -119,13 +120,8 @@ export default async function Home() {
 			</section>
 			{/* Welcome Section */}
 
-			{/* Welcome Section */}
-			<section
-				id="batch"
-				className=" min-h-screen min-w-screen flex items-center bg-[#D0E5EE]">
-				<div className="container px-5  mx-auto "></div>
-			</section>
-			{/* Welcome Section */}
+			{/* Batch */}
+			<BatchSection />
 
 			{/* Contact Us Section */}
 			<ContactSectionForm />

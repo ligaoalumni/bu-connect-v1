@@ -64,3 +64,6 @@ export * from "./custom/change-password";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
+
+// MAGIC UI
+export * from "./magicui/marquee";
