@@ -214,7 +214,6 @@ model Announcement {
   slug      String   @unique
   title      String @db.Text
   content String @db.Text
-  coverImg  String
 
   likedBy AlumniAccount[] @relation("AnnouncementLikes") // Many-to-many with alumni
   comments AnnouncementComment[]
