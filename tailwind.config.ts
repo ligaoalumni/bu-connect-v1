@@ -13,6 +13,7 @@ export default {
 				sans: ["var(--font-geist-sans)", "sans-serif"],
 				mono: ["var(--font-geist-mono)", "monospace"],
 				tangerine: ["var(--font-tangerine)", "cursive"],
+				poppins: ["var(--font-poppins)", "sans-serif"],
 			},
 			colors: {
 				background: "hsl(var(--background))",
