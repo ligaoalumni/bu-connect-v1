@@ -83,7 +83,7 @@ const LoginForm = () => {
 		<div className=" bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65  ">
 			<Card className="w-full md:min-w-[400px] pt-16 max-w-md mx-auto border-none bg-transparent relative">
 				<Image
-					src="/icon.svg"
+					src="/images/bup-logo.png"
 					height={120}
 					width={120}
 					alt="LNHS Logo"
