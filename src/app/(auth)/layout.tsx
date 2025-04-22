@@ -33,7 +33,7 @@ export default async function Layout({
 	children: ReactNode;
 }>) {
 	return (
-		<div className="p-5 min-h-screen w-screen flex justify-center md:p-10 items-center bg-[url('/images/auth-img.png')] bg-no-repeat bg-cover bg-center lg:col-span-4 lg:p-10">
+		<div className="p-5 min-h-screen w-screen flex justify-center md:p-10 items-center bg-[url('/images/hallway.png')] bg-no-repeat bg-cover bg-center lg:col-span-4 lg:p-10">
 			{children}
 		</div>
 	);
