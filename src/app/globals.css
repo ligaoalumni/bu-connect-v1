@@ -23,7 +23,7 @@
 		--border: 213 30% 82%;
 		--input: 213 30% 50%;
 		--ring: 213 54.6% 40.6%;
-		--radius: 0.75rem;
+		--radius: 0.5rem;
 
 		--sidebar-background: hsl(213, 100%, 100%);
 		--sidebar-foreground: hsl(213, 5%, 10%);
@@ -34,7 +34,7 @@
 		--sidebar-active-foreground: hsl(0, 0%, 100%);
 		--sidebar-muted: hsl(175, 30%, 95%);
 		--sidebar-muted-foreground: hsl(213, 5%, 40%);
-		--sidebar-radius: 0.75rem;
+		--sidebar-radius: 0.5rem;
 	}
 	.dark {
 		--background: 213 50% 10%;
@@ -56,7 +56,7 @@
 		--border: 213 30% 50%;
 		--input: 213 30% 50%;
 		--ring: 213 54.6% 40.6%;
-		--radius: 0.75rem;
+		--radius: 0.5rem;
 
 		--sidebar-background: hsl(213, 50%, 10%);
 		--sidebar-foreground: hsl(213, 5%, 100%);
@@ -67,7 +67,7 @@
 		--sidebar-active-foreground: hsl(0, 0%, 100%);
 		--sidebar-muted: hsl(175, 30%, 25%);
 		--sidebar-muted-foreground: hsl(213, 5%, 65%);
-		--sidebar-radius: 0.75rem;
+		--sidebar-radius: 0.5rem;
 	}
 
 	/* :root {
@@ -90,7 +90,7 @@
 		--border: 225 30% 82%;
 		--input: 225 30% 50%;
 		--ring: 225 84.2% 44.7%;
-		--radius: 0.75rem;
+		--radius: 0.5rem;
 	}
 	.dark {
 		--background: 225 50% 10%;
@@ -112,7 +112,7 @@
 		--border: 225 30% 50%;
 		--input: 225 30% 50%;
 		--ring: 225 84.2% 44.7%;
-		--radius: 0.75rem;
+		--radius: 0.5rem;
 	} */
 	.theme {
 		--animate-marquee: marquee var(--duration) infinite linear;
