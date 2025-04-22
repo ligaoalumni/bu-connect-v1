@@ -61,6 +61,7 @@ export * from "./custom/attendants-section";
 export * from "./custom/contact-section";
 export * from "./custom/change-email";
 export * from "./custom/change-password";
+export * from "./custom/header";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
