@@ -62,6 +62,7 @@ export * from "./custom/contact-section";
 export * from "./custom/change-email";
 export * from "./custom/change-password";
 export * from "./custom/header";
+export * from "./custom/hero-section";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
