@@ -6,6 +6,7 @@ import {
 	IconBrandGoogle,
 	IconBrandLinkedin,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export function HeroSection() {
 	return (
@@ -27,10 +28,12 @@ export function HeroSection() {
 						updated on news and events
 					</p>
 					<div className="flex items-center gap-4">
-						<Button className="bg-[#E6750C] hover:bg-[#E6750C90]">
-							Register
+						<Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
+							<Link href="/register">Register</Link>
 						</Button>
-						<Button className="bg-white text-black">Login</Button>
+						<Button asChild className="bg-white text-black">
+							<Link href="/login">Log in</Link>
+						</Button>
 					</div>
 					<div className="flex items-center gap-2">
 						<Button
