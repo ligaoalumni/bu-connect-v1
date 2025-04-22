@@ -6,7 +6,7 @@ import Link from "next/link";
 export function Header() {
 	return (
 		<div className="">
-			<header className="mx-auto container py-5 flex items-center justify-between">
+			<header className="mx-auto container px-5 md:px-0 py-5 flex items-center justify-between">
 				<div className="flex items-center  gap-3">
 					<Image
 						src="/images/bup-logo.png"
