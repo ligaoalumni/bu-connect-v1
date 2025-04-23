@@ -11,7 +11,7 @@ import Image from "next/image";
 
 // either Static metadata
 export const metadata: Metadata = {
-	title: "LNHS Alumni Tracking",
+	title: "BU Connect",
 };
 
 // const FCalendar = lazy(() => import("@/components/custom/full-calendar"));
