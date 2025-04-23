@@ -4,7 +4,7 @@ import { Iconify } from "./iconify";
 export const Footer = () => {
 	return (
 		<footer className="mx-auto container mb-10 ">
-			<div className="flex flex-col md:flex-row justify-center items-center min-h-[430px] md:min-h-[324px]  relative py-14">
+			<div className="flex flex-col md:flex-row justify-center items-center min-h-[450px] md:min-h-[324px]  relative py-14">
 				<div className="h-full w-full absolute bg-no-repeat bg-right z-10 bg-[url('/images/bu-torch.png')]" />
 				<div className="bg-[#15406ADD] p-5 h-full w-full absolute z-20 flex flex-col md:flex-row gap-y-10 md:gap-y-0 md:justify-between md:items-center">
 					<div className="space-y-2 ">
@@ -56,6 +56,9 @@ export const Footer = () => {
 						</div>
 					</div>
 				</div>
+				<p className="z-30 bottom-2 md:bottom-5 text-white absolute">
+					&copy; {new Date().getFullYear()} BUConnect. All rights reserved.
+				</p>
 			</div>
 		</footer>
 	);
