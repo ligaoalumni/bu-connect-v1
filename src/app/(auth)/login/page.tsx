@@ -15,6 +15,7 @@ import {
 	CardContent,
 	CardFooter,
 	Checkbox,
+	Iconify,
 } from "@/components";
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib/definitions";
@@ -80,7 +81,7 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className=" bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65  ">
+		<div className=" bg-[url('/images/austh-form-bg.png')] bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20   ">
 			<Card className="w-full md:min-w-[400px] pt-16 max-w-md mx-auto border-none bg-transparent relative">
 				<Image
 					src="/images/bup-logo.png"
@@ -177,7 +178,7 @@ const LoginForm = () => {
 
 									<Button
 										type="submit"
-										className="w-full"
+										className="w-full bg-[#FF9500] hover:bg-[#FF9500]"
 										disabled={form.formState.isSubmitting}>
 										{form.formState.isSubmitting ? "Logging in..." : "Login"}
 									</Button>
@@ -185,17 +186,30 @@ const LoginForm = () => {
 							</Form>
 						</CardContent>
 
-						<CardFooter className="flex justify-center">
-							<p className="text-sm text-white ">
-								Don&apos;t have an account?{" "}
-								<Button
-									variant="link"
-									className="px-0 font-normal text-primary hover:underline"
-									type="button"
-									asChild>
-									<Link href="signup">Sign up </Link>
-								</Button>
-							</p>
+						<CardFooter className="flex flex-col items-center gap-y-3 justify-center">
+							<p className="text-sm text-white ">or Sign in with</p>
+							<div className="flex gap-5">
+								<Link className="" href="#">
+									<Iconify icon="logos:facebook" width="32" height="32" />
+								</Link>
+								<Link className="" href="#">
+									<Iconify
+										icon="skill-icons:instagram"
+										width="32"
+										height="32"
+									/>
+								</Link>
+								<Link className="" href="#">
+									<Iconify icon="skill-icons:linkedin" width="32" height="32" />
+								</Link>
+								<Link className="" href="#">
+									<Iconify
+										icon="flat-color-icons:google"
+										width="32"
+										height="32"
+									/>
+								</Link>
+							</div>
 						</CardFooter>
 					</>
 				)}
