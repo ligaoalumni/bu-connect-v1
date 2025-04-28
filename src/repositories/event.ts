@@ -325,11 +325,11 @@ function formatDashboardEvent(event: EventWithPagination): DashboardEvent {
 }
 
 export const addEventAttendant = async ({
-	attendantLrn,
+	id,
 	eventId,
 }: {
 	eventId: number;
-	attendantLrn: string;
+	id: number;
 }) => {
 	return await prisma.$transaction(async (tx) => {
 		const attendantAlreadyExists = await tx.event.findFirst({
@@ -337,7 +337,7 @@ export const addEventAttendant = async ({
 				id: eventId,
 				alumni: {
 					some: {
-						lrn: attendantLrn,
+						id,
 					},
 				},
 			},
@@ -351,7 +351,7 @@ export const addEventAttendant = async ({
 			data: {
 				alumni: {
 					connect: {
-						lrn: attendantLrn,
+						id,
 					},
 				},
 			},
@@ -375,21 +375,18 @@ export const readAttendants = async ({
 				skip: pagination ? pagination.limit * pagination.page : undefined,
 				take: pagination ? pagination.limit : undefined,
 				select: {
-					user: {
-						select: {
-							avatar: true,
-						},
-					},
+					// user: {
+					// 	select: {
+					// 		avatar: true,
+					// 	},
+					// },
+					avatar: true,
+					batch: true,
+					studentId: true,
+					course: true,
 					firstName: true,
 					lastName: true,
 					email: true,
-					lrn: true,
-					graduationYear: true,
-					alumni: {
-						select: {
-							strand: true,
-						},
-					},
 				},
 			},
 		},
@@ -402,16 +399,9 @@ export const readAttendants = async ({
 		select: {
 			alumni: {
 				select: {
-					user: {
-						select: {
-							avatar: true,
-						},
-					},
 					firstName: true,
 					lastName: true,
 					email: true,
-					lrn: true,
-					graduationYear: true,
 				},
 			},
 		},
@@ -427,13 +417,12 @@ export const readAttendants = async ({
 	return {
 		count: total?.alumni.length || 0,
 		data: event.alumni.map((attendant) => ({
-			avatar: attendant.user.avatar || "",
+			avatar: attendant.avatar || "",
 			firstName: attendant.firstName,
 			lastName: attendant.lastName,
 			email: attendant.email,
-			lrn: attendant.lrn,
-			strand: attendant.alumni?.strand || "",
-			batch: attendant.graduationYear,
+			course: attendant?.course || "",
+			batch: attendant.batch || 0,
 		})),
 		hasMore: event.alumni.length === pagination?.limit,
 	};
@@ -452,16 +441,12 @@ export const readEventComments = async ({
 		include: {
 			commentBy: {
 				select: {
-					user: {
-						select: {
-							avatar: true,
-						},
-					},
 					firstName: true,
 					lastName: true,
 					email: true,
-					lrn: true,
-					graduationYear: true,
+					studentId: true,
+					batch: true,
+					avatar: true,
 				},
 			},
 		},
@@ -482,10 +467,10 @@ export const readEventComments = async ({
 		data: comments.map((comment) => ({
 			id: comment.id,
 			comment: comment.comment,
-			avatar: comment.commentBy.user.avatar || "",
+			avatar: comment.commentBy?.avatar || "",
 			name: `${comment.commentBy.firstName} ${comment.commentBy.lastName}`,
-			lrn: comment.commentBy.lrn,
-			batch: comment.commentBy.graduationYear.toString(),
+			studentId: comment.commentBy.studentId || "",
+			batch: comment.commentBy.batch?.toString() || "",
 			createdAt: comment.createdAt.toISOString(),
 		})),
 		hasMore: comments.length === pagination?.limit,

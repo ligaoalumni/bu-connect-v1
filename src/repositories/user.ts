@@ -6,10 +6,9 @@ import {
 	PaginationArgs,
 	PaginationResult,
 	UpdateProfileData,
-	User,
 	UserRole,
 } from "@/types";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes } from "date-fns";
 import { transporter } from "@/lib/email";
@@ -20,29 +19,25 @@ const generateOTP = () => {
 	return newOTP;
 };
 
-export const readUser = async ({
-	id,
-	isAlumni = false,
-}: {
-	id: string;
-	isAlumni?: boolean;
-}) => {
-	let where: Prisma.UserWhereUniqueInput = { id: Number(id) };
+export const readUser = async (
+	id: number,
+	email?: string
+): Promise<User | null> => {
+	let where: Prisma.UserWhereUniqueInput = {
+		id,
+	};
 
-	if (id.includes("@")) {
-		where = { email: id };
+	if (email) {
+		where = {
+			email,
+		};
 	}
 
 	const user = await prisma.user.findUnique({
 		where,
-		include: {
-			alumni: {
-				include: {
-					alumni: isAlumni,
-				},
-			},
-		},
 	});
+
+	if (!user) return null;
 
 	return user;
 };
@@ -63,35 +58,21 @@ export const createUser = async (
 			lastName: user.lastName,
 			middleName: user.middleName,
 			password: user.password,
-			alumni: !!user.alumniData
-				? {
-						create: {
-							email: user.email,
-							firstName: user.firstName,
-							lastName: user.lastName,
-							graduationYear: user.alumniData.batchYear,
-							lrn: user.alumniData.lrn,
-							qrCode: "",
-							middleName: user.middleName,
-						},
-				  }
-				: undefined,
 		},
 	});
 
 	return createdUser;
 };
 
-export const readUsers = async (
-	{
-		filter,
-		order,
-		orderBy,
-		pagination,
-		role = ["ADMIN", "ALUMNI"],
-	}: PaginationArgs<never, UserRole> = {},
-	includeAlumni?: boolean
-): Promise<PaginationResult<Omit<User, "password" | "notifications">>> => {
+export const readUsers = async ({
+	filter,
+	order,
+	orderBy,
+	pagination,
+	role = ["ADMIN", "ALUMNI"],
+}: PaginationArgs<never, UserRole> = {}): Promise<
+	PaginationResult<Omit<User, "password" | "notifications">>
+> => {
 	let where: Prisma.UserWhereInput = {};
 
 	if (filter && typeof filter === "number") {
@@ -128,9 +109,6 @@ export const readUsers = async (
 			password: true,
 		},
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
-		include: {
-			alumni: includeAlumni,
-		},
 	});
 
 	const count = await prisma.user.count({ where });
@@ -140,15 +118,6 @@ export const readUsers = async (
 		hasMore: users.length === pagination?.limit,
 		data: users.map((user) => ({
 			...user,
-			alumni: user.alumni
-				? {
-						...user.alumni,
-						major: user.alumni.major || "",
-						userId: user.id,
-						interested: [],
-						events: [],
-				  }
-				: null,
 			notifications: [],
 		})),
 	};
@@ -196,8 +165,7 @@ export const updateUser = async (
 
 export const updateProfile = async (
 	id: number,
-	data: UpdateProfileData,
-	lrn?: string
+	data: UpdateProfileData
 ): Promise<void> => {
 	const {
 		address,
@@ -207,7 +175,6 @@ export const updateProfile = async (
 		contactNumber,
 		course,
 		firstName,
-		furtherEducation,
 		gender,
 		jobTitle,
 		lastName,
@@ -215,7 +182,6 @@ export const updateProfile = async (
 		nationality,
 		occupation,
 		religion,
-		schoolName,
 	} = data;
 
 	// Input validation
@@ -223,7 +189,7 @@ export const updateProfile = async (
 	if (!firstName || !lastName)
 		throw new Error("First and last names are required.");
 
-	let parsedBirthDate: Date | null = null;
+	let parsedBirthDate: Date | undefined = undefined;
 	if (birthDate) {
 		parsedBirthDate = new Date(birthDate);
 		if (isNaN(parsedBirthDate.getTime())) {
@@ -247,36 +213,13 @@ export const updateProfile = async (
 					lastName,
 					nationality,
 					gender,
+					company,
+					course,
+					jobTitle,
+					currentOccupation: occupation,
 				},
 			});
 			if (!user) throw new Error("Failed to update user profile.");
-
-			if (lrn) {
-				// Update alumni account
-				const alumniAccount = await tx.alumniAccount.update({
-					where: { lrn },
-					data: {
-						firstName,
-						middleName,
-						lastName,
-					},
-				});
-				if (!alumniAccount) throw new Error("Failed to update profile.");
-
-				// Update alumni details
-				const alumni = await tx.alumni.update({
-					where: { lrn },
-					data: {
-						companyName: company,
-						course,
-						furtherEducation,
-						jobTitle,
-						schoolName,
-						status: occupation,
-					},
-				});
-				if (!alumni) throw new Error("Failed to update profile.");
-			}
 		});
 	} catch (error) {
 		// Log the error (placeholder for actual logging)
