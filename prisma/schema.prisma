@@ -9,100 +9,64 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-
-model Alumni {
-  id             Int      @id @default(autoincrement())
-  studentId      String   @unique
-  lrn            String   @unique
-  firstName      String
-  middleName     String
-  lastName       String
-  graduationYear Int
-  birthDate      DateTime
-  strand  String?
-  educationLevel String?
-
-  // POST GRADUATION INFORMATION
-  furtherEducation String?
-  course String?
-  schoolName String?
-  // JOB INFORMATION
-  status String?
-  companyName String?
-  jobTitle String?
-  
-  alumniAccount  AlumniAccount?  
-
-  @@map("alumni")
-}
-
-// Alumni model: Stores the alumni's personal information and their QR code.
-model AlumniAccount {
-  id         Int     @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  middleName String?
-
-  graduationYear Int 
-
-  major String?
-  email  String @unique
-  qrCode String  // Unique QR code for alumni
  
-  alumniId      Int? @unique
-  alumni Alumni? @relation(   fields: [alumniId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-
-  lrn String @unique
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-
-  interested    Event[]        @relation("InterestEvent") // Many-to-many relationship with events
-  events        Event[]        @relation("EventAttendees") // Many-to-many relationship with events
-
-  eventComments EventComment[]
-  announcementComments AnnouncementComment[] // Alumni can have multiple announcements
-  likedAnnouncements Announcement[] @relation("AnnouncementLikes") // Alumni can like multiple announcements
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("alumni_accounts")
-}
 
 enum Gender {
   MALE
   FEMALE
   PREFER_NOT_TO_SAY
 }
-
+ 
 // User model: Handles both alumni and admin/super admin login.
 model User {
   id        Int     @id @default(autoincrement())
   email     String  @unique
   password  String
+  role      Role
+  avatar    String?
+  bio       String? @default("")
+
+  // Personal Info
   firstName String  @default("")
   lastName  String  @default("")
   middleName String? @default("")
-  role      Role
-  avatar    String?
-
+  // phoneNumber String? @default("")
   nationality String? @default("")
   religion String? @default("")
+  address Json? @default("{}")
   gender Gender @default(PREFER_NOT_TO_SAY)
-  address String? @default("")
   contactNumber String? @default("")
-  birthDate DateTime? 
+  birthDate DateTime 
+
+  // Academic Info
+  studentId String? @unique
+  batch Int? @default(0)
+  course String? 
+
+  // POST GRAD INFO 
+  company String? @default("")
+  currentOccupation String? @default("")
+  jobTitle String? @default("")
 
 
-  alumni    AlumniAccount?
+
   sessions Session[]
 
   verifiedAt DateTime?
-  status     UserStatus @default(PENDING)
+  status     UserStatus @default(ACTIVE)
 
   notifications Notification[] // Alumni can have multiple notifications
+  eventsInterested Event[] @relation("InterestEvent") // Alumni can be interested in multiple events
+  eventsAttended Event[] @relation("EventAttendees") // Alumni can attend multiple events
+  eventComments EventComment[] // Alumni can comment on multiple events
+  likedAnnouncements Announcement[] @relation("AnnouncementLikes") // Alumni can like multiple announcements
+  announcementComments AnnouncementComment[] // Alumni can comment on multiple announcements
+  posts Post[] @relation("Posted By") // Alumni can post multiple posts
+  postComments PostComment[] // Alumni can comment on multiple posts
+  likedPosts Post[] @relation("PostLikes") // Alumni can like multiple posts
+  job Job[]
+  recruitment Recruitment[] @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
+  Votes Vote[] // Alumni can vote on multiple polls
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -138,8 +102,8 @@ model Event {
 
   location String
 
-  interested AlumniAccount[] @relation("InterestEvent") // Many-to-many with alumni
-  alumni     AlumniAccount[] @relation("EventAttendees") // Many-to-many with alumni
+  interested User[] @relation("InterestEvent") // Many-to-many with alumni
+  alumni     User[] @relation("EventAttendees") // Many-to-many with alumni
 
   comments EventComment[]
 
@@ -185,7 +149,7 @@ model EventComment {
 
   eventId Int
   event Event @relation(fields: [eventId], references: [id])
-  commentBy AlumniAccount @relation(fields: [commentById],references: [id])
+  commentBy User @relation(fields: [commentById],references: [id])
   commentById Int   
 
   createdAt DateTime @default(now())
@@ -200,7 +164,7 @@ model AnnouncementComment {
   comment String
   announcementId Int
   announcement Announcement @relation(fields: [announcementId], references: [id])
-  commentBy AlumniAccount @relation(fields: [commentById], references: [id])
+  commentBy User @relation(fields: [commentById], references: [id])
   commentById Int
 
   createdAt DateTime @default(now())
@@ -215,9 +179,142 @@ model Announcement {
   title      String @db.Text
   content String @db.Text
 
-  likedBy AlumniAccount[] @relation("AnnouncementLikes") // Many-to-many with alumni
+  likedBy User[] @relation("AnnouncementLikes") // Many-to-many with alumni
   comments AnnouncementComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum PostType {
+  ANNOUNCEMENT
+  EVENT
+  POST
+  JOB
+  NEWS
+}
+
+model Post {
+  id       Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String   @db.Text
+  type  PostType @default(JOB)
+  content   String   @db.Text
+  coverImg  String
+
+  comments PostComment[]
+  likedBy User[] @relation("PostLikes") // Many-to-many with alumni
+
+  postedById Int
+  postedBy User @relation("Posted By", fields: [postedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
+}
+
+model PostComment {
+  id Int @id @default(autoincrement())
+  comment String
+
+  postId Int
+  postedBy Post @relation(fields: [postId], references: [id])
+
+  commentBy User @relation(fields: [commentById], references: [id])
+  commentById Int
+
+  createdAt DateTime @default(now())
+
+  @@map("post_comments")
+}
+
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  FREELANCE
+}
+
+enum JobStatus {
+  OPEN
+  COMPLETED
+  CLOSED
+}
+
+model Job {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  company String
+  location String
+  jobTitle String
+  type JobType @default(FULL_TIME)
+  status JobStatus @default(OPEN)
+
+  postedById Int
+  postedBy User @relation(fields: [postedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("jobs")
+}
+
+enum RecruitmentStatus {
+  OPEN
+  CLOSED
+}
+
+model Recruitment {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  company String
+  location String
+  jobTitle String
+  type JobType @default(FULL_TIME)
+  applicantsId Int[]
+  applicants User[] @relation("RecruitmentApplicants")
+
+  status RecruitmentStatus @default(OPEN) 
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("recruitments")
+
+}
+
+ 
+enum PollStatus {
+  OPEN
+  COMPLETED
+}
+
+model Poll {
+  id          Int         @id @default(autoincrement())
+  question    String      @db.Text // Poll's main question
+  status PollStatus @default(OPEN)
+  options     Option[]    // Relationship: One poll has many options
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Option {
+  id         Int        @id @default(autoincrement())
+  content    String     // Option text (e.g., "Manila")
+  pollId     Int        // Foreign key referencing Poll
+  poll       Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes      Vote[]     // Relationship: Option can have multiple votes
+}
+
+model Vote {
+  id         Int        @id @default(autoincrement())
+  optionId   Int        // Foreign key referencing Option
+  option     Option     @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  userId     Int        // Foreign key referencing User
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime   @default(now())
 }
