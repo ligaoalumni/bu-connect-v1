@@ -67,14 +67,13 @@ export const AlumniSchema = z.object({
 	lastName: z.string().min(1, { message: "Last name is required" }),
 	middleName: z.string().optional(),
 	birthDate: z.string().min(1, { message: "Birth date is required" }),
-	graduationYear: z.coerce
+	batch: z.coerce
 		.number()
 		.int()
 		.min(2000, { message: "Year must be at least 2000" })
 		.max(2100, { message: "Year must be at most 2100" }),
-	lrn: z.string().length(12, { message: "LRN must be exactly 12 characters" }),
-	strand: z.string().optional(),
-	educationLevel: z.string().min(1, { message: "Education level is required" }),
+	email: z.string().email({ message: "Please enter a valid email address" }),
+	course: z.string().min(1, { message: "Course is required" }),
 });
 
 export const AdminSchema = z.object({
@@ -155,4 +154,14 @@ export const ChangePasswordSchema = z
 export const AnnouncementSchema = z.object({
 	title: z.string().nonempty("Title is required"),
 	content: z.string().nonempty("Content is required"),
+});
+
+export const JobSchema = z.object({
+	jobTitle: z.string().min(1, { message: "Job title is required" }),
+	companyName: z.string().min(1, { message: "Company name is required" }),
+	employmentType: z.string().min(1, { message: "Employment type is required" }),
+	location: z.string().min(1, { message: "Location type is required" }),
+	jobDescription: z
+		.string()
+		.min(1, { message: "Job description type is required" }),
 });
