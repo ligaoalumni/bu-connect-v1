@@ -1,14 +1,16 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { AlumniWithRelation, PaginationArgs, PaginationResult } from "@/types";
-import { AlumniAccount, Prisma } from "@prisma/client";
+import { PaginationArgs, PaginationResult } from "@/types";
+import { Prisma, User } from "@prisma/client";
 
-export const readAlumniAccounts = async (
-	{ filter, order, orderBy, pagination }: PaginationArgs<never, never> = {},
-	includeAlumni?: boolean
-): Promise<PaginationResult<AlumniAccount>> => {
-	let where: Prisma.AlumniAccountWhereInput = {};
+export const readAlumniAccounts = async ({
+	filter,
+	order,
+	orderBy,
+	pagination,
+}: PaginationArgs<never, never> = {}): Promise<PaginationResult<User>> => {
+	let where: Prisma.UserWhereInput = {};
 
 	if (filter && typeof filter === "number") {
 		where = {
@@ -19,7 +21,7 @@ export const readAlumniAccounts = async (
 	if (typeof filter === "string") {
 		where = {
 			OR: [
-				{ lrn: { contains: filter, mode: "insensitive" } },
+				{ studentId: { contains: filter, mode: "insensitive" } },
 				{
 					email: { contains: filter, mode: "insensitive" },
 				},
@@ -33,35 +35,38 @@ export const readAlumniAccounts = async (
 		};
 	}
 
-	where.alumniId = null;
+	where = {
+		...where,
+		role: "ALUMNI",
+	};
 
-	const alumniAccounts = await prisma.alumniAccount.findMany({
+	const alumni = await prisma.user.findMany({
 		where,
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
-		include: {
-			alumni: includeAlumni,
-		},
 	});
 
-	const count = await prisma.alumniAccount.count({ where });
+	const count = await prisma.user.count({ where });
+
+	console.log(alumni, "qqq");
 
 	return {
 		count,
-		hasMore: alumniAccounts.length === pagination?.limit,
-		data: alumniAccounts.map((alumniAccount) => ({
-			...alumniAccount,
-		})),
+		hasMore: alumni.length === pagination?.limit,
+		data: alumni,
 	};
 };
 
 export const readAlumniAccount = async (id: string | number) => {
-	let where: Prisma.AlumniAccountWhereUniqueInput;
+	let where: Prisma.UserWhereInput;
 
 	if (typeof id === "string") {
 		where = {
-			lrn: id,
+			OR: [
+				{ studentId: { contains: id, mode: "insensitive" } },
+				{ email: { contains: id, mode: "insensitive" } },
+			],
 		};
 	} else {
 		where = {
@@ -69,83 +74,7 @@ export const readAlumniAccount = async (id: string | number) => {
 		};
 	}
 
-	return await prisma.alumniAccount.findUnique({
+	return await prisma.user.findFirst({
 		where,
-		include: {
-			alumni: true,
-			user: true,
-		},
 	});
-};
-
-export const readAlumniRecords = async ({
-	filter,
-	order,
-	orderBy,
-	pagination,
-}: PaginationArgs<never, never> = {}): Promise<
-	PaginationResult<AlumniWithRelation>
-> => {
-	let where: Prisma.AlumniWhereInput = {};
-
-	if (filter && typeof filter === "number") {
-		where = {
-			id: filter,
-		};
-	}
-
-	if (typeof filter === "string") {
-		where = {
-			OR: [
-				{ lrn: { contains: filter, mode: "insensitive" } },
-				{
-					firstName: { contains: filter, mode: "insensitive" },
-				},
-				{
-					lastName: { contains: filter, mode: "insensitive" },
-				},
-			],
-		};
-	}
-
-	const records = await prisma.alumni.findMany({
-		where,
-		skip: pagination ? pagination.limit * pagination.page : undefined,
-		take: pagination ? pagination.limit : undefined,
-		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
-		include: {
-			alumniAccount: true,
-		},
-	});
-
-	const count = await prisma.alumni.count({ where });
-
-	return {
-		count,
-		hasMore: records.length === pagination?.limit,
-		data: records.map((record) => ({
-			...record,
-		})),
-	};
-};
-
-export const readAlumniRecord = async ({
-	id,
-	lrn,
-	studentId,
-}: {
-	id?: number;
-	studentId?: string;
-	lrn?: string;
-}): Promise<AlumniWithRelation | null> => {
-	const record = await prisma.alumni.findFirst({
-		where: {
-			OR: [{ id: id }, { lrn: lrn }, { studentId: studentId }],
-		},
-		include: {
-			alumniAccount: true,
-		},
-	});
-
-	return record;
 };

@@ -8,7 +8,7 @@ import {
 	readEventComments,
 	readEvents,
 	updateEvent,
-} from "@/models";
+} from "@/repositories";
 import {
 	EventFormData,
 	EventStatus,
@@ -73,16 +73,16 @@ export const readEventsAction = async (
 
 export const addEventAttendantAction = async ({
 	eventId,
-	lrn,
+	id,
 }: {
 	eventId: number;
-	lrn: string;
+	id: number;
 }) => {
 	// const;
 	try {
 		await addEventAttendant({
 			eventId,
-			attendantLrn: lrn,
+			id,
 		});
 
 		revalidatePath("/events");

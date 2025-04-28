@@ -7,3 +7,5 @@ export * from "./user";
 export * from "./token";
 export * from "./announcement";
 export * from "./dashboard";
+export * from "./job";
+export * from "./post";

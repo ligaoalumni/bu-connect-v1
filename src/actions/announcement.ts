@@ -6,7 +6,7 @@ import {
 	readAnnouncement,
 	readAnnouncements,
 	updateAnnouncement,
-} from "@/models";
+} from "@/repositories";
 import { PaginationArgs } from "@/types";
 import { Announcement } from "@prisma/client";
 import { revalidatePath } from "next/cache";

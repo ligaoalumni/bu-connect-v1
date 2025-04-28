@@ -1,50 +1,91 @@
 "use server";
 
 import { AlumniSchema } from "@/lib/definitions";
+import { transporter } from "@/lib/email";
+import { generateEmailHTML } from "@/lib/generate-email";
 import prisma from "@/lib/prisma";
+import { readUser } from "@/repositories";
 import { AlumniFormData } from "@/types";
-import { Alumni } from "@prisma/client";
+import { User } from "@prisma/client";
+import { hash } from "bcryptjs";
+import { getDay, getMonth, getYear } from "date-fns";
 import { revalidatePath } from "next/cache";
 
 export const addAlumniData = async (
 	data: Pick<
-		Alumni,
-		| "birthDate"
-		| "strand"
-		| "educationLevel"
+		User,
+		| "email"
 		| "firstName"
 		| "lastName"
 		| "middleName"
 		| "studentId"
-		| "graduationYear"
-		| "lrn"
+		| "batch"
+		| "birthDate"
 	>
 ) => {
 	try {
 		const validated = AlumniSchema.safeParse({
 			...data,
-			birthDate: data.birthDate.toISOString(),
+			birthDate: data.birthDate?.toISOString(),
 		});
-
-		console.log(data, "data");
 
 		if (!validated.success) {
 			throw new Error("Invalid form fields");
 		}
 
-		console.log(data, "qqq");
+		const year = getYear(data.birthDate);
+		const month = getMonth(data.birthDate) + 1; // Months are zero-indexed in JavaScript
+		const day = getDay(data.birthDate);
+		const password = `${data.lastName.toLowerCase()}${year}${month}${day}`;
 
-		const alumni = await prisma.alumni.create({
+		const hashedPassword = await hash(password, 10);
+
+		const alumni = await prisma.user.create({
 			data: {
 				...data,
 				middleName: data.middleName || "",
-				strand: data.strand ? data.strand : null,
+				password: hashedPassword,
+				role: "ALUMNI",
 			},
 		});
 
 		if (!alumni) {
 			throw new Error("An error occurred while adding alumni data.");
 		}
+
+		const mailOptions = {
+			from: process.env.EMAIL,
+			sender: {
+				name: "LNHS | Alumni Association",
+				address: process.env.EMAIL!,
+			},
+			to: data.email,
+			subject: "Account Credentials",
+			html: generateEmailHTML(`
+						<p>Hello ${alumni.firstName} ${alumni.lastName},</p>
+		
+						<p>Your alumni account has been created. Below are your login credentials:</p>
+
+						<div class="credentials">
+							<p><strong>Email:</strong> ${alumni.email}</p> 
+							<p><strong>Password:</strong> Your initial password is your last name (all lowercase) followed by your birthdate in the format YYYYMMDD.</p>
+						</div>
+
+						<p><em>For example, if your last name is "Garcia" and your birthdate is January 15, 1990, your password would be "garcia19900115".</em></p>
+
+						<p class="warning">Important: Please change your password immediately after your first login for security reasons.</p>
+
+						<p>To access your account, please click the button below:</p>
+
+						<a href="${process.env.CLIENT_URL}/login" target="_blank" class="button">Login to Your Account</a>
+
+						<p>If you have any questions or need assistance, please contact our support team.</p>
+
+						<p>Thank you,<br>The Team</p> 
+					`),
+		};
+
+		await transporter.sendMail(mailOptions);
 
 		revalidatePath("/alumni");
 	} catch (err) {
@@ -55,7 +96,7 @@ export const addAlumniData = async (
 
 export const updateAlumniRecord = async (id: number, data: AlumniFormData) => {
 	try {
-		const existingRecord = await prisma.alumni.findUnique({
+		const existingRecord = await prisma.user.findUnique({
 			where: { id },
 		});
 
@@ -63,9 +104,9 @@ export const updateAlumniRecord = async (id: number, data: AlumniFormData) => {
 			throw new Error("Alumni record not found.");
 		}
 
-		const isDataExists = await prisma.alumni.findFirst({
+		const isDataExists = await prisma.user.findFirst({
 			where: {
-				OR: [{ lrn: data.lrn }, { studentId: data.studentId }],
+				OR: [{ studentId: data.studentId }, { studentId: data.studentId }],
 				NOT: {
 					id,
 				},
@@ -74,16 +115,20 @@ export const updateAlumniRecord = async (id: number, data: AlumniFormData) => {
 
 		// If LRN or studentId are modified, verify that no other record uses the same combination
 		if (
-			(existingRecord.lrn !== data.lrn && isDataExists?.lrn === data.lrn) ||
+			(existingRecord.studentId !== data.studentId &&
+				isDataExists?.studentId === data.studentId) ||
 			(existingRecord.studentId !== data.studentId &&
 				isDataExists?.studentId === data.studentId)
 		) {
 			throw new Error("LRN or Student ID is already used by another record.");
 		}
 
-		const alumni = await prisma.alumni.update({
+		const alumni = await prisma.user.update({
 			where: { id },
-			data: { ...data, birthDate: new Date(data.birthDate) },
+			data: {
+				...data,
+				birthDate: new Date(data.birthDate),
+			},
 		});
 
 		if (!alumni) {
@@ -96,73 +141,13 @@ export const updateAlumniRecord = async (id: number, data: AlumniFormData) => {
 	}
 };
 
-export const updateAlumniData = async (data: {
-	lrn: string;
-	userId: number;
-}) => {
+export const readAlumniAction = async (id: number) => {
 	try {
-		const alumni = await prisma.alumni.update({
-			where: { lrn: data.lrn },
-			data: {
-				alumniAccount: {
-					connect: {
-						id: data.userId,
-					},
-				},
-			},
-		});
+		const alumni = await readUser(id);
 
-		if (!alumni) {
-			throw new Error("An error occurred while updating alumni data.");
-		}
-
-		revalidatePath("/alumni");
+		return alumni;
 	} catch (err) {
 		console.error(err);
-		throw new Error("INTERNAL_SERVER_ERROR");
-	}
-};
-
-export const verifyAlumniAccount = async (
-	alumniAccountId: number,
-	alumniRecordId: number
-) => {
-	try {
-		const isAccountAlreadyAssociated = await prisma.alumni.findFirst({
-			where: {
-				alumniAccount: {
-					id: alumniAccountId,
-				},
-				id: alumniRecordId,
-			},
-		});
-
-		if (isAccountAlreadyAssociated)
-			throw new Error("Alumni already associated with other account.");
-
-		await prisma.alumniAccount.update({
-			data: {
-				alumni: {
-					connect: {
-						id: alumniRecordId,
-					},
-				},
-				user: {
-					update: {
-						status: "ACTIVE",
-					},
-				},
-			},
-			where: {
-				id: alumniAccountId,
-			},
-		});
-
-		revalidatePath("/admin/alumni");
-	} catch (err) {
-		console.error(err);
-		throw new Error(
-			err instanceof Error ? err.message : "INTERNAL_SERVER_ERROR"
-		);
+		throw new Error((err as Error).message);
 	}
 };

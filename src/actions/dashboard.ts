@@ -1,5 +1,5 @@
 "use server";
-import { readDashboardOverview } from "@/models";
+import { readDashboardOverview } from "@/repositories";
 
 export const dashboardOverviewAction = async () => {
 	try {

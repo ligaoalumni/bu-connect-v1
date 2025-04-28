@@ -11,10 +11,11 @@ import {
 	updateProfile,
 	updateUser,
 	updateUserStatus,
-} from "@/models";
-import { validateToken } from "@/models/token";
+} from "@/repositories";
+import { validateToken } from "@/repositories/token";
 import { AdminFormData } from "@/types";
-import type { UpdateProfileData, User } from "@/types";
+import type { UpdateProfileData } from "@/types";
+import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -27,7 +28,7 @@ export const createAdmin = async (
 ) => {
 	try {
 		// Your code here
-		const isExists = await readUser({ id: data.email });
+		const isExists = await readUser(-1, data.email);
 
 		if (isExists) {
 			throw new Error("An admin with the same email address already exists.");
@@ -141,12 +142,12 @@ export const verifyAccount = async (
 export const updateProfileActions = async (
 	id: number,
 	data: UpdateProfileData,
-	lrn?: string
+	alumni?: boolean
 ) => {
 	try {
-		await updateProfile(id, data, lrn);
+		await updateProfile(id, data);
 
-		revalidatePath(lrn ? "/profile" : "/admin/profile");
+		revalidatePath(alumni ? "/profile" : "/admin/profile");
 	} catch (err) {
 		throw new Error(
 			err instanceof Error

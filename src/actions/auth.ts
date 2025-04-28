@@ -2,7 +2,7 @@
 
 import { SignupFormSchema } from "@/lib/definitions";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
-import { createUser, readUser } from "@/models";
+import { createUser, readUser } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -24,7 +24,7 @@ export async function signUpAction(
 		const { email, password, firstName, lastName, batchYear, lrn } =
 			validatedFields.data;
 
-		const isExists = await readUser({ id: email });
+		const isExists = await readUser(-1, email);
 
 		if (isExists) {
 			throw new Error("User already exists");
@@ -64,7 +64,7 @@ export async function signUpAction(
 
 export async function loginAction(email: string, password: string) {
 	try {
-		const user = await readUser({ id: email, isAlumni: true });
+		const user = await readUser(-1, email);
 
 		if (!user) {
 			return {
@@ -148,5 +148,5 @@ export async function getInformation(
 		return null;
 	}
 
-	return await readUser({ id: session?.email, isAlumni: isAlumni });
+	return await readUser(-1, session.email);
 }
