@@ -147,6 +147,24 @@
 	text-wrap: pretty;
 }
 
+.tiptap code {
+	background-color: var(--purple-light);
+	border-radius: 0.4rem;
+	color: var(--black);
+	font-size: 0.85rem;
+	padding: 0.25em 0.3em;
+}
+
+/* Link styles */
+
+.tiptap a {
+	color: purple;
+	cursor: pointer;
+}
+.tiptap a:hover {
+	color: rgba(128, 0, 128, 0.732);
+}
+
 .tiptap h1,
 .tiptap h2 {
 	margin-top: 1.5rem;

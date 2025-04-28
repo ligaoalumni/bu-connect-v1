@@ -16,6 +16,7 @@ import {
 	Undo,
 } from "lucide-react";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import UnderlineExe from "@tiptap/extension-underline";
 import BulletExe from "@tiptap/extension-bullet-list";
 import ListItemExe from "@tiptap/extension-list-item";
@@ -56,6 +57,14 @@ RichTextEditorProps) => {
 					class: "",
 				},
 			}),
+			Link.configure({
+				openOnClick: false,
+				autolink: true,
+				defaultProtocol: "https",
+				linkOnPaste: true,
+				shouldAutoLink: (url) => url.startsWith("https://"),
+				protocols: ["http", "https"],
+			}),
 			StarterKit.configure({
 				heading: {
 					levels: [1, 2, 3],
@@ -82,6 +91,14 @@ RichTextEditorProps) => {
 						HTMLAttributes: {
 							class: "",
 						},
+					}),
+					Link.configure({
+						openOnClick: false,
+						autolink: true,
+						defaultProtocol: "https",
+						linkOnPaste: true,
+						shouldAutoLink: (url) => url.startsWith("https://"),
+						protocols: ["http", "https"],
 					}),
 					StarterKit.configure({
 						heading: {
