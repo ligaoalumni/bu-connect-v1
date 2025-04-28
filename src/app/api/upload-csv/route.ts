@@ -3,20 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "csv-parse/sync";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { Gender, User } from "@prisma/client";
+import { hash } from "bcryptjs";
+import { getDay, getMonth, getYear } from "date-fns";
+import { transporter } from "@/lib/email";
+import { generateEmailHTML } from "@/lib/generate-email";
 
 // Define a schema for validation based on your data model
 // Example: If you're importing users
 const AlumniSchema = z.object({
-	lrn: z.string().length(12),
-	firstName: z.string(),
+	studentId: z.string(),
+	email: z.string().email(),
 	lastName: z.string(),
+	firstName: z.string(),
 	middleName: z.string().optional(),
 	birthDate: z.string(),
-	graduationYear: z.number(),
-	studentId: z.string(),
-	educationLevel: z.string(),
-	strand: z.string().optional(),
-	// Add other fields as needed
+	batch: z.number(),
+	course: z.string(),
+	gender: z.string(),
 });
 
 const parseCSV = (item: any) => {
@@ -25,17 +29,17 @@ const parseCSV = (item: any) => {
 	// Map the values to the correct fields
 	return {
 		studentId: values[0],
-		firstName: values[1],
-		middleName: values[2],
-		lastName: values[3],
+		email: values[1],
+		firstName: values[2],
+		middleName: values[3],
+		lastName: values[4],
 		birthDate:
-			values[4] instanceof Date
-				? new Date(values[4]).toISOString()
+			values[5] instanceof Date
+				? new Date(values[5]).toISOString()
 				: new Date().toISOString(),
-		graduationYear: Number(values[5]), // Convert to number
-		lrn: values[6],
-		educationLevel: values[7],
-		strand: values[8],
+		gender: values[6],
+		batch: Number(values[7]), // Convert to number
+		course: values[8],
 	};
 };
 
@@ -78,8 +82,6 @@ export async function POST(request: NextRequest) {
 			trim: true,
 		});
 
-		console.log(records, "qqq");
-
 		if (!records.length) {
 			return NextResponse.json(
 				{ message: "CSV file is empty" },
@@ -98,44 +100,53 @@ export async function POST(request: NextRequest) {
 
 		// console.log(validatedData);
 
+		const alumni: User[] = [];
+
 		// Start a transaction
 		await prisma.$transaction(async (tx) => {
 			for (const record of records) {
 				try {
 					// Parse the CSV record
 
-					console.log(record, "UNPARSED RECORD");
-
 					const parsedData = parseCSV(record);
 
-					console.log(parsedData, "PARSED RECORD");
+					console.log(parsedData, "PARSED DATA");
 
 					// Validate the record against your schema
 					const validatedData = AlumniSchema.parse(parsedData);
 
 					// Check if the record already exists (using email as unique identifier)
-					const existingStudent = await tx.alumni.findUnique({
-						where: { lrn: validatedData.lrn },
+					const existingStudent = await tx.user.findUnique({
+						where: { email: validatedData.email },
 					});
 
 					if (existingStudent) {
 						results.alreadyExists++;
 					} else {
+						const year = getYear(validatedData.birthDate);
+						const month = getMonth(validatedData.birthDate) + 1; // Months are zero-indexed in JavaScript
+						const day = getDay(validatedData.birthDate);
+						const password = `${validatedData.lastName.toLowerCase()}${year}${month}${day}`;
+						const hashedPassword = await hash(password, 10);
+
 						// Create new user
-						await tx.alumni.create({
+						const newAccount = await tx.user.create({
 							data: {
-								lrn: validatedData.lrn,
+								studentId: validatedData.studentId,
+								email: validatedData.email,
 								firstName: validatedData.firstName,
 								lastName: validatedData.lastName,
 								middleName: validatedData.middleName || "",
 								birthDate: validatedData.birthDate,
-								graduationYear: validatedData.graduationYear,
-								studentId: validatedData.studentId,
-								strand: validatedData.strand || "",
-								educationLevel: validatedData.educationLevel || "",
+								batch: validatedData.batch,
+								gender: validatedData.gender as Gender,
+								course: validatedData.course,
+								password: hashedPassword,
+								role: "ALUMNI",
 							},
 						});
 
+						alumni.push(newAccount);
 						results.processed++;
 					}
 				} catch (error) {
@@ -158,6 +169,38 @@ export async function POST(request: NextRequest) {
 				}
 			}
 		});
+
+		const mailOptions = {
+			from: process.env.EMAIL,
+			sender: {
+				name: "LNHS | Alumni Association",
+				address: process.env.EMAIL!,
+			},
+			to: alumni.map((acc) => acc.email).join(", "),
+			subject: "Account Credentials",
+			html: generateEmailHTML(`
+				<p>Your alumni account has been created. Below are your login credentials:</p>
+
+				<div class="credentials">
+					<p><strong>Email:</strong> Your BU email</p>
+					<p><strong>Password:</strong> Your initial password is your last name (all lowercase) followed by your birthdate in the format YYYYMMDD.</p>
+				</div>
+
+				<p><em>For example, if your last name is "Garcia" and your birthdate is January 15, 1990, your password would be "garcia19900115".</em></p>
+
+				<p class="warning">Important: Please change your password immediately after your first login for security reasons.</p>
+
+				<p>To access your account, please click the button below:</p>
+
+				<a href="${process.env.CLIENT_URL}/login" target="_blank" class="button">Login to Your Account</a>
+
+				<p>If you have any questions or need assistance, please contact our support team.</p>
+
+				<p>Thank you,<br>The Team</p>
+			`),
+		};
+
+		await transporter.sendMail(mailOptions);
 
 		return NextResponse.json({
 			message: "CSV processed successfully",
