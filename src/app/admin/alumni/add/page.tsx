@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components";
 
 import CSVUploader from "@/app/admin/_components/csv-uploader";
-import { AlumniRecordForm } from "../../__components";
+import { AlumniRecordForm } from "../__components";
 
 export default function StudentDataUpload() {
 	const [activeTab, setActiveTab] = useState("single");
@@ -13,11 +13,11 @@ export default function StudentDataUpload() {
 	return (
 		<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full  ">
 			<TabsList className="grid w-full grid-cols-2">
-				<TabsTrigger value="single">Single Student</TabsTrigger>
+				<TabsTrigger value="single">Single Alumna/Alumnus</TabsTrigger>
 				<TabsTrigger value="batch">Batch Upload</TabsTrigger>
 			</TabsList>
 
-			<TabsContent value="single" className="max-h-fit">
+			<TabsContent value="single" className=" ">
 				<AlumniRecordForm />
 			</TabsContent>
 
