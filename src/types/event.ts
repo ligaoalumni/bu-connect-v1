@@ -52,7 +52,7 @@ export interface EventComment {
 	// user who commented
 	avatar: string;
 	name: string;
-	lrn: string;
+	studentId: string;
 	batch: string;
 
 	createdAt: string;

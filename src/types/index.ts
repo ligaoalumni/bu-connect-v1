@@ -5,6 +5,7 @@ import {
 	AnnouncementSchema,
 	ChangePasswordSchema,
 	EventFormSchema,
+	JobSchema,
 	LoginFormSchema,
 	ProfileSchema,
 	SignupFormSchema,
@@ -13,23 +14,25 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
-import { Alumni, AlumniAccount, User } from "@prisma/client";
+import { Job, Post, User } from "@prisma/client";
 
-export * from "./alumni-account";
 export * from "./user";
 export * from "./event";
-export * from "./alumni-record";
 
-export interface AlumniWithRelation extends Alumni {
-	alumniAccount: AlumniAccount | null;
-}
+export type CreatePost = Omit<Post, "slug" | "createdAt" | "id" | "updatedAt">;
+export type UpdateJob = Partial<
+	Omit<Job, "id" | "createdAt" | "updatedAt" | "postedById">
+>;
+export type JobData = Pick<
+	Job,
+	"company" | "description" | "jobTitle" | "location" | "title" | "type"
+> & { userId: number };
 
 export interface Attendant {
 	avatar: string;
 	firstName: string;
 	lastName: string;
 	email: string;
-	lrn: string;
 	strand?: string;
 	batch: number;
 }
@@ -124,6 +127,7 @@ export type ProfileFormData = z.infer<typeof ProfileSchema>;
 export type AdminProfileFormData = z.infer<typeof AdminProfileSchema>;
 export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
 export type AnnouncementFormData = z.infer<typeof AnnouncementSchema>;
+export type JobFormData = z.infer<typeof JobSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;
