@@ -64,3 +64,5 @@ export const alumniLabel: Record<User["gender"], string> = {
 	MALE: "Alumnus",
 	PREFER_NOT_TO_SAY: "Alumnus",
 };
+
+export const jobTypes = ["FULL_TIME", "PART_TIME", "INTERNSHIP", "FREELANCE"];
