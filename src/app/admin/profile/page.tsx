@@ -9,7 +9,6 @@ import {
 	CardContent,
 	CardHeader,
 	CardTitle,
-	ChangeEmail,
 	ChangePassword,
 } from "@/components";
 import { formatDate } from "date-fns";
@@ -44,7 +43,6 @@ export default async function Page() {
 					<Button variant="default" asChild>
 						<Link href={"profile/edit"}>Edit Profile</Link>
 					</Button>
-					<ChangeEmail />
 					<ChangePassword />
 				</div>
 
@@ -71,7 +69,7 @@ export default async function Page() {
 								.toLocaleLowerCase()}`.replaceAll(/_/g, " ")}
 						/>
 						<AlumniData label="Email" data={user?.email} />
-						<AlumniData label="Address" data={user?.address} />
+						{/* <AlumniData label="Address" data={user?.address} /> */}
 						<AlumniData label="Contact Number" data={user?.contactNumber} />
 						<AlumniData label="Nationality" data={user?.nationality} />
 						<AlumniData label="Religion" data={user?.religion} />

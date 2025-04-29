@@ -11,7 +11,7 @@ import {
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components";
-import { createToken } from "@/models/token";
+import { createToken } from "@/repositories/token";
 import { User } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
