@@ -26,8 +26,7 @@ import {
 	SelectItem,
 } from "@/components";
 import { Users } from "lucide-react";
-import { Alumni, AlumniFormData } from "@/types";
-import { seniorHighStrands } from "@/constant";
+import { AlumniFormData } from "@/types";
 import { AlumniSchema } from "@/lib/definitions";
 import { toast } from "sonner";
 import {
@@ -36,13 +35,14 @@ import {
 	updateAlumniRecord,
 } from "@/actions";
 import { formatDate } from "date-fns";
+import { User } from "@prisma/client";
 
 // Define the form's type
 const currentYear = new Date().getFullYear() - 1; // Get the current year
 const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 interface AlumniRecordFormProps {
-	alumni?: Alumni;
+	alumni?: User;
 }
 
 export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
@@ -57,10 +57,9 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 			birthDate: alumni?.birthDate
 				? formatDate(alumni.birthDate, "yyyy-MM-dd")
 				: "",
-			graduationYear: alumni?.graduationYear || new Date().getFullYear(),
-			lrn: alumni?.lrn || "",
-			educationLevel: alumni?.educationLevel || "",
-			strand: alumni?.strand || "",
+			batch: Number(alumni?.batch || new Date().getFullYear()),
+			email: alumni?.email || "",
+			course: alumni?.course || "",
 		},
 	});
 
@@ -76,8 +75,6 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 					...data,
 					middleName: data.middleName || "",
 					birthDate: new Date(data.birthDate),
-					educationLevel: data.educationLevel || "",
-					strand: data.strand || "",
 				});
 			}
 
@@ -100,10 +97,9 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 					lastName: "",
 					middleName: "",
 					birthDate: "",
-					graduationYear: new Date().getFullYear(),
-					lrn: "",
-					strand: "",
-					educationLevel: "",
+					batch: new Date().getFullYear(),
+					email: "",
+					course: "",
 				});
 			}
 		} catch (error) {
@@ -137,7 +133,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 								control={form.control}
 								name="studentId"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-2 md:col-span-1">
 										<FormLabel>Student ID</FormLabel>
 										<FormControl>
 											<Input className="h-12 text-lg" {...field} />
@@ -149,10 +145,10 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 
 							<FormField
 								control={form.control}
-								name="lrn"
+								name="email"
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>LRN (12 digits)</FormLabel>
+									<FormItem className="col-span-2 md:col-span-1">
+										<FormLabel>Email</FormLabel>
 										<FormControl>
 											<Input className="h-12 text-lg" {...field} />
 										</FormControl>
@@ -167,7 +163,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 								control={form.control}
 								name="firstName"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-3 md:col-span-1">
 										<FormLabel>First Name</FormLabel>
 										<FormControl>
 											<Input className="h-12 text-lg" {...field} />
@@ -181,7 +177,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 								control={form.control}
 								name="middleName"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-3 md:col-span-1">
 										<FormLabel>Middle Name</FormLabel>
 										<FormControl>
 											<Input className="h-12 text-lg" {...field} />
@@ -195,7 +191,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 								control={form.control}
 								name="lastName"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-3 md:col-span-1">
 										<FormLabel>Last Name</FormLabel>
 										<FormControl>
 											<Input className="h-12 text-lg" {...field} />
@@ -206,7 +202,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 							/>
 						</div>
 
-						<div className="grid grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4  ">
 							<FormField
 								control={form.control}
 								name="birthDate"
@@ -228,10 +224,10 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 
 							<FormField
 								control={form.control}
-								name="graduationYear"
+								name="batch"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Graduation Year</FormLabel>
+										<FormLabel>Batch</FormLabel>
 										<FormControl>
 											<Select
 												onValueChange={(value: string) =>
@@ -260,10 +256,10 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 							/>
 							<FormField
 								control={form.control}
-								name="educationLevel"
+								name="course"
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Education Level</FormLabel>
+									<FormItem className="md:col-span-2">
+										<FormLabel>Course</FormLabel>
 										<FormControl>
 											<Select
 												onValueChange={field.onChange}
@@ -282,36 +278,6 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
 														].map((year) => (
 															<SelectItem value={year.toString()} key={year}>
 																{year}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="strand"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Strand</FormLabel>
-										<FormControl>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value?.toString()}>
-												{/* Option to prompt user */}
-												<SelectTrigger className="w-full h-12">
-													<SelectValue placeholder="Select strand" />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>Strand</SelectLabel>
-														{seniorHighStrands.map((strand) => (
-															<SelectItem value={strand} key={strand}>
-																{strand}
 															</SelectItem>
 														))}
 													</SelectGroup>
