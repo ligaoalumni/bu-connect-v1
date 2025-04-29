@@ -1,4 +1,4 @@
-import { AlumniAccount } from "./alumni-account";
+import { User } from "@prisma/client";
 
 export interface Event {
 	readonly id: number;
@@ -14,16 +14,16 @@ export interface Event {
 
 	location: string;
 
-	interested: AlumniAccount[];
-	alumni: AlumniAccount[];
+	interested: User[];
+	alumni: User[];
 
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type EventPartialRelation = Omit<Event, "interested" | "alumni"> & {
-	alumni: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
-	interested: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
+	alumni: Pick<User, "id" | "firstName" | "lastName" | "email">[];
+	interested: Pick<User, "id" | "firstName" | "lastName" | "email">[];
 };
 
 export type EventWithoutRelations = Omit<Event, "interested" | "alumni">;
