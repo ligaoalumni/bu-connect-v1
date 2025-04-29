@@ -1,7 +1,7 @@
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { Button, Card, CardContent, CardFooter, Skeleton } from "@/components";
-import { readOngoingEvent } from "@/models";
+import { readOngoingEvent } from "@/repositories";
 import DashboardEventCard, { NoCurrentEvent } from "./dashboard-card-event";
 
 export default async function DashboardEventSection() {

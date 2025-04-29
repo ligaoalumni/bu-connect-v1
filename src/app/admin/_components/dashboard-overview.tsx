@@ -1,15 +1,14 @@
-import { dashboardOverviewAction } from "@/actions";
-import { GraduationCap, LucideIcon, Users } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components";
 
 export default async function DashboardOverview() {
-	const overview = await dashboardOverviewAction();
+	// const overview = await dashboardOverviewAction();
 
 	return (
 		<section className="mt-6">
 			<h2 className="text-2xl font-bold tracking-tight mb-4">Overview</h2>
 			<div className="grid gap-4 md:grid-cols-3">
-				<OverviewCard
+				{/* <OverviewCard
 					Icon={GraduationCap}
 					title="Total Alumni Rec"
 					change={`${overview.alumniRecord.percentage}%: has accounts`}
@@ -26,7 +25,7 @@ export default async function DashboardOverview() {
 					title="Events"
 					change={`+${overview.events.percentage}%: from last month`}
 					value={overview.events.total.toFixed(2)}
-				/>
+				/> */}
 			</div>
 		</section>
 	);
