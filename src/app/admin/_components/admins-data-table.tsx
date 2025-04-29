@@ -17,7 +17,7 @@ import {
 import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { UserTableData } from "@/types";
-import { readUsers } from "@/models";
+import { readUsers } from "@/repositories";
 import { userStatusColorMap } from "@/constant";
 import AdminDetailsModal from "./admin-details-modal";
 import UpdateStatusModal from "./update-user-status-modal";

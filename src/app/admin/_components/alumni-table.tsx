@@ -13,12 +13,12 @@ import {
 } from "@/components";
 import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
 import { toast } from "sonner";
-import { readAlumniRecords } from "@/actions/alumni-account";
-import { AlumniWithRelation } from "@/types";
 import Link from "next/link";
+import { AlumniDataTableColumns } from "@/types";
+import { User } from "@prisma/client";
 
 export default function AlumniDataTable() {
-	const [data, setData] = useState<AlumniWithRelation[]>([]);
+	const [data, setData] = useState<User[]>([]);
 	const [total, setTotal] = useState(0);
 	const [pagination, setPagination] = React.useState({
 		pageIndex: 0, //initial page index
@@ -26,7 +26,7 @@ export default function AlumniDataTable() {
 	});
 	const [loading, setLoading] = useState(false);
 
-	const columns: ColumnDef<AlumniWithRelation>[] = [
+	const columns: ColumnDef<AlumniDataTableColumns>[] = [
 		{
 			id: "id",
 			header: "#",
@@ -71,7 +71,7 @@ export default function AlumniDataTable() {
 				);
 			},
 			cell: ({ row }) => {
-				return <p className="min-w-[100px]">{row.original.lrn}</p>;
+				return <p className="min-w-[100px]">{row.original.studentId}</p>;
 			},
 		},
 		{
@@ -132,25 +132,7 @@ export default function AlumniDataTable() {
 				);
 			},
 			cell: ({ row }) => {
-				return <p className="min-w-[100px]">{row.original.graduationYear}</p>;
-			},
-		},
-		{
-			accessorKey: "alumniAccount",
-			enableHiding: true,
-			enableSorting: false,
-			header: "Account",
-			cell: ({ row }) => {
-				if (!row.original.alumniAccount?.id)
-					return <p className="italic  text-gray-500">No data</p>;
-				return (
-					<Button size="sm" asChild type="button">
-						<Link
-							href={`/admin/alumni/accounts/${row.original.alumniAccount.lrn}`}>
-							View Full Details
-						</Link>
-					</Button>
-				);
+				return <p className="min-w-[100px]">{row.original.batch}</p>;
 			},
 		},
 
@@ -218,13 +200,14 @@ export default function AlumniDataTable() {
 							<DropdownMenuItem
 								asChild
 								className="cursor-pointer hover:bg-emerald">
-								<Link href={`/admin/alumni/records/${row.original.lrn}/edit`}>
+								<Link
+									href={`/admin/alumni/records/${row.original.studentId}/edit`}>
 									<Pencil />
 									Edit
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild className="cursor-pointer">
-								<Link href={`/admin/alumni/records/${row.original.lrn}`}>
+								<Link href={`/admin/alumni/records/${row.original.studentId}`}>
 									<Info />
 									View Details
 								</Link>
@@ -236,33 +219,30 @@ export default function AlumniDataTable() {
 		},
 	];
 
-	const handleFetchData = useCallback(
-		async (filter?: string) => {
-			try {
-				setLoading(true);
-				const data = await readAlumniRecords({
+	const handleFetchData = useCallback(async () => {
+		try {
+			setLoading(true);
+			const data = /* await readAlumniRecords({
 					filter,
 					pagination: {
 						limit: pagination.pageSize,
 						page: pagination.pageIndex,
 					},
-				});
+				}); */ { data: [], count: 0 };
 
-				setData(data.data);
-				setTotal(data.count);
-			} catch (error) {
-				toast.error(`Failed to fetch events`, {
-					description: (error as Error).message,
-					richColors: true,
-					position: "top-center",
-					duration: 5000,
-				});
-			} finally {
-				setLoading(false);
-			}
-		},
-		[pagination]
-	);
+			setData(data.data);
+			setTotal(data.count);
+		} catch (error) {
+			toast.error(`Failed to fetch events`, {
+				description: (error as Error).message,
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
+		} finally {
+			setLoading(false);
+		}
+	}, [pagination]);
 
 	useEffect(() => {
 		handleFetchData();

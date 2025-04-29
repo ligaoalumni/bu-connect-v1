@@ -12,23 +12,22 @@ import {
 } from "@/components";
 import { ArrowUpDown, MoreHorizontal, ShieldEllipsis } from "lucide-react";
 import { toast } from "sonner";
-import VerifyAlumniSheet from "./verify-alumni-sheet";
+import AlumniDetailsSheet from "./alumni-details-sheet";
 import { readAlumniAccounts } from "@/actions/alumni-account";
-import { AlumniAccount } from "@prisma/client";
+import { AlumniDataTableColumns } from "@/types";
+import { User } from "@prisma/client";
 
 export default function AlumniAccountsDataTable() {
-	const [data, setData] = useState<AlumniAccount[]>([]);
+	const [data, setData] = useState<User[]>([]);
 	const [total, setTotal] = useState(0);
 	const [pagination, setPagination] = React.useState({
 		pageIndex: 0, //initial page index
 		pageSize: 10, //default page size
 	});
-	const [alumniAccount, setAlumniAccount] = useState<AlumniAccount | null>(
-		null
-	);
+	const [alumniAccount, setAlumniAccount] = useState<number | null>(null);
 	const [loading, setLoading] = useState(false);
 
-	const columns: ColumnDef<AlumniAccount>[] = [
+	const columns: ColumnDef<AlumniDataTableColumns>[] = [
 		{
 			id: "id",
 			header: "#",
@@ -37,7 +36,7 @@ export default function AlumniAccountsDataTable() {
 			enableSorting: true,
 		},
 		{
-			accessorKey: "LRN",
+			accessorKey: "studentId",
 			enableHiding: false,
 			enableSorting: true,
 			header: ({ column }) => {
@@ -47,13 +46,13 @@ export default function AlumniAccountsDataTable() {
 						onClick={() =>
 							column.toggleSorting(column.getIsSorted() === "asc")
 						}>
-						LRN
+						Student ID
 						<ArrowUpDown />
 					</Button>
 				);
 			},
 			cell: ({ row }) => {
-				return <p className="min-w-[100px]">{row.original.lrn}</p>;
+				return <p className="min-w-[100px]">{row.original.studentId}</p>;
 			},
 		},
 		{
@@ -133,7 +132,7 @@ export default function AlumniAccountsDataTable() {
 				);
 			},
 			cell: ({ row }) => {
-				return <p className="min-w-[100px]">{row.original.graduationYear}</p>;
+				return <p className="min-w-[100px]">{row.original.batch}</p>;
 			},
 		},
 		// {
@@ -225,10 +224,10 @@ export default function AlumniAccountsDataTable() {
 								View Details
 							</DropdownMenuItem> */}
 							<DropdownMenuItem
-								onClick={() => setAlumniAccount(row.original)}
+								onClick={() => setAlumniAccount(row.original.id)}
 								className="  cursor-pointer flex items-center ">
 								<ShieldEllipsis />
-								Verify
+								View Full Details
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -241,16 +240,13 @@ export default function AlumniAccountsDataTable() {
 		async (filter?: string) => {
 			try {
 				setLoading(true);
-				const data = await readAlumniAccounts(
-					{
-						filter,
-						pagination: {
-							limit: pagination.pageSize,
-							page: pagination.pageIndex,
-						},
+				const data = await readAlumniAccounts({
+					filter,
+					pagination: {
+						limit: pagination.pageSize,
+						page: pagination.pageIndex,
 					},
-					true
-				);
+				});
 
 				setData(data.data);
 				setTotal(data.count);
@@ -285,13 +281,8 @@ export default function AlumniAccountsDataTable() {
 				handleSearch={handleFetchData}
 			/>
 			{alumniAccount && (
-				<VerifyAlumniSheet
-					alumni={alumniAccount}
-					handleComplete={() =>
-						setData((items) =>
-							items.filter((item) => item.id !== alumniAccount.id)
-						)
-					}
+				<AlumniDetailsSheet
+					id={alumniAccount}
 					closeSheet={() => setAlumniAccount(null)}
 				/>
 			)}
