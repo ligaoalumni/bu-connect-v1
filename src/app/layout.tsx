@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins, Tangerine } from "next/font/google";
 import "./globals.css";
 import Providers from "../providers";
+import { Header } from "@/components";
+import { getInformation } from "@/actions";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -39,12 +41,14 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const user = await getInformation();
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}>
 				<Providers>
-					{/* <MainNav user={userInfo} /> */}
+					<Header user={user} />
 					{children}
 					{/* <Footer /> */}
 				</Providers>
