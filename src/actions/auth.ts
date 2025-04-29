@@ -133,13 +133,7 @@ export async function logout() {
 	}
 }
 
-export async function getInformation(
-	{
-		isAlumni,
-	}: {
-		isAlumni: boolean;
-	} = { isAlumni: true }
-) {
+export async function getInformation() {
 	const cookieStore = await cookies();
 
 	const session = await decrypt(cookieStore.get("session")?.value);
