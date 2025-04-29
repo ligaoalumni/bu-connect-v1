@@ -14,7 +14,7 @@ export default function AlumniLayout({
 				{children}
 			</main>
 			<ContactSectionForm />
-			<Footer show />
+			<Footer />
 		</div>
 	);
 }
