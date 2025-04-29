@@ -157,6 +157,7 @@ export const AnnouncementSchema = z.object({
 });
 
 export const JobSchema = z.object({
+	title: z.string().min(1, { message: "Title is required" }),
 	jobTitle: z.string().min(1, { message: "Job title is required" }),
 	companyName: z.string().min(1, { message: "Company name is required" }),
 	employmentType: z.string().min(1, { message: "Employment type is required" }),

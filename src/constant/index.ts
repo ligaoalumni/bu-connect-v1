@@ -1,5 +1,5 @@
 import { getEventStatus } from "@/lib/event";
-import { User } from "@prisma/client";
+import { Job, User } from "@prisma/client";
 export * from "./blur-data";
 
 // 1. Specify protected and public routes
@@ -66,3 +66,12 @@ export const alumniLabel: Record<User["gender"], string> = {
 };
 
 export const jobTypes = ["FULL_TIME", "PART_TIME", "INTERNSHIP", "FREELANCE"];
+
+export const JobStatusBadgeColorMap: Record<
+	Job["status"],
+	"default" | "destructive" | "secondary" | "outline"
+> = {
+	CLOSED: "destructive",
+	OPEN: "secondary",
+	COMPLETED: "default",
+};
