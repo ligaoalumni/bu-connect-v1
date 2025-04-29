@@ -1,10 +1,13 @@
 import * as React from "react";
 import {
+	Briefcase,
 	CalendarDays,
 	CalendarPlus,
 	ChevronDown,
 	ChevronUp,
 	Cog,
+	FilePlus,
+	Files,
 	GraduationCap,
 	Info,
 	LayoutDashboard,
@@ -53,7 +56,7 @@ const data = {
 			items: [
 				{
 					icon: CalendarPlus,
-					title: "Add New Event",
+					title: "Add",
 					url: "/admin/events/add-new-event",
 				},
 				{
@@ -70,7 +73,7 @@ const data = {
 			items: [
 				{
 					icon: Plus,
-					title: "Add Announcement",
+					title: "Add",
 					url: "/admin/announcements/add",
 				},
 				{
@@ -81,23 +84,35 @@ const data = {
 			],
 		},
 		{
+			icon: Briefcase,
+			title: "Jobs",
+			url: "#",
+			items: [
+				{
+					icon: FilePlus,
+					title: "Add",
+					url: "/admin/jobs/add",
+				},
+				{
+					icon: Files,
+					title: "List",
+					url: "/admin/jobs",
+				},
+			],
+		},
+		{
 			icon: GraduationCap,
 			title: "Alumni",
 			url: "#",
 			items: [
 				{
 					icon: UserPlus2,
-					title: "Add Record",
-					url: "/admin/alumni/records/add",
+					title: "Add",
+					url: "/admin/alumni/add",
 				},
 				{
 					icon: Users2,
-					title: "Records",
-					url: "/admin/alumni/records",
-				},
-				{
-					icon: Users,
-					title: "Verify Account",
+					title: "List",
 					url: "/admin/alumni",
 				},
 			],
