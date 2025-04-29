@@ -21,12 +21,10 @@ export const AvatarDropdown = () => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button
-					variant="ghost"
-					className="relative h-8 w-8 bg-transparent hover:bg-red-400 rounded-full">
+				<Button variant="ghost" className="relative h-8 w-8     rounded-full">
 					<Avatar className="h-8 w-8">
 						{user?.avatar ? (
-							<AvatarImage src={user.avatar} alt="@johndoe" />
+							<AvatarImage src={user.avatar} alt="Avatar" />
 						) : (
 							<AvatarFallback>
 								{user?.firstName[0]}
