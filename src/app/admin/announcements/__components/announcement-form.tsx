@@ -13,7 +13,7 @@ import {
 	RichTextEditor,
 } from "@/components";
 import { AnnouncementSchema } from "@/lib/definitions";
-import { updateAnnouncement } from "@/models";
+import { updateAnnouncement } from "@/repositories";
 import { AnnouncementFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Announcement } from "@prisma/client";
