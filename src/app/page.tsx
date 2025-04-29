@@ -1,8 +1,10 @@
 import {
+	About,
 	AspectRatio,
 	BackToTopButton,
 	Button,
 	ContactSectionForm,
+	HeroSection,
 } from "@/components";
 import BatchSection from "@/components/custom/batch-section";
 import { welcomeImageBlurData } from "@/constant";
@@ -18,6 +20,13 @@ export const metadata: Metadata = {
 
 export default async function Home() {
 	// const events = await getDisabledEvents();
+
+	return (
+		<>
+			<HeroSection />
+			<About />
+		</>
+	);
 
 	return (
 		<div className=" ">
