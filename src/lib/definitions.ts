@@ -97,23 +97,31 @@ export const AdminSchema = z.object({
 });
 
 export const ProfileSchema = z.object({
+	avatar: z.string(),
+	bio: z.string().optional(),
+
 	firstName: z.string().min(1, { message: "First name is required" }),
 	lastName: z.string().min(1, { message: "Last name is required" }),
 	middleName: z.string().optional(),
-	birthDate: z.string().min(1, { message: "Birth date is required" }),
-	contactNumber: z.string(),
-	address: z.string(),
-	religion: z.string(),
-	nationality: z.string(),
-	gender: z.string(),
-	avatar: z.string(),
 
-	// POST GRADUATION
-	furtherEducation: z.string(),
+	nationality: z.string(),
+	religion: z.string(),
+	// TODO: Implement Address
+	// address: z.string(),
+	gender: z.string(),
+	contactNumber: z.string(),
+	birthDate: z.string().min(1, { message: "Birth date is required" }),
+
+	// EDUCATION INFO
+	studentId: z.string(),
 	course: z.string(),
+	batch: z.coerce
+		.string()
+		.regex(/[0-9]/, { message: "Contain at least one number." }),
+
+	// JOB INFO
 	company: z.string(),
-	schoolName: z.string(),
-	occupation: z.string(),
+	currentOccupation: z.string(),
 	jobTitle: z.string(),
 });
 
