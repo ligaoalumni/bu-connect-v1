@@ -41,6 +41,7 @@ export const createAdmin = async (
 			...data,
 			middleName: data.middleName || "",
 			password: hashedPassword,
+			birthDate: new Date(),
 		});
 
 		if (!newAdmin) {
