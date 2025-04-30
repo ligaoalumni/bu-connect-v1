@@ -15,7 +15,7 @@ import { formatDate } from "date-fns";
 import Link from "next/link";
 
 export default async function Page() {
-	const user = await getInformation({ isAlumni: false });
+	const user = await getInformation();
 
 	return (
 		<div className="space-y-3">

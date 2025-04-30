@@ -11,7 +11,6 @@ import {
 	CardTitle,
 	QRCodeViewer,
 	ChangePassword,
-	ChangeEmail,
 } from "@/components";
 import { formatDate } from "date-fns";
 import Link from "next/link";
@@ -19,8 +18,6 @@ import React from "react";
 
 export default async function Page() {
 	const user = await getInformation();
-
-	const alumniSystemRecord = user?.alumni?.alumni;
 
 	return (
 		<div className="space-y-3">
@@ -39,8 +36,7 @@ export default async function Page() {
 							{user?.firstName} {user?.lastName}
 						</h2>
 						<p className="text-sm text-white">
-							{user?.alumni?.graduationYear}{" "}
-							{alumniSystemRecord?.strand && `| ${alumniSystemRecord?.strand}`}
+							{user?.batch} {user?.course}
 						</p>
 					</div>
 				</div>
@@ -50,7 +46,6 @@ export default async function Page() {
 						<Button variant="default" asChild>
 							<Link href={"profile/edit"}>Edit Profile</Link>
 						</Button>
-						<ChangeEmail />
 						<ChangePassword />
 					</div>
 
@@ -60,13 +55,12 @@ export default async function Page() {
 						}}
 						buttonLabel="My QR Code"
 						data={{
-							batch: Number(user?.alumni?.graduationYear),
-							educationLevel: alumniSystemRecord?.educationLevel || "",
+							batch: Number(user?.batch),
 							firstName: user?.firstName || "",
 							lastName: user?.lastName || "",
-							strand: String(alumniSystemRecord?.strand || ""),
-							lrn: String(user?.alumni?.lrn),
-							// email: user?.email || "",
+							course: user?.course || "",
+							studentId: user?.studentId || "",
+							email: user?.email || "",
 							middleName: user?.middleName || "",
 						}}
 					/>
@@ -76,15 +70,15 @@ export default async function Page() {
 					<CardHeader className="px-5 pb-2 pt-5 font-medium">
 						<CardTitle>Personal Information</CardTitle>
 					</CardHeader>
-					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-4  md:col-span-2">
+					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  md:col-span-2">
 						<AlumniData label="First Name" data={user?.firstName} />
 						<AlumniData label="Middle Name" data={user?.middleName} />
 						<AlumniData label="Last Name" data={user?.lastName} />
 						<AlumniData
 							label="Birth Date"
 							data={
-								alumniSystemRecord?.birthDate
-									? formatDate(alumniSystemRecord.birthDate, "MMMM dd, yyyy")
+								user?.birthDate
+									? formatDate(user.birthDate, "MMMM dd, yyyy")
 									: null
 							}
 						/>
@@ -95,7 +89,7 @@ export default async function Page() {
 								.toLocaleLowerCase()}`.replaceAll(/_/g, " ")}
 						/>
 						<AlumniData label="Email" data={user?.email} />
-						<AlumniData label="Address" data={user?.address} />
+						{/* <AlumniData label="Address" data={user?.address} /> */}
 						<AlumniData label="Contact Number" data={user?.contactNumber} />
 						<AlumniData label="Nationality" data={user?.nationality} />
 						<AlumniData label="Religion" data={user?.religion} />
@@ -108,17 +102,10 @@ export default async function Page() {
 					<CardHeader className="px-5 pb-2 pt-5 font-medium">
 						<CardTitle>Academic Information</CardTitle>
 					</CardHeader>
-					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-						<AlumniData label="LRN" data={alumniSystemRecord?.lrn} />
-						<AlumniData
-							label="Batch"
-							data={alumniSystemRecord?.graduationYear?.toString()}
-						/>
-						<AlumniData
-							label="Education Level"
-							data={alumniSystemRecord?.educationLevel}
-						/>
-						<AlumniData label="Strand" data={alumniSystemRecord?.strand} />
+					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  ">
+						<AlumniData label="Student ID" data={user?.studentId} />
+						<AlumniData label="Batch" data={user?.batch?.toString()} />
+						<AlumniData label="Course" data={user?.course} />
 					</CardContent>
 				</Card>
 
@@ -126,25 +113,16 @@ export default async function Page() {
 					<CardHeader className="px-5 pb-2 pt-5 font-medium">
 						<CardTitle>Post - Graduation Information</CardTitle>
 					</CardHeader>
-					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-						<AlumniData
-							label="Further Education"
-							data={alumniSystemRecord?.furtherEducation}
-						/>
-						<AlumniData label="Course" data={alumniSystemRecord?.course} />
-						<AlumniData
-							label="Company"
-							data={alumniSystemRecord?.companyName}
-						/>
+					<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  ">
+						<AlumniData label="Company" data={user?.company} />
 						<AlumniData
 							label="Name of University/College"
-							data={alumniSystemRecord?.schoolName}
+							data={user?.jobTitle}
 						/>
 						<AlumniData
 							label="Current Occupation"
-							data={alumniSystemRecord?.status}
+							data={user?.currentOccupation}
 						/>
-						<AlumniData label="Job Title" data={alumniSystemRecord?.jobTitle} />
 					</CardContent>
 				</Card>
 			</div>
