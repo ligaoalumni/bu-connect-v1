@@ -8,6 +8,8 @@ import { publicRoutes } from "@/constant";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { User } from "@prisma/client";
+import { ThemeSwitcher } from "./theme-switcher";
+import { AvatarDropdown } from "./avatar-dropdown";
 
 const links = [
 	"/",
@@ -42,7 +44,7 @@ export function Header({
 	return (
 		showMainNavRoutes.includes(path) && (
 			<>
-				<header className="  mx-auto bg-white container px-5 md:px-0 py-5 flex items-center justify-between">
+				<header className="  mx-auto bg-white dark:bg-transparent container px-5 md:px-0 py-5 flex items-center justify-between">
 					<div className="flex items-center  gap-3">
 						<Image
 							src="/images/bup-logo.png"
@@ -56,9 +58,19 @@ export function Header({
 						</div>
 					</div>
 
-					{/* <Button asChild>
-				<Link href="/login">Log in</Link>
-			</Button> */}
+					<div className="flex gap-2">
+						<ThemeSwitcher />
+						{user ? (
+							<AvatarDropdown />
+						) : (
+							<Button
+								variant="default"
+								asChild
+								className="text-white text-lg capitalize">
+								<Link href="/login">Login</Link>
+							</Button>
+						)}
+					</div>
 				</header>
 				<div className="sticky top-0   z-50 hidden md:flex py-2 bg-[#15497A]  shadow-md mx-auto container justify-center gap-4">
 					{links.map((link, index) => (
