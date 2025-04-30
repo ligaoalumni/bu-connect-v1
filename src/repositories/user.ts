@@ -45,7 +45,13 @@ export const readUser = async (
 export const createUser = async (
 	user: Pick<
 		User,
-		"email" | "password" | "role" | "firstName" | "lastName" | "middleName"
+		| "email"
+		| "password"
+		| "role"
+		| "firstName"
+		| "lastName"
+		| "middleName"
+		| "birthDate"
 	> & {
 		alumniData?: { batchYear: number; lrn: string };
 	}
@@ -57,6 +63,7 @@ export const createUser = async (
 			firstName: user.firstName,
 			lastName: user.lastName,
 			middleName: user.middleName,
+			birthDate: user.birthDate,
 			password: user.password,
 		},
 	});
@@ -180,8 +187,9 @@ export const updateProfile = async (
 		lastName,
 		middleName,
 		nationality,
-		occupation,
+		currentOccupation,
 		religion,
+		batch,
 	} = data;
 
 	// Input validation
@@ -216,7 +224,8 @@ export const updateProfile = async (
 					company,
 					course,
 					jobTitle,
-					currentOccupation: occupation,
+					currentOccupation,
+					batch,
 				},
 			});
 			if (!user) throw new Error("Failed to update user profile.");
