@@ -38,13 +38,13 @@ export interface Attendant {
 }
 
 export interface QRCodeValues {
-	lrn: string;
+	studentId: string;
+	email: string;
 	middleName?: string;
 	lastName: string;
 	firstName: string;
 	batch: number;
-	strand?: string;
-	educationLevel: string;
+	course?: string;
 }
 
 export type Events = {

@@ -10,17 +10,18 @@ export interface UpdateProfileData {
 	birthDate?: string;
 	company?: string;
 	contactNumber?: string;
-	course?: string;
 	firstName: string;
-	furtherEducation?: string;
 	gender?: Gender;
-	jobTitle?: string;
 	lastName: string;
 	middleName?: string;
 	nationality?: string;
-	occupation?: string;
 	religion?: string;
-	schoolName?: string;
+
+	batch?: number;
+
+	jobTitle?: string;
+	course?: string;
+	currentOccupation?: string;
 }
 
 export type Gender = "MALE" | "FEMALE" | "PREFER_NOT_TO_SAY";
