@@ -1,7 +1,6 @@
 "use client";
 
 import { updateProfileActions } from "@/actions";
-import { AlumniData } from "@/app/admin/alumni/__components";
 import {
 	Card,
 	CardContent,
@@ -14,9 +13,6 @@ import {
 	Input,
 	Form,
 	FormLabel,
-	Alert,
-	AlertTitle,
-	AlertDescription,
 	Select,
 	SelectContent,
 	SelectGroup,
@@ -31,66 +27,41 @@ import { alumniLabel } from "@/constant";
 import { ProfileSchema } from "@/lib/definitions";
 import { ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon, ArrowLeft } from "lucide-react";
+import { Gender, User } from "@prisma/client";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+const currentYear = new Date().getFullYear() - 1; // Get the current year
+const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
+
 interface EditProfileFormProps {
-	user: {
-		id: number;
-		firstName: string;
-		middleName: string;
-		lastName: string;
-		birthDate: string;
-		gender: string;
-		address: string;
-		contactNumber: string;
-		nationality: string;
-		religion: string;
-		avatar: string;
-	};
-	postInfo: {
-		furtherEducation: string;
-		course: string;
-		company: string;
-		schoolName: string;
-		occupation: string;
-		jobTitle: string;
-	};
-	alumniSystemRecord: {
-		lrn: string;
-		batch: string;
-		educationLevel: string;
-		strand: string;
-	};
+	user: User;
 }
 
-export default function EditProfileForm({
-	alumniSystemRecord,
-	user,
-	postInfo,
-}: EditProfileFormProps) {
+export default function EditProfileForm({ user }: EditProfileFormProps) {
 	const router = useRouter();
 	const defaultValues = {
-		firstName: user.firstName,
-		lastName: user.lastName,
-		middleName: user.middleName,
-		birthDate: user.birthDate,
-		contactNumber: user.contactNumber,
-		religion: user.religion,
-		nationality: user.nationality,
-		address: user.address,
-		avatar: user.avatar,
-		gender: user.gender,
-
-		company: postInfo.company,
-		course: postInfo.course,
-		furtherEducation: postInfo.furtherEducation,
-		schoolName: postInfo.schoolName,
-		jobTitle: postInfo.jobTitle,
-		occupation: postInfo.occupation,
+		firstName: user.firstName || "",
+		lastName: user.lastName || "",
+		middleName: user.middleName || "",
+		// birthDate: new Date(user.birthDate).toISOString().split("T")[0],
+		birthDate: user.birthDate.toISOString(),
+		contactNumber: user.contactNumber || "",
+		religion: user.religion || "",
+		nationality: user.nationality || "",
+		// address: user.address,
+		avatar: user.avatar || "",
+		gender: user.gender || "MALE",
+		batch: String(user.batch),
+		company: user.company || "",
+		course: user.course || "",
+		currentOccupation: user.currentOccupation || "",
+		jobTitle: user.jobTitle || "",
+		studentId: user.studentId || "",
+		bio: user.bio || "",
 	};
 
 	const form = useForm<ProfileFormData>({
@@ -100,7 +71,11 @@ export default function EditProfileForm({
 
 	const handleSignUp = async (values: ProfileFormData) => {
 		try {
-			await updateProfileActions(user.id, values, alumniSystemRecord.lrn);
+			await updateProfileActions(user.id, {
+				...values,
+				gender: values.gender as Gender,
+				batch: Number(values.batch),
+			});
 
 			toast.success("Profile updated successfully", {
 				richColors: true,
@@ -272,7 +247,7 @@ export default function EditProfileForm({
 								)}
 							/>
 
-							<FormField
+							{/* <FormField
 								control={form.control}
 								name="address"
 								render={({ field }) => (
@@ -288,7 +263,7 @@ export default function EditProfileForm({
 										<FormMessage />
 									</FormItem>
 								)}
-							/>
+							/> */}
 							<FormField
 								control={form.control}
 								name="contactNumber"
@@ -345,42 +320,19 @@ export default function EditProfileForm({
 					</Card>
 
 					<Card className="bg-transparent text-white">
-						<Alert variant="warning" className="rounded-b-none border-none">
-							<AlertCircleIcon className="h-4 w-4" />
-							<AlertTitle>Important Notice</AlertTitle>
-							<AlertDescription>
-								Academic information cannot be edited as these records are saved
-								in the system.
-							</AlertDescription>
-						</Alert>
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
 							<CardTitle>Academic Information</CardTitle>
 						</CardHeader>
-						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-							<AlumniData label="LRN" data={alumniSystemRecord.lrn} />
-							<AlumniData label="Batch" data={alumniSystemRecord.batch} />
-							<AlumniData
-								label="Education Level"
-								data={alumniSystemRecord.educationLevel}
-							/>
-							<AlumniData label="Strand" data={alumniSystemRecord.strand} />
-						</CardContent>
-					</Card>
-
-					<Card className="bg-transparent text-white">
-						<CardHeader className="px-5 pb-2 pt-5 font-medium">
-							<CardTitle>Post - Graduation Information</CardTitle>
-						</CardHeader>
-						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-1 gap-3  md:grid-cols-3  md:col-span-2">
+						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3 ">
 							<FormField
 								control={form.control}
-								name="occupation"
+								name="studentId"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Occupation</FormLabel>
+										<FormLabel>Student ID</FormLabel>
 										<FormControl>
 											<Input
-												readOnly={form.formState.isSubmitting}
+												readOnly={true}
 												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
@@ -389,6 +341,7 @@ export default function EditProfileForm({
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="course"
@@ -408,44 +361,58 @@ export default function EditProfileForm({
 							/>
 							<FormField
 								control={form.control}
-								name="schoolName"
+								name="batch"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>School Name</FormLabel>
+										<FormLabel>Batch</FormLabel>
 										<FormControl>
-											<Input
-												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
-												{...field}
-											/>
+											<Select
+												onValueChange={(value: string) =>
+													field.onChange(String(value))
+												}
+												value={field.value.toString()}>
+												{/* Option to prompt user */}
+												<SelectTrigger className="text-white data-[placeholder]:text-white/80 first-letter:uppercase">
+													<SelectValue
+														placeholder="Select gender"
+														className="text-white  "
+													/>
+												</SelectTrigger>
+												<SelectContent className="bg-[#2F61A0] shadow-lg border-none dark:bg-[#5473a8]">
+													<SelectGroup>
+														<SelectLabel className="text-white">
+															Batch Year
+														</SelectLabel>
+														{years.map((year) => (
+															<SelectItem
+																value={year.toString()}
+																key={year}
+																className="first-letter:capitalize text-white">
+																{year}
+															</SelectItem>
+														))}
+													</SelectGroup>
+												</SelectContent>
+											</Select>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+						</CardContent>
+					</Card>
+
+					<Card className="bg-transparent text-white">
+						<CardHeader className="px-5 pb-2 pt-5 font-medium">
+							<CardTitle>Post - Graduation Information</CardTitle>
+						</CardHeader>
+						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-1 gap-3  md:grid-cols-3  md:col-span-2">
 							<FormField
 								control={form.control}
-								name="furtherEducation"
+								name="currentOccupation"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Further Education</FormLabel>
-										<FormControl>
-											<Input
-												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="company"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Company</FormLabel>
+										<FormLabel>Occupation</FormLabel>
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
@@ -462,7 +429,25 @@ export default function EditProfileForm({
 								name="jobTitle"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Job title</FormLabel>
+										<FormLabel>Job Title</FormLabel>
+										<FormControl>
+											<Input
+												readOnly={form.formState.isSubmitting}
+												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="company"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Company</FormLabel>
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
