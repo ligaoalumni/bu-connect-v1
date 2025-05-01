@@ -9,3 +9,4 @@ export * from "./announcement";
 export * from "./dashboard";
 export * from "./job";
 export * from "./post";
+export * from "./poll";

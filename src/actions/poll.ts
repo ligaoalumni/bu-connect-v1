@@ -1,3 +1,4 @@
+"use server";
 import { decrypt } from "@/lib/session";
 import { createPoll, readPoll, readPolls, vote } from "@/repositories";
 import { PaginationArgs, PaginationResult } from "@/types";
