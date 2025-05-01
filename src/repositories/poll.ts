@@ -78,8 +78,8 @@ export const readPolls = async ({
 	};
 };
 
-export const readJob = async (id: number) => {
-	return await prisma.job.findUnique({
+export const readPoll = async (id: number) => {
+	return await prisma.poll.findUnique({
 		where: {
 			id,
 		},
