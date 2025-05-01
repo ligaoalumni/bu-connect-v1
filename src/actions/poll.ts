@@ -39,6 +39,6 @@ export const createPollAction = async (data: {
 		});
 	} catch (error) {
 		console.log(error);
-		throw new Error("Failed to update job");
+		throw new Error("Failed to create job");
 	}
 };
