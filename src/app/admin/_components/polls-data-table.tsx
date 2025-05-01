@@ -37,7 +37,7 @@ export function PollsDataTable() {
 			enableSorting: true,
 		},
 		{
-			accessorKey: "jobTitle",
+			accessorKey: "question",
 			enableHiding: false,
 			enableSorting: true,
 			header: ({ column }) => {
@@ -47,7 +47,7 @@ export function PollsDataTable() {
 						onClick={() =>
 							column.toggleSorting(column.getIsSorted() === "asc")
 						}>
-						Job Title
+						Question
 						<ArrowUpDown />
 					</Button>
 				);
