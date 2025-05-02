@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 interface NotFoundComponentProps {
-	title?: string;
+	title: string;
 	description?: string;
-	backTo?: string;
-	backLabel?: string;
+	backTo: string;
+	backLabel: string;
 }
 
 export function NotFoundComponent({
-	title = "404 - Not Found",
+	title,
 	description = "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or never existed.",
 	backTo = "/",
 	backLabel = "Back to Home",
