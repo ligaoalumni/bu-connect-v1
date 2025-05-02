@@ -150,3 +150,11 @@ export type UserCredentials = Pick<
 	User,
 	"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
 > | null;
+
+export type UpdatePoll = {
+	options: {
+		id: number;
+		content: string;
+	}[];
+	question: string;
+};

@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult } from "@/types";
+import { PaginationArgs, PaginationResult, UpdatePoll } from "@/types";
 import { Poll, Prisma } from "@prisma/client";
 
 export const createPoll = async ({
@@ -83,5 +83,56 @@ export const readPoll = async (id: number) => {
 		where: {
 			id,
 		},
+		include: {
+			options: {
+				include: {
+					votes: {
+						select: {
+							user: {
+								select: {
+									id: true,
+									firstName: true,
+									lastName: true,
+									email: true,
+									batch: true,
+									avatar: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	});
+};
+
+export const updatePoll = async (
+	id: number,
+	{ options, question }: UpdatePoll
+) => {
+	await prisma.$transaction(async (tx) => {
+		options.forEach(async (option) => {
+			await tx.option.upsert({
+				where: {
+					id: option.id,
+				},
+				update: {
+					content: option.content,
+				},
+				create: {
+					content: option.content,
+					pollId: id,
+				},
+			});
+		});
+
+		await tx.poll.update({
+			where: {
+				id,
+			},
+			data: {
+				question,
+			},
+		});
 	});
 };
