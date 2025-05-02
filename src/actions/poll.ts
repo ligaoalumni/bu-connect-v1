@@ -1,7 +1,13 @@
 "use server";
 import { decrypt } from "@/lib/session";
-import { createPoll, readPoll, readPolls, vote } from "@/repositories";
-import { PaginationArgs, PaginationResult } from "@/types";
+import {
+	createPoll,
+	readPoll,
+	readPolls,
+	updatePoll,
+	vote,
+} from "@/repositories";
+import { PaginationArgs, PaginationResult, UpdatePoll } from "@/types";
 import { Poll } from "@prisma/client";
 import { cookies } from "next/headers";
 
@@ -36,7 +42,7 @@ export const createPollAction = async (data: {
 	options: string[];
 }) => {
 	try {
-		await createPoll({
+		return await createPoll({
 			options: data.options,
 			question: data.question,
 		});
@@ -58,5 +64,14 @@ export const voteAction = async (optionId: number) => {
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to create job");
+	}
+};
+
+export const updatePollAction = async (id: number, values: UpdatePoll) => {
+	try {
+		await updatePoll(id, values);
+	} catch (error) {
+		console.log(error);
+		throw new Error("Failed to update poll");
 	}
 };
