@@ -25,7 +25,7 @@ export function JobDetailsCard(job: Job) {
 						<CardTitle className="text-2xl font-bold">{job.title}</CardTitle>
 						<p className="text-lg text-muted-foreground mt-1">{job.jobTitle}</p>
 					</div>
-					<Badge className="w-fit text-sm px-3 py-1 first-letter:uppercase">
+					<Badge className="w-fit text-sm px-3 py-1  capitalize">
 						{formatJobType(job.type)}
 					</Badge>
 				</div>
