@@ -88,7 +88,7 @@ export function PollsDataTable() {
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
 							<DropdownMenuItem asChild className="cursor-pointer">
-								<Link href={`/admin/jobs/${row.original.id}`}>
+								<Link href={`/admin/polls/${row.original.id}`}>
 									<Info />
 									View Details
 								</Link>
@@ -97,7 +97,7 @@ export function PollsDataTable() {
 								asChild
 								className="  cursor-pointer flex items-center ">
 								<Link
-									href={`/admin/jobs/${row.original.id}/edit`}
+									href={`/admin/polls/${row.original.id}/edit`}
 									className="text-blue-500   ">
 									<Pencil />
 									Edit Details
