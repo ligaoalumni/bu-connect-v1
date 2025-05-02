@@ -3,7 +3,7 @@
 import { decrypt } from "@/lib/session";
 import { createJob, readJob, readJobs, updateJob } from "@/repositories";
 import { JobData, PaginationArgs, UpdateJob } from "@/types";
-import { JobStatus } from "@prisma/client";
+import { Job, JobStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 
 export const createJobAction = async (data: Omit<JobData, "userId">) => {
@@ -36,7 +36,10 @@ export const updateJobAction = async (toUpdateId: number, data: UpdateJob) => {
 };
 
 export const readJobsAction = async (
-	data: PaginationArgs<JobStatus, never>
+	data: PaginationArgs<JobStatus, never> & {
+		type?: Job["type"];
+		location?: string;
+	}
 ) => {
 	try {
 		const cookieStore = await cookies();

@@ -56,6 +56,8 @@ export const updateJob = async (
 type TJobPagination = PaginationArgs<JobStatus, never> & {
 	isAdmin?: boolean;
 	userId: number;
+	type?: Job["type"];
+	location?: string;
 };
 
 export const readJobs = async ({
@@ -64,8 +66,8 @@ export const readJobs = async ({
 	order,
 	orderBy,
 	status,
-	userId,
-	isAdmin,
+	type,
+	location,
 }: TJobPagination): Promise<PaginationResult<Job>> => {
 	let where: Prisma.JobWhereInput = {};
 
@@ -75,11 +77,28 @@ export const readJobs = async ({
 		};
 	}
 
+	if (type) {
+		where = {
+			...where,
+			type,
+		};
+	}
+
 	if (status) {
 		where = {
 			...where,
 			status: {
 				in: status,
+			},
+		};
+	}
+
+	if (location) {
+		where = {
+			...where,
+			location: {
+				contains: location,
+				mode: "insensitive",
 			},
 		};
 	}
@@ -93,14 +112,14 @@ export const readJobs = async ({
 		};
 	}
 
-	if (!isAdmin) {
-		where = {
-			...where,
-			postedBy: {
-				id: userId,
-			},
-		};
-	}
+	// if (!isAdmin ) {
+	// 	where = {
+	// 		...where,
+	// 		postedBy: {
+	// 			id: userId,
+	// 		},
+	// 	};
+	// }
 
 	const jobs = await prisma.job.findMany({
 		where,
@@ -110,6 +129,8 @@ export const readJobs = async ({
 	});
 
 	const count = await prisma.job.count({ where });
+
+	console.log(jobs, "qweqw");
 
 	return {
 		count,
