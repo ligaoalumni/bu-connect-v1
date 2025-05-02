@@ -153,8 +153,7 @@ export function JobsInfiniteScroll({
 			className={`${
 				!isFilterChanging && "space-y-8"
 			} grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-10  `}>
-			<div className="flex flex-col gap-2  ">
-				<h1 className="text-3xl font-medium">Filter jobs</h1>
+			<div className="flex flex-col gap-2 md:pt-16 ">
 				<div>
 					<Label>Status</Label>
 					<Select
@@ -202,6 +201,7 @@ export function JobsInfiniteScroll({
 			</div>
 
 			<div className="md:col-span-4 md:max-w-screen-lg md:mx-auto overflow-y-auto max-h-[80vh] scrollbar-hide">
+				<h1 className="text-3xl font-medium">Job Opportunities</h1>
 				<div className="space-y-5">
 					{jobs.map((job, index) => (
 						<JobCard key={`${index}-event-card-${job.id}`} {...job} />

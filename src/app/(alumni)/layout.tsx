@@ -1,6 +1,6 @@
 import React from "react";
-import { Header } from "./__components";
 import { ContactSectionForm, Footer } from "@/components";
+import { Header } from "./__components";
 
 export default function AlumniLayout({
 	children,
