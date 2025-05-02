@@ -67,6 +67,7 @@ export * from "./custom/about";
 export * from "./custom/iconify";
 export * from "./custom/job-form";
 export * from "./custom/job-details-card";
+export * from "./custom/not-found";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
