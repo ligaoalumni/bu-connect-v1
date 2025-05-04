@@ -24,6 +24,7 @@ import { JobSchema } from "@/lib/definitions";
 import { JobFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Job, JobType } from "@prisma/client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -43,6 +44,9 @@ export default function JobForm({ job }: JobFormProps) {
 			location: job?.location || "",
 		},
 	});
+	const [status, setStatus] = useState(false);
+
+	console.log("qqqq", job);
 
 	const handleSubmit = async (values: JobFormData) => {
 		try {
@@ -55,7 +59,14 @@ export default function JobForm({ job }: JobFormProps) {
 				title: values.title,
 			};
 			if (job) {
-				await updateJobAction(job.id, data);
+				await updateJobAction(job.id, {
+					...data,
+					status: status
+						? job.status !== "OPEN"
+							? "OPEN"
+							: "COMPLETED"
+						: undefined,
+				});
 			} else {
 				await createJobAction(data);
 			}
@@ -200,12 +211,30 @@ export default function JobForm({ job }: JobFormProps) {
 					)}
 				/>
 				<div className="flex justify-end gap-2">
+					{/* {job && (
+						<Button
+							disabled={form.formState.isSubmitting}
+							className="min-w-[130px] text-lg"
+							size="lg"
+							type="button"
+							variant="secondary"
+							onClick={() => {
+								setStatus(true);
+								handleSubmit(form.getValues());
+							}}>
+							{job.status !== "OPEN" ? "Mark as Open" : "Mark as Completed"}
+						</Button>
+					)} */}
 					<Button
 						disabled={form.formState.isSubmitting}
 						className="min-w-[130px] text-lg"
 						size="lg"
 						type="submit">
-						{form.formState.isSubmitting ? "Posting job..." : "Post Job"}
+						{form.formState.isSubmitting
+							? "Posting job..."
+							: job
+							? "Update job"
+							: "Post Job"}
 					</Button>
 					<Button
 						disabled={form.formState.isSubmitting}
