@@ -32,6 +32,7 @@ import {
 import { alumniLabel } from "@/constant";
 import AvatarUpload from "@/components/custom/avatar-upload";
 import { updateProfileActions } from "@/actions";
+import { Gender } from "@prisma/client";
 
 interface ProfileFormProps {
 	id: number;
@@ -84,7 +85,10 @@ export default function ProfileForm(user: ProfileFormProps) {
 
 	const handleUpdateProfile = async (values: AdminProfileFormData) => {
 		try {
-			await updateProfileActions(user.id, values);
+			await updateProfileActions(user.id, {
+				...values,
+				gender: values as Gender,
+			});
 
 			toast.success("Profile updated successfully", {
 				richColors: true,
@@ -123,7 +127,6 @@ export default function ProfileForm(user: ProfileFormProps) {
 						avatarFallback={`${user.firstName[0]}${user.lastName[0]}`}
 						isDisabled={form.formState.isSubmitting}
 						handleSetValue={(value) => {
-							console.log(value, "qqqq");
 							form.setValue("avatar", value || "");
 						}}
 						avatarImage={form.getValues("avatar")}

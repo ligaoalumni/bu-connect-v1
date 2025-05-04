@@ -12,14 +12,25 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
+import {
+	ArrowUpDown,
+	Check,
+	CircleCheck,
+	Info,
+	MoreHorizontal,
+	Pencil,
+} from "lucide-react";
 import Link from "next/link";
-import { readJobsAction } from "@/actions";
+import { readJobsAction, updateJobAction } from "@/actions";
 import { toast } from "sonner";
 import { Job } from "@prisma/client";
 import { JobStatusBadgeColorMap } from "@/constant";
 
-export default function JobsDataTable() {
+interface JobsDataTableProps {
+	managedByAlumni?: boolean;
+}
+
+export default function JobsDataTable({ managedByAlumni }: JobsDataTableProps) {
 	const [data, setData] = useState<Job[]>([]);
 	const [total, setTotal] = useState(0);
 	const [pagination, setPagination] = React.useState({
@@ -125,6 +136,47 @@ export default function JobsDataTable() {
 									Edit Details
 								</Link>
 							</DropdownMenuItem>
+							<DropdownMenuItem
+								className="  cursor-pointer flex items-center text-blue-500"
+								onClick={async () => {
+									try {
+										setData((prev) => {
+											return prev.map((job) => {
+												if (job.id === row.original.id) {
+													return {
+														...job,
+														status:
+															job.status === "OPEN" ? "COMPLETED" : "OPEN",
+													};
+												}
+												return job;
+											});
+										});
+										await updateJobAction(row.original.id, {
+											status:
+												row.original.status === "OPEN" ? "COMPLETED" : "OPEN",
+										});
+									} catch (error) {
+										setData((prev) => {
+											return prev.map((job) => {
+												if (job.id === row.original.id) {
+													return {
+														...job,
+														status:
+															job.status !== "OPEN" ? "COMPLETED" : "OPEN",
+													};
+												}
+												return job;
+											});
+										});
+										console.log(error);
+									}
+								}}>
+								{row.original.status !== "OPEN" ? <Check /> : <CircleCheck />}
+								{row.original.status !== "OPEN"
+									? "Reopen"
+									: "Mark as completed"}
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);
@@ -142,6 +194,7 @@ export default function JobsDataTable() {
 						limit: pagination.pageSize,
 						page: pagination.pageIndex,
 					},
+					managedByAlumni,
 				});
 
 				setData(jobs.data);
@@ -170,7 +223,7 @@ export default function JobsDataTable() {
 			setPagination={setPagination}
 			columns={columns}
 			data={data}
-			filterName="events"
+			filterName="job title"
 			rowCount={total}
 			loading={loading}
 			handleSearch={handleFetchData}
