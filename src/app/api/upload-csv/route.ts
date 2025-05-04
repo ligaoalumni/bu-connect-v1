@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { Gender, User } from "@prisma/client";
 import { hash } from "bcryptjs";
-import { getDay, getMonth, getYear } from "date-fns";
+import { getMonth, getYear } from "date-fns";
 import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
 
@@ -33,10 +33,7 @@ const parseCSV = (item: any) => {
 		firstName: values[2],
 		middleName: values[3],
 		lastName: values[4],
-		birthDate:
-			values[5] instanceof Date
-				? new Date(values[5]).toISOString()
-				: new Date().toISOString(),
+		birthDate: new Date(String(values[5])).toISOString(),
 		gender: values[6],
 		batch: Number(values[7]), // Convert to number
 		course: values[8],
@@ -110,8 +107,6 @@ export async function POST(request: NextRequest) {
 
 					const parsedData = parseCSV(record);
 
-					console.log(parsedData, "PARSED DATA");
-
 					// Validate the record against your schema
 					const validatedData = AlumniSchema.parse(parsedData);
 
@@ -124,9 +119,15 @@ export async function POST(request: NextRequest) {
 						results.alreadyExists++;
 					} else {
 						const year = getYear(validatedData.birthDate);
-						const month = getMonth(validatedData.birthDate) + 1; // Months are zero-indexed in JavaScript
-						const day = getDay(validatedData.birthDate);
+						const month = String(
+							getMonth(validatedData.birthDate) + 1
+						).padStart(2, "0"); // Month is 0-indexed in JavaScript
+						const day = new Date(validatedData.birthDate)
+							.getDate()
+							.toString()
+							.padStart(2, "0"); // Pad day with leading zero if needed
 						const password = `${validatedData.lastName.toLowerCase()}${year}${month}${day}`;
+
 						const hashedPassword = await hash(password, 10);
 
 						// Create new user
