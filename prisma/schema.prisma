@@ -184,6 +184,8 @@ model Announcement {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("announcements")
 }
 
 enum PostType {
