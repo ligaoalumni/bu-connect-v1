@@ -1,13 +1,17 @@
 "use server";
 
 import { EventFormSchema } from "@/lib/definitions";
+import { decrypt } from "@/lib/session";
 import {
 	addEventAttendant,
+	addInterestEvent,
 	createEvent,
 	readAttendants,
 	readEventComments,
 	readEvents,
+	readInterestedAlumni,
 	updateEvent,
+	writeEventComment,
 } from "@/repositories";
 import {
 	EventFormData,
@@ -16,6 +20,7 @@ import {
 	TEventPagination,
 } from "@/types";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const createEventAction = async (data: EventFormData) => {
 	const parsed = EventFormSchema.safeParse(data);
@@ -116,5 +121,55 @@ export const readEventCommentsAction = async ({
 	} catch (err) {
 		console.log(err);
 		throw new Error("Failed to fetch comments");
+	}
+};
+
+export const addInterestEventAction = async (eventId: number) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (!session?.id) throw new Error("Unauthorized");
+
+		return await addInterestEvent({ eventId, userId: session.id });
+	} catch (err) {
+		console.log(err);
+		throw new Error("Failed to fetch comments");
+	}
+};
+
+export const readInterestedAlumniAction = async ({
+	slug,
+	pagination,
+}: TEventPagination) => {
+	try {
+		return await readInterestedAlumni({ slug, pagination });
+	} catch {
+		throw new Error("Failed to fetch interested alumni");
+	}
+};
+
+export const writeEventCommentAction = async ({
+	comment,
+	eventId,
+	slug,
+}: {
+	eventId: number;
+	comment: string;
+	slug: string;
+}) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (!session?.id) throw new Error("Unauthorized");
+
+		await writeEventComment({ userId: session.id, comment, eventId });
+
+		revalidatePath(`/events/${slug}`);
+	} catch {
+		throw new Error("Failed to fetch interested alumni");
 	}
 };

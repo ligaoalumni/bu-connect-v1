@@ -49,8 +49,6 @@ export const readAlumniAccounts = async ({
 
 	const count = await prisma.user.count({ where });
 
-	console.log(alumni, "qqq");
-
 	return {
 		count,
 		hasMore: alumni.length === pagination?.limit,

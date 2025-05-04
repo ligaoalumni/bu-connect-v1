@@ -4,6 +4,7 @@ import { decrypt } from "@/lib/session";
 import { createJob, readJob, readJobs, updateJob } from "@/repositories";
 import { JobData, PaginationArgs, UpdateJob } from "@/types";
 import { Job, JobStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const createJobAction = async (data: Omit<JobData, "userId">) => {
@@ -28,7 +29,17 @@ export const updateJobAction = async (toUpdateId: number, data: UpdateJob) => {
 
 		const session = await decrypt(cookieStore.get("session")?.value);
 
-		await updateJob(toUpdateId, Number(session?.id), data);
+		const job = await updateJob(toUpdateId, Number(session?.id), data);
+
+		if (data.status) {
+			revalidatePath(session?.role === "ALUMNI" ? `/jobs` : `/admin/jobs`);
+		} else {
+			revalidatePath(
+				session?.role === "ALUMNI"
+					? `/jobs/${job.id}/edit`
+					: `/admin/jobs/${job.id}/edit`
+			);
+		}
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to update job");
@@ -39,6 +50,7 @@ export const readJobsAction = async (
 	data: PaginationArgs<JobStatus, never> & {
 		type?: Job["type"];
 		location?: string;
+		managedByAlumni?: boolean;
 	}
 ) => {
 	try {
