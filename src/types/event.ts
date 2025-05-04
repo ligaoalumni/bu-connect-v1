@@ -29,8 +29,13 @@ export type EventPartialRelation = Omit<Event, "interested" | "alumni"> & {
 export type EventWithoutRelations = Omit<Event, "interested" | "alumni">;
 
 export type EventWithPagination = Omit<Event, "interested" | "alumni"> & {
-	interested: number;
-	alumni: number;
+	interested: User[];
+	alumni: User[];
+	_count: {
+		interested: number;
+		alumni: number;
+		comments: number;
+	};
 };
 
 export interface DashboardEvent {

@@ -14,7 +14,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
-import { Job, Post, User } from "@prisma/client";
+import { AnnouncementComment, Job, Post, User } from "@prisma/client";
 
 export * from "./user";
 export * from "./event";
@@ -69,20 +69,19 @@ export interface PaginationResult<T> {
 	hasMore: boolean;
 }
 
+export type Pagination = {
+	limit: number;
+	page: number;
+};
+
 export type TEventPagination = {
 	slug: string;
-	pagination?: {
-		limit: number;
-		page: number;
-	};
+	pagination?: Pagination;
 };
 
 export type PaginationArgs<TStatus, SRole> = {
 	filter?: string | number;
-	pagination?: {
-		limit: number;
-		page: number;
-	};
+	pagination?: Pagination;
 	orderBy?: string;
 	order?: "asc" | "desc";
 	status?: TStatus[];
@@ -158,3 +157,13 @@ export type UpdatePoll = {
 	}[];
 	question: string;
 };
+
+export interface AnnouncementCommentWithUser extends AnnouncementComment {
+	commentBy: {
+		id: number;
+		avatar: string | null;
+		firstName: string;
+		lastName: string;
+		batch: number | null;
+	};
+}
