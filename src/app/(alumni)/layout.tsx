@@ -13,7 +13,6 @@ export default function AlumniLayout({
 			<main className="px-5 scrollbar-hide md:px-3 lg:px-0 container min-h-[calc(100dvh-6rem)] overflow-y-auto mx-auto py-5">
 				{children}
 			</main>
-			<ContactSectionForm />
 			<Footer />
 		</div>
 	);
