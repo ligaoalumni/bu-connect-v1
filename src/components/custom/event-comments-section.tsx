@@ -1,6 +1,6 @@
 "use client";
 
-import { readEventCommentsAction } from "@/actions";
+import { readEventCommentsAction, writeEventCommentAction } from "@/actions";
 import type { EventComment, PaginationResult } from "@/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -14,12 +14,19 @@ import {
 } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import CommentBox from "./comment-box-input";
+import { createBrowserClient } from "@/lib/supabase-client";
+import { formatDistanceToNow } from "date-fns";
 
-interface CommentsSectionProps {
+interface EventCommentsSectionProps {
 	eventSlug: string;
+	id: number;
 }
 
-export function CommentsSection({ eventSlug }: CommentsSectionProps) {
+export function EventCommentsSection({
+	eventSlug,
+	id,
+}: EventCommentsSectionProps) {
+	const [comments, setComments] = useState(0);
 	const [data, setData] = useState<PaginationResult<EventComment>>({
 		count: 0,
 		data: [],
@@ -61,6 +68,7 @@ export function CommentsSection({ eventSlug }: CommentsSectionProps) {
 					page: prev.page + 1,
 				}));
 			} else {
+				setComments(response.count);
 				setData(response);
 			}
 		} catch {
@@ -90,6 +98,69 @@ export function CommentsSection({ eventSlug }: CommentsSectionProps) {
 		handleFetchMore();
 	}, [eventSlug]);
 
+	useEffect(() => {
+		const db = createBrowserClient();
+		const subscription = db
+			.channel("event_comments_channel")
+			.on(
+				"postgres_changes",
+				{
+					event: "INSERT",
+					schema: "public",
+					table: "event_comments",
+					filter: `eventId=eq.${id}`,
+				},
+				async (payload) => {
+					if (payload.new) {
+						const { data } = await db
+							.from("users")
+							.select("*")
+							.eq("id", payload.new.commentById)
+							.single();
+
+						if (data) {
+							setData((prev) => ({
+								...prev,
+								data: [
+									{
+										createdAt: new Date().toISOString(),
+										id: payload.new.id,
+										name: `${data.firstName} ${data.lastName}`,
+										avatar: data.avatar || "",
+										studentId: String(data.studentId || ""),
+										batch: String(data.batch || ""),
+										comment: payload.new.comment,
+									},
+									...prev.data,
+								],
+							}));
+							setComments((prev) => prev + 1);
+						}
+					}
+				}
+			)
+			.subscribe();
+
+		// Cleanup subscription on unmount
+		return () => {
+			subscription.unsubscribe();
+		};
+	}, []);
+
+	async function handleWriteComment(comment: string) {
+		try {
+			await writeEventCommentAction({ comment, slug: eventSlug, eventId: id });
+		} catch {
+			// toast.error("Error writing comment", {
+			// 	description: "Please try again later.",
+			// 	richColors: true,
+			// 	duration: 5000,
+			// });
+		} finally {
+			setLoading({ ...loading, initialFetch: false });
+		}
+	}
+
 	return (
 		<div className="space-y-4 overflow-hidden break-words">
 			<div className="flex items-center justify-between">
@@ -98,7 +169,7 @@ export function CommentsSection({ eventSlug }: CommentsSectionProps) {
 					Comments
 					{!loading.initialFetch && !hasError && (
 						<span className="text-sm text-muted-foreground">
-							({data.count})
+							({comments || data.count})
 						</span>
 					)}
 				</h1>
@@ -151,15 +222,16 @@ export function CommentsSection({ eventSlug }: CommentsSectionProps) {
 				</div>
 			)}
 
+			<div>
+				<CommentBox onSubmit={handleWriteComment} />
+			</div>
+
 			{/* Content State */}
 			{!loading.initialFetch && !hasError && (
 				<>
 					{data.data.length > 0 ? (
 						<div className="space-y-3">
 							<div className="space-y-3 divide-y divide-gray-100">
-								<div>
-									<CommentBox onSubmit={async () => {}} />
-								</div>
 								{data.data.map((comment) => (
 									<div className="pt-3 first:pt-0" key={comment.id}>
 										<CommentCard {...comment} />
@@ -233,7 +305,7 @@ const CommentCard = (comment: EventComment) => {
 					<p className="text-xs text-muted-foreground flex items-center gap-2">
 						<span>{comment.batch}</span>
 						<span className="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
-						<span>{new Date(comment.createdAt).toLocaleDateString()}</span>
+						<span>{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
 					</p>
 				</div>
 			</div>

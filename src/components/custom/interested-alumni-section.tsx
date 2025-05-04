@@ -1,5 +1,5 @@
 "use client";
-import { readAttendantsAction } from "@/actions";
+import { readInterestedAlumniAction } from "@/actions";
 import type { Attendant, PaginationResult } from "@/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -8,13 +8,13 @@ import { Button } from "../ui/button";
 import { RefreshCw, UserX, Users } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 
-interface AttendantsSectionProps {
+interface InterestedAlumniSectionProps {
 	eventSlug: string;
 }
 
-export default function AttendantsSection({
+export function InterestedAlumniSection({
 	eventSlug,
-}: AttendantsSectionProps) {
+}: InterestedAlumniSectionProps) {
 	const [data, setData] = useState<PaginationResult<Attendant>>({
 		count: 0,
 		data: [],
@@ -38,7 +38,7 @@ export default function AttendantsSection({
 			});
 			setHasError(false);
 
-			const response = await readAttendantsAction({
+			const response = await readInterestedAlumniAction({
 				slug: eventSlug,
 				pagination: fetchMore
 					? { ...pagination, page: pagination.page + 1 }
@@ -90,7 +90,7 @@ export default function AttendantsSection({
 			<div className="flex items-center justify-between">
 				<h1 className="font-medium text-lg flex items-center gap-2">
 					<Users className="h-5 w-5" />
-					Attendants
+					Interested
 					{!loading.initialFetch && !hasError && (
 						<span className="text-sm text-muted-foreground">
 							({data.count})
@@ -98,21 +98,21 @@ export default function AttendantsSection({
 					)}
 				</h1>
 				{/* {!loading.initialFetch && (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={handleRefresh}
-						disabled={loading.fetchingMore || loading.initialFetch}>
-						<RefreshCw
-							className={`h-4 w-4 mr-2 ${
-								loading.initialFetch || loading.fetchingMore
-									? "animate-spin"
-									: ""
-							}`}
-						/>
-						Refresh
-					</Button>
-				)} */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleRefresh}
+                        disabled={loading.fetchingMore || loading.initialFetch}>
+                        <RefreshCw
+                            className={`h-4 w-4 mr-2 ${
+                                loading.initialFetch || loading.fetchingMore
+                                    ? "animate-spin"
+                                    : ""
+                            }`}
+                        />
+                        Refresh
+                    </Button>
+                )} */}
 			</div>
 
 			{/* Error State */}
@@ -178,7 +178,7 @@ export default function AttendantsSection({
 										{loading.fetchingMore ? (
 											<RefreshCw className="h-4 w-4 mr-2 animate-spin" />
 										) : (
-											"Load More Attendants"
+											"Load More interested alumni"
 										)}
 									</Button>
 								</div>
