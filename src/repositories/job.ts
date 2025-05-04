@@ -58,6 +58,7 @@ type TJobPagination = PaginationArgs<JobStatus, never> & {
 	userId: number;
 	type?: Job["type"];
 	location?: string;
+	managedByAlumni?: boolean;
 };
 
 export const readJobs = async ({
@@ -67,6 +68,9 @@ export const readJobs = async ({
 	orderBy,
 	status,
 	type,
+	managedByAlumni,
+	userId,
+	isAdmin,
 	location,
 }: TJobPagination): Promise<PaginationResult<Job>> => {
 	let where: Prisma.JobWhereInput = {};
@@ -112,14 +116,14 @@ export const readJobs = async ({
 		};
 	}
 
-	// if (!isAdmin ) {
-	// 	where = {
-	// 		...where,
-	// 		postedBy: {
-	// 			id: userId,
-	// 		},
-	// 	};
-	// }
+	if (managedByAlumni && !isAdmin) {
+		where = {
+			...where,
+			postedBy: {
+				id: userId,
+			},
+		};
+	}
 
 	const jobs = await prisma.job.findMany({
 		where,

@@ -146,6 +146,13 @@ export const readEvents = async ({
 		include: {
 			alumni: true,
 			interested: true,
+			_count: {
+				select: {
+					interested: true,
+					alumni: true,
+					comments: true,
+				},
+			},
 		},
 	});
 
@@ -156,8 +163,13 @@ export const readEvents = async ({
 		hasMore: events.length === pagination?.limit,
 		data: events.map((event) => ({
 			...event,
-			alumni: event.alumni.length,
-			interested: event.interested.length,
+			alumni: event.alumni,
+			interested: event.interested,
+			_count: {
+				interested: event._count.interested,
+				alumni: event._count.alumni,
+				comments: event._count.comments,
+			},
 			coverImg: event.coverImg || "",
 		})),
 	};
@@ -252,9 +264,13 @@ export const readOngoingEvent = async () => {
 		},
 
 		include: {
+			alumni: true,
+			interested: true,
 			_count: {
 				select: {
+					interested: true,
 					alumni: true,
+					comments: true,
 				},
 			},
 		},
@@ -270,29 +286,21 @@ export const readOngoingEvent = async () => {
 			startDate: "asc",
 		},
 		include: {
+			alumni: true,
+			interested: true,
 			_count: {
 				select: {
 					interested: true,
+					alumni: true,
+					comments: true,
 				},
 			},
 		},
 	});
 
 	return {
-		ongoing: event
-			? formatDashboardEvent({
-					...event,
-					alumni: event._count.alumni,
-					interested: 0,
-			  })
-			: null,
-		nextEvent: upcomingEvent
-			? formatDashboardEvent({
-					...upcomingEvent,
-					alumni: 0,
-					interested: upcomingEvent._count.interested,
-			  })
-			: null,
+		ongoing: event ? formatDashboardEvent(event) : null,
+		nextEvent: upcomingEvent ? formatDashboardEvent(upcomingEvent) : null,
 	};
 };
 
@@ -310,7 +318,7 @@ function formatDashboardEvent(event: EventWithPagination): DashboardEvent {
 		slug: event.slug,
 		name: event.name,
 		location: event.location,
-		attendees: event.alumni,
+		attendees: event._count.alumni,
 		time: `${format(event.startTime, "h:mm a")} - ${format(
 			event.endTime,
 			"h:mm a"
@@ -375,11 +383,6 @@ export const readAttendants = async ({
 				skip: pagination ? pagination.limit * pagination.page : undefined,
 				take: pagination ? pagination.limit : undefined,
 				select: {
-					// user: {
-					// 	select: {
-					// 		avatar: true,
-					// 	},
-					// },
 					avatar: true,
 					batch: true,
 					studentId: true,
@@ -475,4 +478,100 @@ export const readEventComments = async ({
 		})),
 		hasMore: comments.length === pagination?.limit,
 	};
+};
+
+export const addInterestEvent = async ({
+	eventId,
+	userId,
+}: {
+	userId: number;
+	eventId: number;
+}) => {
+	return await prisma.event.update({
+		data: {
+			interested: {
+				connect: {
+					id: userId,
+				},
+			},
+		},
+		where: {
+			id: eventId,
+		},
+	});
+};
+
+export const readInterestedAlumni = async ({
+	slug,
+	pagination,
+}: TEventPagination) => {
+	const event = await prisma.event.findUnique({
+		where: {
+			slug,
+		},
+		select: {
+			interested: {
+				skip: pagination ? pagination.limit * pagination.page : undefined,
+				take: pagination ? pagination.limit : undefined,
+				select: {
+					avatar: true,
+					batch: true,
+					studentId: true,
+					course: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+				},
+			},
+			_count: {
+				select: { interested: true },
+			},
+		},
+	});
+
+	if (!event)
+		return {
+			count: 0,
+			data: [],
+			hasMore: false,
+		};
+
+	return {
+		count: event._count.interested || 0,
+		data: event.interested.map((attendant) => ({
+			avatar: attendant.avatar || "",
+			firstName: attendant.firstName,
+			lastName: attendant.lastName,
+			email: attendant.email,
+			course: attendant?.course || "",
+			batch: attendant.batch || 0,
+		})),
+		hasMore: event.interested.length === pagination?.limit,
+	};
+};
+
+export const writeEventComment = async ({
+	comment,
+	eventId,
+	userId,
+}: {
+	comment: string;
+	eventId: number;
+	userId: number;
+}) => {
+	return await prisma.eventComment.create({
+		data: {
+			comment,
+			commentBy: {
+				connect: {
+					id: userId,
+				},
+			},
+			event: {
+				connect: {
+					id: eventId,
+				},
+			},
+		},
+	});
 };

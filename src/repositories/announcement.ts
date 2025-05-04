@@ -1,7 +1,12 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult } from "@/types";
+import {
+	AnnouncementCommentWithUser,
+	Pagination,
+	PaginationArgs,
+	PaginationResult,
+} from "@/types";
 import { Announcement, Prisma } from "@prisma/client";
 import slug from "unique-slug";
 
@@ -87,5 +92,124 @@ export const readAnnouncements = async ({
 export const readAnnouncement = async (slug: string) => {
 	return await prisma.announcement.findUnique({
 		where: { slug },
+
+		include: {
+			_count: {
+				select: {
+					comments: true,
+					likedBy: true,
+				},
+			},
+			likedBy: {
+				select: {
+					id: true,
+				},
+			},
+		},
+	});
+};
+
+export const writeAnnouncementComment = async ({
+	announcementId,
+	comment,
+	userId,
+}: {
+	announcementId: number;
+	comment: string;
+	userId: number;
+}) => {
+	return await prisma.announcementComment.create({
+		data: {
+			announcementId,
+			comment,
+			commentById: userId,
+		},
+	});
+};
+
+export const readAnnouncementComments = async ({
+	pagination,
+	announcementId,
+}: {
+	pagination?: Pagination;
+	announcementId: number;
+}): Promise<PaginationResult<AnnouncementCommentWithUser>> => {
+	const records = await prisma.announcementComment.findMany({
+		where: {
+			announcementId,
+		},
+		include: {
+			commentBy: {
+				select: {
+					id: true,
+					avatar: true,
+					firstName: true,
+					lastName: true,
+					batch: true,
+				},
+			},
+		},
+		skip: pagination ? pagination.limit * pagination.page : undefined,
+		take: pagination ? pagination.limit : undefined,
+		orderBy: {
+			createdAt: "desc",
+		},
+	});
+
+	const count = await prisma.announcementComment.count({
+		where: {
+			announcementId,
+		},
+	});
+
+	return {
+		count,
+		hasMore: records.length === pagination?.limit,
+		data: records.map((record) => ({
+			...record,
+		})),
+	};
+};
+
+export const likeAnnouncement = async ({
+	id,
+	userId,
+}: {
+	id: number;
+	userId: number;
+}) => {
+	return await prisma.announcement.update({
+		where: {
+			id,
+		},
+		data: {
+			likedBy: {
+				connect: {
+					id: userId,
+				},
+			},
+		},
+	});
+};
+
+export const unlikeAnnouncement = async ({
+	id,
+	userId,
+}: {
+	id: number;
+	userId: number;
+}) => {
+	console.log("UNLIKING");
+	return await prisma.announcement.update({
+		where: {
+			id,
+		},
+		data: {
+			likedBy: {
+				disconnect: {
+					id: userId,
+				},
+			},
+		},
 	});
 };
