@@ -23,7 +23,7 @@ export const alumniRoutes = ["/account"];
 
 export const authRoutes = ["/login", "/signup"];
 
-export const publicRoutes = alumniRoutes.concat(["/", "/events"]);
+export const publicRoutes = alumniRoutes.concat(["/"]);
 
 export const eventStatusColorMap: Record<
 	ReturnType<typeof getEventStatus>,
