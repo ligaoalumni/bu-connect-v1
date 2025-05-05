@@ -198,7 +198,7 @@ const Sidebar = React.forwardRef<
 						data-sidebar="sidebar"
 						data-mobile="true"
 						aria-describedby="" //and this
-						className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+						className="w-[--sidebar-width] bg-gradient-to-b from-[#001E54] via-[#005CA1] to-[#00BFFF] dark:from-[#000814] dark:via-[#001d3d] dark:to-[#003566] shadow-none p-0 text-sidebar-foreground [&>button]:hidden"
 						style={
 							{
 								"--sidebar-width": SIDEBAR_WIDTH_MOBILE,

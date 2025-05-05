@@ -2,7 +2,7 @@
 
 import { SignupFormSchema } from "@/lib/definitions";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
-import { createUser, readUser } from "@/models";
+import { createUser, readUser } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -23,7 +23,7 @@ export async function signUpAction(
 		// 2. Prepare data for insertion into database
 		const { email, password, firstName, lastName } = validatedFields.data;
 
-		const isExists = await readUser({ id: email });
+		const isExists = await readUser(-1, email);
 
 		if (isExists) {
 			throw new Error("User already exists");
@@ -38,27 +38,15 @@ export async function signUpAction(
 			password: hashedPassword,
 			firstName,
 			lastName,
+			middleName: validatedFields.data.middleName || "",
 			role: userRole,
+			// TODO: TO FIX
+			birthDate: new Date(),
 		});
 
 		if (!user) {
 			throw new Error("An error occurred while creating your account.");
 		}
-
-		// TODO:
-		// 4. Create user session
-		const { email: userEmail, id, role } = user;
-		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		const session = await encrypt({ id, role, email: userEmail, expiresAt });
-		const cookieStore = await cookies();
-
-		cookieStore.set("session", session, {
-			httpOnly: true,
-			secure: true,
-			expires: expiresAt,
-			sameSite: "lax",
-			path: "/",
-		});
 
 		return user;
 	} catch (error) {
@@ -73,11 +61,30 @@ export async function signUpAction(
 
 export async function loginAction(email: string, password: string) {
 	try {
-		const user = await readUser({ id: email, isAlumni: true });
+		const user = await readUser(-1, email);
 
 		if (!user) {
 			return {
 				error: { message: "User is not registered" },
+			};
+		}
+
+		if (user.status === "DELETED" || user.status === "BLOCKED") {
+			return {
+				error: {
+					message:
+						"Your account has been suspended. Please contact support for assistance.",
+				},
+			};
+		}
+
+		if (user.status === "PENDING" && user.role === "ALUMNI") {
+			return {
+				error: {
+					isPending: true,
+					message:
+						"Your account is pending for admin verification. Please wait for approval.",
+				},
 			};
 		}
 
@@ -92,7 +99,13 @@ export async function loginAction(email: string, password: string) {
 		// Create user session
 		const { email: userEmail, id, role } = user;
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		const session = await encrypt({ id, role, email: userEmail, expiresAt });
+		const session = await encrypt({
+			id,
+			role,
+			email: userEmail,
+			expiresAt,
+			verified: !!user.verifiedAt,
+		});
 		const cookieStore = await cookies();
 
 		cookieStore.set("session", session, {
@@ -126,5 +139,5 @@ export async function getInformation() {
 		return null;
 	}
 
-	return await readUser({ id: session?.email, isAlumni: true });
+	return await readUser(-1, session.email);
 }

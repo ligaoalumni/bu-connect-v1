@@ -3,19 +3,42 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "csv-parse/sync";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { Gender, User } from "@prisma/client";
+import { hash } from "bcryptjs";
+import { getMonth, getYear } from "date-fns";
+import { transporter } from "@/lib/email";
+import { generateEmailHTML } from "@/lib/generate-email";
 
 // Define a schema for validation based on your data model
 // Example: If you're importing users
 const AlumniSchema = z.object({
-	lrn: z.string().length(12),
-	firstName: z.string(),
+	studentId: z.string(),
+	email: z.string().email(),
 	lastName: z.string(),
+	firstName: z.string(),
 	middleName: z.string().optional(),
 	birthDate: z.string(),
-	graduationYear: z.number(),
-	studentId: z.string(),
-	// Add other fields as needed
+	batch: z.number(),
+	course: z.string(),
+	gender: z.string(),
 });
+
+const parseCSV = (item: any) => {
+	const values = Object.values(item);
+
+	// Map the values to the correct fields
+	return {
+		studentId: values[0],
+		email: values[1],
+		firstName: values[2],
+		middleName: values[3],
+		lastName: values[4],
+		birthDate: new Date(String(values[5])).toISOString(),
+		gender: values[6],
+		batch: Number(values[7]), // Convert to number
+		course: values[8],
+	};
+};
 
 export async function POST(request: NextRequest) {
 	try {
@@ -74,38 +97,57 @@ export async function POST(request: NextRequest) {
 
 		// console.log(validatedData);
 
+		const alumni: User[] = [];
+
 		// Start a transaction
 		await prisma.$transaction(async (tx) => {
 			for (const record of records) {
 				try {
 					// Parse the CSV record
+
 					const parsedData = parseCSV(record);
 
 					// Validate the record against your schema
 					const validatedData = AlumniSchema.parse(parsedData);
 
 					// Check if the record already exists (using email as unique identifier)
-					const existingStudent = await tx.student.findUnique({
-						where: { lrn: validatedData.lrn },
+					const existingStudent = await tx.user.findUnique({
+						where: { email: validatedData.email },
 					});
 
 					if (existingStudent) {
 						results.alreadyExists++;
 					} else {
+						const year = getYear(validatedData.birthDate);
+						const month = String(
+							getMonth(validatedData.birthDate) + 1
+						).padStart(2, "0"); // Month is 0-indexed in JavaScript
+						const day = new Date(validatedData.birthDate)
+							.getDate()
+							.toString()
+							.padStart(2, "0"); // Pad day with leading zero if needed
+						const password = `${validatedData.lastName.toLowerCase()}${year}${month}${day}`;
+
+						const hashedPassword = await hash(password, 10);
+
 						// Create new user
-						await tx.student.create({
+						const newAccount = await tx.user.create({
 							data: {
-								lrn: validatedData.lrn,
+								studentId: validatedData.studentId,
+								email: validatedData.email,
 								firstName: validatedData.firstName,
 								lastName: validatedData.lastName,
 								middleName: validatedData.middleName || "",
 								birthDate: validatedData.birthDate,
-								graduationYear: validatedData.graduationYear,
-								studentId: validatedData.studentId,
-								// Add other fields as needed
+								batch: validatedData.batch,
+								gender: validatedData.gender as Gender,
+								course: validatedData.course,
+								password: hashedPassword,
+								role: "ALUMNI",
 							},
 						});
 
+						alumni.push(newAccount);
 						results.processed++;
 					}
 				} catch (error) {
@@ -129,6 +171,38 @@ export async function POST(request: NextRequest) {
 			}
 		});
 
+		const mailOptions = {
+			from: process.env.EMAIL,
+			sender: {
+				name: "LNHS | Alumni Association",
+				address: process.env.EMAIL!,
+			},
+			to: alumni.map((acc) => acc.email).join(", "),
+			subject: "Account Credentials",
+			html: generateEmailHTML(`
+				<p>Your alumni account has been created. Below are your login credentials:</p>
+
+				<div class="credentials">
+					<p><strong>Email:</strong> Your BU email</p>
+					<p><strong>Password:</strong> Your initial password is your last name (all lowercase) followed by your birthdate in the format YYYYMMDD.</p>
+				</div>
+
+				<p><em>For example, if your last name is "Garcia" and your birthdate is January 15, 1990, your password would be "garcia19900115".</em></p>
+
+				<p class="warning">Important: Please change your password immediately after your first login for security reasons.</p>
+
+				<p>To access your account, please click the button below:</p>
+
+				<a href="${process.env.CLIENT_URL}/login" target="_blank" class="button">Login to Your Account</a>
+
+				<p>If you have any questions or need assistance, please contact our support team.</p>
+
+				<p>Thank you,<br>The Team</p>
+			`),
+		};
+
+		await transporter.sendMail(mailOptions);
+
 		return NextResponse.json({
 			message: "CSV processed successfully",
 			processed: results.processed,
@@ -147,24 +221,3 @@ export async function POST(request: NextRequest) {
 		);
 	}
 }
-
-export const parseCSV = (item: any) => {
-	const combinedString = Object.keys(item)[0];
-
-	// Split the string by semicolons
-	const values = item[combinedString].split(";");
-
-	// Map the values to the correct fields
-	return {
-		studentId: values[0],
-		firstName: values[1],
-		middleName: values[2],
-		lastName: values[3],
-		birthDate:
-			values[4] instanceof Date
-				? new Date(values[4]).toISOString()
-				: new Date().toISOString(),
-		graduationYear: parseInt(values[5], 10), // Convert to number
-		lrn: values[6],
-	};
-};

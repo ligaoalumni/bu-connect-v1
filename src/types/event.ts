@@ -1,4 +1,4 @@
-import { AlumniAccount } from "./alumni-account";
+import { User } from "@prisma/client";
 
 export interface Event {
 	readonly id: number;
@@ -14,23 +14,28 @@ export interface Event {
 
 	location: string;
 
-	interested: AlumniAccount[];
-	alumni: AlumniAccount[];
+	interested: User[];
+	alumni: User[];
 
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type EventPartialRelation = Omit<Event, "interested" | "alumni"> & {
-	alumni: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
-	interested: Pick<AlumniAccount, "id" | "firstName" | "lastName" | "email">[];
+	alumni: Pick<User, "id" | "firstName" | "lastName" | "email">[];
+	interested: Pick<User, "id" | "firstName" | "lastName" | "email">[];
 };
 
 export type EventWithoutRelations = Omit<Event, "interested" | "alumni">;
 
 export type EventWithPagination = Omit<Event, "interested" | "alumni"> & {
-	interested: number;
-	alumni: number;
+	interested: User[];
+	alumni: User[];
+	_count: {
+		interested: number;
+		alumni: number;
+		comments: number;
+	};
 };
 
 export interface DashboardEvent {
@@ -44,3 +49,16 @@ export interface DashboardEvent {
 }
 
 export type EventStatus = "Upcoming Event" | "Ongoing Event" | "Past Event";
+
+export interface EventComment {
+	id: number;
+	comment: string;
+
+	// user who commented
+	avatar: string;
+	name: string;
+	studentId: string;
+	batch: string;
+
+	createdAt: string;
+}

@@ -133,7 +133,7 @@ export default function EventsDataTable() {
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								asChild
-								className="  cursor-pointer flex items-center dark:text-white">
+								className="  cursor-pointer flex items-center ">
 								<Link
 									href={`/admin/events/${row.original.slug}/edit`}
 									className="text-blue-500   ">

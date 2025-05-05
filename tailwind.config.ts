@@ -9,6 +9,12 @@ export default {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ["var(--font-geist-sans)", "sans-serif"],
+				mono: ["var(--font-geist-mono)", "monospace"],
+				tangerine: ["var(--font-tangerine)", "cursive"],
+				poppins: ["var(--font-poppins)", "sans-serif"],
+			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
@@ -65,6 +71,33 @@ export default {
 				lg: "var(--radius)",
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)",
+			},
+			keyframes: {
+				"caret-blink": {
+					"0%,70%,100%": { opacity: "1" },
+					"20%,50%": { opacity: "0" },
+				},
+				marquee: {
+					from: {
+						transform: "translateX(0)",
+					},
+					to: {
+						transform: "translateX(calc(-100% - var(--gap)))",
+					},
+				},
+				"marquee-vertical": {
+					from: {
+						transform: "translateY(0)",
+					},
+					to: {
+						transform: "translateY(calc(-100% - var(--gap)))",
+					},
+				},
+			},
+			animation: {
+				"caret-blink": "caret-blink 1.25s ease-out infinite",
+				marquee: "marquee var(--duration) infinite linear",
+				"marquee-vertical": "marquee-vertical var(--duration) linear infinite",
 			},
 		},
 	},

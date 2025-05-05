@@ -1,14 +1,21 @@
 import * as React from "react";
 import {
+	Briefcase,
 	CalendarDays,
 	CalendarPlus,
 	ChevronDown,
 	ChevronUp,
 	Cog,
+	FilePlus,
+	Files,
+	FileStack,
 	GraduationCap,
+	Info,
 	LayoutDashboard,
 	ListOrdered,
+	Plus,
 	QrCode,
+	Tally5,
 	UserCog,
 	UserPlus,
 	UserPlus2,
@@ -51,7 +58,7 @@ const data = {
 			items: [
 				{
 					icon: CalendarPlus,
-					title: "Add New Event",
+					title: "Add",
 					url: "/admin/events/add-new-event",
 				},
 				{
@@ -62,23 +69,69 @@ const data = {
 			],
 		},
 		{
+			icon: Info,
+			title: "Announcements",
+			url: "#",
+			items: [
+				{
+					icon: Plus,
+					title: "Add",
+					url: "/admin/announcements/add",
+				},
+				{
+					icon: ListOrdered,
+					title: "List",
+					url: "/admin/announcements",
+				},
+			],
+		},
+		{
+			icon: Briefcase,
+			title: "Jobs",
+			url: "#",
+			items: [
+				{
+					icon: FilePlus,
+					title: "Add",
+					url: "/admin/jobs/add",
+				},
+				{
+					icon: Files,
+					title: "List",
+					url: "/admin/jobs",
+				},
+			],
+		},
+		{
+			icon: Tally5,
+			title: "Polls",
+			url: "#",
+			items: [
+				{
+					icon: FilePlus,
+					title: "Add",
+					url: "/admin/polls/add",
+				},
+				{
+					icon: FileStack,
+					title: "List",
+					url: "/admin/polls",
+				},
+			],
+		},
+		{
 			icon: GraduationCap,
 			title: "Alumni",
 			url: "#",
 			items: [
 				{
 					icon: UserPlus2,
-					title: "Add Record",
-					url: "/admin/alumni/records/add",
+					title: "Add",
+					url: "/admin/alumni/add",
 				},
 				{
 					icon: Users2,
-					title: "Records",
-					url: "/admin/alumni/records",
-				},
-				{
-					icon: Users,
-					title: "Registered",
+					title: "List",
 					url: "/admin/alumni",
 				},
 			],
@@ -90,7 +143,7 @@ const data = {
 			items: [
 				{
 					icon: UserPlus,
-					title: "Add New	Admin",
+					title: "Add",
 					url: "/admin/list/add-new",
 				},
 				{
@@ -110,12 +163,15 @@ const data = {
 
 export function AppSidebar({
 	...props
-}: React.ComponentProps<typeof Sidebar> & { pathname: string }) {
+}: React.ComponentProps<typeof Sidebar> & {
+	pathname: string;
+	isSuperAdmin?: false;
+}) {
 	return (
-		<Sidebar {...props} className="">
+		<Sidebar {...props}>
 			<SidebarHeader>
 				<SidebarMenu>
-					<SidebarMenuItem>
+					<SidebarMenuItem className="text-white ">
 						<SidebarMenuButton size="lg" asChild>
 							<a href="#">
 								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
@@ -141,7 +197,7 @@ export function AppSidebar({
 										key={item.title}
 										defaultOpen={index === 1}
 										className="group/collapsible">
-										<SidebarMenuItem>
+										<SidebarMenuItem className="text-white">
 											<CollapsibleTrigger asChild>
 												<SidebarMenuButton>
 													<item.icon />
@@ -151,7 +207,7 @@ export function AppSidebar({
 												</SidebarMenuButton>
 											</CollapsibleTrigger>
 											{item.items?.length ? (
-												<CollapsibleContent>
+												<CollapsibleContent className="">
 													<SidebarMenuSub>
 														{item.items.map((item) => (
 															<Link href={item.url} key={item.title}>
@@ -175,7 +231,7 @@ export function AppSidebar({
 								);
 							} else {
 								return (
-									<Link href={item.url} key={index}>
+									<Link href={item.url} key={index} className="text-white">
 										<SidebarMenuItem>
 											<SidebarMenuButton
 												asChild

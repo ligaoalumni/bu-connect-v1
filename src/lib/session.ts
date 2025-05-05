@@ -11,9 +11,17 @@ export async function createSession({
 	id,
 	role,
 	alumniId,
+	verified,
 }: Omit<SessionPayload, "expiresAt">) {
 	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-	const session = await encrypt({ id, role, email, expiresAt, alumniId });
+	const session = await encrypt({
+		id,
+		role,
+		email,
+		expiresAt,
+		alumniId,
+		verified,
+	});
 	const cookieStore = await cookies();
 
 	cookieStore.set("session", session, {

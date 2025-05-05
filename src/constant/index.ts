@@ -1,5 +1,5 @@
 import { getEventStatus } from "@/lib/event";
-import { User } from "@prisma/client";
+import { Job, User } from "@prisma/client";
 export * from "./blur-data";
 
 // 1. Specify protected and public routes
@@ -12,16 +12,18 @@ export const adminRoutes = [
 	"/admin/events/add-new-event",
 	"/admin/settings",
 	"/admin/account-info",
+	"/admin/announcements",
+	"/admin/announcements/add",
 ];
-export const superAdminRoutes = [
-	"/admin/admins",
-	"/admin/admins/add-new-admin",
-];
+
+export const sharedRoutes = ["/verify-account"];
+
+export const superAdminRoutes = ["/admin/list", "/admin/list/add-new"];
 export const alumniRoutes = ["/account"];
 
 export const authRoutes = ["/login", "/signup"];
 
-export const publicRoutes = alumniRoutes.concat(["/", "/events"]);
+export const publicRoutes = alumniRoutes.concat(["/"]);
 
 export const eventStatusColorMap: Record<
 	ReturnType<typeof getEventStatus>,
@@ -41,4 +43,35 @@ export const userStatusColorMap: Record<
 	BLOCKED: "destructive",
 	PENDING: "outline",
 	DELETED: "destructive",
+};
+
+export const seniorHighStrands = [
+	"NA - Not Applicable",
+	"ACADEMIC - ABM",
+	"ACADEMIC - HUMSS",
+	"ACADEMIC - STEM",
+	"ACADEMIC - GAS",
+	"TVL - ICT",
+	"TVL - Home Economics",
+	"TVL - Agri-Fishery Arts",
+	"TVL - Industrial Arts",
+	"SPORTS - Sports Track",
+	"ARTS AND DESIGN - Arts and Design Track",
+];
+
+export const alumniLabel: Record<User["gender"], string> = {
+	FEMALE: "Alumna",
+	MALE: "Alumnus",
+	PREFER_NOT_TO_SAY: "Alumnus",
+};
+
+export const jobTypes = ["FULL_TIME", "PART_TIME", "INTERNSHIP", "FREELANCE"];
+
+export const JobStatusBadgeColorMap: Record<
+	Job["status"],
+	"default" | "destructive" | "secondary" | "outline"
+> = {
+	CLOSED: "destructive",
+	OPEN: "secondary",
+	COMPLETED: "default",
 };

@@ -1,4 +1,4 @@
-import { getDisabledEvents, readEvent } from "@/models";
+import { getDisabledEvents, readEvent } from "@/repositories";
 import { notFound } from "next/navigation";
 import EventForm from "../../_components/event-form";
 

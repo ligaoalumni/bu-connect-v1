@@ -1,18 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins, Tangerine } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "../providers";
+import { Header } from "@/components";
 import { getInformation } from "@/actions";
-import { Footer, MainNav } from "@/components";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
 });
 
+const poppins = Poppins({
+	variable: "--font-poppins",
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+});
+
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
+});
+
+const tangerine = Tangerine({
+	variable: "--font-tangerine",
+	subsets: ["latin"],
+	weight: "400",
+	style: "normal",
 });
 
 export const metadata: Metadata = {
@@ -30,24 +43,14 @@ export default async function RootLayout({
 }>) {
 	const user = await getInformation();
 
-	const userInfo = user?.id
-		? {
-				email: user.email,
-				firstName: user.firstName,
-				id: user.id,
-				lastName: user.lastName,
-				role: user.role,
-		  }
-		: null;
-
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
+				className={`${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}>
 				<Providers>
-					<MainNav user={userInfo} />
+					<Header user={user} />
 					{children}
-					<Footer />
+					{/* <Footer /> */}
 				</Providers>
 			</body>
 		</html>

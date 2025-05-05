@@ -16,6 +16,7 @@ import {
 	Undo,
 } from "lucide-react";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import UnderlineExe from "@tiptap/extension-underline";
 import BulletExe from "@tiptap/extension-bullet-list";
 import ListItemExe from "@tiptap/extension-list-item";
@@ -56,6 +57,14 @@ RichTextEditorProps) => {
 					class: "",
 				},
 			}),
+			Link.configure({
+				openOnClick: false,
+				autolink: true,
+				defaultProtocol: "https",
+				linkOnPaste: true,
+				shouldAutoLink: (url) => url.startsWith("https://"),
+				protocols: ["http", "https"],
+			}),
 			StarterKit.configure({
 				heading: {
 					levels: [1, 2, 3],
@@ -72,8 +81,8 @@ RichTextEditorProps) => {
 		injectCSS: true,
 		content: content
 			? `${generateHTML(JSON.parse(String(content)), [
-					UnderlineExe,
-					BulletExe,
+					// UnderlineExe,
+					// BulletExe,
 					ListItemExe,
 					OrderedListExe,
 					Image.configure({
@@ -82,6 +91,14 @@ RichTextEditorProps) => {
 						HTMLAttributes: {
 							class: "",
 						},
+					}),
+					Link.configure({
+						openOnClick: false,
+						autolink: true,
+						defaultProtocol: "https",
+						linkOnPaste: true,
+						shouldAutoLink: (url) => url.startsWith("https://"),
+						protocols: ["http", "https"],
 					}),
 					StarterKit.configure({
 						heading: {
@@ -280,9 +297,9 @@ RichTextEditorProps) => {
 				name="description"
 				onClick={() => editor?.chain().focus()}
 				style={{}}
-				className={` cursor-text  p-1.5 rounded-md ${
-					editable && " "
-				} min-h-[300px] lg:min-h-[400px] w-full   `}
+				className={` cursor-text  p-1.5 rounded-md ${editable && " "} ${
+					!content && "min-h-[300px] lg:min-h-[400px]"
+				} w-full   `}
 			/>
 		</div>
 	);

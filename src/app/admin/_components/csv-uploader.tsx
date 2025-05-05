@@ -32,12 +32,18 @@ export default function CSVUploader() {
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = e.target.files?.[0];
-		if (selectedFile && selectedFile.type === "text/csv") {
+		if (
+			selectedFile &&
+			(selectedFile.type === "text/csv" ||
+				selectedFile.type === "application/vnd.ms-excel" ||
+				selectedFile.type ===
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+		) {
 			setFile(selectedFile);
 			setResult(null);
 		} else {
-			toast.success("Invalid file", {
-				description: "Please select a valid CSV file.",
+			toast.error("Invalid file", {
+				description: "Please select a valid CSV or Excel file.",
 				richColors: true,
 				position: "top-center",
 			});
@@ -83,6 +89,7 @@ export default function CSVUploader() {
 			}
 
 			const data = await response.json();
+
 			setResult({
 				success: true,
 				message: "Upload successful!",
@@ -142,13 +149,13 @@ export default function CSVUploader() {
 									and drop
 								</p>
 								<p className="text-xs text-gray-500 dark:text-gray-400">
-									CSV files only
+									CSV and Excel files only
 								</p>
 							</div>
 							<input
 								id="csv-file"
 								type="file"
-								accept=".csv"
+								accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 								className="hidden"
 								onChange={handleFileChange}
 								disabled={isUploading}

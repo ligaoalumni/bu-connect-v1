@@ -1,11 +1,19 @@
-import { AspectRatio, BackToTopButton, Button } from "@/components";
+import {
+	About,
+	AspectRatio,
+	BackToTopButton,
+	Button,
+	ContactSectionForm,
+	HeroSection,
+} from "@/components";
+import BatchSection from "@/components/custom/batch-section";
 import { welcomeImageBlurData } from "@/constant";
 import { Metadata } from "next";
 import Image from "next/image";
 
 // either Static metadata
 export const metadata: Metadata = {
-	title: "LNHS Alumni Tracking",
+	title: "BU Connect",
 };
 
 // const FCalendar = lazy(() => import("@/components/custom/full-calendar"));
@@ -14,9 +22,18 @@ export default async function Home() {
 	// const events = await getDisabledEvents();
 
 	return (
+		<>
+			<HeroSection />
+			<About />
+		</>
+	);
+
+	return (
 		<div className=" ">
 			{/* HERO SECTION */}
-			<section className="min-h-screen min-w-screen items-center	bg-center  bg-[url('/images/hero-img.png')] bg-no-repeat bg-cover relative">
+			<section
+				id="#home"
+				className="min-h-screen min-w-screen items-center	bg-center  bg-[url('/images/hero-img.png')] bg-no-repeat bg-cover relative">
 				{/* <header className="z-50 absolute top-5 lef-0 w-full px-5">
 					<div className="container mx-auto flex items-center justify-end h-full">
 						<Button asChild>
@@ -44,11 +61,13 @@ export default async function Home() {
 						</div>
 						<div className="flex gap-4">
 							<Button className="rounded-[5px]">Join Us</Button>
-							<Button
-								className="rounded-[5px] bg-transparent border-white text-white"
-								variant="outline">
-								Learn More
-							</Button>
+							<a href="#welcome">
+								<Button
+									className="rounded-[5px] bg-transparent border-white text-white"
+									variant="outline">
+									Learn More
+								</Button>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -56,7 +75,9 @@ export default async function Home() {
 			{/* HERO SECTION */}
 
 			{/* Welcome Section */}
-			<section className=" min-h-screen min-w-screen flex items-center bg-[#EAF4FD]">
+			<section
+				id="welcome"
+				className=" min-h-screen min-w-screen flex items-center bg-[#EAF4FD]">
 				<div className="container px-5 gap-0 md:gap-5 py-5 mx-auto flex md:flex-row flex-col-reverse items-center">
 					<div className="w-full space-y-5">
 						<h2 className="text-2xl md:text-5xl font-semibold">
@@ -108,11 +129,11 @@ export default async function Home() {
 			</section>
 			{/* Welcome Section */}
 
-			{/* Welcome Section */}
-			<section className=" min-h-screen min-w-screen flex items-center bg-[#D0E5EE]">
-				<div className="container px-5  mx-auto "></div>
-			</section>
-			{/* Welcome Section */}
+			{/* Batch */}
+			<BatchSection />
+
+			{/* Contact Us Section */}
+			<ContactSectionForm />
 
 			<BackToTopButton />
 		</div>

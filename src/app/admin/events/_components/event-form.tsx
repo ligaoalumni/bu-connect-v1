@@ -162,7 +162,7 @@ export default function EventForm({
 							name="coverImg"
 							render={() => (
 								<FormItem className="w-full">
-									<FormLabel>Event Name</FormLabel>
+									<FormLabel>Cover Image</FormLabel>
 									<FormControl>
 										<ImageUpload
 											defaultValue={form.getValues().coverImg}

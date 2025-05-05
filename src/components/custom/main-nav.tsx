@@ -5,44 +5,39 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicRoutes } from "@/constant";
-import { User } from "@/types";
 import { AvatarDropdown } from "./avatar-dropdown";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useAuth } from "@/contexts/auth-context";
+import { ThemeSwitcher } from "./theme-switcher";
+import { User } from "@prisma/client";
 
-// const components: { title: string; href: string; description: string }[] = [
-// 	{
-// 		title: "All Events",
-// 		href: "/all-events",
-// 		description: "Browse all events with comprehensive details.",
-// 	},
-// 	{
-// 		title: "Upcoming Events",
-// 		href: "/upcoming-events",
-// 		description: "Discover upcoming events and their schedules.",
-// 	},
-// 	{
-// 		title: "Past Events",
-// 		href: "/past-events",
-// 		description: "Review past events and notable highlights.",
-// 	},
-// 	// {
-// 	// 	title: "Ongoing Events",
-// 	// 	href: "/ongoing-events",
-// 	// 	description: "See events currently in progress with live updates.",
-// 	// },
-// ];
+const showMainNavRoutes = publicRoutes.concat(["/verify-account", "/"]);
+const routes = ["#home", "#batch", "#about-us", "/events", "#contact-us"];
 
 export function MainNav({
 	user,
 }: {
-	user: Pick<User, "firstName" | "lastName" | "email" | "role" | "id"> | null;
+	user: Pick<
+		User,
+		"firstName" | "lastName" | "email" | "role" | "id" | "avatar"
+	> | null;
 }) {
 	const path = usePathname();
+	const { login, logout } = useAuth();
 
-	return publicRoutes.includes(path) ? (
+	useEffect(() => {
+		if (user) {
+			login(user);
+		} else {
+			logout();
+		}
+	}, [user]);
+
+	return showMainNavRoutes.includes(path) ? (
 		<header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
-			<div className="mx-auto container px-5 md:px-0 flex h-14  items-center">
-				<div className="mr-4  hidden md:flex">
+			<div className="mx-auto container  justify-between  px-5 md:px-0 flex h-14  items-center">
+				<div className="mr-4 hidden md:flex">
 					<Link href="/" className="mr-6 flex items-center space-x-2">
 						<Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
 					</Link>
@@ -76,10 +71,26 @@ export function MainNav({
 						</div>
 					</SheetContent>
 				</Sheet>
-				<div className="flex flex-1 items-center justify-end space-x-2">
+
+				{path !== "/verify-account" && (
+					<div className="hidden md:flex gap-5 items-center ">
+						{routes.map((route) => (
+							<Link
+								key={route}
+								href={route}
+								className="text-sm font-medium leading-none text-white capitalize hover:text-primary transition-colors duration-200 ease-in-out">
+								{route.replace("#", "").replaceAll("-", " ").toLowerCase()}
+							</Link>
+						))}
+					</div>
+				)}
+				<div className="flex  items-center  justify-end space-x-2">
 					{/* <ThemeSwitcher /> */}
 					{user && user.id ? (
-						<AvatarDropdown isAdmin={user.role !== "ALUMNI"} />
+						<>
+							<ThemeSwitcher />
+							<AvatarDropdown />
+						</>
 					) : (
 						<nav className="flex items-center space-x-2">
 							<Button

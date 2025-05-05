@@ -72,12 +72,13 @@ export function NoCurrentEvent({ upcoming = false }: { upcoming?: boolean }) {
 		<Card>
 			<CardContent className="flex flex-col items-center justify-center py-10">
 				<Calendar className="h-10 w-10 text-muted-foreground mb-4" />
-				<p className="text-lg font-medium">
+				<p className="text-lg text-center  font-medium">
 					{upcoming
-						? "Upcoming event details will be updated soon"
+						? `Upcoming event 
+					details will be updated soon`
 						: "No events scheduled for today"}
 				</p>
-				<p className="text-sm text-muted-foreground mt-1">
+				<p className="text-sm text-center text-muted-foreground mt-1">
 					{upcoming
 						? "Keep an eye on the calendar for updates"
 						: "Check the calendar for upcoming events"}

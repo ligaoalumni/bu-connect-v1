@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,15 +12,25 @@ import { Button } from "@/components/ui/button";
 import { Settings, User, Bell, LayoutDashboard } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-context";
 
-export const AvatarDropdown = ({ isAdmin }: { isAdmin?: boolean }) => {
+export const AvatarDropdown = () => {
+	const { user } = useAuth();
+	const isAdmin = user?.role !== "ALUMNI";
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+				<Button variant="ghost" className="relative h-8 w-8     rounded-full">
 					<Avatar className="h-8 w-8">
-						<AvatarImage src="#" alt="@johndoe" />
-						<AvatarFallback>JD</AvatarFallback>
+						{user?.avatar ? (
+							<AvatarImage src={user.avatar} alt="Avatar" />
+						) : (
+							<AvatarFallback>
+								{user?.firstName[0]}
+								{user?.lastName[0]}
+							</AvatarFallback>
+						)}
 					</Avatar>
 				</Button>
 			</DropdownMenuTrigger>
@@ -28,9 +38,11 @@ export const AvatarDropdown = ({ isAdmin }: { isAdmin?: boolean }) => {
 			<DropdownMenuContent className="w-56" align="end" forceMount>
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
-						<p className="text-sm font-medium leading-none">John Doe</p>
+						<p className="text-sm font-medium leading-none">
+							{user?.firstName} {user?.lastName}
+						</p>
 						<p className="text-xs leading-none text-muted-foreground">
-							john@example.com
+							{user?.email}
 						</p>
 					</div>
 				</DropdownMenuLabel>
