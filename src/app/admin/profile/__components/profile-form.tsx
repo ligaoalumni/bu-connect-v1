@@ -87,7 +87,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 		try {
 			await updateProfileActions(user.id, {
 				...values,
-				gender: values as Gender,
+				gender: values.gender as Gender,
 			});
 
 			toast.success("Profile updated successfully", {

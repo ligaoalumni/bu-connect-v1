@@ -21,8 +21,7 @@ export async function signUpAction(
 		}
 
 		// 2. Prepare data for insertion into database
-		const { email, password, firstName, lastName, batchYear, lrn } =
-			validatedFields.data;
+		const { email, password, firstName, lastName } = validatedFields.data;
 
 		const isExists = await readUser(-1, email);
 
@@ -41,10 +40,8 @@ export async function signUpAction(
 			lastName,
 			middleName: validatedFields.data.middleName || "",
 			role: userRole,
-			alumniData: {
-				batchYear: Number(batchYear),
-				lrn,
-			},
+			// TODO: TO FIX
+			birthDate: new Date(),
 		});
 
 		if (!user) {

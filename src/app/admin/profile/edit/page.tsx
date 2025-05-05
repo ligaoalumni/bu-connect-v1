@@ -4,7 +4,7 @@ import { Gender } from "@prisma/client";
 import { formatDate } from "date-fns";
 
 export default async function Page() {
-	const user = await getInformation({ isAlumni: false });
+	const user = await getInformation();
 
 	if (!user) {
 		return <div className="text-center">User not found</div>;
@@ -25,7 +25,7 @@ export default async function Page() {
 
 	return (
 		<div>
-			<ProfileForm id={user.id} {...data} />
+			<ProfileForm {...data} address="" id={user.id} />
 		</div>
 	);
 }

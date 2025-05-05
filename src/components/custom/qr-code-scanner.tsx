@@ -46,7 +46,7 @@ export function QRCodeScanner({ eventId }: QRCodeScannerProps) {
 				// Process the QR code with database
 				const result = await addEventAttendantAction({
 					eventId,
-					lrn: values.lrn,
+					id: values.id,
 				});
 
 				// Update status and show toast
@@ -99,7 +99,7 @@ export function QRCodeScanner({ eventId }: QRCodeScannerProps) {
 			try {
 				const result = await addEventAttendantAction({
 					eventId,
-					lrn: values.lrn,
+					id: values.id,
 				});
 				setProcessingStatus(result);
 				setScanComplete(result.success);

@@ -19,9 +19,9 @@ import {
 } from "@/components";
 import { toast } from "sonner";
 import { AlertTriangle } from "lucide-react";
-import { User } from "@/types";
 import { userStatusColorMap } from "@/constant";
 import { updateUserStatusAction } from "@/actions";
+import { User } from "@prisma/client";
 
 interface UpdateStatusModalProps {
 	user: {

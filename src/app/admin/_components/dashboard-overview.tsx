@@ -31,7 +31,7 @@ export default async function DashboardOverview() {
 	);
 }
 
-const OverviewCard = ({
+export const OverviewCard = ({
 	change,
 	Icon,
 	title,

@@ -4,8 +4,16 @@ import prisma from "@/lib/prisma";
 import { sub } from "date-fns";
 
 export const readDashboardOverview = async () => {
-	const totalAlumniRecords = await prisma.alumni.count();
-	const totalAlumni = await prisma.alumniAccount.count();
+	const totalAlumniRecords = await prisma.user.count({
+		where: {
+			role: "ALUMNI",
+		},
+	});
+	const totalAlumni = await prisma.user.count({
+		where: {
+			role: "ALUMNI",
+		},
+	});
 	const totalEvents = await prisma.event.count();
 
 	const lastMonth = await prisma.event.count({
@@ -16,8 +24,9 @@ export const readDashboardOverview = async () => {
 		},
 	});
 
-	const lastMonthAlumni = await prisma.alumniAccount.count({
+	const lastMonthAlumni = await prisma.user.count({
 		where: {
+			role: "ALUMNI",
 			createdAt: {
 				gte: sub(new Date(), { months: 1 }),
 			},

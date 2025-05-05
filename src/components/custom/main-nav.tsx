@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicRoutes } from "@/constant";
-import { User } from "@/types";
 import { AvatarDropdown } from "./avatar-dropdown";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { ThemeSwitcher } from "./theme-switcher";
+import { User } from "@prisma/client";
 
 const showMainNavRoutes = publicRoutes.concat(["/verify-account", "/"]);
 const routes = ["#home", "#batch", "#about-us", "/events", "#contact-us"];

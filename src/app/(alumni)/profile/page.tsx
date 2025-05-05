@@ -55,6 +55,7 @@ export default async function Page() {
 						}}
 						buttonLabel="My QR Code"
 						data={{
+							id: Number(user?.id),
 							batch: Number(user?.batch),
 							firstName: user?.firstName || "",
 							lastName: user?.lastName || "",

@@ -21,7 +21,7 @@ export function AnnouncementsInfiniteScroll({
 	const [announcements, setAnnouncements] = useState<Announcement[]>(
 		defaultData || []
 	);
-	const [filter, setFilter] = useState<"all">("all");
+	const [filter] = useState<"all">("all");
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(moreData);
 	const [loading, setLoading] = useState(false);
@@ -33,6 +33,7 @@ export function AnnouncementsInfiniteScroll({
 		rootMargin: "0px 0px 500px 0px", // Load more content before user reaches the end
 	});
 
+	// eslint-disable-next-line
 	const loadMorePosts = async (resetData = false, currentFilter = filter) => {
 		if (loading) return;
 
@@ -46,6 +47,7 @@ export function AnnouncementsInfiniteScroll({
 					page: currentPage,
 					limit: 8,
 				},
+
 				// type: jobType === "all" ? undefined : jobType,
 				// status: currentFilter === "all" ? undefined : [currentFilter],
 			});

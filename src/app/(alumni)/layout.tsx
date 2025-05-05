@@ -1,5 +1,5 @@
 import React from "react";
-import { ContactSectionForm, Footer } from "@/components";
+import { Footer } from "@/components";
 import { Header } from "./__components";
 
 export default function AlumniLayout({
