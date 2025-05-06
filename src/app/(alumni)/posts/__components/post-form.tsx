@@ -17,6 +17,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Iconify,
 	Input,
 	Textarea,
 } from "@/components";
@@ -161,7 +162,11 @@ export function PostForm({ post }: PostFormProps) {
 						<FormItem>
 							<FormLabel>Title</FormLabel>
 							<FormControl>
-								<Input placeholder="Enter post title" {...field} />
+								<Input
+									readOnly={form.formState.isSubmitting}
+									placeholder="Enter post title"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -178,6 +183,7 @@ export function PostForm({ post }: PostFormProps) {
 								<Textarea
 									placeholder="Write your post content here..."
 									className="min-h-[200px]"
+									readOnly={form.formState.isSubmitting}
 									{...field}
 								/>
 							</FormControl>
@@ -194,11 +200,48 @@ export function PostForm({ post }: PostFormProps) {
 							<FormLabel>Images</FormLabel>
 							<FormControl>
 								<div className="space-y-4">
-									<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+									<div className="overflow-x-auto flex gap-5">
+										{imageUrls.length < 6 && (
+											<label
+												htmlFor="image-upload"
+												className={cn(
+													"flex aspect-square cursor-pointer flex-col items-center justify-center rounded-md border border-dashed",
+													"hover:bg-muted/50 transition-colors",
+													"full min-w-[200px]  min-h-[200px] md:min-w-[300px] md:min-h-[300px]"
+												)}>
+												{isUploading ? (
+													<>
+														<Iconify
+															icon="line-md:uploading-loop"
+															width="52"
+															height="52"
+															style={{ color: "#E8770B" }}
+														/>
+													</>
+												) : (
+													<>
+														<Upload className="h-6 w-6 mb-2 text-muted-foreground" />
+														<span className="text-sm text-muted-foreground">
+															Upload
+														</span>
+													</>
+												)}
+												<Input
+													readOnly={form.formState.isSubmitting || isUploading}
+													id="image-upload"
+													max={5}
+													type="file"
+													accept="image/*"
+													multiple
+													className="hidden"
+													onChange={handleImageUpload}
+												/>
+											</label>
+										)}
 										{imageUrls.map((url, index) => (
 											<div
 												key={index}
-												className="relative aspect-square rounded-md overflow-hidden border">
+												className="relative aspect-square  min-w-[200px]  min-h-[200px] md:min-w-[300px] md:min-h-[300px]  rounded-md overflow-hidden border">
 												<Image
 													src={url || "/placeholder.svg"}
 													alt={`Image ${index + 1}`}
@@ -215,25 +258,6 @@ export function PostForm({ post }: PostFormProps) {
 												</Button>
 											</div>
 										))}
-										<label
-											htmlFor="image-upload"
-											className={cn(
-												"flex aspect-square cursor-pointer flex-col items-center justify-center rounded-md border border-dashed",
-												"hover:bg-muted/50 transition-colors"
-											)}>
-											<Upload className="h-6 w-6 mb-2 text-muted-foreground" />
-											<span className="text-sm text-muted-foreground">
-												Upload
-											</span>
-											<Input
-												id="image-upload"
-												type="file"
-												accept="image/*"
-												multiple
-												className="hidden"
-												onChange={handleImageUpload}
-											/>
-										</label>
 									</div>
 									<FormDescription>
 										Upload one or more images for your post
@@ -249,7 +273,7 @@ export function PostForm({ post }: PostFormProps) {
 					type="submit"
 					disabled={form.formState.isSubmitting}
 					className="w-full sm:w-auto">
-					{post || isUploading
+					{form.formState.isSubmitting
 						? "Saving..."
 						: post
 						? "Update Post"
