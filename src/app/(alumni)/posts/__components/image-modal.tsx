@@ -78,7 +78,7 @@ export function ImageModal({
 					{/* Main image */}
 					<div className="relative w-full h-full flex items-center justify-center p-8">
 						<Image
-							src={images[currentIndex] || "/placeholder.svg"}
+							src={images[currentIndex] || ""}
 							alt={`Image ${currentIndex + 1}`}
 							fill
 							className="object-contain"
@@ -122,7 +122,7 @@ export function ImageModal({
 										}`}
 										onClick={() => setCurrentIndex(index)}>
 										<Image
-											src={image || "/placeholder.svg"}
+											src={image || ""}
 											alt={`Thumbnail ${index + 1}`}
 											fill
 											className="object-cover"

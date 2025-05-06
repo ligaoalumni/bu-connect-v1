@@ -210,7 +210,7 @@ const AttendantCard = (attendant: Attendant) => {
 		<div className="flex items-center gap-3 group hover:bg-gray-50 p-2 rounded-md transition-colors">
 			<Avatar className="border">
 				<AvatarImage
-					src={attendant.avatar || "/placeholder.svg"}
+					src={attendant.avatar || ""}
 					alt={`${attendant.firstName} ${attendant.lastName}`}
 				/>
 				<AvatarFallback className="bg-primary/10 text-primary">

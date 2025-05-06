@@ -201,7 +201,7 @@ export function PostForm({ post }: PostFormProps) {
 							<FormControl>
 								<div className="space-y-4">
 									<div className="overflow-x-auto flex gap-5">
-										{imageUrls.length < 6 && (
+										{imageUrls.length < 5 && (
 											<label
 												htmlFor="image-upload"
 												className={cn(
@@ -243,7 +243,7 @@ export function PostForm({ post }: PostFormProps) {
 												key={index}
 												className="relative aspect-square  min-w-[200px]  min-h-[200px] md:min-w-[300px] md:min-h-[300px]  rounded-md overflow-hidden border">
 												<Image
-													src={url || "/placeholder.svg"}
+													src={url || ""}
 													alt={`Image ${index + 1}`}
 													fill
 													className="object-cover"
