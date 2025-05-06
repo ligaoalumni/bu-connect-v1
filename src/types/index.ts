@@ -168,3 +168,8 @@ export interface AnnouncementCommentWithUser extends AnnouncementComment {
 		batch: number | null;
 	};
 }
+
+export interface TPost extends Post {
+	likes: number;
+	comments: number;
+}
