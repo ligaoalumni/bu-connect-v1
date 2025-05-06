@@ -1,8 +1,8 @@
 "use server";
 
 import { decrypt } from "@/lib/session";
-import { createPost, updatePost } from "@/repositories";
-import { CreatePost } from "@/types";
+import { createPost, readPost, readPosts, updatePost } from "@/repositories";
+import { CreatePost, PaginationArgs } from "@/types";
 import { cookies } from "next/headers";
 
 export const createPostAction = async (
@@ -40,5 +40,25 @@ export const updatePostAction = async (
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to create event");
+	}
+};
+
+export const readPostsAction = async (
+	data: PaginationArgs<never, never> = {}
+) => {
+	try {
+		return await readPosts(data);
+	} catch (error) {
+		console.log(error);
+		throw new Error("Failed to fetch posts");
+	}
+};
+
+export const readPostAction = async (slug: string) => {
+	try {
+		return await readPost(slug);
+	} catch (error) {
+		console.log(error);
+		throw new Error("Failed to fetch posts");
 	}
 };

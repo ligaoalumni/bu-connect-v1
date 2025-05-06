@@ -10,7 +10,6 @@ export const createPost = async ({
 	images,
 	postedById,
 	title,
-	type,
 }: CreatePost) => {
 	const timestamp = Date.now(); // current timestamp
 	const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
@@ -23,7 +22,6 @@ export const createPost = async ({
 			images,
 			slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
 			title,
-			type,
 			postedBy: {
 				connect: {
 					id: postedById,
@@ -88,6 +86,15 @@ export const readPosts = async ({
 		take: pagination ? pagination.limit : undefined,
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
 		include: {
+			postedBy: {
+				select: {
+					id: true,
+					avatar: true,
+					firstName: true,
+					lastName: true,
+					batch: true,
+				},
+			},
 			_count: {
 				select: {
 					comments: true,
@@ -108,4 +115,29 @@ export const readPosts = async ({
 			comments: post._count.comments,
 		})),
 	};
+};
+
+export const readPost = async (slug: string) => {
+	return await prisma.post.findFirst({
+		where: {
+			slug,
+		},
+		include: {
+			_count: {
+				select: {
+					comments: true,
+					likedBy: true,
+				},
+			},
+			postedBy: {
+				select: {
+					id: true,
+					avatar: true,
+					firstName: true,
+					lastName: true,
+					batch: true,
+				},
+			},
+		},
+	});
 };
