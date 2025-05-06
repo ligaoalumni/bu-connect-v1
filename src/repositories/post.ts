@@ -95,6 +95,11 @@ export const readPosts = async ({
 					batch: true,
 				},
 			},
+			likedBy: {
+				select: {
+					id: true,
+				},
+			},
 			_count: {
 				select: {
 					comments: true,
@@ -111,8 +116,6 @@ export const readPosts = async ({
 		hasMore: posts.length === pagination?.limit,
 		data: posts.map((post) => ({
 			...post,
-			likes: post._count.likedBy,
-			comments: post._count.comments,
 		})),
 	};
 };

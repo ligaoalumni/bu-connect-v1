@@ -170,6 +170,17 @@ export interface AnnouncementCommentWithUser extends AnnouncementComment {
 }
 
 export interface TPost extends Post {
-	likes: number;
-	comments: number;
+	_count: {
+		likedBy: number;
+		comments: number;
+	};
+	likedBy: {
+		id: number;
+	}[];
+	postedBy: {
+		id: number;
+		firstName: string;
+		lastName: string;
+		image?: string;
+	};
 }
