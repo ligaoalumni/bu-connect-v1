@@ -19,11 +19,6 @@ import {
 	FormMessage,
 	Input,
 	Textarea,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
 } from "@/components";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -32,15 +27,6 @@ import {
 	updatePostAction,
 	uploadImageAction,
 } from "@/actions";
-import { Post } from "@prisma/client";
-
-// Define the PostType enum to match your Prisma schema
-export enum PostType {
-	JOB = "JOB",
-	EVENT = "EVENT",
-	NEWS = "NEWS",
-	OTHER = "OTHER",
-}
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -49,9 +35,6 @@ const formSchema = z.object({
 	}),
 	content: z.string().min(1, {
 		message: "Content is required",
-	}),
-	type: z.nativeEnum(PostType, {
-		required_error: "Please select a post type",
 	}),
 	images: z.array(z.string()).optional(),
 });
@@ -67,8 +50,7 @@ interface PostFormProps {
 }
 
 export function PostForm({ post }: PostFormProps) {
-	const [imageFiles, setImageFiles] = useState<File[]>([]);
-	const [imageUrls, setImageUrls] = useState<string[]>([]);
+	const [imageUrls, setImageUrls] = useState<string[]>(post?.images || []);
 	const [isUploading, setIsUploading] = useState(false);
 
 	// Initialize the form with react-hook-form
@@ -77,7 +59,6 @@ export function PostForm({ post }: PostFormProps) {
 		defaultValues: post || {
 			title: "",
 			content: "",
-			type: PostType.JOB,
 			images: [],
 		},
 	});
@@ -130,12 +111,6 @@ export function PostForm({ post }: PostFormProps) {
 		newImageUrls.splice(index, 1);
 		setImageUrls(newImageUrls);
 
-		const newImageFiles = [...imageFiles];
-		if (index < newImageFiles.length) {
-			newImageFiles.splice(index, 1);
-			setImageFiles(newImageFiles);
-		}
-
 		// Update form value
 		form.setValue("images", newImageUrls, {
 			shouldValidate: true,
@@ -149,20 +124,11 @@ export function PostForm({ post }: PostFormProps) {
 		// and replace the object URLs with the actual URLs before submitting
 
 		try {
+			const values = { ...data, images: data.images || [] };
 			if (post) {
-				await updatePostAction(post.slug, {
-					content: data.content,
-					images: data.images || [],
-					title: data.title,
-					type: data.type as Post["type"],
-				});
+				await updatePostAction(post.slug, values);
 			} else {
-				await createPostAction({
-					content: data.content,
-					images: data.images || [],
-					title: data.title,
-					type: data.type as Post["type"],
-				});
+				await createPostAction(values);
 			}
 
 			toast.success(post ? "Post updated!" : "Post created!", {
@@ -197,34 +163,6 @@ export function PostForm({ post }: PostFormProps) {
 							<FormControl>
 								<Input placeholder="Enter post title" {...field} />
 							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="type"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Post Type</FormLabel>
-							<Select onValueChange={field.onChange} defaultValue={field.value}>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Select a post type" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{Object.values(PostType).map((type) => (
-										<SelectItem key={type} value={type}>
-											{type}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormDescription>
-								Select the type of post you want to create
-							</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
