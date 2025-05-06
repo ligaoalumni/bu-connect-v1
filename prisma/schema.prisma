@@ -199,10 +199,10 @@ enum PostType {
 model Post {
   id       Int      @id @default(autoincrement())
   slug      String   @unique
-  title     String   @db.Text
   type  PostType @default(JOB)
+  title     String   @db.Text
   content   String   @db.Text
-  coverImg  String
+  images  String[]
 
   comments PostComment[]
   likedBy User[] @relation("PostLikes") // Many-to-many with alumni
