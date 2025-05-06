@@ -1,8 +1,16 @@
 "use server";
 
 import { decrypt } from "@/lib/session";
-import { createPost, readPost, readPosts, updatePost } from "@/repositories";
-import { CreatePost, PaginationArgs } from "@/types";
+import {
+	createPost,
+	readPost,
+	readPostComments,
+	readPosts,
+	updatePost,
+	writePostComment,
+} from "@/repositories";
+import { CreatePost, Pagination, PaginationArgs } from "@/types";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const createPostAction = async (
@@ -60,5 +68,41 @@ export const readPostAction = async (slug: string) => {
 	} catch (error) {
 		console.log(error);
 		throw new Error("Failed to fetch posts");
+	}
+};
+
+export const readPostCommentsAction = async (args: {
+	pagination?: Pagination;
+	postId: number;
+}) => {
+	try {
+		return await readPostComments(args);
+	} catch (err) {
+		console.log(err);
+		throw new Error("Failed to fetch comments");
+	}
+};
+
+export const writePostCommentAction = async ({
+	comment,
+	postId,
+	slug,
+}: {
+	postId: number;
+	comment: string;
+	slug: string;
+}) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (!session?.id) throw new Error("Unauthorized");
+
+		await writePostComment({ userId: session.id, comment, postId });
+
+		revalidatePath(`/events/${slug}/info`);
+	} catch {
+		throw new Error("Failed to fetch interested alumni");
 	}
 };
