@@ -1,9 +1,10 @@
 "use client";
 import { Button } from "@/components";
 import { useContentData } from "@/contexts/content-context";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { Heart, LinkIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function PostButtons({
 	slug,
@@ -29,6 +30,16 @@ export default function PostButtons({
 		});
 	}, [id]);
 
+	const handleCopy = () => {
+		navigator.clipboard.writeText(window.location.href);
+		toast.info("Link copied to clipboard", {
+			description: "You can now share this link with others.",
+			duration: 5000,
+			position: "bottom-right",
+			richColors: true,
+		});
+	};
+
 	return (
 		<div className="flex items-center justify-between w-full px-6 py-2 border-y">
 			<Button variant="ghost" size="sm" className="flex-1 gap-2">
@@ -43,9 +54,13 @@ export default function PostButtons({
 					Comment
 				</Link>
 			</Button>
-			<Button variant="ghost" size="sm" className="flex-1 gap-2">
-				<Share2 className="h-4 w-4" />
-				Share
+			<Button
+				onClick={handleCopy}
+				variant="ghost"
+				size="sm"
+				className="flex-1 gap-2">
+				<LinkIcon className="h-4 w-4" />
+				Copy Link
 			</Button>
 		</div>
 	);
