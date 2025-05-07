@@ -1,6 +1,11 @@
 "use server";
 
-import { createBatch, readBatch, readBatches } from "@/repositories";
+import {
+	createBatch,
+	readBatch,
+	readBatches,
+	uploadBatchImages,
+} from "@/repositories";
 import { Pagination } from "@/types";
 import { revalidatePath } from "next/cache";
 
@@ -26,6 +31,29 @@ export const createBatchAction = async (batchNumber: number) => {
 		const batch = await createBatch(batchNumber);
 
 		revalidatePath("/admin/batches-gallery");
+
+		return batch;
+	} catch (error) {
+		console.log(error, "qq");
+		throw new Error(
+			error instanceof Error ? error.message : "Failed to create batch"
+		);
+	}
+};
+
+export const uploadBatchImagesAction = async (
+	batchNumber: number,
+	images: string[]
+) => {
+	try {
+		const isBatchExists = await readBatch(batchNumber);
+		if (!isBatchExists) {
+			throw new Error("Batch does not exist");
+		}
+		const batch = await uploadBatchImages({
+			batch: batchNumber,
+			images,
+		});
 
 		return batch;
 	} catch (error) {

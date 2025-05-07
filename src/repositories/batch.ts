@@ -54,3 +54,22 @@ export const readBatch = async (batchNumber: number) => {
 		},
 	});
 };
+
+export const uploadBatchImages = async ({
+	batch,
+	images,
+}: {
+	batch: number;
+	images: string[];
+}) => {
+	return await prisma.batch.update({
+		where: {
+			batch,
+		},
+		data: {
+			images: {
+				push: images,
+			},
+		},
+	});
+};
