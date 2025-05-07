@@ -1,5 +1,6 @@
 import { createBatch, readBatch, readBatches } from "@/repositories";
 import { Pagination } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const readBatchesAction = async ({
 	pagination,
@@ -20,7 +21,11 @@ export const createBatchAction = async (batchNumber: number) => {
 			throw new Error("Batch already exists");
 		}
 
-		return await createBatch(batchNumber);
+		const batch = await createBatch(batchNumber);
+
+		revalidatePath("/admin/batches-gallery");
+
+		return batch;
 	} catch {
 		throw new Error("Failed to create batch");
 	}
