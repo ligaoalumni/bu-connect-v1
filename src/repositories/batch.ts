@@ -37,3 +37,19 @@ export const readBatches = async ({
 		data: batchesWithStudentCounts,
 	};
 };
+
+export const createBatch = async (batchNumber: number) => {
+	return await prisma.batch.create({
+		data: {
+			batch: batchNumber,
+		},
+	});
+};
+
+export const readBatch = async (batchNumber: number) => {
+	return await prisma.batch.findUnique({
+		where: {
+			batch: batchNumber,
+		},
+	});
+};
