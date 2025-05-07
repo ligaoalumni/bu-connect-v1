@@ -77,7 +77,8 @@ export const readUsers = async ({
 	orderBy,
 	pagination,
 	role = ["ADMIN", "ALUMNI"],
-}: PaginationArgs<never, UserRole> = {}): Promise<
+	batch,
+}: PaginationArgs<never, UserRole> & { batch?: number } = {}): Promise<
 	PaginationResult<Omit<User, "password" | "notifications">>
 > => {
 	let where: Prisma.UserWhereInput = {};
@@ -85,6 +86,13 @@ export const readUsers = async ({
 	if (filter && typeof filter === "number") {
 		where = {
 			id: filter,
+		};
+	}
+
+	if (batch) {
+		where = {
+			...where,
+			batch,
 		};
 	}
 
