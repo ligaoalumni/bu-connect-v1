@@ -22,8 +22,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createBatchAction } from "@/actions";
+import { createBatchAction, readUsersAction } from "@/actions";
 import { toast } from "sonner";
+import { Dispatch, SetStateAction } from "react";
+import { Batch } from "@/types";
 
 const formSchema = z.object({
 	batch: z.preprocess(
@@ -50,9 +52,14 @@ const formSchema = z.object({
 interface AddBatchDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	setBatches: Dispatch<SetStateAction<Batch[]>>;
 }
 
-export function AddBatchDialog({ open, onOpenChange }: AddBatchDialogProps) {
+export function AddBatchDialog({
+	open,
+	onOpenChange,
+	setBatches,
+}: AddBatchDialogProps) {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -64,7 +71,16 @@ export function AddBatchDialog({ open, onOpenChange }: AddBatchDialogProps) {
 		// In a real app, you would send this data to your API
 
 		try {
-			await createBatchAction(values.batch);
+			const batch = await createBatchAction(values.batch);
+			const users = await readUsersAction({ batch: batch.batch });
+
+			setBatches((prev) => [
+				...prev,
+				{
+					...batch,
+					students: users.count,
+				},
+			]);
 
 			toast.success("Batch created successfully!", {
 				description: `Batch ${values.batch} has been created.`,
@@ -102,6 +118,7 @@ export function AddBatchDialog({ open, onOpenChange }: AddBatchDialogProps) {
 									<FormLabel>Batch Number</FormLabel>
 									<FormControl>
 										<Input
+											readOnly={form.formState.isSubmitting}
 											type="number"
 											placeholder="Enter batch number"
 											{...field}
@@ -113,7 +130,11 @@ export function AddBatchDialog({ open, onOpenChange }: AddBatchDialogProps) {
 						/>
 
 						<DialogFooter>
-							<Button type="submit">Create Batch</Button>
+							<Button type="submit">
+								{form.formState.isSubmitting
+									? "Creating batch..."
+									: "Create Batch"}
+							</Button>
 						</DialogFooter>
 					</form>
 				</Form>
