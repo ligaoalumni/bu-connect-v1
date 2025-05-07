@@ -1,3 +1,5 @@
+"use server";
+
 import { createBatch, readBatch, readBatches } from "@/repositories";
 import { Pagination } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -26,7 +28,10 @@ export const createBatchAction = async (batchNumber: number) => {
 		revalidatePath("/admin/batches-gallery");
 
 		return batch;
-	} catch {
-		throw new Error("Failed to create batch");
+	} catch (error) {
+		console.log(error, "qq");
+		throw new Error(
+			error instanceof Error ? error.message : "Failed to create batch"
+		);
 	}
 };

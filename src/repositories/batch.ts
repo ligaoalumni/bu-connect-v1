@@ -1,3 +1,4 @@
+"use server";
 import prisma from "@/lib/prisma";
 import { Batch, PaginationArgs, PaginationResult } from "@/types";
 
@@ -47,7 +48,7 @@ export const createBatch = async (batchNumber: number) => {
 };
 
 export const readBatch = async (batchNumber: number) => {
-	return await prisma.batch.findUnique({
+	return await prisma.batch.findFirst({
 		where: {
 			batch: batchNumber,
 		},
