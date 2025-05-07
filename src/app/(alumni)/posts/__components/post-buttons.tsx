@@ -1,9 +1,10 @@
 "use client";
+import { unlikePostAction } from "@/actions";
 import { Button } from "@/components";
 import { useContentData } from "@/contexts/content-context";
 import { Heart, LinkIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function PostButtons({
@@ -20,6 +21,7 @@ export default function PostButtons({
 	id: number;
 }) {
 	const { setData } = useContentData();
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		setData({
@@ -40,9 +42,49 @@ export default function PostButtons({
 		});
 	};
 
+	async function handleLike() {
+		try {
+			setLoading(true);
+
+			if (isLiked) {
+				setData((prev) => ({
+					comments: prev?.comments || 0,
+					id,
+					isLiked: false,
+					likes: (prev?.likes || 0) - 1,
+				}));
+				await unlikePostAction({
+					postId: id,
+					slug,
+				});
+			} else {
+				setData((prev) => ({
+					comments: prev?.comments || 0,
+					id,
+					isLiked: true,
+					likes: (prev?.likes || 0) + 1,
+				}));
+			}
+		} catch {
+			toast.error(isLiked ? "Failed to unlike" : "Failed to like", {
+				description: "Please try again",
+				richColors: true,
+				position: "top-center",
+			});
+		} finally {
+			//
+			setLoading(false);
+		}
+	}
+
 	return (
 		<div className="flex items-center justify-between w-full px-6 py-2 border-y">
-			<Button variant="ghost" size="sm" className="flex-1 gap-2">
+			<Button
+				disabled={loading}
+				variant="ghost"
+				onClick={handleLike}
+				size="sm"
+				className="flex-1 gap-2">
 				<Heart
 					className={`h-5 w-5 ${isLiked && "text-[#E8770B] fill-[#E8770B]"}`}
 				/>
