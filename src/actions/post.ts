@@ -6,6 +6,7 @@ import {
 	readPost,
 	readPostComments,
 	readPosts,
+	unlikePost,
 	updatePost,
 	writePostComment,
 } from "@/repositories";
@@ -101,7 +102,30 @@ export const writePostCommentAction = async ({
 
 		await writePostComment({ userId: session.id, comment, postId });
 
-		revalidatePath(`/events/${slug}/info`);
+		revalidatePath(`/posts/${slug}/info`);
+	} catch {
+		throw new Error("Failed to fetch interested alumni");
+	}
+};
+
+export const unlikePostAction = async ({
+	postId,
+	slug,
+}: {
+	postId: number;
+
+	slug: string;
+}) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (!session?.id) throw new Error("Unauthorized");
+
+		await unlikePost({ userId: session.id, postId });
+
+		revalidatePath(`/posts/${slug}/info`);
 	} catch {
 		throw new Error("Failed to fetch interested alumni");
 	}

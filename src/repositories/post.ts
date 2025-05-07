@@ -234,3 +234,24 @@ export const writePostComment = async ({
 		},
 	});
 };
+
+export const unlikePost = async ({
+	userId,
+	postId,
+}: {
+	userId: number;
+	postId: number;
+}) => {
+	return await prisma.post.update({
+		where: {
+			id: postId,
+		},
+		data: {
+			likedBy: {
+				disconnect: {
+					id: userId,
+				},
+			},
+		},
+	});
+};
