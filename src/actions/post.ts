@@ -3,6 +3,7 @@
 import { decrypt } from "@/lib/session";
 import {
 	createPost,
+	likePost,
 	readPost,
 	readPostComments,
 	readPosts,
@@ -124,6 +125,29 @@ export const unlikePostAction = async ({
 		if (!session?.id) throw new Error("Unauthorized");
 
 		await unlikePost({ userId: session.id, postId });
+
+		revalidatePath(`/posts/${slug}/info`);
+	} catch {
+		throw new Error("Failed to fetch interested alumni");
+	}
+};
+
+export const likePostAction = async ({
+	postId,
+	slug,
+}: {
+	postId: number;
+
+	slug: string;
+}) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (!session?.id) throw new Error("Unauthorized");
+
+		await likePost({ userId: session.id, postId });
 
 		revalidatePath(`/posts/${slug}/info`);
 	} catch {
