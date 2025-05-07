@@ -320,3 +320,13 @@ model Vote {
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime   @default(now())
 }
+
+
+model Batch {
+  id Int @id @default(autoincrement())
+  batch Int @unique
+
+  images String[]
+
+  @@map("batches")
+}
