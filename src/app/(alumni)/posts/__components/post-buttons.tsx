@@ -1,5 +1,5 @@
 "use client";
-import { unlikePostAction } from "@/actions";
+import { likePostAction, unlikePostAction } from "@/actions";
 import { Button } from "@/components";
 import { useContentData } from "@/contexts/content-context";
 import { Heart, LinkIcon, MessageCircle } from "lucide-react";
@@ -20,7 +20,7 @@ export default function PostButtons({
 	isLiked: boolean;
 	id: number;
 }) {
-	const { setData } = useContentData();
+	const { setData, data } = useContentData();
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -64,6 +64,10 @@ export default function PostButtons({
 					isLiked: true,
 					likes: (prev?.likes || 0) + 1,
 				}));
+				await likePostAction({
+					postId: id,
+					slug,
+				});
 			}
 		} catch {
 			toast.error(isLiked ? "Failed to unlike" : "Failed to like", {
@@ -71,6 +75,21 @@ export default function PostButtons({
 				richColors: true,
 				position: "top-center",
 			});
+			if (isLiked) {
+				setData((prev) => ({
+					comments: prev?.comments || 0,
+					id,
+					isLiked: true,
+					likes: (prev?.likes || 0) + 1,
+				}));
+			} else {
+				setData((prev) => ({
+					comments: prev?.comments || 0,
+					id,
+					isLiked: false,
+					likes: (prev?.likes || 0) - 1,
+				}));
+			}
 		} finally {
 			//
 			setLoading(false);
@@ -86,9 +105,11 @@ export default function PostButtons({
 				size="sm"
 				className="flex-1 gap-2">
 				<Heart
-					className={`h-5 w-5 ${isLiked && "text-[#E8770B] fill-[#E8770B]"}`}
+					className={`h-5 w-5 ${
+						data?.isLiked && "text-[#E8770B] fill-[#E8770B]"
+					}`}
 				/>
-				{isLiked ? "Unlike" : "Like"}
+				{data?.isLiked ? "Unlike" : "Like"}
 			</Button>
 			<Button asChild variant="ghost" size="sm" className="flex-1 gap-2">
 				<Link href={`/posts/${slug}/info#comment-section`}>
