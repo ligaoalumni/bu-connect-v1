@@ -14,12 +14,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
+
 import {
 	AnnouncementComment,
 	Job,
 	Post,
 	PostComment,
 	User,
+	Batch as TBatch,
 } from "@prisma/client";
 
 export * from "./user";
@@ -195,4 +197,8 @@ export interface TPostComment extends PostComment {
 	avatar: string;
 	name: string;
 	batch: string;
+}
+
+export interface Batch extends TBatch {
+	students: number;
 }
