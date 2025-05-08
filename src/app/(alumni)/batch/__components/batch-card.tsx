@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components";
+import { Button, Iconify } from "@/components";
 import { welcomeImageBlurData } from "@/constant";
 import { Batch } from "@/types";
 import Image from "next/image";
@@ -26,7 +26,20 @@ export const BatchCard = (batch: Batch) => {
 				</div>
 			</div>
 
-			<ImageGallery batch={batch.batch} images={batch.images} />
+			{batch.images.length > 0 ? (
+				<div className="mt-4">
+					<ImageGallery batch={batch.batch} images={batch.images} />
+				</div>
+			) : (
+				<div className="py-5">
+					<div className="mt-4 flex items-center justify-center">
+						<Iconify icon="carbon:no-image" width="52" height="52" />
+					</div>
+					<p className="text-center text-sm text-stone-400">
+						No images available for this batch.
+					</p>
+				</div>
+			)}
 		</div>
 	);
 };

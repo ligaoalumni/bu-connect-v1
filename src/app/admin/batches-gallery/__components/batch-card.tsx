@@ -79,7 +79,19 @@ export function BatchCard({ batch, setBatches }: BatchCardProps) {
 			</Card>
 
 			<ImageUploadDialog
-				setBatches={setBatches}
+				handleUploadedImages={(imgs) => {
+					setBatches((prev) => {
+						return prev.map((b) => {
+							if (b.batch === batch.batch) {
+								return {
+									...b,
+									images: b.images.concat(imgs),
+								};
+							}
+							return b;
+						});
+					});
+				}}
 				batchNumber={batch.batch}
 				open={uploadDialogOpen}
 				onOpenChange={setUploadDialogOpen}

@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -18,20 +18,19 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { uploadBatchImagesAction, uploadImageAction } from "@/actions";
 import { Iconify } from "@/components";
-import { Batch } from "@/types";
 
 interface ImageUploadDialogProps {
 	batchNumber: number;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	setBatches: Dispatch<SetStateAction<Batch[]>>;
+	handleUploadedImages: (imgs: string[]) => void;
 }
 
 export function ImageUploadDialog({
 	batchNumber,
 	open,
 	onOpenChange,
-	setBatches,
+	handleUploadedImages,
 }: ImageUploadDialogProps) {
 	const [files, setFiles] = useState<File[]>([]);
 	const [isDragging, setIsDragging] = useState(false);
@@ -84,17 +83,8 @@ export function ImageUploadDialog({
 				(img): img is string => typeof img === "string"
 			);
 			const batch = await uploadBatchImagesAction(batchNumber, imgs);
-			setBatches((prev) => {
-				return prev.map((b) => {
-					if (b.batch === batch.batch) {
-						return {
-							...b,
-							images: b.images.concat(batch.images),
-						};
-					}
-					return b;
-				});
-			});
+			handleUploadedImages(batch.images);
+
 			toast.success("Images uploaded successfully!", {
 				description: `Batch ${batch.batch} has been updated with new images.`,
 				richColors: true,
