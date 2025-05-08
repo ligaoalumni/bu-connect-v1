@@ -2,9 +2,9 @@
 // import { InfiniteScroll } from "@/components";
 
 import { readEventsAction } from "@/actions";
-import { EmptyState, Marquee } from "@/components";
+import { EmptyState } from "@/components";
 import EventCard from "@/components/custom/event-card";
-import Image from "next/image";
+import ImagesMarquee from "../__components/images-marquee";
 
 export default async function AllEvents() {
 	const upcomingEvents = await readEventsAction({
@@ -23,32 +23,19 @@ export default async function AllEvents() {
 		},
 	});
 
-	const images = [
-		{ image: "/images/event-img-1.png", alt: "event image 1" },
-		{ image: "/images/event-img-2.png", alt: "event image 2" },
-		{ image: "/images/event-img-3.png", alt: "event image 3" },
-		{ image: "/images/event-img-4.png", alt: "event image 4" },
-	];
-
 	return (
 		<div className="container mx-auto space-y-10 py-10 mt-32 pt-5 px-5 md:px-0">
 			<section>
 				<h1 className="text-2xl md:text-3xl font-bold text-center ">
 					Ligao National High School
 				</h1>
-				<p className="font-tangerine tracking-wider text-3xl md:text-5xl text-center">
-					&quot;The past brought us together,
-					<br /> the future keep us connected&quot;
+				<p className="font-tangerine  tracking-wider text-2xl md:text-3xl  text-center">
+					&quot;The past brought us together, the future keep us <br />
+					connected&quot;
 				</p>
 			</section>
 
-			<section className=" ">
-				<Marquee pauseOnHover className="">
-					{images.map((image, index) => (
-						<EventImageCard key={index} image={image.image} alt={image.alt} />
-					))}
-				</Marquee>
-			</section>
+			<ImagesMarquee />
 
 			<section>
 				<h1 className="text-2xl md:text-3xl font-bold text-center ">
@@ -88,11 +75,3 @@ export default async function AllEvents() {
 		</div>
 	);
 }
-
-const EventImageCard = ({ image, alt }: { image: string; alt?: string }) => {
-	return (
-		<div className="relative mx-5 min-w-[240px] max-w-[240px] md:max-w-[300px] md:min-w-[300px] h-[280px] md:h-[320px] ">
-			<Image alt={alt || image} fill src={image} />
-		</div>
-	);
-};
