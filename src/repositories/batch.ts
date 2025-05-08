@@ -10,7 +10,7 @@ export const readBatches = async ({
 	const batches = await prisma.batch.findMany({
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
-		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+		orderBy: orderBy ? { [orderBy]: order || "asc" } : { batch: "asc" },
 	});
 
 	const batchesWithStudentCounts = await Promise.all(
