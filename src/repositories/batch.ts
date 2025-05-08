@@ -48,11 +48,21 @@ export const createBatch = async (batchNumber: number) => {
 };
 
 export const readBatch = async (batchNumber: number) => {
-	return await prisma.batch.findFirst({
+	const batch = await prisma.batch.findFirst({
 		where: {
 			batch: batchNumber,
 		},
 	});
+
+	if (!batch) return null;
+
+	const students = await prisma.user.count({
+		where: {
+			batch: batchNumber,
+		},
+	});
+
+	return { ...batch, students };
 };
 
 export const uploadBatchImages = async ({

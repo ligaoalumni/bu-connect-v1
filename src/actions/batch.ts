@@ -63,3 +63,14 @@ export const uploadBatchImagesAction = async (
 		);
 	}
 };
+
+export const readBatchAction = async (batchNumber: number) => {
+	try {
+		return await readBatch(batchNumber);
+	} catch (error) {
+		console.log(error, "qq");
+		throw new Error(
+			error instanceof Error ? error.message : "Failed to create batch"
+		);
+	}
+};
