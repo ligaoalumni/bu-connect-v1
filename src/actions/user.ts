@@ -223,3 +223,15 @@ export const readUsersAction = async ({
 		);
 	}
 };
+
+export const readUserAction = async (studentId: number) => {
+	try {
+		return await readUser(studentId);
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while sending OTP to your new email address."
+		);
+	}
+};
