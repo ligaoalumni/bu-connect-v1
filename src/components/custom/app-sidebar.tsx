@@ -10,6 +10,7 @@ import {
 	Files,
 	FileStack,
 	GraduationCap,
+	Images,
 	Info,
 	LayoutDashboard,
 	ListOrdered,
@@ -135,6 +136,11 @@ const data = {
 					url: "/admin/alumni",
 				},
 			],
+		},
+		{
+			icon: Images,
+			title: "Batches Gallery",
+			url: "/admin/batches-gallery",
 		},
 		{
 			icon: UserCog,

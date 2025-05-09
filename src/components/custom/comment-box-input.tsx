@@ -77,7 +77,7 @@ export default function CommentBox({ onSubmit }: CommentBoxProps) {
 				<Avatar className="border mt-1">
 					{user?.avatar ? (
 						<AvatarImage
-							src={user.avatar || "/placeholder.svg"}
+							src={user.avatar || ""}
 							alt={`${user.firstName} profile picture`}
 						/>
 					) : (

@@ -6,3 +6,4 @@ export * from "./dashboard";
 export * from "./post";
 export * from "./job";
 export * from "./poll";
+export * from "./batch";

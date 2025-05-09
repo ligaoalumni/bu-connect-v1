@@ -14,7 +14,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { EventPartialRelation } from "./event";
-import { AnnouncementComment, Job, Post, User } from "@prisma/client";
+
+import {
+	AnnouncementComment,
+	Job,
+	Post,
+	PostComment,
+	User,
+	Batch as TBatch,
+} from "@prisma/client";
 
 export * from "./user";
 export * from "./event";
@@ -167,4 +175,30 @@ export interface AnnouncementCommentWithUser extends AnnouncementComment {
 		lastName: string;
 		batch: number | null;
 	};
+}
+
+export interface TPost extends Post {
+	_count: {
+		likedBy: number;
+		comments: number;
+	};
+	likedBy: {
+		id: number;
+	}[];
+	postedBy: {
+		id: number;
+		firstName: string;
+		lastName: string;
+		image?: string;
+	};
+}
+
+export interface TPostComment extends PostComment {
+	avatar: string;
+	name: string;
+	batch: string;
+}
+
+export interface Batch extends TBatch {
+	students: number;
 }

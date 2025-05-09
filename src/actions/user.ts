@@ -7,6 +7,7 @@ import {
 	changeEmail,
 	createUser,
 	readUser,
+	readUsers,
 	updatePassword,
 	updateProfile,
 	updateUser,
@@ -14,7 +15,12 @@ import {
 } from "@/repositories";
 import { validateToken } from "@/repositories/token";
 import { AdminFormData } from "@/types";
-import type { UpdateProfileData } from "@/types";
+import type {
+	PaginationArgs,
+	PaginationResult,
+	UpdateProfileData,
+	UserRole,
+} from "@/types";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
@@ -181,6 +187,46 @@ export const updatePasswordAction = async ({
 export const changeEmailAction = async ({ email }: { email: string }) => {
 	try {
 		await changeEmail({ email });
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while sending OTP to your new email address."
+		);
+	}
+};
+
+export const readUsersAction = async ({
+	filter,
+	order,
+	orderBy,
+	pagination,
+	role = ["ADMIN", "ALUMNI"],
+	batch,
+}: PaginationArgs<never, UserRole> & { batch?: number } = {}): Promise<
+	PaginationResult<Omit<User, "password" | "notifications">>
+> => {
+	try {
+		return await readUsers({
+			filter,
+			order,
+			orderBy,
+			pagination,
+			role,
+			batch,
+		});
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while sending OTP to your new email address."
+		);
+	}
+};
+
+export const readUserAction = async (studentId: number) => {
+	try {
+		return await readUser(studentId);
 	} catch (err) {
 		throw new Error(
 			err instanceof Error
