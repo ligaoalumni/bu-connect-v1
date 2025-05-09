@@ -15,8 +15,10 @@ export default async function Page({
 	// TODO: apply pagination
 	return (
 		<div>
-			<h1 className="text-2xl font-bold">List of Alumni</h1>
-			<h1 className="text-lg ">Batch {slug}</h1>
+			<div className="my-6">
+				<h1 className="text-2xl font-bold">List of Alumni</h1>
+				<h2 className="text-lg ">Batch {slug}</h2>
+			</div>
 			<div className="flex flex-col gap-4">
 				{users.count > 0 ? (
 					users.data.map((user) => (
@@ -42,7 +44,7 @@ export default async function Page({
 								<p className="text-white">{user.course}</p>
 							</div>
 							<div className="ml-auto flex items-center">
-								<Link href={``}>
+								<Link href={`/batch/${slug}/alumni/${user.id}`}>
 									<ArrowRight className="h-12 w-12 text-white" />
 								</Link>
 							</div>
