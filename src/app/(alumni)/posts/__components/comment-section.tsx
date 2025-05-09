@@ -25,7 +25,7 @@ export default function CommentSection({
 	postId: number;
 	slug: string;
 }) {
-	const [comments, setComments] = useState(0);
+	const [, setComments] = useState(0);
 	const [data, setData] = useState<PaginationResult<TPostComment>>({
 		count: 0,
 		data: [],
