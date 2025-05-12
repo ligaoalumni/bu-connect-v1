@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { User } from "@prisma/client";
 import { ThemeSwitcher } from "./theme-switcher";
 import { AvatarDropdown } from "./avatar-dropdown";
+import { MobileDrawer } from "./mobile-header";
 
 const links = [
 	"/",
@@ -70,6 +71,9 @@ export function Header({
 								<Link href="/login">Login</Link>
 							</Button>
 						)}
+						<div className="md:hidden block">
+							<MobileDrawer />
+						</div>
 					</div>
 				</header>
 				<div className="sticky top-0   z-50 hidden md:flex py-2 bg-[#15497A]  shadow-md mx-auto container justify-center gap-4">
