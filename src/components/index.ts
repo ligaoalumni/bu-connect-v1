@@ -49,6 +49,7 @@ export * from "./custom/date-range-picker";
 export * from "./custom/time-picker";
 export * from "./custom/empty-state";
 export * from "./custom/full-calendar";
+export * from "./custom/mobile-header";
 export * from "./custom/full-calendar-skeleton";
 export * from "./custom/qr-code-scanner";
 export * from "./custom/event-card";

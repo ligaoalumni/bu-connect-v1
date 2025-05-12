@@ -159,7 +159,7 @@ export const Footer = () => {
 	// ) : null;
 };
 
-const Socials = () => (
+export const Socials = () => (
 	<div className="flex gap-5">
 		<Link className="" href="#">
 			<Iconify icon="logos:facebook" width="32" height="32" />
