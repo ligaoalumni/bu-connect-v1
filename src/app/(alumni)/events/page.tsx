@@ -24,7 +24,7 @@ export default async function AllEvents() {
 	});
 
 	return (
-		<div className="container mx-auto space-y-10 py-10 mt-32 pt-5 px-5 md:px-0">
+		<div className="container mx-auto space-y-10 py-10 md:mt-14 pt-5 px-5 md:px-0">
 			<section>
 				<h1 className="text-2xl md:text-3xl font-bold text-center ">
 					Ligao National High School
