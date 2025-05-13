@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import { PaginationArgs, PaginationResult, UpdatePoll } from "@/types";
-import { Poll, Prisma } from "@prisma/client";
+import { PaginationArgs, PaginationResult, Poll, UpdatePoll } from "@/types";
+import { Prisma } from "@prisma/client";
 
 export const createPoll = async ({
 	options,
@@ -67,6 +67,22 @@ export const readPolls = async ({
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+		include: {
+			options: {
+				include: {
+					_count: {
+						select: {
+							votes: true,
+						},
+					},
+					votes: {
+						select: {
+							userId: true,
+						},
+					},
+				},
+			},
+		},
 	});
 
 	const count = await prisma.poll.count({ where });
@@ -74,7 +90,10 @@ export const readPolls = async ({
 	return {
 		count,
 		hasMore: polls.length === pagination?.limit,
-		data: polls,
+		data: polls.map((poll) => ({
+			...poll,
+			votes: poll.options.reduce((acc, option) => acc + option._count.votes, 0),
+		})),
 	};
 };
 
