@@ -8,6 +8,7 @@ import {
 	JobSchema,
 	LoginFormSchema,
 	ProfileSchema,
+	RecruitmentSchema,
 	SignupFormSchema,
 } from "@/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
@@ -137,6 +138,7 @@ export type AdminProfileFormData = z.infer<typeof AdminProfileSchema>;
 export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
 export type AnnouncementFormData = z.infer<typeof AnnouncementSchema>;
 export type JobFormData = z.infer<typeof JobSchema>;
+export type RecruitmentFormData = z.infer<typeof RecruitmentSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;

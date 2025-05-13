@@ -174,3 +174,15 @@ export const JobSchema = z.object({
 		.string()
 		.min(1, { message: "Job description type is required" }),
 });
+
+export const RecruitmentSchema = z.object({
+	title: z.string().min(1, "Title is required"),
+	allowedBatches: z
+		.array(z.number())
+		.min(1, "At least one batch must be selected"),
+	industry: z.string().min(1, "Industry is required"),
+	topics: z.array(z.string()).min(1, "At least one topic is required"),
+	date: z.date({
+		required_error: "Date is required",
+	}),
+});
