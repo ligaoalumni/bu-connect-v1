@@ -271,12 +271,15 @@ enum RecruitmentStatus {
 
 model Recruitment {
   id Int @id @default(autoincrement())
+
+
   title String
-  description String
-  company String
-  location String
-  jobTitle String
-  type JobType @default(FULL_TIME)
+  allowedBatches Int[]
+  industry String
+  topics String
+  date DateTime
+
+
   applicantsId Int[]
   applicants User[] @relation("RecruitmentApplicants")
 
@@ -284,6 +287,7 @@ model Recruitment {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 
   @@map("recruitments")
 
@@ -330,3 +334,17 @@ model Batch {
 
   @@map("batches")
 }
+
+
+
+// model Recruitment {
+//   id Int @id @default(autoincrement())
+
+//   title String
+//   allowedBatches Int[]
+//   industry String
+//   topics String
+//   date DateTime
+
+//   @@map("recruitments")
+// }
