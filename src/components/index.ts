@@ -36,6 +36,7 @@ export * from "./ui/dialog";
 export * from "./ui/slider";
 export * from "./ui/textarea";
 export * from "./ui/radio-group";
+export * from "./ui/command";
 
 // CUSTOM
 export * from "./custom/theme-switcher";
