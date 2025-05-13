@@ -9,6 +9,7 @@ import {
 	FilePlus,
 	Files,
 	FileStack,
+	FileUser,
 	GraduationCap,
 	Images,
 	Info,
@@ -134,6 +135,23 @@ const data = {
 					icon: Users2,
 					title: "List",
 					url: "/admin/alumni",
+				},
+			],
+		},
+		{
+			icon: FileUser,
+			title: "Recruitment",
+			url: "#",
+			items: [
+				{
+					icon: UserPlus2,
+					title: "Add",
+					url: "/admin/recruitment/add",
+				},
+				{
+					icon: Users2,
+					title: "List",
+					url: "/admin/recruitment",
 				},
 			],
 		},
