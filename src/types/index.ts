@@ -207,12 +207,12 @@ export interface Batch extends TBatch {
 	students: number;
 }
 
+export type Applicant = Pick<
+	User,
+	"id" | "firstName" | "lastName" | "email"
+> & {
+	batch: number;
+};
 export interface RecruitmentWithApplicants extends Recruitment {
-	applicants: {
-		id: number;
-		firstName: string;
-		lastName: string;
-		email: string;
-		batch: number;
-	}[];
+	applicants: Applicant[];
 }

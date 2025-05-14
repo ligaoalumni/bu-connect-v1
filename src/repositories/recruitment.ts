@@ -34,7 +34,6 @@ export const readRecruitment = async (id: number) => {
 		where: {
 			id,
 		},
-		include: { applicants: true },
 	});
 };
 

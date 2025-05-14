@@ -75,3 +75,12 @@ export const JobStatusBadgeColorMap: Record<
 	OPEN: "secondary",
 	COMPLETED: "default",
 };
+
+export const INDUSTRIES = [
+	{ id: "tech", name: "Technology" },
+	{ id: "finance", name: "Finance" },
+	{ id: "healthcare", name: "Healthcare" },
+	{ id: "education", name: "Education" },
+	{ id: "manufacturing", name: "Manufacturing" },
+	{ id: "retail", name: "Retail" },
+];

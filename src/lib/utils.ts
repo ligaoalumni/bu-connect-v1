@@ -1,3 +1,4 @@
+import { INDUSTRIES } from "@/constant";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -51,3 +52,9 @@ export function getImageHeightClass(count: number, index: number): string {
 			return "aspect-square";
 	}
 }
+
+// Helper function to get industry name by id
+export const getIndustryName = (industryId: string) => {
+	const industry = INDUSTRIES.find((i) => i.id === industryId);
+	return industry ? industry.name : industryId;
+};
