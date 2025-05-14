@@ -272,8 +272,8 @@ enum RecruitmentStatus {
 model Recruitment {
   id Int @id @default(autoincrement())
 
-
-  title String
+  eventTitle String
+  recruiting String
   allowedBatches Int[]
   industry String
   topics String
