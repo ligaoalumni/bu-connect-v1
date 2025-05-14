@@ -23,6 +23,7 @@ import {
 	PostComment,
 	User,
 	Batch as TBatch,
+	Recruitment,
 } from "@prisma/client";
 
 export * from "./user";
@@ -204,4 +205,14 @@ export interface TPostComment extends PostComment {
 
 export interface Batch extends TBatch {
 	students: number;
+}
+
+export interface RecruitmentWithApplicants extends Recruitment {
+	applicants: {
+		id: number;
+		firstName: string;
+		lastName: string;
+		email: string;
+		batch: number;
+	}[];
 }
