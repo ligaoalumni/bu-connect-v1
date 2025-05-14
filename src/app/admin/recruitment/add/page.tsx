@@ -1,10 +1,17 @@
 import React from "react";
 import { RecruitmentForm } from "../__components/recruitment-form";
+import { readBatchesAction } from "@/actions";
 
-export default function Page() {
+export default async function Page() {
+	const batches = await readBatchesAction();
+
+	const batchesOptions = batches.data.map((batch) => batch.batch);
+
+	console.log(batchesOptions);
+
 	return (
 		<div>
-			<RecruitmentForm />
+			<RecruitmentForm batches={batchesOptions} />
 		</div>
 	);
 }

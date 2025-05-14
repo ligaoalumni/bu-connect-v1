@@ -38,15 +38,11 @@ import { cn } from "@/lib/utils";
 import { RecruitmentSchema } from "@/lib/definitions";
 import { RecruitmentFormData } from "@/types";
 import { Recruitment } from "@prisma/client";
+import { toast } from "sonner";
+import { createRecruitmentAction } from "@/actions";
+import { useRouter } from "next/navigation";
 
 // Sample data for batches and industries
-const BATCHES = [
-	{ id: 1, name: "Batch 2020" },
-	{ id: 2, name: "Batch 2021" },
-	{ id: 3, name: "Batch 2022" },
-	{ id: 4, name: "Batch 2023" },
-	{ id: 5, name: "Batch 2024" },
-];
 
 const INDUSTRIES = [
 	{ id: "tech", name: "Technology" },
@@ -61,11 +57,16 @@ const INDUSTRIES = [
 
 interface RecruitmentFormProps {
 	initialData?: Recruitment;
+	batches: number[];
 }
 
-export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
+export function RecruitmentForm({
+	initialData,
+	batches,
+}: RecruitmentFormProps) {
 	const [topicInput, setTopicInput] = useState("");
 	const [batchesOpen, setBatchesOpen] = useState(false);
+	const router = useRouter();
 
 	// Initialize form with default values or editing data
 	const form = useForm<RecruitmentFormData>({
@@ -88,8 +89,41 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 	});
 
 	// Handle form submission
-	const handleSubmit = (values: RecruitmentFormData) => {
-		// onSubmit(values);
+	const handleSubmit = async (values: RecruitmentFormData) => {
+		try {
+			let id = initialData?.id;
+			if (initialData) {
+				// UPDATE
+			} else {
+				// CREATE
+				const recruitment = await createRecruitmentAction({
+					...values,
+					topics: values.topics.join(","),
+				});
+				id = recruitment.id;
+			}
+			router.push(`/admin/recruitment/${id}/info`);
+
+			toast.success(
+				`Successfully ${initialData ? "updated" : "created"} recruitment`,
+				{
+					description: "The recruitment has been successfully saved.",
+					richColors: true,
+					position: "top-center",
+				}
+			);
+		} catch (error) {
+			console.log(error, "qqq");
+			toast.error(
+				`Failed to ${initialData ? "update" : "create"} recruitment`,
+				{
+					description:
+						error instanceof Error ? error.message : "Please try again later.",
+					richColors: true,
+					position: "top-center",
+				}
+			);
+		}
 	};
 
 	// Handle adding a new topic
@@ -116,12 +150,12 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 	// Toggle "All batches" selection
 	const toggleAllBatches = () => {
 		const currentBatches = form.getValues("allowedBatches");
-		if (currentBatches.length === BATCHES.length) {
+		if (currentBatches.length === batches.length) {
 			form.setValue("allowedBatches", []);
 		} else {
 			form.setValue(
 				"allowedBatches",
-				BATCHES.map((batch) => batch.id)
+				batches.map((batch) => batch)
 			);
 		}
 	};
@@ -141,7 +175,10 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+			<form
+				onReset={() => form.reset()}
+				onSubmit={form.handleSubmit(handleSubmit)}
+				className="space-y-6">
 				<h1 className="text-3xl text-center font-medium ">
 					<span className="capitalize">{form.getValues("title")}</span>{" "}
 					Recruitment
@@ -160,7 +197,11 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 								<FormItem>
 									<FormLabel>Title</FormLabel>
 									<FormControl>
-										<Input placeholder="Enter recruitment title" {...field} />
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter recruitment title"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -177,12 +218,13 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 										<PopoverTrigger asChild>
 											<FormControl>
 												<Button
+													disabled={form.formState.isSubmitting}
 													variant="outline"
 													role="combobox"
 													aria-expanded={batchesOpen}
 													className="w-full justify-between">
 													{field.value.length > 0
-														? field.value.length === BATCHES.length
+														? field.value.length === batches.length
 															? "All batches"
 															: `${field.value.length} batch${
 																	field.value.length > 1 ? "es" : ""
@@ -205,7 +247,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 															<div
 																className={cn(
 																	"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-																	field.value.length === BATCHES.length
+																	field.value.length === batches.length
 																		? "bg-primary text-primary-foreground"
 																		: "opacity-50 [&_svg]:invisible"
 																)}>
@@ -224,16 +266,16 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 															</div>
 															<span>All batches</span>
 														</CommandItem>
-														{BATCHES.map((batch) => (
+														{batches.map((batch) => (
 															<CommandItem
-																key={batch.id}
-																value={batch.name}
-																onSelect={() => toggleBatch(batch.id)}
+																key={batch}
+																value={batch.toString()}
+																onSelect={() => toggleBatch(batch)}
 																className="cursor-pointer">
 																<div
 																	className={cn(
 																		"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-																		field.value.includes(batch.id)
+																		field.value.includes(batch)
 																			? "bg-primary text-primary-foreground"
 																			: "opacity-50 [&_svg]:invisible"
 																	)}>
@@ -250,7 +292,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 																		/>
 																	</svg>
 																</div>
-																<span>{batch.name}</span>
+																<span>Batch {batch}</span>
 															</CommandItem>
 														))}
 													</CommandGroup>
@@ -259,19 +301,19 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 										</PopoverContent>
 									</Popover>
 									<div className="flex flex-wrap gap-2 mt-2">
-										{field.value.length === BATCHES.length ? (
+										{field.value.length === batches.length ? (
 											<Badge variant="secondary" className="px-3 py-1">
 												All batches
 											</Badge>
 										) : (
 											field.value.map((batchId) => {
-												const batch = BATCHES.find((b) => b.id === batchId);
+												const batch = batches.find((b) => b === batchId);
 												return (
 													<Badge
 														key={batchId}
 														variant="secondary"
 														className="px-3 py-1">
-														{batch?.name}
+														Batch {batch}
 														<Button
 															type="button"
 															variant="ghost"
@@ -279,9 +321,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 															className="h-auto p-0 ml-1"
 															onClick={() => toggleBatch(batchId)}>
 															<X className="h-3 w-3" />
-															<span className="sr-only">
-																Remove {batch?.name}
-															</span>
+															<span className="sr-only">Remove {batch}</span>
 														</Button>
 													</Badge>
 												);
@@ -300,6 +340,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 								<FormItem>
 									<FormLabel>Industry</FormLabel>
 									<Select
+										disabled={form.formState.isSubmitting}
 										onValueChange={field.onChange}
 										defaultValue={field.value}>
 										<FormControl>
@@ -329,6 +370,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 									<FormControl>
 										<div className="space-y-2">
 											<Input
+												readOnly={form.formState.isSubmitting}
 												placeholder="Add topics (press Enter)"
 												value={topicInput}
 												onChange={(e) => setTopicInput(e.target.value)}
@@ -375,6 +417,7 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 										<PopoverTrigger asChild>
 											<FormControl>
 												<Button
+													disabled={form.formState.isSubmitting}
 													variant={"outline"}
 													className={cn(
 														"w-full pl-3 text-left font-normal",
@@ -403,10 +446,22 @@ export function RecruitmentForm({ initialData }: RecruitmentFormProps) {
 							)}
 						/>
 					</div>
+					<div className="flex justify-between items-center mt-7 mb-2 ">
+						<Button disabled={form.formState.isSubmitting} type="submit">
+							{form.formState.isSubmitting
+								? "Saving..."
+								: initialData
+								? "Update Recruitment"
+								: "Create Recruitment"}
+						</Button>
+						<Button
+							disabled={form.formState.isSubmitting}
+							variant="destructive"
+							type="reset">
+							Reset
+						</Button>
+					</div>
 				</div>
-				<Button type="submit">
-					{initialData ? "Update Recruitment" : "Create Recruitment"}
-				</Button>
 			</form>
 		</Form>
 	);
