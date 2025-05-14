@@ -39,19 +39,9 @@ import { RecruitmentSchema } from "@/lib/definitions";
 import { RecruitmentFormData } from "@/types";
 import { Recruitment } from "@prisma/client";
 import { toast } from "sonner";
-import { createRecruitmentAction } from "@/actions";
+import { createRecruitmentAction, updateRecruitmentAction } from "@/actions";
 import { useRouter } from "next/navigation";
-
-// Sample data for batches and industries
-
-const INDUSTRIES = [
-	{ id: "tech", name: "Technology" },
-	{ id: "finance", name: "Finance" },
-	{ id: "healthcare", name: "Healthcare" },
-	{ id: "education", name: "Education" },
-	{ id: "manufacturing", name: "Manufacturing" },
-	{ id: "retail", name: "Retail" },
-];
+import { INDUSTRIES } from "@/constant";
 
 // Form schema
 
@@ -94,6 +84,11 @@ export function RecruitmentForm({
 			let id = initialData?.id;
 			if (initialData) {
 				// UPDATE
+				const recruitment = await updateRecruitmentAction(initialData.id, {
+					...values,
+					topics: values.topics.join(","),
+				});
+				id = recruitment.id;
 			} else {
 				// CREATE
 				const recruitment = await createRecruitmentAction({
