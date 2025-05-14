@@ -1,11 +1,14 @@
 "use server";
 import {
 	createRecruitment,
+	readApplicants,
 	readRecruitment,
 	readRecruitmentList,
 	updateRecruitment,
 } from "@/repositories";
 import {
+	Applicant,
+	Pagination,
 	PaginationArgs,
 	PaginationResult,
 	RecruitmentWithApplicants,
@@ -59,5 +62,16 @@ export const readRecruitmentListAction = async (
 	} catch (error) {
 		console.log(error);
 		throw new Error(`Failed to read recruitment list`);
+	}
+};
+export const readApplicantsAction = async (args: {
+	id: number;
+	pagination?: Pagination;
+}): Promise<PaginationResult<Applicant>> => {
+	try {
+		return await readApplicants(args);
+	} catch (error) {
+		console.log(error);
+		throw new Error(`Failed to read applicant list`);
 	}
 };

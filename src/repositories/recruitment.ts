@@ -2,6 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import {
+	Applicant,
+	Pagination,
 	PaginationArgs,
 	PaginationResult,
 	RecruitmentWithApplicants,
@@ -103,6 +105,55 @@ export const readRecruitmentList = async ({
 				...applicant,
 				batch: Number(applicant.batch),
 			})),
+		})),
+	};
+};
+
+export const readApplicants = async ({
+	id,
+	pagination,
+}: {
+	id: number;
+	pagination?: Pagination;
+}): Promise<PaginationResult<Applicant>> => {
+	const where = {
+		id,
+	};
+
+	const recruitment = await prisma.recruitment.findUnique({
+		where,
+		select: {
+			applicants: {
+				take: pagination ? pagination.limit : undefined,
+				skip: pagination ? pagination.limit * pagination.page : undefined,
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+					batch: true,
+				},
+			},
+		},
+	});
+
+	const applicants = await prisma.recruitment.findUnique({
+		where,
+		include: {
+			_count: {
+				select: {
+					applicants: true,
+				},
+			},
+		},
+	});
+
+	return {
+		count: applicants?._count.applicants || 0,
+		hasMore: recruitment?.applicants.length === pagination?.limit,
+		data: (recruitment?.applicants || []).map((applicant) => ({
+			...applicant,
+			batch: Number(applicant.batch),
 		})),
 	};
 };
