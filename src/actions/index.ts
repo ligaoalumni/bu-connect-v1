@@ -11,3 +11,4 @@ export * from "./job";
 export * from "./post";
 export * from "./poll";
 export * from "./batch";
+export * from "./recruitment";

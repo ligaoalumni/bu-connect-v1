@@ -23,3 +23,5 @@ export const createRecruitment = async ({
 		},
 	});
 };
+
+export const readRecruitment = async () => {};
