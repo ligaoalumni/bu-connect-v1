@@ -1,5 +1,5 @@
 "use server";
-import { createRecruitment } from "@/repositories";
+import { createRecruitment, readRecruitment } from "@/repositories";
 import { Recruitment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
@@ -17,5 +17,14 @@ export const createRecruitmentAction = async (
 	} catch (error) {
 		console.log(error);
 		throw new Error(`Failed to create ${data.title} recruitment`);
+	}
+};
+
+export const readRecruitmentAction = async (id: number) => {
+	try {
+		return await readRecruitment(id);
+	} catch (error) {
+		console.log(error);
+		throw new Error(`Failed to read recruitment`);
 	}
 };

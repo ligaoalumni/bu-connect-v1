@@ -24,4 +24,11 @@ export const createRecruitment = async ({
 	});
 };
 
-export const readRecruitment = async () => {};
+export const readRecruitment = async (id: number) => {
+	return await prisma.recruitment.findUnique({
+		where: {
+			id,
+		},
+		include: { applicants: true },
+	});
+};
