@@ -32,3 +32,15 @@ export const readRecruitment = async (id: number) => {
 		include: { applicants: true },
 	});
 };
+
+export const updateRecruitment = async (
+	id: number,
+	data: Partial<Recruitment>
+) => {
+	return await prisma.recruitment.update({
+		where: {
+			id,
+		},
+		data,
+	});
+};
