@@ -2,8 +2,14 @@
 import {
 	createRecruitment,
 	readRecruitment,
+	readRecruitmentList,
 	updateRecruitment,
 } from "@/repositories";
+import {
+	PaginationArgs,
+	PaginationResult,
+	RecruitmentWithApplicants,
+} from "@/types";
 import { Recruitment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
@@ -42,5 +48,16 @@ export const updateRecruitmentAction = async (
 	} catch (error) {
 		console.log(error);
 		throw new Error(`Failed to update recruitment`);
+	}
+};
+
+export const readRecruitmentListAction = async (
+	args: PaginationArgs<Recruitment["status"], never> = {}
+): Promise<PaginationResult<RecruitmentWithApplicants>> => {
+	try {
+		return await readRecruitmentList(args);
+	} catch (error) {
+		console.log(error);
+		throw new Error(`Failed to read recruitment list`);
 	}
 };
