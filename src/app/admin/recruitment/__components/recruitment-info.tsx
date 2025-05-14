@@ -11,6 +11,7 @@ import { getIndustryName } from "@/lib/utils";
 import { Recruitment } from "@prisma/client";
 import { format } from "date-fns";
 import { Briefcase, CalendarIcon, Tag, Users } from "lucide-react";
+import Link from "next/link";
 
 export default function RecruitmentInfo({
 	recruitment,
@@ -30,8 +31,8 @@ export default function RecruitmentInfo({
 							{format(new Date(recruitment.date), "PPP")}
 						</CardDescription>
 					</div>
-					<Button variant="outline" size="sm">
-						Edit
+					<Button asChild variant="outline" size="sm">
+						<Link href={`/admin/recruitment/${recruitment.id}/edit`}>Edit</Link>
 					</Button>
 				</div>
 			</CardHeader>
