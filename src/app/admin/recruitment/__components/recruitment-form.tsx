@@ -66,11 +66,11 @@ export function RecruitmentForm({
 					allowedBatches: initialData.allowedBatches,
 					date: initialData.date,
 					industry: initialData.industry,
-					title: initialData.title,
+					eventTitle: initialData.eventTitle,
 					topics: initialData.topics.split(","),
 			  }
 			: {
-					title: "",
+					eventTitle: "",
 					allowedBatches: [],
 					industry: "",
 					topics: [],
@@ -175,19 +175,19 @@ export function RecruitmentForm({
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className="space-y-6">
 				<h1 className="text-3xl text-center font-medium ">
-					<span className="capitalize">{form.getValues("title")}</span>{" "}
+					<span className="capitalize">{form.getValues("recruiting")}</span>{" "}
 					Recruitment
 				</h1>
 
 				<div className="shadow-md rounded-lg p-5 bg-white">
 					<h2 className="text-2xl font-semibold mb-4">
-						<span className="capitalize">{form.getValues("title")}</span>{" "}
+						<span className="capitalize">{form.getValues("recruiting")}</span>{" "}
 						Details
 					</h2>
 					<div className="space-y-5">
 						<FormField
 							control={form.control}
-							name="title"
+							name="eventTitle"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Title</FormLabel>
@@ -195,6 +195,24 @@ export function RecruitmentForm({
 										<Input
 											readOnly={form.formState.isSubmitting}
 											placeholder="Enter recruitment title"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="recruiting"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Recruiting</FormLabel>
+									<FormControl>
+										<Input
+											readOnly={form.formState.isSubmitting}
+											placeholder="Enter what to recruit"
 											{...field}
 										/>
 									</FormControl>
