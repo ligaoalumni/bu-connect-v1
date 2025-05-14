@@ -122,7 +122,13 @@ export const readApplicants = async ({
 
 	const recruitment = await prisma.recruitment.findUnique({
 		where,
-		select: {
+
+		include: {
+			_count: {
+				select: {
+					applicants: true,
+				},
+			},
 			applicants: {
 				take: pagination ? pagination.limit : undefined,
 				skip: pagination ? pagination.limit * pagination.page : undefined,
@@ -137,19 +143,8 @@ export const readApplicants = async ({
 		},
 	});
 
-	const applicants = await prisma.recruitment.findUnique({
-		where,
-		include: {
-			_count: {
-				select: {
-					applicants: true,
-				},
-			},
-		},
-	});
-
 	return {
-		count: applicants?._count.applicants || 0,
+		count: recruitment?._count.applicants || 0,
 		hasMore: recruitment?.applicants.length === pagination?.limit,
 		data: (recruitment?.applicants || []).map((applicant) => ({
 			...applicant,
