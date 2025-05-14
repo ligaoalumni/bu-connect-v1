@@ -14,17 +14,24 @@ export const createRecruitment = async ({
 	allowedBatches,
 	date,
 	industry,
-	title,
+	eventTitle,
+	recruiting,
 	topics,
 }: Pick<
 	Recruitment,
-	"date" | "industry" | "allowedBatches" | "title" | "topics"
+	| "date"
+	| "industry"
+	| "allowedBatches"
+	| "eventTitle"
+	| "topics"
+	| "recruiting"
 >) => {
 	return await prisma.recruitment.create({
 		data: {
 			date,
 			industry,
-			title,
+			eventTitle,
+			recruiting,
 			topics,
 			allowedBatches,
 		},
@@ -69,10 +76,20 @@ export const readRecruitmentList = async ({
 
 	if (filter && typeof filter === "string") {
 		where = {
-			title: {
-				contains: filter,
-				mode: "insensitive",
-			},
+			OR: [
+				{
+					eventTitle: {
+						contains: filter,
+						mode: "insensitive",
+					},
+				},
+				{
+					recruiting: {
+						contains: filter,
+						mode: "insensitive",
+					},
+				},
+			],
 		};
 	}
 
