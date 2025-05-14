@@ -39,11 +39,32 @@ export const createRecruitment = async ({
 };
 
 export const readRecruitment = async (id: number) => {
-	return await prisma.recruitment.findUnique({
+	const recruitment = await prisma.recruitment.findUnique({
 		where: {
 			id,
 		},
+		include: {
+			applicants: {
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+					batch: true,
+				},
+			},
+		},
 	});
+
+	if (!recruitment) return null;
+
+	return {
+		...recruitment,
+		applicants: recruitment.applicants.map((applicant) => ({
+			...applicant,
+			batch: Number(applicant.batch),
+		})),
+	};
 };
 
 export const updateRecruitment = async (

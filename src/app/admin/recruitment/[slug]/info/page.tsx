@@ -24,7 +24,11 @@ export default async function Page({
 
 	return (
 		<div>
-			<RecruitmentInfo recruitment={recruitment} batches={batchesOptions} />
+			<RecruitmentInfo
+				recruitment={recruitment}
+				isAdmin
+				batches={batchesOptions}
+			/>
 			<Suspense fallback={<ApplicantsLoading />}>
 				<ApplicantsList recruitmentId={recruitment.id} />
 			</Suspense>
