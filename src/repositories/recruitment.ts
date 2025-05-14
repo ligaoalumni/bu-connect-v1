@@ -169,3 +169,18 @@ export const readApplicants = async ({
 		})),
 	};
 };
+
+export const applyToRecruitment = async (id: number, applicantId: number) => {
+	return await prisma.recruitment.update({
+		where: {
+			id,
+		},
+		data: {
+			applicants: {
+				connect: {
+					id: applicantId,
+				},
+			},
+		},
+	});
+};
