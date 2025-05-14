@@ -176,7 +176,8 @@ export const JobSchema = z.object({
 });
 
 export const RecruitmentSchema = z.object({
-	title: z.string().min(1, "Title is required"),
+	eventTitle: z.string().min(1, "Title is required"),
+	recruiting: z.string().min(1, "Recruiting is required"),
 	allowedBatches: z
 		.array(z.number())
 		.min(1, "At least one batch must be selected"),
