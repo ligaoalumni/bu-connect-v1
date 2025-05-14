@@ -15,6 +15,7 @@ import { Info, MoreHorizontal, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { RecruitmentWithApplicants } from "@/types";
 import { readRecruitmentListAction } from "@/actions";
+import Link from "next/link";
 export default function RecruitmentDataTable() {
 	const [data, setData] = useState<RecruitmentWithApplicants[]>([]);
 	const [total, setTotal] = useState(0);
@@ -59,7 +60,7 @@ export default function RecruitmentDataTable() {
 		{
 			id: "actions",
 			enableHiding: false,
-			cell: () => {
+			cell: ({ row }) => {
 				return (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
@@ -70,13 +71,19 @@ export default function RecruitmentDataTable() {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuItem className="cursor-pointer">
-								<Info />
-								View Details
+							<DropdownMenuItem asChild className="cursor-pointer">
+								<Link href={`/admin/recruitment/${row.original.id}/info`}>
+									<Info />
+									View Details
+								</Link>
 							</DropdownMenuItem>
-							<DropdownMenuItem className="  cursor-pointer flex items-center ">
-								<Pencil />
-								Update Status
+							<DropdownMenuItem
+								asChild
+								className="  cursor-pointer flex items-center ">
+								<Link href={`/admin/recruitment/${row.original.id}/edit`}>
+									<Pencil />
+									Edit Details
+								</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
