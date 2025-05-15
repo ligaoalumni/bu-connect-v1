@@ -257,9 +257,11 @@ export const writePostComment = async ({
 		.map((comment) => comment.commentById)
 		.filter((id) => id != userId);
 
+	const uniqueIds = [...new Set(ids)];
+
 	const link = `/post/${post.slug}/info#${newComment.id}`;
 
-	const notifications = ids.map((id) => ({
+	const notifications = uniqueIds.map((id) => ({
 		userId: id,
 		message: getNotificationMessage("POST_COMMENT"),
 		link,

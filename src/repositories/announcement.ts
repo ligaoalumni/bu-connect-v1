@@ -163,9 +163,11 @@ export const writeAnnouncementComment = async ({
 		.map((comment) => comment.commentById)
 		.filter((ids) => ids !== userId);
 
+	const uniqueIds = [...new Set(ids)];
+
 	const link = `/announcements/${announcementId}#comment-${newComment.id}`;
 
-	const notifications = ids.map((id) => ({
+	const notifications = uniqueIds.map((id) => ({
 		userId: id,
 		message: getNotificationMessage("ANNOUNCEMENT_COMMENT"),
 		link,

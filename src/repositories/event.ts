@@ -611,9 +611,11 @@ export const writeEventComment = async ({
 		.map((comment) => comment.commentById)
 		.filter((id) => id !== userId);
 
+	const uniqueIds = [...new Set(ids)];
+
 	const link = `/events/${event.slug}/info#comment-${newCommentData.id}`;
 
-	const notifications = ids.map((id) => ({
+	const notifications = uniqueIds.map((id) => ({
 		userId: id,
 		message: getNotificationMessage("EVENT_COMMENT"),
 		link,
