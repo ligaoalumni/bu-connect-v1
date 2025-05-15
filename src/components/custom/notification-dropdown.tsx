@@ -9,10 +9,13 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, getNotificationTitle } from "@/lib/utils";
 import { createBrowserClient } from "@/lib/supabase-client";
 import { useAuth } from "@/contexts/auth-context";
 import { Notification } from "@prisma/client";
+import { readNotificationsAction } from "@/actions";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface NotificationDropdownProps {
 	className?: string;
@@ -60,6 +63,20 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 		};
 	}, [user?.id]);
 
+	useEffect(() => {
+		async function fetchNotifications() {
+			try {
+				const notifications = await readNotificationsAction();
+				setNotifications(notifications);
+			} catch (error) {
+				setNotifications([]);
+				console.error("Error fetching notifications:", error);
+			}
+		}
+
+		fetchNotifications();
+	}, [user?.id]);
+
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
@@ -92,7 +109,8 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 					{notifications.length > 0 ? (
 						<div>
 							{notifications.map((notification) => (
-								<div
+								<Link
+									href={notification.link || "#"}
 									key={notification.id}
 									className={cn(
 										"flex flex-col gap-1 p-4 border-b last:border-0 cursor-pointer transition-colors",
@@ -104,16 +122,21 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 									}>
 									<div className="flex items-center justify-between">
 										<h4 className="font-medium text-sm">
-											{notification.message}
+											{getNotificationTitle(notification.type)}
 										</h4>
-										<span className="text-xs text-muted-foreground">
+										{/* <span className="text-xs text-muted-foreground">
 											{notification.createdAt.toString()}
-										</span>
+										</span> */}
 									</div>
 									<p className="text-sm text-muted-foreground">
 										{notification.message}
 									</p>
-								</div>
+									<span className="text-xs text-muted-foreground">
+										{formatDistanceToNow(notification.createdAt, {
+											addSuffix: true,
+										})}
+									</span>
+								</Link>
 							))}
 						</div>
 					) : (
