@@ -57,6 +57,7 @@ export * from "./custom/qr-code-scanner";
 export * from "./custom/event-card";
 export * from "./custom/infinite-scroll";
 export * from "./custom/back-to-top-btn";
+export * from "./custom/notification-dropdown";
 export * from "./custom/footer";
 export * from "./custom/qr-code-viewer";
 export * from "./custom/event-comments-section";
