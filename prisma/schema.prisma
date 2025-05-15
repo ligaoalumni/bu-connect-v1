@@ -114,11 +114,34 @@ model Event {
   @@map("events")
 }
 
+
+enum NotificationType {
+  EVENT
+  ANNOUNCEMENT
+  LIKE_ANNOUNCEMENT
+  ANNOUNCEMENT_COMMENT
+  POST
+  LIKE_POST
+  POST_COMMENT
+  NEW_JOB
+  JOB
+  NEW_RECRUITMENT
+  RECRUITMENT
+  NEW_POLL
+  POLL
+  RECRUITMENT_APPLICATION
+
+}
+
 // Notification model: Stores notifications for alumni.
 model Notification {
   id         Int      @id @default(autoincrement())
+
   message    String
   readStatus Boolean  @default(false) // Whether the notification has been read
+  type       NotificationType 
+  link      String? 
+  
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
