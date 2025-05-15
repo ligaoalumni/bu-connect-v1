@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { getNotificationMessage } from "@/lib/utils";
 import {
 	CreatePost,
 	Pagination,
@@ -9,8 +10,9 @@ import {
 	TPost,
 	TPostComment,
 } from "@/types";
-import { Prisma } from "@prisma/client";
+import { NotificationType, Prisma } from "@prisma/client";
 import uniqueSlug from "unique-slug";
+import { createNotifications } from "./notifications";
 
 export const createPost = async ({
 	content,
@@ -218,7 +220,22 @@ export const writePostComment = async ({
 	comment: string;
 	userId: number;
 }) => {
-	return await prisma.postComment.create({
+	const post = await prisma.post.findUnique({
+		where: {
+			id: postId,
+		},
+		include: {
+			comments: {
+				select: {
+					commentById: true,
+				},
+			},
+		},
+	});
+
+	if (!post) throw new Error("Post not found");
+
+	const newComment = await prisma.postComment.create({
 		data: {
 			comment,
 			postedBy: {
@@ -233,6 +250,25 @@ export const writePostComment = async ({
 			},
 		},
 	});
+
+	if (!newComment) throw new Error("Failed to create comment");
+
+	const ids = post.comments
+		.map((comment) => comment.commentById)
+		.filter((id) => id != userId);
+
+	const link = `/post/${post.slug}/info#${newComment.id}`;
+
+	const notifications = ids.map((id) => ({
+		userId: id,
+		message: getNotificationMessage("POST_COMMENT"),
+		link,
+		type: "POST_COMMENT" as NotificationType,
+	}));
+
+	await createNotifications(notifications);
+
+	return newComment;
 };
 
 export const unlikePost = async ({
@@ -263,7 +299,7 @@ export const likePost = async ({
 	userId: number;
 	postId: number;
 }) => {
-	return await prisma.post.update({
+	const likedPost = await prisma.post.update({
 		where: {
 			id: postId,
 		},
@@ -275,4 +311,19 @@ export const likePost = async ({
 			},
 		},
 	});
+
+	if (!likedPost) throw new Error("Failed to like post");
+
+	const link = `/post/${likedPost.slug}/info`;
+
+	await createNotifications([
+		{
+			userId: likedPost.postedById,
+			message: getNotificationMessage("LIKE_POST"),
+			link,
+			type: "LIKE_POST" as NotificationType,
+		},
+	]);
+
+	return likedPost;
 };
