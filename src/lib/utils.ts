@@ -64,11 +64,11 @@ export function getNotificationMessage(type: NotificationType): string {
 	switch (type) {
 		case "EVENT":
 			return "You have a new event invitation!";
+		case "EVENT_COMMENT":
+			return "Someone commented on an event.";
 		case "ANNOUNCEMENT":
 			return "A new announcement is available. Check it out!";
-		case "ANNOUNCEMENT_COMMENT":
-			return "Someone commented on an announcement.";
-		case "LIKE_COMMENT":
+		case "LIKE_ANNOUNCEMENT":
 			return "Your comment received a new like!";
 		case "POST":
 			return "A new post has been shared.";

@@ -157,7 +157,7 @@ export const writeAnnouncementComment = async ({
 		throw new Error("Failed to create comment");
 	}
 
-	const { announcement, ...newCommentData } = newComment;
+	const { announcement } = newComment;
 
 	const ids = announcement.comments
 		.map((comment) => comment.commentById)
@@ -172,11 +172,7 @@ export const writeAnnouncementComment = async ({
 		type: "ANNOUNCEMENT_COMMENT" as NotificationType,
 	}));
 
-	console.log(notifications);
-
 	await createNotifications(notifications);
-
-	return newCommentData;
 };
 
 export const readAnnouncementComments = async ({
