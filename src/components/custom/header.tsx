@@ -64,7 +64,7 @@ export function Header({
 						<ThemeSwitcher />
 						{user ? (
 							<>
-								<NotificationDropdown notifications={[]} />
+								<NotificationDropdown />
 								<AvatarDropdown />
 							</>
 						) : (

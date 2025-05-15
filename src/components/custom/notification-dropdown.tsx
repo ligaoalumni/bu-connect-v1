@@ -15,36 +15,19 @@ import { useAuth } from "@/contexts/auth-context";
 import { Notification } from "@prisma/client";
 
 interface NotificationDropdownProps {
-	notifications: Notification[];
-	onMarkAsRead?: (id: string) => void;
-	onMarkAllAsRead?: () => void;
 	className?: string;
 }
 
-export function NotificationDropdown({
-	notifications: d,
-	onMarkAsRead,
-	onMarkAllAsRead,
-	className,
-}: NotificationDropdownProps) {
+export function NotificationDropdown({ className }: NotificationDropdownProps) {
 	const [open, setOpen] = useState(false);
 	const { user, setNotifications, notifications } = useAuth();
 	const unreadCount = notifications.filter(
 		(notification) => !notification.readStatus
 	).length;
 
-	const handleNotificationClick = (id: string) => {
-		if (onMarkAsRead) {
-			onMarkAsRead(id);
-		}
-	};
+	const handleNotificationClick = (id: string) => {};
 
-	const handleMarkAllAsRead = () => {
-		if (onMarkAllAsRead) {
-			onMarkAllAsRead();
-			setOpen(false);
-		}
-	};
+	const handleMarkAllAsRead = () => {};
 
 	useEffect(() => {
 		const db = createBrowserClient();

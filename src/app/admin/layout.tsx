@@ -87,7 +87,7 @@ export default function AdminLayout({
 								</div>
 								<div className="flex items-center gap-2">
 									<ThemeSwitcher />
-									<NotificationDropdown notifications={[]} />
+									<NotificationDropdown />
 									<AvatarDropdown />
 								</div>
 							</div>
