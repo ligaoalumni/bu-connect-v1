@@ -197,7 +197,7 @@ export function AppSidebar({
 				<SidebarMenu>
 					<SidebarMenuItem className="text-white ">
 						<SidebarMenuButton size="lg" asChild>
-							<a href="#">
+							<Link href="/">
 								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
 									<QrCode className="size-4" />
 								</div>
@@ -205,7 +205,7 @@ export function AppSidebar({
 									<span className="font-semibold">Alumni Tracking System</span>
 									<span className="">Ligao National High School</span>
 								</div>
-							</a>
+							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
