@@ -338,3 +338,22 @@ export const updateEmail = async (id: number, email: string) => {
 		data: { email },
 	});
 };
+
+export const getAdmins = async () => {
+	return await prisma.user.findMany({
+		where: {
+			role: {
+				not: "ALUMNI",
+			},
+			status: "ACTIVE",
+		},
+	});
+};
+
+export const getUsersId = async () => {
+	const users = await prisma.user.findMany({
+		where: { role: "ALUMNI", status: "ACTIVE" },
+	});
+
+	return users.map((user) => user.id);
+};
