@@ -94,3 +94,40 @@ export function getNotificationMessage(type: NotificationType): string {
 			return "You have a new notification.";
 	}
 }
+
+export function getNotificationTitle(type: NotificationType): string {
+	switch (type) {
+		case "EVENT":
+			return "New Event";
+		case "EVENT_COMMENT":
+			return "New Comment on Your Event";
+		case "ANNOUNCEMENT":
+			return "New Announcement";
+		case "LIKE_ANNOUNCEMENT":
+			return "Someone Liked Your Announcement";
+		case "ANNOUNCEMENT_COMMENT":
+			return "New Comment on Your Announcement";
+		case "POST":
+			return "New Post";
+		case "LIKE_POST":
+			return "Someone Liked Your Post";
+		case "POST_COMMENT":
+			return "New Comment on Your Post";
+		case "NEW_JOB":
+			return "New Job Opportunity";
+		case "JOB":
+			return "Job Notification";
+		case "NEW_RECRUITMENT":
+			return "New Recruitment Posted";
+		case "RECRUITMENT":
+			return "Recruitment Notification";
+		case "NEW_POLL":
+			return "New Poll Created";
+		case "POLL":
+			return "Poll Notification";
+		case "RECRUITMENT_APPLICATION":
+			return "New Recruitment Application";
+		default:
+			return "Notification";
+	}
+}
