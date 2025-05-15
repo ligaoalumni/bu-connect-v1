@@ -100,19 +100,19 @@ export function getNotificationTitle(type: NotificationType): string {
 		case "EVENT":
 			return "New Event";
 		case "EVENT_COMMENT":
-			return "New Comment on Your Event";
+			return "New Comment on an Event You Engaged With";
 		case "ANNOUNCEMENT":
 			return "New Announcement";
 		case "LIKE_ANNOUNCEMENT":
 			return "Someone Liked Your Announcement";
 		case "ANNOUNCEMENT_COMMENT":
-			return "New Comment on Your Announcement";
+			return "New Comment on an Announcement You Engaged With";
 		case "POST":
 			return "New Post";
 		case "LIKE_POST":
 			return "Someone Liked Your Post";
 		case "POST_COMMENT":
-			return "New Comment on Your Post";
+			return "New Comment on a Post You Engaged With";
 		case "NEW_JOB":
 			return "New Job Opportunity";
 		case "JOB":
