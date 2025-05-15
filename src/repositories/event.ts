@@ -472,6 +472,9 @@ export const readEventComments = async ({
 		},
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
+		orderBy: {
+			createdAt: "desc",
+		},
 	});
 
 	const total = await prisma.eventComment.count({
