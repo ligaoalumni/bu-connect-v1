@@ -7,8 +7,11 @@ import {
 	PaginationArgs,
 	PaginationResult,
 } from "@/types";
-import { Announcement, Prisma } from "@prisma/client";
+import { Announcement, NotificationType, Prisma } from "@prisma/client";
 import slug from "unique-slug";
+import { createNotifications } from "./notifications";
+import { getNotificationMessage } from "@/lib/utils";
+import { getAdmins, getUsersId } from "./user";
 
 export const createAnnouncement = async ({
 	content,
@@ -20,13 +23,27 @@ export const createAnnouncement = async ({
 	const name = title.toLowerCase().replace(/ /g, "-");
 	const generatedSlug = slug(name);
 
-	return await prisma.announcement.create({
+	const newAnnouncement = await prisma.announcement.create({
 		data: {
 			title,
 			content,
 			slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
 		},
 	});
+
+	const usersId = await getUsersId();
+	const link = `/announcements/${newAnnouncement.slug}`;
+
+	const notifications = usersId.map((id) => ({
+		userId: id,
+		message: getNotificationMessage("ANNOUNCEMENT"),
+		link,
+		type: "ANNOUNCEMENT" as NotificationType,
+	}));
+
+	await createNotifications(notifications);
+
+	return newAnnouncement;
 };
 
 export const updateAnnouncement = async (
@@ -92,7 +109,6 @@ export const readAnnouncements = async ({
 export const readAnnouncement = async (slug: string) => {
 	return await prisma.announcement.findUnique({
 		where: { slug },
-
 		include: {
 			_count: {
 				select: {
@@ -118,13 +134,49 @@ export const writeAnnouncementComment = async ({
 	comment: string;
 	userId: number;
 }) => {
-	return await prisma.announcementComment.create({
+	const newComment = await prisma.announcementComment.create({
 		data: {
 			announcementId,
 			comment,
 			commentById: userId,
 		},
+		include: {
+			announcement: {
+				select: {
+					comments: {
+						select: {
+							commentById: true,
+						},
+					},
+				},
+			},
+		},
 	});
+
+	if (!newComment) {
+		throw new Error("Failed to create comment");
+	}
+
+	const { announcement, ...newCommentData } = newComment;
+
+	const ids = announcement.comments
+		.map((comment) => comment.commentById)
+		.filter((ids) => ids !== userId);
+
+	const link = `/announcements/${announcementId}#comment-${newComment.id}`;
+
+	const notifications = ids.map((id) => ({
+		userId: id,
+		message: getNotificationMessage("ANNOUNCEMENT_COMMENT"),
+		link,
+		type: "ANNOUNCEMENT_COMMENT" as NotificationType,
+	}));
+
+	console.log(notifications);
+
+	await createNotifications(notifications);
+
+	return newCommentData;
 };
 
 export const readAnnouncementComments = async ({
@@ -178,7 +230,7 @@ export const likeAnnouncement = async ({
 	id: number;
 	userId: number;
 }) => {
-	return await prisma.announcement.update({
+	const announcement = await prisma.announcement.update({
 		where: {
 			id,
 		},
@@ -190,6 +242,22 @@ export const likeAnnouncement = async ({
 			},
 		},
 	});
+
+	if (!announcement) throw new Error("Failed to like announcement");
+	const users = await getAdmins();
+
+	const link = `/announcements/${announcement.id}`;
+
+	const notifications = users.map((user) => ({
+		userId: user.id,
+		message: getNotificationMessage("LIKE_ANNOUNCEMENT"),
+		link,
+		type: "LIKE_ANNOUNCEMENT" as NotificationType,
+	}));
+
+	await createNotifications(notifications);
+
+	return announcement;
 };
 
 export const unlikeAnnouncement = async ({
@@ -199,7 +267,6 @@ export const unlikeAnnouncement = async ({
 	id: number;
 	userId: number;
 }) => {
-	console.log("UNLIKING");
 	return await prisma.announcement.update({
 		where: {
 			id,
