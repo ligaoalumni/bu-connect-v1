@@ -11,6 +11,7 @@ import { User } from "@prisma/client";
 import { ThemeSwitcher } from "./theme-switcher";
 import { AvatarDropdown } from "./avatar-dropdown";
 import { MobileDrawer } from "./mobile-header";
+import { NotificationDropdown } from "./notification-dropdown";
 
 const links = [
 	"/",
@@ -62,7 +63,10 @@ export function Header({
 					<div className="flex gap-2">
 						<ThemeSwitcher />
 						{user ? (
-							<AvatarDropdown />
+							<>
+								<NotificationDropdown notifications={[]} />
+								<AvatarDropdown />
+							</>
 						) : (
 							<Button
 								variant="default"

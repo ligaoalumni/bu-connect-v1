@@ -8,6 +8,7 @@ import {
 	AvatarDropdown,
 	Button,
 	MobileDrawer,
+	NotificationDropdown,
 } from "@/components";
 
 const links = [
@@ -41,7 +42,10 @@ export function Header() {
 				<div className="flex gap-2">
 					<ThemeSwitcher />
 					{user ? (
-						<AvatarDropdown />
+						<>
+							<NotificationDropdown notifications={[]} />
+							<AvatarDropdown />
+						</>
 					) : (
 						<Button
 							variant="default"

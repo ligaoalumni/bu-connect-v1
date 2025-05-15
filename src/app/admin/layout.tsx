@@ -13,6 +13,7 @@ import {
 	SidebarTrigger,
 	ThemeSwitcher,
 	AvatarDropdown,
+	NotificationDropdown,
 } from "@/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -86,6 +87,7 @@ export default function AdminLayout({
 								</div>
 								<div className="flex items-center gap-2">
 									<ThemeSwitcher />
+									<NotificationDropdown notifications={[]} />
 									<AvatarDropdown />
 								</div>
 							</div>
