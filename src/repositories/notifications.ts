@@ -27,6 +27,17 @@ export const updateNotification = async (
 	});
 };
 
+export const updateAllNotification = async (userId: number) => {
+	return await prisma.notification.updateMany({
+		where: {
+			userId,
+		},
+		data: {
+			readStatus: true,
+		},
+	});
+};
+
 export const getNotifications = async (userId: number) => {
 	return await prisma.notification.findMany({
 		where: {
@@ -34,6 +45,26 @@ export const getNotifications = async (userId: number) => {
 		},
 		orderBy: {
 			createdAt: "desc",
+		},
+	});
+};
+
+export const deleteNotification = async (
+	notificationId: number,
+	userId: number
+) => {
+	return await prisma.notification.delete({
+		where: {
+			userId,
+			id: notificationId,
+		},
+	});
+};
+
+export const deleteAllNotifications = async (userId: number) => {
+	return await prisma.notification.deleteMany({
+		where: {
+			userId,
 		},
 	});
 };

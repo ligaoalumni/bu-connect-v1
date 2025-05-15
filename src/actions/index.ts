@@ -12,3 +12,4 @@ export * from "./post";
 export * from "./poll";
 export * from "./batch";
 export * from "./recruitment";
+export * from "./notification";

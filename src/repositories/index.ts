@@ -8,3 +8,4 @@ export * from "./job";
 export * from "./poll";
 export * from "./batch";
 export * from "./recruitment";
+export * from "./notifications";
