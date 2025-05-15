@@ -1,4 +1,5 @@
 import { INDUSTRIES } from "@/constant";
+import { NotificationType } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -58,3 +59,38 @@ export const getIndustryName = (industryId: string) => {
 	const industry = INDUSTRIES.find((i) => i.id === industryId);
 	return industry ? industry.name : industryId;
 };
+
+export function getNotificationMessage(type: NotificationType): string {
+	switch (type) {
+		case "EVENT":
+			return "You have a new event invitation!";
+		case "ANNOUNCEMENT":
+			return "A new announcement is available. Check it out!";
+		case "ANNOUNCEMENT_COMMENT":
+			return "Someone commented on an announcement.";
+		case "LIKE_COMMENT":
+			return "Your comment received a new like!";
+		case "POST":
+			return "A new post has been shared.";
+		case "POST_COMMENT":
+			return "Someone commented on your post.";
+		case "LIKE_POST":
+			return "Your post received a new like!";
+		case "NEW_JOB":
+			return "A new job opportunity has been posted.";
+		case "JOB":
+			return "Check out the latest job postings.";
+		case "NEW_RECRUITMENT":
+			return "A new recruitment opportunity is available.";
+		case "RECRUITMENT":
+			return "Explore the latest recruitment notices.";
+		case "NEW_POLL":
+			return "A new poll has been created. Cast your vote!";
+		case "POLL":
+			return "Don't forget to participate in ongoing polls.";
+		case "RECRUITMENT_APPLICATION":
+			return "A new recruitment application has been submitted.";
+		default:
+			return "You have a new notification.";
+	}
+}
