@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Circle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,11 @@ import { cn, getNotificationTitle } from "@/lib/utils";
 import { createBrowserClient } from "@/lib/supabase-client";
 import { useAuth } from "@/contexts/auth-context";
 import { Notification } from "@prisma/client";
-import { readNotificationsAction } from "@/actions";
+import {
+	readNotificationsAction,
+	updateAllNotificationStatusAction,
+	updateNotificationStatusAction,
+} from "@/actions";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
@@ -28,9 +32,29 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 		(notification) => !notification.readStatus
 	).length;
 
-	const handleNotificationClick = (id: string) => {};
+	const handleNotificationClick = async (id: number) => {
+		await updateNotificationStatusAction(id);
+		setNotifications((prevNotifications) =>
+			prevNotifications.map((notification) => {
+				if (notification.id === id) {
+					return { ...notification, readStatus: true };
+				}
+				return notification;
+			})
+		);
+		setOpen(false);
+	};
 
-	const handleMarkAllAsRead = () => {};
+	const handleMarkAllAsRead = async () => {
+		await updateAllNotificationStatusAction();
+		setNotifications((prevNotifications) =>
+			prevNotifications.map((notification) => ({
+				...notification,
+				readStatus: true,
+			}))
+		);
+		setOpen(false);
+	};
 
 	useEffect(() => {
 		const db = createBrowserClient();
@@ -110,27 +134,32 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 						<div>
 							{notifications.map((notification) => (
 								<Link
-									href={notification.link || "#"}
 									key={notification.id}
+									href={notification.link || "#"}
 									className={cn(
-										"flex flex-col gap-1 p-4 border-b last:border-0 cursor-pointer transition-colors",
-										!notification.readStatus && "bg-muted/50",
-										"hover:bg-muted"
+										"flex flex-col gap-2 p-4 border-b last:border-0 cursor-pointer transition-colors relative",
+										notification.readStatus
+											? "hover:bg-muted"
+											: "bg-muted/30 hover:bg-muted/50 border-l-4 border-l-primary"
 									)}
-									onClick={() =>
-										handleNotificationClick(notification.id.toString())
-									}>
+									onClick={() => handleNotificationClick(notification.id)}>
 									<div className="flex items-center justify-between">
-										<h4 className="font-medium text-sm">
-											{getNotificationTitle(notification.type)}
-										</h4>
-										{/* <span className="text-xs text-muted-foreground">
-											{notification.createdAt.toString()}
-										</span> */}
+										<div className="flex flex-col">
+											<div className="flex items-center justify-between">
+												<div className="flex items-center gap-2">
+													<h4 className="font-medium text-sm">
+														{getNotificationTitle(notification.type)}
+													</h4>
+												</div>
+											</div>
+											<p className="text-sm text-muted-foreground">
+												{notification.message}
+											</p>
+										</div>
+										{!notification.readStatus && (
+											<Circle className="h-2 w-2 fill-primary text-primary" />
+										)}
 									</div>
-									<p className="text-sm text-muted-foreground">
-										{notification.message}
-									</p>
 									<span className="text-xs text-muted-foreground">
 										{formatDistanceToNow(notification.createdAt, {
 											addSuffix: true,
