@@ -5,6 +5,7 @@ import { readEventsAction } from "@/actions";
 import { EmptyState } from "@/components";
 import EventCard from "@/components/custom/event-card";
 import ImagesMarquee from "../__components/images-marquee";
+import AlumniMap from "@/components/custom/alumni-map";
 
 export default async function AllEvents() {
 	const upcomingEvents = await readEventsAction({
@@ -69,6 +70,13 @@ export default async function AllEvents() {
 						<EmptyState showRedirectButton={false} />
 					</div>
 				)}
+			</section>
+
+			<section>
+				<h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
+					Alumni Map
+				</h1>
+				<AlumniMap isMapping />
 			</section>
 
 			{/* <InfiniteScroll defaultData={events.data} moreData={events.hasMore} /> */}
