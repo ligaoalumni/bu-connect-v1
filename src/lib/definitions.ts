@@ -106,8 +106,15 @@ export const ProfileSchema = z.object({
 
 	nationality: z.string(),
 	religion: z.string(),
-	// TODO: Implement Address
-	// address: z.string(),
+
+	address: z
+		.object({
+			lat: z.number(),
+			lng: z.number(),
+			address: z.string(),
+		})
+		.optional(), // Make it optional so existing profiles without address still work
+
 	gender: z.string(),
 	contactNumber: z.string(),
 	birthDate: z.string().min(1, { message: "Birth date is required" }),
@@ -133,7 +140,14 @@ export const AdminProfileSchema = z.object({
 	nationality: z.string(),
 	religion: z.string(),
 	gender: z.string(),
-	address: z.string(),
+	address: z
+		.object({
+			lat: z.number(),
+			lng: z.number(),
+			address: z.string(),
+		})
+		.optional(), // Make it optional so existing profiles without address still work
+
 	contactNumber: z.string(),
 	avatar: z.string(),
 	birthDate: z.string().min(1, { message: "Birth date is required" }),
