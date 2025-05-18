@@ -146,6 +146,20 @@ type DataTablePagination = {
 	pageSize: number;
 };
 
+// Define the address type
+export interface AddressData {
+	lat: number;
+	lng: number;
+	address: string;
+}
+
+// Define the address type
+export interface AddressData {
+	lat: number;
+	lng: number;
+	address: string;
+}
+
 export interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];

@@ -1,11 +1,12 @@
 import { User } from "@prisma/client";
+import { AddressData } from "./index";
 
 export type UserRole = "ADMIN" | "SUPER_ADMIN" | "ALUMNI";
 
 export type UserTableData = Omit<User, "password" | "notifications">;
 
 export interface UpdateProfileData {
-	address?: string;
+	address?: AddressData;
 	avatar?: string;
 	birthDate?: string;
 	company?: string;
