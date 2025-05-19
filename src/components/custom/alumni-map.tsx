@@ -53,6 +53,7 @@ export default function AlumniMap({
 	isMapping = false,
 }: {
 	isMapping?: boolean;
+	initialMarkers?: LatLngExpression[];
 }) {
 	// Use state to track if component is mounted (client-side)
 	const [center, setCenter] = useState<LatLngExpression>([
