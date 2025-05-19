@@ -21,13 +21,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Button,
+	LocationPicker,
 } from "@/components";
 import AvatarUpload from "@/components/custom/avatar-upload";
 import { alumniLabel } from "@/constant";
 import { ProfileSchema } from "@/lib/definitions";
-import { ProfileFormData } from "@/types";
+import type { AddressData, ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Gender, User } from "@prisma/client";
+import type { Gender, User } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -38,7 +39,9 @@ const currentYear = new Date().getFullYear() - 1; // Get the current year
 const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 interface EditProfileFormProps {
-	user: User;
+	user: Omit<User, "address"> & {
+		address?: AddressData;
+	};
 }
 
 export default function EditProfileForm({ user }: EditProfileFormProps) {
@@ -47,12 +50,11 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 		firstName: user.firstName || "",
 		lastName: user.lastName || "",
 		middleName: user.middleName || "",
-		// birthDate: new Date(user.birthDate).toISOString().split("T")[0],
 		birthDate: user.birthDate.toISOString(),
 		contactNumber: user.contactNumber || "",
 		religion: user.religion || "",
 		nationality: user.nationality || "",
-		// address: user.address,
+		address: user.address,
 		avatar: user.avatar || "",
 		gender: user.gender || "MALE",
 		batch: String(user.batch),
@@ -247,23 +249,25 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 								)}
 							/>
 
-							{/* <FormField
+							{/* Add the address field with location picker */}
+							<FormField
 								control={form.control}
 								name="address"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-3">
 										<FormLabel>Address</FormLabel>
 										<FormControl>
-											<Input
-												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
-												{...field}
+											<LocationPicker
+												value={field.value}
+												onChange={field.onChange}
+												disabled={form.formState.isSubmitting}
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
-							/> */}
+							/>
+
 							<FormField
 								control={form.control}
 								name="contactNumber"
@@ -315,10 +319,10 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 									</FormItem>
 								)}
 							/>
-							{/* <AlumniData label="Contact Number" data={alumni.user./} /> */}
 						</CardContent>
 					</Card>
 
+					{/* Rest of your form remains the same */}
 					<Card className="bg-transparent text-white">
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
 							<CardTitle>Academic Information</CardTitle>
