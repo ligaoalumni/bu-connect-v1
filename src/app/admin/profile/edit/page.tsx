@@ -19,13 +19,17 @@ export default async function Page() {
 		nationality: user.nationality || "",
 		religion: user.religion || "",
 		avatar: user.avatar || "",
-		address: user.address || "",
+		address: typeof user.address
+			? user.address === "string"
+				? JSON.parse(user.address)
+				: user.address
+			: undefined,
 		gender: Gender[user.gender],
 	};
 
 	return (
 		<div>
-			<ProfileForm {...data} address="" id={user.id} />
+			<ProfileForm {...data} id={user.id} />
 		</div>
 	);
 }
