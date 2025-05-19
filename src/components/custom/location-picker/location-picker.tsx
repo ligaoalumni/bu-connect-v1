@@ -46,7 +46,7 @@ export function LocationPicker({
 				</Button>
 			</div>
 
-			{value && (
+			{value?.lat && value.lng && value.address && (
 				<p className="text-xs text-white/80">
 					Coordinates: {value.lat.toFixed(6)}, {value.lng.toFixed(6)}
 				</p>
