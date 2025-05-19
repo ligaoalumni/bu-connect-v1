@@ -221,7 +221,7 @@ export const updateProfile = async (
 				data: {
 					avatar,
 					religion,
-					address,
+					address: address ? JSON.stringify(address) : undefined,
 					birthDate: parsedBirthDate,
 					contactNumber,
 					firstName,
