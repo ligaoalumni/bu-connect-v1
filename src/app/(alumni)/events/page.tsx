@@ -76,7 +76,7 @@ export default async function AllEvents() {
 				<h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
 					Alumni Map
 				</h1>
-				<AlumniMap isMapping />
+				<AlumniMap />
 			</section>
 
 			{/* <InfiniteScroll defaultData={events.data} moreData={events.hasMore} /> */}
