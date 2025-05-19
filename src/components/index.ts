@@ -77,6 +77,10 @@ export * from "./custom/announcement-comment-section";
 export * from "./custom/reactions";
 export * from "./custom/interested-alumni-section";
 
+// LOCATION PICKER
+export * from "./custom/location-picker/location-picker";
+export * from "./custom/location-picker/map-modal";
+
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
 

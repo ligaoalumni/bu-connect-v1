@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Search, Navigation } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { geocodeAddressAction, reverseGeocodeAction } from "@/actions";
+import { AddressData } from "@/types";
 
 // Fix for default marker icons in Leaflet with Next.js
 const defaultIcon = new Icon({
@@ -310,7 +311,7 @@ export function MapModal({
 							readOnly={isLoading}
 						/>
 						<p className="text-xs text-muted-foreground">
-							{markerPosition
+							{markerPosition && markerPosition[0] && markerPosition[1]
 								? `Coordinates: ${markerPosition[0].toFixed(
 										6
 								  )}, ${markerPosition[1].toFixed(6)}`
