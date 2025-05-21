@@ -48,7 +48,9 @@ export default async function Page() {
 							<Link href={"profile/edit"}>Edit Profile</Link>
 						</Button>
 						<ChangePassword />
-						<LocationSharingModal shareLocation={false} />
+						<LocationSharingModal
+							shareLocation={user?.shareLocation || false}
+						/>
 					</div>
 
 					<QRCodeViewer
