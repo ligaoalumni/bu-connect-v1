@@ -8,6 +8,7 @@ import {
 	createUser,
 	readUser,
 	readUsers,
+	updateLocationSharing,
 	updatePassword,
 	updateProfile,
 	updateUser,
@@ -244,9 +245,9 @@ export const updateLocationSharingAction = async (shareLocation: boolean) => {
 
 		if (session == null) throw new Error("Session expired!");
 
-		await updateUser(session.id, {
-			shareLocation,
-		});
+		console.log(shareLocation);
+
+		await updateLocationSharing(session.id, shareLocation);
 
 		revalidatePath(session.role == "ALUMNI" ? "/profile" : "/admin/profile");
 	} catch (err) {

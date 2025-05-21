@@ -147,6 +147,16 @@ export const updateUserStatus = async (id: number, status: User["status"]) => {
 	return updatedUser;
 };
 
+export const updateLocationSharing = async (
+	id: number,
+	shareLocation: boolean
+) => {
+	return await prisma.user.update({
+		where: { id },
+		data: { shareLocation },
+	});
+};
+
 export const updateUser = async (
 	id: number,
 	data: Partial<
