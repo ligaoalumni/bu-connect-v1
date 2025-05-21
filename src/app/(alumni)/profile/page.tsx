@@ -11,6 +11,7 @@ import {
 	CardTitle,
 	QRCodeViewer,
 	ChangePassword,
+	LocationSharingModal,
 } from "@/components";
 import { formatDate } from "date-fns";
 import Link from "next/link";
@@ -47,6 +48,7 @@ export default async function Page() {
 							<Link href={"profile/edit"}>Edit Profile</Link>
 						</Button>
 						<ChangePassword />
+						<LocationSharingModal shareLocation={false} />
 					</div>
 
 					<QRCodeViewer
