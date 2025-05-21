@@ -14,6 +14,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { updateLocationSharingAction } from "@/actions";
+import { toast } from "sonner";
 
 interface LocationSharingModalProps {
 	shareLocation: boolean;
@@ -35,7 +36,19 @@ export function LocationSharingModal({
 		try {
 			await updateLocationSharingAction(isShareLocation);
 			setOpen(true);
+			toast.success("Location sharing preference updated successfully.", {
+				description: `Location sharing preference updated to ${
+					isShareLocation ? "enabled" : "disabled"
+				}.`,
+				richColors: true,
+				position: "top-center",
+			});
 		} catch (error) {
+			toast.error("Failed to update location sharing preference.", {
+				description: "Please try again later.",
+				richColors: true,
+				position: "top-center",
+			});
 			console.error(error);
 		} finally {
 			setLoading(false);
