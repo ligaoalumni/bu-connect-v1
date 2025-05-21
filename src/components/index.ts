@@ -80,6 +80,7 @@ export * from "./custom/interested-alumni-section";
 // LOCATION PICKER
 export * from "./custom/location-picker/location-picker";
 export * from "./custom/location-picker/map-modal";
+export * from "./custom/location-picker/location-sharing-modal";
 
 // ACETERNITY UI
 export * from "./custom/animated-testimonials";
