@@ -48,7 +48,8 @@ model User {
   currentOccupation String? @default("")
   jobTitle String? @default("")
 
-
+  // User Settings
+  shareLocation Boolean @default(false)
 
   sessions Session[]
 
