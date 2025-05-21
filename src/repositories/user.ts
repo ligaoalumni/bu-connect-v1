@@ -152,7 +152,12 @@ export const updateUser = async (
 	data: Partial<
 		Pick<
 			User,
-			"avatar" | "firstName" | "lastName" | "middleName" | "verifiedAt"
+			| "avatar"
+			| "firstName"
+			| "lastName"
+			| "middleName"
+			| "verifiedAt"
+			| "shareLocation"
 		>
 	>
 ) => {
