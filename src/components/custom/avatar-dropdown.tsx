@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Settings, User, Bell, LayoutDashboard } from "lucide-react";
+import { Settings, User, LayoutDashboard } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
@@ -63,14 +63,12 @@ export const AvatarDropdown = () => {
 						</Link>
 					</DropdownMenuItem>
 				)}
-				<DropdownMenuItem>
-					<Bell className="mr-2 h-4 w-4" />
-					<span>Notifications</span>
-				</DropdownMenuItem>
 
-				<DropdownMenuItem>
-					<Settings className="mr-2 h-4 w-4" />
-					<span>Settings</span>
+				<DropdownMenuItem asChild>
+					<Link href={isAdmin ? "/admin/settings" : "/settings"}>
+						<Settings className="mr-2 h-4 w-4" />
+						<span>Settings</span>
+					</Link>
 				</DropdownMenuItem>
 
 				<DropdownMenuSeparator />
