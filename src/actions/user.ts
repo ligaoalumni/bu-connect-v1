@@ -2,7 +2,7 @@
 
 import { transporter } from "@/lib/email";
 import { generateEmailHTML } from "@/lib/generate-email";
-import { encrypt } from "@/lib/session";
+import { decrypt, encrypt } from "@/lib/session";
 import {
 	changeEmail,
 	createUser,
@@ -227,6 +227,28 @@ export const readUsersAction = async ({
 export const readUserAction = async (studentId: number) => {
 	try {
 		return await readUser(studentId);
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while sending OTP to your new email address."
+		);
+	}
+};
+
+export const updateLocationSharingAction = async (shareLocation: boolean) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (session == null) throw new Error("Session expired!");
+
+		await updateUser(session.id, {
+			shareLocation,
+		});
+
+		revalidatePath(session.role == "ALUMNI" ? "/profile" : "/admin/profile");
 	} catch (err) {
 		throw new Error(
 			err instanceof Error
