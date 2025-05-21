@@ -63,13 +63,14 @@ export const AvatarDropdown = () => {
 						</Link>
 					</DropdownMenuItem>
 				)}
-
-				<DropdownMenuItem asChild>
-					<Link href={isAdmin ? "/admin/settings" : "/settings"}>
-						<Settings className="mr-2 h-4 w-4" />
-						<span>Settings</span>
-					</Link>
-				</DropdownMenuItem>
+				{isAdmin && (
+					<DropdownMenuItem asChild>
+						<Link href={"/admin/settings"}>
+							<Settings className="mr-2 h-4 w-4" />
+							<span>Settings</span>
+						</Link>
+					</DropdownMenuItem>
+				)}
 
 				<DropdownMenuSeparator />
 				<LogoutButton />
