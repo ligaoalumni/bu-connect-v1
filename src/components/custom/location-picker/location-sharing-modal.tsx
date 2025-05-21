@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { updateLocationSharingAction } from "@/actions";
 
 interface LocationSharingModalProps {
 	shareLocation: boolean;
@@ -22,13 +23,24 @@ export function LocationSharingModal({
 	shareLocation,
 }: LocationSharingModalProps) {
 	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [isShareLocation, setIsShareLocation] = useState(shareLocation);
 
 	// Save preference when changed
-	const handleToggleChange = (checked: boolean) => {
+	const handleToggleChange = async (checked: boolean) =>
 		setIsShareLocation(checked);
-		localStorage.setItem("shareLocation", checked.toString());
-	};
+
+	async function handleSave() {
+		setLoading(true);
+		try {
+			await updateLocationSharingAction(isShareLocation);
+			setOpen(true);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	}
 
 	return (
 		<>
@@ -78,10 +90,15 @@ export function LocationSharingModal({
 					</div>
 
 					<DialogFooter className="flex sm:justify-between">
-						<Button variant="outline" onClick={() => setOpen(false)}>
+						<Button
+							disabled={loading}
+							variant="outline"
+							onClick={() => setOpen(false)}>
 							Cancel
 						</Button>
-						<Button onClick={() => setOpen(false)}>Save Preferences</Button>
+						<Button disabled={loading} onClick={handleSave}>
+							{loading ? "Saving..." : "Save Preferences"}
+						</Button>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
