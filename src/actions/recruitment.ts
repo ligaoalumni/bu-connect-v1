@@ -98,6 +98,6 @@ export const applyToRecruitmentAction = async (recruitmentId: number) => {
 		revalidatePath("/highlights");
 	} catch (error) {
 		console.log(error);
-		throw new Error(`Failed to read applicant list`);
+		throw new Error(`Failed to apply to recruitment`);
 	}
 };
