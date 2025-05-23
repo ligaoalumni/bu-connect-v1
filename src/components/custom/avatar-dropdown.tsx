@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Settings, User, Bell, LayoutDashboard } from "lucide-react";
+import { Settings, User, LayoutDashboard } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
@@ -21,8 +21,8 @@ export const AvatarDropdown = () => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="relative h-8 w-8     rounded-full">
-					<Avatar className="h-8 w-8">
+				<Button variant="ghost" className="relative  w-9 h-9    rounded-full">
+					<Avatar className="h-9 w-9">
 						{user?.avatar ? (
 							<AvatarImage src={user.avatar} alt="Avatar" />
 						) : (
@@ -63,15 +63,14 @@ export const AvatarDropdown = () => {
 						</Link>
 					</DropdownMenuItem>
 				)}
-				<DropdownMenuItem>
-					<Bell className="mr-2 h-4 w-4" />
-					<span>Notifications</span>
-				</DropdownMenuItem>
-
-				<DropdownMenuItem>
-					<Settings className="mr-2 h-4 w-4" />
-					<span>Settings</span>
-				</DropdownMenuItem>
+				{isAdmin && (
+					<DropdownMenuItem asChild>
+						<Link href={"/admin/settings"}>
+							<Settings className="mr-2 h-4 w-4" />
+							<span>Settings</span>
+						</Link>
+					</DropdownMenuItem>
+				)}
 
 				<DropdownMenuSeparator />
 				<LogoutButton />

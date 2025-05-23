@@ -15,9 +15,12 @@ import {
 	PaginationResult,
 	TEventPagination,
 } from "@/types";
-import { Prisma } from "@prisma/client";
+import { NotificationType, Prisma } from "@prisma/client";
 import { format, isFuture } from "date-fns";
 import slug from "unique-slug";
+import { getUsersId } from "./user";
+import { getNotificationMessage } from "@/lib/utils";
+import { createNotifications } from "./notifications";
 
 export const readEvent = async (
 	slug: string | number
@@ -69,7 +72,7 @@ export const createEvent = async (
 	const name = data.name.toLowerCase().replace(/ /g, "-");
 	const generatedSlug = slug(name);
 
-	const createdEvent = await prisma.event.create({
+	const newEvent = await prisma.event.create({
 		data: {
 			...data,
 			endDate: data.endDate || data.startDate,
@@ -78,7 +81,21 @@ export const createEvent = async (
 		},
 	});
 
-	return createdEvent;
+	if (!newEvent) throw new Error("Failed to create new event");
+
+	const usersId = await getUsersId();
+	const link = `/events/${newEvent.slug}/info`;
+
+	const notifications = usersId.map((id) => ({
+		userId: id,
+		message: getNotificationMessage("EVENT"),
+		link,
+		type: "EVENT" as NotificationType,
+	}));
+
+	await createNotifications(notifications);
+
+	return newEvent;
 };
 
 export const readEvents = async ({
@@ -455,6 +472,9 @@ export const readEventComments = async ({
 		},
 		skip: pagination ? pagination.limit * pagination.page : undefined,
 		take: pagination ? pagination.limit : undefined,
+		orderBy: {
+			createdAt: "desc",
+		},
 	});
 
 	const total = await prisma.eventComment.count({
@@ -559,7 +579,7 @@ export const writeEventComment = async ({
 	eventId: number;
 	userId: number;
 }) => {
-	return await prisma.eventComment.create({
+	const newComment = await prisma.eventComment.create({
 		data: {
 			comment,
 			commentBy: {
@@ -573,5 +593,39 @@ export const writeEventComment = async ({
 				},
 			},
 		},
+		include: {
+			event: {
+				include: {
+					comments: {
+						select: {
+							commentById: true,
+						},
+					},
+				},
+			},
+		},
 	});
+
+	if (!newComment) throw new Error("Failed to post your comment.");
+
+	const { event, ...newCommentData } = newComment;
+
+	const ids = event.comments
+		.map((comment) => comment.commentById)
+		.filter((id) => id !== userId);
+
+	const uniqueIds = [...new Set(ids)];
+
+	const link = `/events/${event.slug}/info#comment-${newCommentData.id}`;
+
+	const notifications = uniqueIds.map((id) => ({
+		userId: id,
+		message: getNotificationMessage("EVENT_COMMENT"),
+		link,
+		type: "EVENT_COMMENT" as NotificationType,
+	}));
+
+	await createNotifications(notifications);
+
+	return newCommentData;
 };

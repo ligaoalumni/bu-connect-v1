@@ -31,8 +31,6 @@ const formSchema = z.object({
 	batch: z.preprocess(
 		(val) => {
 			if (typeof val === "string") {
-				// Ensure the input has exactly 4 digits
-				if (val.length !== 4) return NaN;
 				return parseInt(val, 10);
 			}
 			return val;
@@ -41,10 +39,10 @@ const formSchema = z.object({
 			.number()
 			.int()
 			.min(1980, {
-				message: "Batch number must be exactly 4 digits.",
+				message: "Batch year is invalid.",
 			})
 			.max(new Date().getFullYear(), {
-				message: "Batch number must be exactly 4 digits.",
+				message: "Batch year is invalid.",
 			})
 	),
 });

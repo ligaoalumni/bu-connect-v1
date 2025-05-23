@@ -45,6 +45,17 @@ const nextConfig: NextConfig = {
 				permanent: false, // Set to true for a permanent redirect (301), false for temporary (302)
 			},
 			{
+				source: "/admin/recruitment/:slug",
+				destination: "/admin/recruitment/:slug/info",
+				has: [
+					{
+						type: "query",
+						key: "slug",
+					},
+				],
+				permanent: false, // Set to true for a permanent redirect (301), false for temporary (302)
+			},
+			{
 				source: "/posts/:slug",
 				destination: "/posts/:slug/info",
 				has: [

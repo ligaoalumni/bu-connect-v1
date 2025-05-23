@@ -8,6 +8,7 @@ import {
 	JobSchema,
 	LoginFormSchema,
 	ProfileSchema,
+	RecruitmentSchema,
 	SignupFormSchema,
 } from "@/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
@@ -22,10 +23,12 @@ import {
 	PostComment,
 	User,
 	Batch as TBatch,
+	Recruitment,
 } from "@prisma/client";
 
 export * from "./user";
 export * from "./event";
+export * from "./poll";
 
 export type CreatePost = Omit<Post, "slug" | "createdAt" | "id" | "updatedAt">;
 export type UpdateJob = Partial<
@@ -136,11 +139,26 @@ export type AdminProfileFormData = z.infer<typeof AdminProfileSchema>;
 export type ChangePasswordFormData = z.infer<typeof ChangePasswordSchema>;
 export type AnnouncementFormData = z.infer<typeof AnnouncementSchema>;
 export type JobFormData = z.infer<typeof JobSchema>;
+export type RecruitmentFormData = z.infer<typeof RecruitmentSchema>;
 
 type DataTablePagination = {
 	pageIndex: number;
 	pageSize: number;
 };
+
+// Define the address type
+export interface AddressData {
+	lat: number;
+	lng: number;
+	address: string;
+}
+
+// Define the address type
+export interface AddressData {
+	lat: number;
+	lng: number;
+	address: string;
+}
 
 export interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -201,4 +219,14 @@ export interface TPostComment extends PostComment {
 
 export interface Batch extends TBatch {
 	students: number;
+}
+
+export type Applicant = Pick<
+	User,
+	"id" | "firstName" | "lastName" | "email"
+> & {
+	batch: number;
+};
+export interface RecruitmentWithApplicants extends Recruitment {
+	applicants: Applicant[];
 }

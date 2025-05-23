@@ -8,9 +8,21 @@ export default async function Page() {
 		return <div>Loading...</div>;
 	}
 
+	const data = {
+		...user,
+		address:
+			Array.from(user.address as any).length > 0
+				? typeof user.address === "string"
+					? JSON.parse(user.address)
+					: user.address
+				: undefined,
+	};
+
+	console.log(data, "qqq");
+
 	return (
 		<div>
-			<EditProfileForm user={user} />
+			<EditProfileForm user={data} />
 		</div>
 	);
 }

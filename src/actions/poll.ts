@@ -7,12 +7,11 @@ import {
 	updatePoll,
 	vote,
 } from "@/repositories";
-import { PaginationArgs, PaginationResult, UpdatePoll } from "@/types";
-import { Poll } from "@prisma/client";
+import { PaginationArgs, PaginationResult, Poll, UpdatePoll } from "@/types";
 import { cookies } from "next/headers";
 
 export const readPollsAction = async (
-	data: PaginationArgs<Poll["status"], never>
+	data: PaginationArgs<Poll["status"], never> = {}
 ): Promise<PaginationResult<Poll>> => {
 	try {
 		return await readPolls({

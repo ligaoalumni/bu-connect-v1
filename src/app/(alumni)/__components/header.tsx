@@ -3,7 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
-import { ThemeSwitcher, AvatarDropdown, Button } from "@/components";
+import {
+	ThemeSwitcher,
+	AvatarDropdown,
+	Button,
+	MobileDrawer,
+	NotificationDropdown,
+} from "@/components";
 
 const links = [
 	"/",
@@ -36,7 +42,10 @@ export function Header() {
 				<div className="flex gap-2">
 					<ThemeSwitcher />
 					{user ? (
-						<AvatarDropdown />
+						<>
+							<NotificationDropdown />
+							<AvatarDropdown />
+						</>
 					) : (
 						<Button
 							variant="default"
@@ -45,6 +54,10 @@ export function Header() {
 							<Link href="/login">Login</Link>
 						</Button>
 					)}
+
+					<div className="md:hidden block">
+						<MobileDrawer />
+					</div>
 				</div>
 			</header>
 			<div className="sticky top-0   z-50 hidden md:flex py-2 bg-[#15497A]  shadow-md mx-auto container justify-center gap-4">

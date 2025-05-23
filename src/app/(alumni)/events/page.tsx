@@ -5,6 +5,7 @@ import { readEventsAction } from "@/actions";
 import { EmptyState } from "@/components";
 import EventCard from "@/components/custom/event-card";
 import ImagesMarquee from "../__components/images-marquee";
+import AlumniMap from "@/components/custom/alumni-map";
 
 export default async function AllEvents() {
 	const upcomingEvents = await readEventsAction({
@@ -24,7 +25,7 @@ export default async function AllEvents() {
 	});
 
 	return (
-		<div className="container mx-auto space-y-10 py-10 mt-32 pt-5 px-5 md:px-0">
+		<div className="container mx-auto space-y-10 py-10 md:mt-14 pt-5 px-5 md:px-0">
 			<section>
 				<h1 className="text-2xl md:text-3xl font-bold text-center ">
 					Ligao National High School
@@ -69,6 +70,13 @@ export default async function AllEvents() {
 						<EmptyState showRedirectButton={false} />
 					</div>
 				)}
+			</section>
+
+			<section>
+				<h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
+					Alumni Map
+				</h1>
+				<AlumniMap />
 			</section>
 
 			{/* <InfiniteScroll defaultData={events.data} moreData={events.hasMore} /> */}

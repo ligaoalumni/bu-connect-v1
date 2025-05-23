@@ -1,12 +1,13 @@
+import { readBatchesAction } from "@/actions";
 import {
 	About,
 	AspectRatio,
 	BackToTopButton,
 	Button,
 	ContactSectionForm,
+	Footer,
 	HeroSection,
 } from "@/components";
-import BatchSection from "@/components/custom/batch-section";
 import { welcomeImageBlurData } from "@/constant";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -19,12 +20,12 @@ export const metadata: Metadata = {
 // const FCalendar = lazy(() => import("@/components/custom/full-calendar"));
 
 export default async function Home() {
-	// const events = await getDisabledEvents();
-
 	return (
 		<>
 			<HeroSection />
 			<About />
+
+			<Footer />
 		</>
 	);
 
@@ -130,7 +131,6 @@ export default async function Home() {
 			{/* Welcome Section */}
 
 			{/* Batch */}
-			<BatchSection />
 
 			{/* Contact Us Section */}
 			<ContactSectionForm />

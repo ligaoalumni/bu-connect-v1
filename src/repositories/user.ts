@@ -147,12 +147,27 @@ export const updateUserStatus = async (id: number, status: User["status"]) => {
 	return updatedUser;
 };
 
+export const updateLocationSharing = async (
+	id: number,
+	shareLocation: boolean
+) => {
+	return await prisma.user.update({
+		where: { id },
+		data: { shareLocation },
+	});
+};
+
 export const updateUser = async (
 	id: number,
 	data: Partial<
 		Pick<
 			User,
-			"avatar" | "firstName" | "lastName" | "middleName" | "verifiedAt"
+			| "avatar"
+			| "firstName"
+			| "lastName"
+			| "middleName"
+			| "verifiedAt"
+			| "shareLocation"
 		>
 	>
 ) => {
@@ -221,7 +236,7 @@ export const updateProfile = async (
 				data: {
 					avatar,
 					religion,
-					address,
+					address: address ? JSON.stringify(address) : undefined,
 					birthDate: parsedBirthDate,
 					contactNumber,
 					firstName,
@@ -337,4 +352,23 @@ export const updateEmail = async (id: number, email: string) => {
 		},
 		data: { email },
 	});
+};
+
+export const getAdmins = async () => {
+	return await prisma.user.findMany({
+		where: {
+			role: {
+				not: "ALUMNI",
+			},
+			status: "ACTIVE",
+		},
+	});
+};
+
+export const getUsersId = async () => {
+	const users = await prisma.user.findMany({
+		where: { role: "ALUMNI", status: "ACTIVE" },
+	});
+
+	return users.map((user) => user.id);
 };

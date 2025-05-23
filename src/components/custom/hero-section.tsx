@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
@@ -7,8 +9,10 @@ import {
 	IconBrandLinkedin,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-context";
 
 export function HeroSection() {
+	const { user } = useAuth();
 	return (
 		<section className="px-5 md:px-0">
 			<div className="container    mx-auto min-h-[500px] h-full md:min-h-[664px] relative">
@@ -27,14 +31,16 @@ export function HeroSection() {
 						Connect with fellow BU Polangui alumni, share memories, and be
 						updated on news and events
 					</p>
-					<div className="flex items-center gap-4">
-						<Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
-							<Link href="/register">Register</Link>
-						</Button>
-						<Button asChild className="bg-white text-black">
-							<Link href="/login">Log in</Link>
-						</Button>
-					</div>
+					{user === null && (
+						<div className="flex items-center gap-4">
+							<Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
+								<Link href="/register">Register</Link>
+							</Button>
+							<Button asChild className="bg-white text-black">
+								<Link href="/login">Log in</Link>
+							</Button>
+						</div>
+					)}
 					<div className="flex items-center gap-2">
 						<Button
 							className="rounded-full bg-white hover:bg-white/80 "

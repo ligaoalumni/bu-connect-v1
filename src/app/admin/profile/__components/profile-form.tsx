@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { AdminProfileFormData } from "@/types";
+import type { AddressData, AdminProfileFormData } from "@/types";
 import { AdminProfileSchema } from "@/lib/definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -28,11 +28,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Button,
+	LocationPicker,
 } from "@/components";
 import { alumniLabel } from "@/constant";
 import AvatarUpload from "@/components/custom/avatar-upload";
 import { updateProfileActions } from "@/actions";
-import { Gender } from "@prisma/client";
+import type { Gender } from "@prisma/client";
 
 interface ProfileFormProps {
 	id: number;
@@ -41,7 +42,7 @@ interface ProfileFormProps {
 	lastName: string;
 	birthDate: string;
 	gender: string;
-	address: string;
+	address?: AddressData;
 	contactNumber: string;
 	nationality: string;
 	religion: string;
@@ -146,7 +147,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -163,7 +164,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -180,7 +181,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -198,7 +199,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 											<Input
 												type="date"
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -220,7 +221,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 												<SelectTrigger className="text-white data-[placeholder]:text-white/80 first-letter:uppercase">
 													<SelectValue
 														placeholder="Select gender"
-														className="text-white  "
+														className="text-white"
 													/>
 												</SelectTrigger>
 												<SelectContent className="bg-[#2F61A0] shadow-lg border-none dark:bg-[#5473a8]">
@@ -245,23 +246,25 @@ export default function ProfileForm(user: ProfileFormProps) {
 								)}
 							/>
 
+							{/* Replace the old address field with the new LocationPicker */}
 							<FormField
 								control={form.control}
 								name="address"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="col-span-3">
 										<FormLabel>Address</FormLabel>
 										<FormControl>
-											<Input
-												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
-												{...field}
+											<LocationPicker
+												value={field.value}
+												onChange={field.onChange}
+												disabled={form.formState.isSubmitting}
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="contactNumber"
@@ -271,7 +274,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -288,7 +291,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -305,7 +308,7 @@ export default function ProfileForm(user: ProfileFormProps) {
 										<FormControl>
 											<Input
 												readOnly={form.formState.isSubmitting}
-												className="  dark:text-white  dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
+												className="dark:text-white dark:selection:bg-black/15 border-x-0 border-t-0 border-b-2 h-10 rounded-none"
 												{...field}
 											/>
 										</FormControl>
@@ -313,7 +316,6 @@ export default function ProfileForm(user: ProfileFormProps) {
 									</FormItem>
 								)}
 							/>
-							{/* <AlumniData label="Contact Number" data={alumni.user./} /> */}
 						</CardContent>
 					</Card>
 
