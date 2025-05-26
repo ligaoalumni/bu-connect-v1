@@ -3,6 +3,8 @@
 import { UAParser } from "ua-parser-js";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
+import { PaginationArgs, PaginationResult } from "@/types";
+import { LoginLog, Prisma } from "@prisma/client";
 
 export async function logLoginAttempt(email: string, success = false) {
 	// Get headers from the incoming request
@@ -32,3 +34,42 @@ export async function logLoginAttempt(email: string, success = false) {
 		},
 	});
 }
+
+export const readLoginLogs = async ({
+	pagination,
+	filter,
+	status,
+	order,
+	orderBy,
+}: PaginationArgs<boolean, never> = {}): Promise<
+	PaginationResult<LoginLog>
+> => {
+	let where: Prisma.LoginLogWhereInput = {};
+
+	if (typeof filter === "string") {
+		where = { email: { contains: filter, mode: "insensitive" } };
+	}
+
+	if (status && status.length > 0) {
+		where = {
+			status: {
+				equals: status[0],
+			},
+		};
+	}
+
+	const logs = await prisma.loginLog.findMany({
+		where,
+		skip: pagination ? pagination.limit * pagination.page : undefined,
+		take: pagination ? pagination.limit : undefined,
+		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+	});
+
+	const count = await prisma.loginLog.count({ where });
+
+	return {
+		count,
+		hasMore: logs.length === pagination?.limit,
+		data: logs,
+	};
+};
