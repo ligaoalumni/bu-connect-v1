@@ -5,6 +5,7 @@ import Providers from "../providers";
 import { Header } from "@/components";
 import { getInformation, readSettingsAction } from "@/actions";
 import { redirect, RedirectType } from "next/navigation";
+import MaintenancePage from "./maintenance/page";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -45,18 +46,23 @@ export default async function RootLayout({
 	const user = await getInformation();
 	const settings = await readSettingsAction();
 
-	if (settings && settings.isMaintenance && user && user.role === "ALUMNI") {
-		return redirect("/maintenance", RedirectType.replace);
-	}
-
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}>
 				<Providers>
-					<Header user={user} />
-					{children}
-					{/* <Footer /> */}
+					{settings &&
+					settings.isMaintenance &&
+					user &&
+					user.role === "ALUMNI" ? (
+						<MaintenancePage />
+					) : (
+						<>
+							<Header user={user} />
+							{children}
+							{/* <Footer /> */}
+						</>
+					)}
 				</Providers>
 			</body>
 		</html>
