@@ -10,3 +10,4 @@ export * from "./batch";
 export * from "./recruitment";
 export * from "./notifications";
 export * from "./login-logs";
+export * from "./settings";
