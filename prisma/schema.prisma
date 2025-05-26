@@ -56,6 +56,7 @@ model User {
   verifiedAt DateTime?
   status     UserStatus @default(ACTIVE)
 
+  
   notifications Notification[] // Alumni can have multiple notifications
   eventsInterested Event[] @relation("InterestEvent") // Alumni can be interested in multiple events
   eventsAttended Event[] @relation("EventAttendees") // Alumni can attend multiple events
@@ -68,6 +69,7 @@ model User {
   job Job[]
   recruitment Recruitment[] @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
   Votes Vote[] // Alumni can vote on multiple polls
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -373,3 +375,18 @@ model Batch {
 
 //   @@map("recruitments")
 // }
+
+
+model LoginLog {
+  id Int @id @default(autoincrement())
+  email String 
+  ipAddress String
+  userAgent String
+  status Boolean @default(false) // true for success, false for failure
+
+
+  createdAt DateTime @default(now())
+
+  @@map("login_logs")
+
+}
