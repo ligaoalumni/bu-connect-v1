@@ -67,6 +67,7 @@ model User {
   job                  Job[]
   recruitment          Recruitment[]         @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
   Votes                Vote[] // Alumni can vote on multiple polls
+  settings            Setting[] // Alumni can have multiple settings
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -373,4 +374,18 @@ model LoginLog {
   createdAt DateTime @default(now())
 
   @@map("login_logs")
+}
+
+model Setting {
+  id          Int      @id @default(autoincrement())
+  websiteName String @default("BU Connect")
+  description String?  @default("")
+  isMaintenance Boolean @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById Int
+  createdBy   User  @relation(fields: [createdById], references: [id])
+
+  @@map("settings")
 }
