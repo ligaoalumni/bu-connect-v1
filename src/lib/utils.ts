@@ -1,4 +1,5 @@
 import { INDUSTRIES } from "@/constant";
+import { AddressData } from "@/types";
 import { NotificationType } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -131,3 +132,7 @@ export function getNotificationTitle(type: NotificationType): string {
 			return "Notification";
 	}
 }
+
+export const formatAddress = (address: any): AddressData => {
+	return typeof address === "string" ? JSON.parse(address) : address;
+};

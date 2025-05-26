@@ -4,7 +4,6 @@ import "./globals.css";
 import Providers from "../providers";
 import { Header } from "@/components";
 import { getInformation, readSettingsAction } from "@/actions";
-import { redirect, RedirectType } from "next/navigation";
 import MaintenancePage from "./maintenance/page";
 
 const geistSans = Geist({

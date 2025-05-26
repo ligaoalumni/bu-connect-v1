@@ -11,6 +11,7 @@ import {
 	CardTitle,
 	ChangePassword,
 } from "@/components";
+import { formatAddress } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import Link from "next/link";
 
@@ -69,7 +70,12 @@ export default async function Page() {
 								.toLocaleLowerCase()}`.replaceAll(/_/g, " ")}
 						/>
 						<AlumniData label="Email" data={user?.email} />
-						{/* <AlumniData label="Address" data={user?.address} /> */}
+						<div className="sm:col-span-2 md:col-span-3">
+							<AlumniData
+								label="Address"
+								data={formatAddress(user?.address || "").address || ""}
+							/>
+						</div>
 						<AlumniData label="Contact Number" data={user?.contactNumber} />
 						<AlumniData label="Nationality" data={user?.nationality} />
 						<AlumniData label="Religion" data={user?.religion} />

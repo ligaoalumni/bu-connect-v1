@@ -9,6 +9,7 @@ import {
 	SheetTitle,
 	Skeleton,
 } from "@/components";
+import { formatAddress } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { formatDate } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -130,7 +131,8 @@ export default function AlumniDetailsSheet({
 									</p>
 									{/* // TODO: TO FIX */}
 									<p className="flex justify-between">
-										<strong>Address:</strong> <span>{alumni.religion}</span>
+										<strong>Address:</strong>{" "}
+										<span>{formatAddress(alumni.address).address}</span>
 									</p>
 								</div>
 
