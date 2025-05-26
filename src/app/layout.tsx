@@ -3,7 +3,8 @@ import { Geist, Geist_Mono, Poppins, Tangerine } from "next/font/google";
 import "./globals.css";
 import Providers from "../providers";
 import { Header } from "@/components";
-import { getInformation } from "@/actions";
+import { getInformation, readSettingsAction } from "@/actions";
+import { redirect, RedirectType } from "next/navigation";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -42,6 +43,11 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const user = await getInformation();
+	const settings = await readSettingsAction();
+
+	if (settings && settings.isMaintenance && user && user.role === "ALUMNI") {
+		return redirect("/maintenance", RedirectType.replace);
+	}
 
 	return (
 		<html lang="en" suppressHydrationWarning>
