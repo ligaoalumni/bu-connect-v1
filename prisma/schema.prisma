@@ -9,44 +9,43 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
- 
 
 enum Gender {
   MALE
   FEMALE
   PREFER_NOT_TO_SAY
 }
- 
+
 // User model: Handles both alumni and admin/super admin login.
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  password  String
-  role      Role
-  avatar    String?
-  bio       String? @default("")
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  role     Role
+  avatar   String?
+  bio      String? @default("")
 
   // Personal Info
-  firstName String  @default("")
-  lastName  String  @default("")
-  middleName String? @default("")
+  firstName     String   @default("")
+  lastName      String   @default("")
+  middleName    String?  @default("")
   // phoneNumber String? @default("")
-  nationality String? @default("")
-  religion String? @default("")
-  address Json? @default("{}")
-  gender Gender @default(PREFER_NOT_TO_SAY)
-  contactNumber String? @default("")
-  birthDate DateTime 
+  nationality   String?  @default("")
+  religion      String?  @default("")
+  address       Json?    @default("{}")
+  gender        Gender   @default(PREFER_NOT_TO_SAY)
+  contactNumber String?  @default("")
+  birthDate     DateTime
 
   // Academic Info
   studentId String? @unique
-  batch Int? @default(0)
-  course String? 
+  batch     Int?    @default(0)
+  course    String?
 
   // POST GRAD INFO 
-  company String? @default("")
+  company           String? @default("")
   currentOccupation String? @default("")
-  jobTitle String? @default("")
+  jobTitle          String? @default("")
 
   // User Settings
   shareLocation Boolean @default(false)
@@ -56,20 +55,18 @@ model User {
   verifiedAt DateTime?
   status     UserStatus @default(ACTIVE)
 
-  
-  notifications Notification[] // Alumni can have multiple notifications
-  eventsInterested Event[] @relation("InterestEvent") // Alumni can be interested in multiple events
-  eventsAttended Event[] @relation("EventAttendees") // Alumni can attend multiple events
-  eventComments EventComment[] // Alumni can comment on multiple events
-  likedAnnouncements Announcement[] @relation("AnnouncementLikes") // Alumni can like multiple announcements
+  notifications        Notification[] // Alumni can have multiple notifications
+  eventsInterested     Event[]               @relation("InterestEvent") // Alumni can be interested in multiple events
+  eventsAttended       Event[]               @relation("EventAttendees") // Alumni can attend multiple events
+  eventComments        EventComment[] // Alumni can comment on multiple events
+  likedAnnouncements   Announcement[]        @relation("AnnouncementLikes") // Alumni can like multiple announcements
   announcementComments AnnouncementComment[] // Alumni can comment on multiple announcements
-  posts Post[] @relation("Posted By") // Alumni can post multiple posts
-  postComments PostComment[] // Alumni can comment on multiple posts
-  likedPosts Post[] @relation("PostLikes") // Alumni can like multiple posts
-  job Job[]
-  recruitment Recruitment[] @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
-  Votes Vote[] // Alumni can vote on multiple polls
-
+  posts                Post[]                @relation("Posted By") // Alumni can post multiple posts
+  postComments         PostComment[] // Alumni can comment on multiple posts
+  likedPosts           Post[]                @relation("PostLikes") // Alumni can like multiple posts
+  job                  Job[]
+  recruitment          Recruitment[]         @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
+  Votes                Vote[] // Alumni can vote on multiple polls
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -117,7 +114,6 @@ model Event {
   @@map("events")
 }
 
-
 enum NotificationType {
   EVENT
   EVENT_COMMENT
@@ -134,21 +130,20 @@ enum NotificationType {
   NEW_POLL
   POLL
   RECRUITMENT_APPLICATION
-
 }
 
 // Notification model: Stores notifications for alumni.
 model Notification {
-  id         Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   message    String
-  readStatus Boolean  @default(false) // Whether the notification has been read
-  type       NotificationType 
-  link      String? 
-  
-  userId   Int
-  user     User   @relation(fields: [userId], references: [id])
-  createdAt  DateTime @default(now())
+  readStatus Boolean          @default(false) // Whether the notification has been read
+  type       NotificationType
+  link       String?
+
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 
   @@map("notifications")
 }
@@ -162,37 +157,35 @@ model Session {
 }
 
 model Token {
- 
-  email String @unique @id
-  token String 
+  email      String   @id @unique
+  token      String
   validUntil DateTime
 
   @@map("tokens")
 }
 
 model EventComment {
-  id Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   comment String
 
-  eventId Int
-  event Event @relation(fields: [eventId], references: [id])
-  commentBy User @relation(fields: [commentById],references: [id])
-  commentById Int   
+  eventId     Int
+  event       Event @relation(fields: [eventId], references: [id])
+  commentBy   User  @relation(fields: [commentById], references: [id])
+  commentById Int
 
   createdAt DateTime @default(now())
 
   @@map("event_comments")
 }
 
-
-model AnnouncementComment { 
+model AnnouncementComment {
   id Int @id @default(autoincrement())
 
-  comment String
+  comment        String
   announcementId Int
-  announcement Announcement @relation(fields: [announcementId], references: [id])
-  commentBy User @relation(fields: [commentById], references: [id])
-  commentById Int
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+  commentBy      User         @relation(fields: [commentById], references: [id])
+  commentById    Int
 
   createdAt DateTime @default(now())
 
@@ -200,13 +193,12 @@ model AnnouncementComment {
 }
 
 model Announcement {
-
-  id        Int      @id @default(autoincrement())
-  slug      String   @unique
-  title      String @db.Text
+  id      Int    @id @default(autoincrement())
+  slug    String @unique
+  title   String @db.Text
   content String @db.Text
 
-  likedBy User[] @relation("AnnouncementLikes") // Many-to-many with alumni
+  likedBy  User[]                @relation("AnnouncementLikes") // Many-to-many with alumni
   comments AnnouncementComment[]
 
   createdAt DateTime @default(now())
@@ -224,18 +216,18 @@ enum PostType {
 }
 
 model Post {
-  id       Int      @id @default(autoincrement())
-  slug      String   @unique
+  id      Int      @id @default(autoincrement())
+  slug    String   @unique
   // type  PostType @default(JOB)
-  title     String   @db.Text
-  content   String   @db.Text
+  title   String   @db.Text
+  content String   @db.Text
   images  String[]
 
   comments PostComment[]
-  likedBy User[] @relation("PostLikes") // Many-to-many with alumni
+  likedBy  User[]        @relation("PostLikes") // Many-to-many with alumni
 
   postedById Int
-  postedBy User @relation("Posted By", fields: [postedById], references: [id])
+  postedBy   User @relation("Posted By", fields: [postedById], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -244,20 +236,19 @@ model Post {
 }
 
 model PostComment {
-  id Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   comment String
 
-  postId Int
+  postId   Int
   postedBy Post @relation(fields: [postId], references: [id])
 
-  commentBy User @relation(fields: [commentById], references: [id])
+  commentBy   User @relation(fields: [commentById], references: [id])
   commentById Int
 
   createdAt DateTime @default(now())
 
   @@map("post_comments")
 }
-
 
 enum JobType {
   FULL_TIME
@@ -273,17 +264,17 @@ enum JobStatus {
 }
 
 model Job {
-  id Int @id @default(autoincrement())
-  title String
+  id          Int       @id @default(autoincrement())
+  title       String
   description String
-  company String
-  location String
-  jobTitle String
-  type JobType @default(FULL_TIME)
-  status JobStatus @default(OPEN)
+  company     String
+  location    String
+  jobTitle    String
+  type        JobType   @default(FULL_TIME)
+  status      JobStatus @default(OPEN)
 
   postedById Int
-  postedBy User @relation(fields: [postedById], references: [id])
+  postedBy   User @relation(fields: [postedById], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -299,70 +290,63 @@ enum RecruitmentStatus {
 model Recruitment {
   id Int @id @default(autoincrement())
 
-  eventTitle String
-  recruiting String
+  eventTitle     String
+  recruiting     String
   allowedBatches Int[]
-  industry String
-  topics String
-  date DateTime
-
+  industry       String
+  topics         String
+  date           DateTime
 
   applicantsId Int[]
-  applicants User[] @relation("RecruitmentApplicants")
+  applicants   User[] @relation("RecruitmentApplicants")
 
-  status RecruitmentStatus @default(OPEN) 
- 
+  status RecruitmentStatus @default(OPEN)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
   @@map("recruitments")
-
 }
 
- 
 enum PollStatus {
   OPEN
   COMPLETED
 }
 
 model Poll {
-  id          Int         @id @default(autoincrement())
-  question    String      @db.Text // Poll's main question
-  status PollStatus @default(OPEN)
-  options     Option[]    // Relationship: One poll has many options
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        Int        @id @default(autoincrement())
+  question  String     @db.Text // Poll's main question
+  status    PollStatus @default(OPEN)
+  options   Option[] // Relationship: One poll has many options
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Option {
-  id         Int        @id @default(autoincrement())
-  content    String     // Option text (e.g., "Manila")
-  pollId     Int        // Foreign key referencing Poll
-  poll       Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
-  votes      Vote[]     // Relationship: Option can have multiple votes
+  id      Int    @id @default(autoincrement())
+  content String // Option text (e.g., "Manila")
+  pollId  Int // Foreign key referencing Poll
+  poll    Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes   Vote[] // Relationship: Option can have multiple votes
 }
 
 model Vote {
-  id         Int        @id @default(autoincrement())
-  optionId   Int        // Foreign key referencing Option
-  option     Option     @relation(fields: [optionId], references: [id], onDelete: Cascade)
-  userId     Int        // Foreign key referencing User
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime   @default(now())
+  id        Int      @id @default(autoincrement())
+  optionId  Int // Foreign key referencing Option
+  option    Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  userId    Int // Foreign key referencing User
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
-
 model Batch {
-  id Int @id @default(autoincrement())
+  id    Int @id @default(autoincrement())
   batch Int @unique
 
   images String[]
 
   @@map("batches")
 }
-
-
 
 // model Recruitment {
 //   id Int @id @default(autoincrement())
@@ -376,17 +360,17 @@ model Batch {
 //   @@map("recruitments")
 // }
 
-
 model LoginLog {
-  id Int @id @default(autoincrement())
-  email String 
+  id        Int     @id @default(autoincrement())
+  email     String
   ipAddress String
   userAgent String
-  status Boolean @default(false) // true for success, false for failure
-
+  status    Boolean @default(false) // true for success, false for failure
+  device    String? // Device used for login (e.g., "Mobile", "Desktop")
+  os        String? // Operating system used for login (e.g., "Windows", "macOS", "Android", "iOS")
+  browser   String? // Browser used for login (e.g., "Chrome", "Firefox", "Safari")
 
   createdAt DateTime @default(now())
 
   @@map("login_logs")
-
 }
