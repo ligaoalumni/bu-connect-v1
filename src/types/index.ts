@@ -217,6 +217,16 @@ export interface TPostComment extends PostComment {
 	batch: string;
 }
 
+export interface ShareableComment {
+	commentId: number;
+	userId: number;
+	name: string;
+	avatar?: string;
+	batch?: number;
+	comment: string;
+	timestamp: Date;
+}
+
 export interface Batch extends TBatch {
 	students: number;
 }
