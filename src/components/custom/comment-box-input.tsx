@@ -33,7 +33,7 @@ export default function CommentBox({ onSubmit }: CommentBoxProps) {
 		if (comment.trim()) {
 			try {
 				setLoading(true);
-				onSubmit(comment.trim());
+				await onSubmit(comment.trim());
 				setComment("");
 				setIsFocused(false);
 			} catch (error) {
