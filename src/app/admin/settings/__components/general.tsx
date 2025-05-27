@@ -77,7 +77,7 @@ export default function GeneralSettings({ data }: GeneralSettingsProps) {
 						</div>
 						<Input
 							id="site-name"
-							defaultValue="Alumni QR Code Tracking System"
+							value={info.websiteName}
 							onChange={(e) =>
 								setInfo({ ...info, websiteName: e.target.value })
 							}
