@@ -76,6 +76,7 @@ export * from "./custom/announcements-infinite-scroll";
 export * from "./custom/announcement-comment-section";
 export * from "./custom/reactions";
 export * from "./custom/interested-alumni-section";
+export * from "./custom/comment";
 
 // LOCATION PICKER
 export * from "./custom/location-picker/location-picker";
