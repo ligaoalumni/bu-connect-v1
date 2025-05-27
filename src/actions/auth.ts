@@ -2,7 +2,7 @@
 
 import { SignupFormSchema } from "@/lib/definitions";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
-import { createUser, readUser } from "@/repositories";
+import { createUser, logLoginAttempt, readUser } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -64,12 +64,14 @@ export async function loginAction(email: string, password: string) {
 		const user = await readUser(-1, email);
 
 		if (!user) {
+			await logLoginAttempt(email, false);
 			return {
 				error: { message: "User is not registered" },
 			};
 		}
 
 		if (user.status === "DELETED" || user.status === "BLOCKED") {
+			await logLoginAttempt(email, false);
 			return {
 				error: {
 					message:
@@ -79,6 +81,7 @@ export async function loginAction(email: string, password: string) {
 		}
 
 		if (user.status === "PENDING" && user.role === "ALUMNI") {
+			await logLoginAttempt(email, false);
 			return {
 				error: {
 					isPending: true,
@@ -91,6 +94,7 @@ export async function loginAction(email: string, password: string) {
 		const passwordMatch = await bcrypt.compare(password, user.password);
 
 		if (!passwordMatch) {
+			await logLoginAttempt(email, false);
 			return {
 				error: { message: "Invalid password" },
 			};
@@ -98,7 +102,8 @@ export async function loginAction(email: string, password: string) {
 
 		// Create user session
 		const { email: userEmail, id, role } = user;
-		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+		const expiresAt = new Date();
+		expiresAt.setDate(expiresAt.getDate() + 7);
 		const session = await encrypt({
 			id,
 			role,
@@ -108,6 +113,7 @@ export async function loginAction(email: string, password: string) {
 		});
 		const cookieStore = await cookies();
 
+		await logLoginAttempt(email, true);
 		cookieStore.set("session", session, {
 			httpOnly: true,
 			secure: true,

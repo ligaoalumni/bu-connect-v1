@@ -31,7 +31,6 @@ export default function CommentBox({ onSubmit }: CommentBoxProps) {
 
 	const handleSubmit = async () => {
 		if (comment.trim()) {
-			// TODO: Add comment submission logic here
 			try {
 				setLoading(true);
 				await onSubmit(comment.trim());

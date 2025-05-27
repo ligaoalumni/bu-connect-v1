@@ -9,6 +9,7 @@ import {
 	SheetTitle,
 	Skeleton,
 } from "@/components";
+import { formatAddress } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { formatDate } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -48,9 +49,8 @@ export default function AlumniDetailsSheet({
 					<SheetTitle>Alumni Details</SheetTitle>
 					<SheetDescription>
 						<SheetDescription>
-							{/* // TODO: Refactor Description */}
-							Please verify the details of the alumni account before proceeding.
-							Ensure that the information is accurate and up-to-date.
+							View the alumni account details below. All information is
+							displayed for review.
 						</SheetDescription>
 					</SheetDescription>
 				</SheetHeader>
@@ -128,9 +128,9 @@ export default function AlumniDetailsSheet({
 									<p className="flex justify-between">
 										<strong>Religion:</strong> <span>{alumni.religion}</span>
 									</p>
-									{/* // TODO: TO FIX */}
 									<p className="flex justify-between">
-										<strong>Address:</strong> <span>{alumni.religion}</span>
+										<strong>Address:</strong>{" "}
+										<span>{formatAddress(alumni.address).address}</span>
 									</p>
 								</div>
 

@@ -4,7 +4,6 @@ import { readEventCommentsAction, writeEventCommentAction } from "@/actions";
 import type { EventComment, PaginationResult } from "@/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
 	AlertCircle,
@@ -12,10 +11,9 @@ import {
 	MessageSquare,
 	RefreshCw,
 } from "lucide-react";
-import { Skeleton } from "../ui/skeleton";
 import CommentBox from "./comment-box-input";
 import { createBrowserClient } from "@/lib/supabase-client";
-import { formatDistanceToNow } from "date-fns";
+import { CommentCard, CommentSkeleton } from "./comment";
 
 interface EventCommentsSectionProps {
 	eventSlug: string;
@@ -234,7 +232,15 @@ export function EventCommentsSection({
 							<div className="space-y-3 divide-y divide-gray-100">
 								{data.data.map((comment) => (
 									<div className="pt-3 first:pt-0" key={comment.id}>
-										<CommentCard {...comment} />
+										<CommentCard
+											comment={comment.comment}
+											commentId={comment.id}
+											name={comment.name}
+											avatar={comment.avatar || ""}
+											timestamp={new Date(comment.createdAt)}
+											userId={Number(comment.studentId)}
+											batch={Number(comment.batch) || undefined}
+										/>
 									</div>
 								))}
 							</div>
@@ -284,48 +290,3 @@ export function EventCommentsSection({
 		</div>
 	);
 }
-
-const CommentCard = (comment: EventComment) => {
-	return (
-		<div className="group hover:bg-gray-50 p-3 rounded-md transition-colors">
-			<div className="flex items-center gap-3 mb-2">
-				<Avatar className="border">
-					{comment.avatar ? (
-						<AvatarImage src={comment.avatar || ""} alt={comment.name} />
-					) : (
-						<AvatarFallback className="bg-primary/10 text-primary">
-							{comment.name.charAt(0)}
-						</AvatarFallback>
-					)}
-				</Avatar>
-				<div>
-					<h3 className="font-medium group-hover:text-primary transition-colors">
-						{comment.name}
-					</h3>
-					<p className="text-xs text-muted-foreground flex items-center gap-2">
-						<span>{comment.batch}</span>
-						<span className="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
-						<span>{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
-					</p>
-				</div>
-			</div>
-			<p className="text-sm pl-12">{comment.comment}</p>
-		</div>
-	);
-};
-
-const CommentSkeleton = () => {
-	return (
-		<div className="p-3">
-			<div className="flex items-center gap-3 mb-2">
-				<Skeleton className="h-10 w-10 rounded-full" />
-				<div className="space-y-2">
-					<Skeleton className="h-4 w-32" />
-					<Skeleton className="h-3 w-24" />
-				</div>
-			</div>
-			<Skeleton className="h-4 w-full max-w-md ml-12" />
-			<Skeleton className="h-4 w-full max-w-sm ml-12 mt-1" />
-		</div>
-	);
-};
