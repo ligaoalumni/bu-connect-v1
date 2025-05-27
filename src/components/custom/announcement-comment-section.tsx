@@ -4,17 +4,15 @@ import {
 	readAnnouncementCommentsAction,
 	writeAnnouncementCommentAction,
 } from "@/actions";
+import { Button } from "../ui/button";
 import type { AnnouncementCommentWithUser, PaginationResult } from "@/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";
-import { Skeleton } from "../ui/skeleton";
 import CommentBox from "./comment-box-input";
-import { formatDistanceToNow } from "date-fns";
 import { createBrowserClient } from "@/lib/supabase-client";
 import { useContentData } from "@/contexts/content-context";
+import { CommentCard, CommentSkeleton } from "./comment";
 
 interface AnnouncementCommentsSectionProps {
 	announcementId: number;
@@ -242,11 +240,22 @@ export function AnnouncementCommentsSection({
 					{data.data.length > 0 ? (
 						<div className="space-y-3">
 							<div className="space-y-3 divide-y divide-gray-100">
-								{data.data.map((comment) => (
-									<div className="pt-3 first:pt-0" key={comment.id}>
-										<CommentCard {...comment} />
-									</div>
-								))}
+								{data.data.map((comment) => {
+									const name = `${comment.commentBy.firstName} ${comment.commentBy.lastName}`;
+									return (
+										<div className="pt-3 first:pt-0" key={comment.id}>
+											<CommentCard
+												comment={comment.comment}
+												commentId={comment.id}
+												name={name}
+												avatar={comment.commentBy.avatar || ""}
+												timestamp={comment.createdAt}
+												userId={comment.commentBy.id}
+												batch={comment.commentBy.batch || undefined}
+											/>
+										</div>
+									);
+								})}
 							</div>
 
 							{/* Load More Section */}
@@ -294,58 +303,3 @@ export function AnnouncementCommentsSection({
 		</div>
 	);
 }
-
-const CommentCard = (comment: AnnouncementCommentWithUser) => {
-	const name = `${comment.commentBy.firstName} ${comment.commentBy.lastName}`;
-
-	return (
-		<div className="group hover:bg-gray-50 p-3 rounded-md transition-colors">
-			<div className="flex items-center gap-3 mb-2">
-				<Avatar className="border">
-					{comment.commentBy.avatar ? (
-						<AvatarImage
-							src={comment.commentBy.avatar || ""}
-							alt={comment.commentBy.avatar}
-						/>
-					) : (
-						<AvatarFallback className="bg-primary/10 text-primary">
-							{comment.commentBy.firstName.charAt(0)}
-							{comment.commentBy.lastName.charAt(0)}
-						</AvatarFallback>
-					)}
-				</Avatar>
-				<div>
-					<h3 className="font-medium group-hover:text-primary transition-colors">
-						{name}
-					</h3>
-					<p className="text-xs text-muted-foreground flex items-center gap-2">
-						{comment.commentBy.batch && (
-							<>
-								<span>{comment.commentBy.batch}</span>
-								<span className="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
-							</>
-						)}
-						<span>{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
-					</p>
-				</div>
-			</div>
-			<p className="text-sm pl-12">{comment.comment}</p>
-		</div>
-	);
-};
-
-const CommentSkeleton = () => {
-	return (
-		<div className="p-3">
-			<div className="flex items-center gap-3 mb-2">
-				<Skeleton className="h-10 w-10 rounded-full" />
-				<div className="space-y-2">
-					<Skeleton className="h-4 w-32" />
-					<Skeleton className="h-3 w-24" />
-				</div>
-			</div>
-			<Skeleton className="h-4 w-full max-w-md ml-12" />
-			<Skeleton className="h-4 w-full max-w-sm ml-12 mt-1" />
-		</div>
-	);
-};

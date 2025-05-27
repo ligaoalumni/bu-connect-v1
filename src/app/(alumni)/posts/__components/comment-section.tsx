@@ -1,19 +1,11 @@
 "use client";
 
 import { writePostCommentAction } from "@/actions";
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
-	Separator,
-	Skeleton,
-} from "@/components";
+import { Button, CommentCard, CommentSkeleton, Separator } from "@/components";
 import CommentBox from "@/components/custom/comment-box-input";
 import { createBrowserClient } from "@/lib/supabase-client";
 import { readPostComments } from "@/repositories";
 import { PaginationResult, TPostComment } from "@/types";
-import { formatDistanceToNow } from "date-fns";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -215,11 +207,21 @@ export default function CommentSection({
 					{data.data.length > 0 ? (
 						<div className="space-y-3">
 							<div className="space-y-3 divide-y divide-gray-100">
-								{data.data.map((comment) => (
-									<div className="pt-3 first:pt-0" key={comment.id}>
-										<CommentCard {...comment} />
-									</div>
-								))}
+								{data.data.map((comment) => {
+									return (
+										<div className="pt-3 first:pt-0" key={comment.id}>
+											<CommentCard
+												comment={comment.comment}
+												commentId={comment.id}
+												name={comment.name}
+												avatar={comment.avatar || ""}
+												timestamp={comment.createdAt}
+												userId={comment.id}
+												batch={Number(comment.batch) || undefined}
+											/>
+										</div>
+									);
+								})}
 							</div>
 
 							{/* Load More Section */}
@@ -267,50 +269,3 @@ export default function CommentSection({
 		</div>
 	);
 }
-
-// TODO: Move to components folder make it reusable
-const CommentSkeleton = () => {
-	return (
-		<div className="p-3">
-			<div className="flex items-center gap-3 mb-2">
-				<Skeleton className="h-10 w-10 rounded-full" />
-				<div className="space-y-2">
-					<Skeleton className="h-4 w-32" />
-					<Skeleton className="h-3 w-24" />
-				</div>
-			</div>
-			<Skeleton className="h-4 w-full max-w-md ml-12" />
-			<Skeleton className="h-4 w-full max-w-sm ml-12 mt-1" />
-		</div>
-	);
-};
-
-// TODO: Move to components folder make it reusable
-const CommentCard = (comment: TPostComment) => {
-	return (
-		<div className="group hover:bg-gray-50 p-3 rounded-md transition-colors">
-			<div className="flex items-center gap-3 mb-2">
-				<Avatar className="border">
-					{comment.avatar ? (
-						<AvatarImage src={comment.avatar || ""} alt={comment.name} />
-					) : (
-						<AvatarFallback className="bg-primary/10 text-primary">
-							{comment.name.charAt(0)}
-						</AvatarFallback>
-					)}
-				</Avatar>
-				<div>
-					<h3 className="font-medium group-hover:text-primary transition-colors">
-						{comment.name}
-					</h3>
-					<p className="text-xs text-muted-foreground flex items-center gap-2">
-						<span>{comment.batch}</span>
-						<span className="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
-						<span>{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
-					</p>
-				</div>
-			</div>
-			<p className="text-sm pl-12">{comment.comment}</p>
-		</div>
-	);
-};
