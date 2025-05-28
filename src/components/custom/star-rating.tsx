@@ -11,6 +11,7 @@ interface StarRatingProps {
 	size?: "sm" | "md" | "lg";
 	readOnly?: boolean;
 	className?: string;
+	hideRate?: boolean;
 }
 
 export function StarRating({
@@ -18,6 +19,7 @@ export function StarRating({
 	size = "md",
 	readOnly = false,
 	className,
+	hideRate = false,
 }: StarRatingProps) {
 	const [rating, setRating] = useState(initialRating);
 	const [hoverRating, setHoverRating] = useState(0);
@@ -123,9 +125,11 @@ export function StarRating({
 					</div>
 				);
 			})}
-			<span className="ml-2 text-sm text-gray-600" aria-live="polite">
-				{activeRating ? `${activeRating.toFixed(1)}` : ""}
-			</span>
+			{!hideRate && (
+				<span className="ml-2 text-sm text-gray-600" aria-live="polite">
+					{activeRating ? `${activeRating.toFixed(1)}` : ""}
+				</span>
+			)}
 		</div>
 	);
 }
