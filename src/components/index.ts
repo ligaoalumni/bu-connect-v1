@@ -77,6 +77,8 @@ export * from "./custom/announcement-comment-section";
 export * from "./custom/reactions";
 export * from "./custom/interested-alumni-section";
 export * from "./custom/comment";
+export * from "./custom/feed";
+export * from "./custom/star-rating";
 
 // LOCATION PICKER
 export * from "./custom/location-picker/location-picker";
