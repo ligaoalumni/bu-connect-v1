@@ -5,6 +5,8 @@ import type React from "react";
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { updateUserAction } from "@/actions";
+import { toast } from "sonner";
 
 interface StarRatingProps {
 	initialRating?: number;
@@ -23,6 +25,7 @@ export function StarRating({
 }: StarRatingProps) {
 	const [rating, setRating] = useState(initialRating);
 	const [hoverRating, setHoverRating] = useState(0);
+	const [loading, setLoading] = useState(false);
 
 	const sizes = {
 		sm: "w-4 h-4",
@@ -30,8 +33,12 @@ export function StarRating({
 		lg: "w-8 h-8",
 	};
 
-	const handleClick = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
-		if (readOnly) return;
+	const handleClick = async (
+		e: React.MouseEvent<HTMLDivElement>,
+		index: number
+	) => {
+		if (loading || readOnly) return;
+		const prevRating = rating;
 
 		const { left, width } = e.currentTarget.getBoundingClientRect();
 		const percent = (e.clientX - left) / width;
@@ -45,9 +52,30 @@ export function StarRating({
 			selectedRating = index + 1;
 		}
 
-		setRating(selectedRating);
-
-		// onChange?.(selectedRating);
+		try {
+			setLoading(true);
+			setRating(selectedRating);
+			await updateUserAction({
+				rate: selectedRating,
+			});
+			toast.success("Rating updated successfully!", {
+				description: `You rated ${selectedRating} stars.`,
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
+		} catch (error) {
+			toast.error("Failed to update rating.", {
+				description: "Please try again later.",
+				richColors: true,
+				position: "top-center",
+				duration: 5000,
+			});
+			console.log(error);
+			setRating(prevRating); // Revert to previous rating on error
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const handleMouseMove = (
