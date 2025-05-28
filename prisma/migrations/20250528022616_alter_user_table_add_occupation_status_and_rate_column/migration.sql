@@ -1,0 +1,6 @@
+-- CreateEnum
+CREATE TYPE "OccupationStatus" AS ENUM ('POST_GRADUATE_STUDENT', 'EMPLOYED', 'UNEMPLOYED', 'SELF_EMPLOYED', 'RETIRED', 'PREFER_NOT_TO_SAY');
+
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "occupationStatus" "OccupationStatus" NOT NULL DEFAULT 'PREFER_NOT_TO_SAY',
+ADD COLUMN     "rate" INTEGER DEFAULT 0;

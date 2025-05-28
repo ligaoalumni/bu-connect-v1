@@ -54,6 +54,9 @@ model User {
 
   verifiedAt DateTime?
   status     UserStatus @default(ACTIVE)
+  rate Int? @default(0) // Alumni rating, can be used for feedback or reputation
+
+  occupationStatus OccupationStatus @default(PREFER_NOT_TO_SAY)
 
   notifications        Notification[] // Alumni can have multiple notifications
   eventsInterested     Event[]               @relation("InterestEvent") // Alumni can be interested in multiple events
@@ -73,6 +76,15 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+enum OccupationStatus {
+  POST_GRADUATE_STUDENT
+  EMPLOYED
+  UNEMPLOYED
+  SELF_EMPLOYED
+  RETIRED
+  PREFER_NOT_TO_SAY
 }
 
 enum UserStatus {
@@ -389,3 +401,4 @@ model Setting {
 
   @@map("settings")
 }
+
