@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 interface StarRatingProps {
 	initialRating?: number;
-	onChange?: (rating: number) => void;
 	size?: "sm" | "md" | "lg";
 	readOnly?: boolean;
 	className?: string;
@@ -16,7 +15,6 @@ interface StarRatingProps {
 
 export function StarRating({
 	initialRating = 0,
-	onChange,
 	size = "md",
 	readOnly = false,
 	className,
@@ -46,7 +44,8 @@ export function StarRating({
 		}
 
 		setRating(selectedRating);
-		onChange?.(selectedRating);
+
+		// onChange?.(selectedRating);
 	};
 
 	const handleMouseMove = (
