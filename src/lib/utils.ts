@@ -1,6 +1,6 @@
 import { INDUSTRIES } from "@/constant";
 import { AddressData } from "@/types";
-import { NotificationType } from "@prisma/client";
+import { NotificationType, OccupationStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -136,3 +136,15 @@ export function getNotificationTitle(type: NotificationType): string {
 export const formatAddress = (address: any): AddressData => {
 	return typeof address === "string" ? JSON.parse(address) : address;
 };
+
+export function getOccupationStatusLabel(status: OccupationStatus): string {
+	const labels: Record<OccupationStatus, string> = {
+		UNEMPLOYED: "Unemployed",
+		EMPLOYED: "Employed",
+		SELF_EMPLOYED: "Self-Employed",
+		POST_GRADUATE_STUDENT: "Post Graduate Student",
+		RETIRED: "Retired",
+		PREFER_NOT_TO_SAY: "Prefer not to say",
+	};
+	return labels[status];
+}
