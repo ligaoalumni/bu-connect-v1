@@ -43,3 +43,17 @@ export type AlumniDataTableColumns = Pick<
 	| "gender"
 	| "status"
 >;
+
+export type UpdateUserArgs = Partial<
+	Pick<
+		User,
+		| "avatar"
+		| "firstName"
+		| "lastName"
+		| "middleName"
+		| "verifiedAt"
+		| "shareLocation"
+		| "occupationStatus"
+		| "rate"
+	>
+>;

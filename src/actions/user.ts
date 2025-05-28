@@ -20,6 +20,7 @@ import type {
 	PaginationArgs,
 	PaginationResult,
 	UpdateProfileData,
+	UpdateUserArgs,
 	UserRole,
 } from "@/types";
 import { User } from "@prisma/client";
@@ -255,6 +256,24 @@ export const updateLocationSharingAction = async (shareLocation: boolean) => {
 			err instanceof Error
 				? err.message
 				: "An error occurred while sending OTP to your new email address."
+		);
+	}
+};
+
+export const updateUserAction = async (data: UpdateUserArgs) => {
+	try {
+		const cookieStore = await cookies();
+
+		const session = await decrypt(cookieStore.get("session")?.value);
+
+		if (session == null) throw new Error("Session expired!");
+
+		await updateUser(session.id, data);
+	} catch (err) {
+		throw new Error(
+			err instanceof Error
+				? err.message
+				: "An error occurred while updating the user."
 		);
 	}
 };

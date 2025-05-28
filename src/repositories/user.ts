@@ -6,6 +6,7 @@ import {
 	PaginationArgs,
 	PaginationResult,
 	UpdateProfileData,
+	UpdateUserArgs,
 	UserRole,
 } from "@/types";
 import { Prisma, User } from "@prisma/client";
@@ -157,20 +158,7 @@ export const updateLocationSharing = async (
 	});
 };
 
-export const updateUser = async (
-	id: number,
-	data: Partial<
-		Pick<
-			User,
-			| "avatar"
-			| "firstName"
-			| "lastName"
-			| "middleName"
-			| "verifiedAt"
-			| "shareLocation"
-		>
-	>
-) => {
+export const updateUser = async (id: number, data: UpdateUserArgs) => {
 	const isExists = await prisma.user.findUnique({
 		where: {
 			id,
