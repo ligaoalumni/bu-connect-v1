@@ -10,6 +10,7 @@ import {
 	MobileDrawer,
 	NotificationDropdown,
 } from "@/components";
+import { usePathname } from "next/navigation";
 
 const links = [
 	"/",
@@ -22,6 +23,7 @@ const links = [
 
 export function Header() {
 	const { user } = useAuth();
+	const path = usePathname();
 
 	return (
 		<>
@@ -60,7 +62,10 @@ export function Header() {
 					</div>
 				</div>
 			</header>
-			<div className="sticky top-0   z-50 hidden md:flex py-2 bg-[#15497A]  shadow-md mx-auto container justify-center gap-4">
+			<div
+				className={`sticky top-0 ${
+					path !== "/" && "shadow-md"
+				}  z-50 hidden md:flex py-2 bg-[#15497A]  mx-auto container justify-center gap-4`}>
 				{links.map((link, index) => (
 					<Button
 						key={`${link}-${index}`}

@@ -59,7 +59,6 @@ export function Header({
 							<p className="text-lg font-poppins">Polangui</p>
 						</div>
 					</div>
-
 					<div className="flex gap-2">
 						<ThemeSwitcher />
 						{user ? (
@@ -80,7 +79,10 @@ export function Header({
 						</div>
 					</div>
 				</header>
-				<div className="sticky top-0   z-50 hidden md:flex py-2 bg-[#15497A]  shadow-md mx-auto container justify-center gap-4">
+				<div
+					className={`sticky top-0 ${
+						path !== "/" && "shadow-md"
+					}  z-50 hidden md:flex py-2 bg-[#15497A]  mx-auto container justify-center gap-4`}>
 					{links.map((link, index) => (
 						<Button
 							key={`${link}-${index}`}
