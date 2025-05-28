@@ -50,12 +50,17 @@ export async function Feed() {
 				<div className="flex flex-col md:flex-row smd:justify-between gap-4">
 					<div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
 						<h2 className="font-medium">Where are you now?</h2>
-						<StatusSelection />
+						<StatusSelection initialValue={information?.occupationStatus} />
 					</div>
 					<div className="bg-white space-y-2 rounded-md shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
 						<h2 className="font-medium">How did BU Connect help you?</h2>
 						<div className="flex justify-center items-center gap-2">
-							<StarRating size="lg" className="  " hideRate />
+							<StarRating
+								size="lg"
+								initialRating={information?.rate || 0}
+								className="  "
+								hideRate
+							/>
 						</div>
 					</div>
 				</div>
