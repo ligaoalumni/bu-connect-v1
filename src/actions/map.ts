@@ -1,5 +1,7 @@
 "use server";
 
+import { readUserLocations } from "@/repositories";
+
 const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org";
 
 export interface GeocodingResult {
@@ -114,3 +116,12 @@ export async function reverseGeocodeAction(
 		return null;
 	}
 }
+
+export const readUserLocationAction = async () => {
+	try {
+		return await readUserLocations();
+	} catch (error) {
+		console.log(error);
+		throw new Error("Failed to create event");
+	}
+};
