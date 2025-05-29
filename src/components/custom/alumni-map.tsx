@@ -136,7 +136,9 @@ export default function AlumniMap({
 							position={[user.address.lat, user.address.lng]}
 							icon={customIcon}>
 							<Popup closeButton={false} className="custom-popup">
-								<Link target="_blank" href={`/batch/alumni/${user.id}`}>
+								<Link
+									target="_blank"
+									href={`/batch/${user.batch}/alumni/${user.id}`}>
 									<div
 										style={{
 											display: "flex",
