@@ -13,6 +13,7 @@ import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes } from "date-fns";
 import { transporter } from "@/lib/email";
+import { formatAddress } from "@/lib/utils";
 
 const generateOTP = () => {
 	// Generate a 6-digit OTP
@@ -359,4 +360,30 @@ export const getUsersId = async () => {
 	});
 
 	return users.map((user) => user.id);
+};
+
+export const readUserLocations = async () => {
+	const users = await prisma.user.findMany({
+		where: {
+			shareLocation: true,
+		},
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+			middleName: true,
+			avatar: true,
+			address: true,
+			batch: true,
+		},
+	});
+
+	return users.map((user) => ({
+		name: `${user.firstName} ${user.middleName ? user.middleName + " " : ""}${
+			user.lastName
+		}`,
+		avatar: user.avatar,
+		batch: user.batch,
+		address: formatAddress(user.address),
+	}));
 };
