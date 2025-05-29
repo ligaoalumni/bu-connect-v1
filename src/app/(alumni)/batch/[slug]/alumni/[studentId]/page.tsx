@@ -29,8 +29,7 @@ export default async function Page({
 	return (
 		<>
 			<div className="space-y-3">
-				<h1 className=" text-center text-lg font-medium">User Profile</h1>
-				<div className="rounded-3xl space-y-5 px-5 bg-[#2F61A0] py-10 dark:bg-[#5473a8]">
+				<div className="rounded-3xl space-y-5 px-5   py-10 dark:bg-[#5473a8]">
 					<div className="flex flex-col items-center ">
 						<Avatar className="h-[120px] w-[120px]">
 							<AvatarImage src={user.avatar || ""} />
@@ -40,10 +39,10 @@ export default async function Page({
 							</AvatarFallback>
 						</Avatar>
 						<div className="text-center">
-							<h2 className="text-2xl font-semibold text-white">
+							<h2 className="text-2xl font-semibold ">
 								{user?.firstName} {user?.lastName}
 							</h2>
-							<p className="text-sm text-white">
+							<p className="text-sm  ">
 								{user?.batch} {user?.course}
 							</p>
 						</div>
@@ -68,15 +67,28 @@ export default async function Page({
 						/> */}
 					</div>
 
-					<Card className="bg-transparent text-white">
+					<Card className="bg-transparent  ">
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
 							<CardTitle>Personal Information</CardTitle>
 						</CardHeader>
 						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  md:col-span-2">
-							<AlumniData label="First Name" data={user?.firstName} />
-							<AlumniData label="Middle Name" data={user?.middleName} />
-							<AlumniData label="Last Name" data={user?.lastName} />
 							<AlumniData
+								useDefaultColors
+								label="First Name"
+								data={user?.firstName}
+							/>
+							<AlumniData
+								useDefaultColors
+								label="Middle Name"
+								data={user?.middleName}
+							/>
+							<AlumniData
+								useDefaultColors
+								label="Last Name"
+								data={user?.lastName}
+							/>
+							<AlumniData
+								useDefaultColors
 								label="Birth Date"
 								data={
 									user?.birthDate
@@ -85,43 +97,70 @@ export default async function Page({
 								}
 							/>
 							<AlumniData
+								useDefaultColors
 								label="Gender"
 								data={`${user?.gender[0]}${user?.gender
 									.slice(1)
 									.toLocaleLowerCase()}`.replaceAll(/_/g, " ")}
 							/>
-							<AlumniData label="Email" data={user?.email} />
-							{/* <AlumniData label="Address" data={user?.address} /> */}
-							<AlumniData label="Contact Number" data={user?.contactNumber} />
-							<AlumniData label="Nationality" data={user?.nationality} />
-							<AlumniData label="Religion" data={user?.religion} />
+							<AlumniData useDefaultColors label="Email" data={user?.email} />
+							{/* <AlumniData useDefaultColors label="Address" data={user?.address} /> */}
+							<AlumniData
+								useDefaultColors
+								label="Contact Number"
+								data={user?.contactNumber}
+							/>
+							<AlumniData
+								useDefaultColors
+								label="Nationality"
+								data={user?.nationality}
+							/>
+							<AlumniData
+								useDefaultColors
+								label="Religion"
+								data={user?.religion}
+							/>
 
-							{/* <AlumniData label="Contact Number" data={alumni.user./} /> */}
+							{/* <AlumniData useDefaultColors label="Contact Number" data={alumni.user./} /> */}
 						</CardContent>
 					</Card>
 
-					<Card className="bg-transparent text-white">
+					<Card className="bg-transparent  ">
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
 							<CardTitle>Academic Information</CardTitle>
 						</CardHeader>
 						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  ">
-							<AlumniData label="Student ID" data={user?.studentId} />
-							<AlumniData label="Batch" data={user?.batch?.toString()} />
-							<AlumniData label="Course" data={user?.course} />
+							<AlumniData
+								useDefaultColors
+								label="Student ID"
+								data={user?.studentId}
+							/>
+							<AlumniData
+								useDefaultColors
+								label="Batch"
+								data={user?.batch?.toString()}
+							/>
+							<AlumniData useDefaultColors label="Course" data={user?.course} />
 						</CardContent>
 					</Card>
 
-					<Card className="bg-transparent text-white">
+					<Card className="bg-transparent  ">
 						<CardHeader className="px-5 pb-2 pt-5 font-medium">
 							<CardTitle>Post - Graduation Information</CardTitle>
 						</CardHeader>
 						<CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  ">
-							<AlumniData label="Company" data={user?.company} />
 							<AlumniData
+								useDefaultColors
+								label="Company"
+								data={user?.company}
+							/>
+							<AlumniData
+								useDefaultColors
 								label="Name of University/College"
 								data={user?.jobTitle}
 							/>
 							<AlumniData
+								useDefaultColors
 								label="Current Occupation"
 								data={user?.currentOccupation}
 							/>
