@@ -6,6 +6,7 @@ import {
 	readAnnouncementsAction,
 	readEventsAction,
 	readJobsAction,
+	readUserLocationAction,
 } from "@/actions";
 import { Button, EmptyState } from "@/components";
 import EventCard from "@/components/custom/event-card";
@@ -40,6 +41,7 @@ export async function Feed() {
 		order: "desc",
 		orderBy: "createdAt",
 	});
+	const locations = await readUserLocationAction();
 
 	return (
 		<div className="container mx-auto space-y-10 pb-10   px-5 md:px-0">
@@ -134,7 +136,7 @@ export async function Feed() {
 				<h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
 					Alumni Map
 				</h1>
-				<AlumniMap />
+				<AlumniMap initialMarkers={locations || []} />
 			</section>
 
 			{/* <InfiniteScroll defaultData={events.data} moreData={events.hasMore} /> */}
