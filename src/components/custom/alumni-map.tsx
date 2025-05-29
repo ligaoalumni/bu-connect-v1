@@ -80,7 +80,7 @@ export default function AlumniMap({
 }) {
 	// Use state to track if component is mounted (client-side)
 	const [center, setCenter] = useState<LatLngExpression>([
-		13.2017724, 123.6404747,
+		13.296332, 123.5053699,
 	]);
 	const [zoom, setZoom] = useState(13);
 	const [isMounted, setIsMounted] = useState(false);
