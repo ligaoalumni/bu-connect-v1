@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import { Icon, LatLngExpression } from "leaflet";
 import { reverseGeocodeAction } from "@/actions";
 import { AddressData } from "@/types";
+import Link from "next/link";
 
 // Fix for default marker icons in Leaflet with Next.js
 const defaultIcon = new Icon({
@@ -72,6 +73,7 @@ export default function AlumniMap({
 }: {
 	isMapping?: boolean;
 	initialMarkers?: {
+		id: number;
 		name: string;
 		avatar: string | null;
 		batch: number | null;
@@ -134,51 +136,53 @@ export default function AlumniMap({
 							position={[user.address.lat, user.address.lng]}
 							icon={customIcon}>
 							<Popup closeButton={false} className="custom-popup">
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-										gap: "12px",
-										padding: "8px",
-										minWidth: "160px",
-										fontFamily: "system-ui, -apple-system, sans-serif",
-									}}>
+								<Link target="_blank" href={`/batch/alumni/${user.id}`}>
 									<div
 										style={{
-											width: "40px",
-											height: "40px",
-											borderRadius: "50%",
-											backgroundColor: "#3B82F6",
 											display: "flex",
 											alignItems: "center",
-											justifyContent: "center",
-											color: "white",
-											fontWeight: "600",
-											fontSize: "16px",
+											gap: "12px",
+											padding: "8px",
+											minWidth: "160px",
+											fontFamily: "system-ui, -apple-system, sans-serif",
 										}}>
-										{user.name ? user.name.charAt(0).toUpperCase() : "U"}
-									</div>
-									<div>
 										<div
 											style={{
+												width: "40px",
+												height: "40px",
+												borderRadius: "50%",
+												backgroundColor: "#3B82F6",
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												color: "white",
 												fontWeight: "600",
-												fontSize: "14px",
-												color: "#1F2937",
-												marginBottom: "2px",
+												fontSize: "16px",
 											}}>
-											{user.name}
+											{user.name ? user.name.charAt(0).toUpperCase() : "U"}
 										</div>
-										{user.batch && (
+										<div>
 											<div
 												style={{
-													fontSize: "12px",
-													color: "#6B7280",
+													fontWeight: "600",
+													fontSize: "14px",
+													color: "#1F2937",
+													marginBottom: "2px",
 												}}>
-												Batch {user.batch}
+												{user.name}
 											</div>
-										)}
+											{user.batch && (
+												<div
+													style={{
+														fontSize: "12px",
+														color: "#6B7280",
+													}}>
+													Batch {user.batch}
+												</div>
+											)}
+										</div>
 									</div>
-								</div>
+								</Link>
 							</Popup>
 						</Marker>
 					))}
