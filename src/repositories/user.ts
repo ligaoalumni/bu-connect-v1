@@ -379,6 +379,7 @@ export const readUserLocations = async () => {
 	});
 
 	return users.map((user) => ({
+		id: user.id,
 		name: `${user.firstName} ${user.middleName ? user.middleName + " " : ""}${
 			user.lastName
 		}`,
