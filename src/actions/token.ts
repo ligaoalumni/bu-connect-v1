@@ -1,6 +1,6 @@
 "use server";
 
-import { encrypt } from "@/lib/session";
+import { encrypt } from "@/lib";
 import { updateEmail } from "@/repositories";
 import { validateToken } from "@/repositories/token";
 import { revalidatePath } from "next/cache";

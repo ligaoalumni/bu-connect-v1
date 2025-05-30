@@ -1,6 +1,6 @@
 "use server";
 
-import { decrypt } from "@/lib/session";
+import { decrypt } from "@/lib";
 import {
 	createPost,
 	likePost,

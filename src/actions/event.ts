@@ -1,7 +1,6 @@
 "use server";
 
-import { EventFormSchema } from "@/lib/definitions";
-import { decrypt } from "@/lib/session";
+import { decrypt, EventFormSchema } from "@/lib";
 import {
 	addEventAttendant,
 	addInterestEvent,
