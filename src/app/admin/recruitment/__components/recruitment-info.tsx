@@ -10,7 +10,7 @@ import {
 	CardTitle,
 	Separator,
 } from "@/components";
-import { getIndustryName } from "@/lib/utils";
+import { getIndustryName } from "@/lib";
 import { format, formatDistanceToNow } from "date-fns";
 import {
 	Briefcase,

@@ -27,7 +27,7 @@ import {
 } from "@/components";
 import { Users } from "lucide-react";
 import { AlumniFormData } from "@/types";
-import { AlumniSchema } from "@/lib/definitions";
+import { AlumniSchema } from "@/lib";
 import { toast } from "sonner";
 import {
 	addAlumniData,

@@ -12,7 +12,7 @@ import {
 	Input,
 	RichTextEditor,
 } from "@/components";
-import { AnnouncementSchema } from "@/lib/definitions";
+import { AnnouncementSchema } from "@/lib";
 import { updateAnnouncement } from "@/repositories";
 import { AnnouncementFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";

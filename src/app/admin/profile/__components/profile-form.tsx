@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { AddressData, AdminProfileFormData } from "@/types";
-import { AdminProfileSchema } from "@/lib/definitions";
+import { AdminProfileSchema } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

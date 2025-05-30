@@ -11,7 +11,7 @@ import {
 	CardTitle,
 	ChangePassword,
 } from "@/components";
-import { formatAddress } from "@/lib/utils";
+import { formatAddress } from "@/lib";
 import { formatDate } from "date-fns";
 import Link from "next/link";
 

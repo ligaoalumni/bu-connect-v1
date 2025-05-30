@@ -15,7 +15,7 @@ import {
 	RichTextEditor,
 	TimePicker,
 } from "@/components";
-import { EventFormSchema } from "@/lib/definitions";
+import { EventFormSchema } from "@/lib";
 import { EventFormData, EventFormProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";

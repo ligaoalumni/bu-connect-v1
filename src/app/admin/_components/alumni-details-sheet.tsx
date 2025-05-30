@@ -9,7 +9,7 @@ import {
 	SheetTitle,
 	Skeleton,
 } from "@/components";
-import { formatAddress } from "@/lib/utils";
+import { formatAddress } from "@/lib";
 import { User } from "@prisma/client";
 import { formatDate } from "date-fns";
 import React, { useEffect, useState } from "react";

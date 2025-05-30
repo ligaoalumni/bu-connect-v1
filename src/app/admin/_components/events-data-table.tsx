@@ -14,7 +14,7 @@ import {
 } from "@/components";
 import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
-import { getEventStatus } from "@/lib/event";
+import { getEventStatus } from "@/lib";
 import { readEventsAction } from "@/actions";
 import { toast } from "sonner";
 

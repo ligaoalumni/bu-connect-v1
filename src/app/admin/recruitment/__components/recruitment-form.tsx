@@ -34,8 +34,7 @@ import {
 	Badge,
 } from "@/components";
 
-import { cn } from "@/lib/utils";
-import { RecruitmentSchema } from "@/lib/definitions";
+import { RecruitmentSchema, cn } from "@/lib";
 import { RecruitmentFormData } from "@/types";
 import { Recruitment } from "@prisma/client";
 import { toast } from "sonner";
