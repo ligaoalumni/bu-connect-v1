@@ -2,7 +2,7 @@
 
 import { UAParser } from "ua-parser-js";
 import { headers } from "next/headers";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { PaginationArgs, PaginationResult } from "@/types";
 import { LoginLog, Prisma } from "@prisma/client";
 

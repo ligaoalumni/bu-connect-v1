@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { JobData, PaginationArgs, PaginationResult, UpdateJob } from "@/types";
 import { Job, JobStatus, Prisma } from "@prisma/client";
 

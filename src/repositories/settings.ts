@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 
 export async function getSettings() {
 	return prisma.setting.findFirst({

@@ -1,7 +1,5 @@
 "use server";
 
-import { generateEmailHTML } from "@/lib/generate-email";
-import prisma from "@/lib/prisma";
 import {
 	PaginationArgs,
 	PaginationResult,
@@ -12,8 +10,7 @@ import {
 import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes } from "date-fns";
-import { transporter } from "@/lib/email";
-import { formatAddress } from "@/lib";
+import { generateEmailHTML, prisma, transporter, formatAddress } from "@/lib";
 
 const generateOTP = () => {
 	// Generate a 6-digit OTP

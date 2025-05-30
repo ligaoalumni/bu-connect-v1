@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { PaginationArgs, PaginationResult, Poll, UpdatePoll } from "@/types";
 import { Prisma } from "@prisma/client";
 

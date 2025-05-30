@@ -1,4 +1,4 @@
-import { getEventStatus } from "@/lib/event";
+import { getEventStatus } from "@/lib";
 import { Job, User } from "@prisma/client";
 export * from "./blur-data";
 

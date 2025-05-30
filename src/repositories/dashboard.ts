@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { sub } from "date-fns";
 
 export const readDashboardOverview = async () => {

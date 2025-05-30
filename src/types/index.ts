@@ -10,7 +10,7 @@ import {
 	ProfileSchema,
 	RecruitmentSchema,
 	SignupFormSchema,
-} from "@/lib/definitions";
+} from "@/lib";
 import { ColumnDef } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";

@@ -1,6 +1,5 @@
 "use server";
 
-import prisma from "@/lib/prisma";
 import {
 	AnnouncementCommentWithUser,
 	Pagination,
@@ -10,7 +9,7 @@ import {
 import { Announcement, NotificationType, Prisma } from "@prisma/client";
 import slug from "unique-slug";
 import { createNotifications } from "./notifications";
-import { getNotificationMessage } from "@/lib";
+import { getNotificationMessage, prisma } from "@/lib";
 import { getAdmins, getUsersId } from "./user";
 
 export const createAnnouncement = async ({
