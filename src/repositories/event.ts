@@ -19,7 +19,7 @@ import { NotificationType, Prisma } from "@prisma/client";
 import { format, isFuture } from "date-fns";
 import slug from "unique-slug";
 import { getUsersId } from "./user";
-import { getNotificationMessage } from "@/lib/utils";
+import { getNotificationMessage } from "@/lib";
 import { createNotifications } from "./notifications";
 
 export const readEvent = async (

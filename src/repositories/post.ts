@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { getNotificationMessage } from "@/lib/utils";
+import { getNotificationMessage } from "@/lib";
 import {
 	CreatePost,
 	Pagination,

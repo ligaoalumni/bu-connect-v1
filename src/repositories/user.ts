@@ -13,7 +13,7 @@ import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes } from "date-fns";
 import { transporter } from "@/lib/email";
-import { formatAddress } from "@/lib/utils";
+import { formatAddress } from "@/lib";
 
 const generateOTP = () => {
 	// Generate a 6-digit OTP
