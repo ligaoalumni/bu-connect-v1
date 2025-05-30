@@ -1,7 +1,7 @@
 "use client";
 import { likePostAction, unlikePostAction } from "@/actions";
 import { Button } from "@/components";
-import { useContentData } from "@/contexts/content-context";
+import { useContentData } from "@/contexts";
 import { Heart, LinkIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

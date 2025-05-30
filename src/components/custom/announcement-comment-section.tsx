@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";
 import CommentBox from "./comment-box-input";
 import { createBrowserClient } from "@/lib/supabase-client";
-import { useContentData } from "@/contexts/content-context";
+import { useContentData } from "@/contexts";
 import { CommentCard, CommentSkeleton } from "./comment";
 
 interface AnnouncementCommentsSectionProps {

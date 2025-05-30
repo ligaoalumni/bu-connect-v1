@@ -1,6 +1,6 @@
 "use client";
 
-import { useContentData } from "@/contexts/content-context";
+import { useContentData } from "@/contexts";
 
 export default function PostCounts() {
 	const { data } = useContentData();
