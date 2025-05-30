@@ -8,7 +8,7 @@ import { publicRoutes } from "@/constant";
 import { AvatarDropdown } from "./avatar-dropdown";
 import Image from "next/image";
 import { useEffect } from "react";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { ThemeSwitcher } from "./theme-switcher";
 import { User } from "@prisma/client";
 

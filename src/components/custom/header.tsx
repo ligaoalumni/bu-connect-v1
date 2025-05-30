@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { publicRoutes } from "@/constant";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { User } from "@prisma/client";
 import { ThemeSwitcher } from "./theme-switcher";
 import { AvatarDropdown } from "./avatar-dropdown";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import {
 	ThemeSwitcher,
 	AvatarDropdown,

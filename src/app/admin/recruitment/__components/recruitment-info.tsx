@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ApplyDialog from "./apply";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { RecruitmentWithApplicants } from "@/types";
 
 export default function RecruitmentInfo({

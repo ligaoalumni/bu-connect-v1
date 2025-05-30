@@ -3,8 +3,7 @@ import React from "react";
 import { ThemeProvider } from "./theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components";
-import { AuthProvider } from "@/contexts/auth-context";
-import { ContentProvider } from "@/contexts/content-context";
+import { AuthProvider, ContentProvider } from "@/contexts";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
 	return (

@@ -18,7 +18,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { ChangePasswordSchema } from "@/lib/definitions";
 import { ChangePasswordFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";

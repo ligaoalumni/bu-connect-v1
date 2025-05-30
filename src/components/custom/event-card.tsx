@@ -16,7 +16,7 @@ import { EventWithPagination } from "@/types";
 import { eventStatusColorMap } from "@/constant";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { toast } from "sonner";
 import { addInterestEventAction } from "@/actions";
 import Link from "next/link";

@@ -12,7 +12,7 @@ import {
 	PopoverTrigger,
 } from "@/components";
 import { Loader2, Send, Smile } from "lucide-react";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import dynamic from "next/dynamic";
 
 // Dynamically import EmojiPicker to avoid SSR issues

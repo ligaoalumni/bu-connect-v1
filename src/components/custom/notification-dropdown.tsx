@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { cn, getNotificationTitle } from "@/lib/utils";
 import { createBrowserClient } from "@/lib/supabase-client";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { Notification } from "@prisma/client";
 import {
 	readNotificationsAction,

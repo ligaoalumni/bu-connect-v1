@@ -10,8 +10,7 @@ import {
 	Reactions,
 	RichTextEditor,
 } from "@/components";
-import { useAuth } from "@/contexts/auth-context";
-import { useContentData } from "@/contexts/content-context";
+import { useAuth, useContentData } from "@/contexts";
 import { Announcement as TAnnouncement } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import { useEffect, useState } from "react";

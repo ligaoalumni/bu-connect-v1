@@ -18,7 +18,7 @@ import {
 	InputOTPSlot,
 	Input,
 } from "@/components";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { UserCredentials } from "@/types";
 import { AlertCircle, Check, Mail } from "lucide-react";
 import { useState } from "react";

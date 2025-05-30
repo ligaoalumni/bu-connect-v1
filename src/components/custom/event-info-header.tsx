@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";

@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Check, Loader2 } from "lucide-react";
 import { Poll } from "@/types";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 import { voteAction } from "@/actions";
 
 export function PollCard({ defaultPoll }: { defaultPoll: Poll }) {

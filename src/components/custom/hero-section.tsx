@@ -9,7 +9,7 @@ import {
 	IconBrandLinkedin,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts";
 
 export function HeroSection() {
 	const { user } = useAuth();
