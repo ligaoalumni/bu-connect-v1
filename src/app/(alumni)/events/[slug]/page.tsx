@@ -1,5 +1,5 @@
 import { EventInfo } from "@/components/custom/event-info";
-import { getEventStatus } from "@/lib/event";
+import { getEventStatus } from "@/lib";
 import { readEvent } from "@/repositories";
 import { formatDate, isSameDay } from "date-fns";
 import { notFound } from "next/navigation";

@@ -3,7 +3,7 @@
 import { writePostCommentAction } from "@/actions";
 import { Button, CommentCard, CommentSkeleton, Separator } from "@/components";
 import CommentBox from "@/components/custom/comment-box-input";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { createBrowserClient } from "@/lib";
 import { readPostComments } from "@/repositories";
 import { PaginationResult, TPostComment } from "@/types";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";

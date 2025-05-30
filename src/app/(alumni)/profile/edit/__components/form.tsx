@@ -25,7 +25,7 @@ import {
 } from "@/components";
 import AvatarUpload from "@/components/custom/avatar-upload";
 import { alumniLabel } from "@/constant";
-import { ProfileSchema } from "@/lib/definitions";
+import { ProfileSchema } from "@/lib";
 import type { AddressData, ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Gender, User } from "@prisma/client";

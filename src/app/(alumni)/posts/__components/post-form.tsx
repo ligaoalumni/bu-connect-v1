@@ -21,7 +21,7 @@ import {
 	Input,
 	Textarea,
 } from "@/components";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib";
 import { toast } from "sonner";
 import {
 	createPostAction,

@@ -18,7 +18,7 @@ import {
 	Iconify,
 } from "@/components";
 import { Lock, Mail } from "lucide-react";
-import { LoginFormSchema } from "@/lib/definitions";
+import { LoginFormSchema } from "@/lib";
 import { LoginFormData } from "@/types";
 import { loginAction, revalidatePathAction } from "@/actions";
 import { useRouter } from "next/navigation";

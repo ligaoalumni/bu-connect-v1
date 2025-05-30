@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generatePassword } from "@/lib/password-utils";
 import {
 	Button,
 	Input,
@@ -31,7 +30,7 @@ import {
 import { toast } from "sonner";
 import { RefreshCw, Mail, Eye, EyeOff } from "lucide-react";
 import { AdminFormData } from "@/types";
-import { AdminSchema } from "@/lib/definitions";
+import { generatePassword, AdminSchema } from "@/lib";
 import { createAdmin } from "@/actions/user";
 
 // Form schema

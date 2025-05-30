@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { ImageModal } from "./image-modal";
-import { getImageGridClass, getImageHeightClass } from "@/lib/utils";
+import { getImageGridClass, getImageHeightClass } from "@/lib";
 
 export default function PostImages({ images }: { images: string[] }) {
 	const imageCount = images.length;

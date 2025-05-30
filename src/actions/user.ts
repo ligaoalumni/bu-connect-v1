@@ -1,8 +1,6 @@
 "use server";
 
-import { transporter } from "@/lib/email";
-import { generateEmailHTML } from "@/lib/generate-email";
-import { decrypt, encrypt } from "@/lib/session";
+import { transporter, generateEmailHTML, decrypt, encrypt } from "@/lib";
 import {
 	changeEmail,
 	createUser,
@@ -13,10 +11,10 @@ import {
 	updateProfile,
 	updateUser,
 	updateUserStatus,
+	validateToken,
 } from "@/repositories";
-import { validateToken } from "@/repositories/token";
-import { AdminFormData } from "@/types";
 import type {
+	AdminFormData,
 	PaginationArgs,
 	PaginationResult,
 	UpdateProfileData,
