@@ -1,8 +1,7 @@
 "use server";
 
 import { encrypt } from "@/lib";
-import { updateEmail } from "@/repositories";
-import { validateToken } from "@/repositories/token";
+import { updateEmail, validateToken } from "@/repositories";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
