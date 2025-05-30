@@ -1,12 +1,10 @@
 "use server";
 
-import { AlumniSchema } from "@/lib/definitions";
-import { transporter } from "@/lib/email";
-import { generateEmailHTML } from "@/lib/generate-email";
-import prisma from "@/lib/prisma";
+import { AlumniSchema, prisma, transporter, generateEmailHTML } from "@/lib";
 import { readUser } from "@/repositories";
 import { AlumniFormData } from "@/types";
 import { User } from "@prisma/client";
+
 import { hash } from "bcryptjs";
 import { getDay, getMonth, getYear } from "date-fns";
 import { revalidatePath } from "next/cache";

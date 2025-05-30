@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib";
 import { PaginationArgs, PaginationResult } from "@/types";
 import { Prisma, User } from "@prisma/client";
 
