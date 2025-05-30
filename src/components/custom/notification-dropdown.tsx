@@ -9,8 +9,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn, getNotificationTitle } from "@/lib/utils";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { cn, getNotificationTitle, createBrowserClient } from "@/lib";
 import { useAuth } from "@/contexts";
 import { Notification } from "@prisma/client";
 import {

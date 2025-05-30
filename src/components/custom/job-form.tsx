@@ -20,7 +20,7 @@ import {
 	Button,
 } from "@/components";
 import { jobTypes } from "@/constant";
-import { JobSchema } from "@/lib/definitions";
+import { JobSchema } from "@/lib";
 import { JobFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Job, JobType } from "@prisma/client";

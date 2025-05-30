@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";
 import CommentBox from "./comment-box-input";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { createBrowserClient } from "@/lib";
 import { useContentData } from "@/contexts";
 import { CommentCard, CommentSkeleton } from "./comment";
 

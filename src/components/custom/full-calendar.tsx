@@ -18,7 +18,7 @@ import { Switch } from "@/components/ui/switch";
 import { CustomButtonInput } from "@fullcalendar/core/index.js";
 import { Events, EventWithPagination } from "@/types";
 import Link from "next/link";
-import { getEventDescription } from "@/lib/event";
+import { getEventDescription } from "@/lib";
 import { getHours, getMinutes, isSameMonth } from "date-fns";
 
 // Sample events data

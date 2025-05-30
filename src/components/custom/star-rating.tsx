@@ -4,7 +4,7 @@ import type React from "react";
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib";
 import { updateUserAction } from "@/actions";
 import { toast } from "sonner";
 

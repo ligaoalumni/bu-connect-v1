@@ -11,7 +11,7 @@ import {
 } from "date-fns";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {

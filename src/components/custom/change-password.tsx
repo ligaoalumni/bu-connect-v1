@@ -19,7 +19,7 @@ import {
 	FormMessage,
 } from "@/components";
 import { useAuth } from "@/contexts";
-import { ChangePasswordSchema } from "@/lib/definitions";
+import { ChangePasswordSchema } from "@/lib";
 import { ChangePasswordFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";

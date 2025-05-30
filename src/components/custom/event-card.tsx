@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { getEventStatus } from "@/lib/event";
+import { getEventStatus } from "@/lib";
 import { EventWithPagination } from "@/types";
 import { eventStatusColorMap } from "@/constant";
 import { Button } from "../ui/button";

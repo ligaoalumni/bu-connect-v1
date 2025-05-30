@@ -1,13 +1,11 @@
 // app/api/upload-csv/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "csv-parse/sync";
-import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { Gender, User } from "@prisma/client";
 import { hash } from "bcryptjs";
 import { getMonth, getYear } from "date-fns";
-import { transporter } from "@/lib/email";
-import { generateEmailHTML } from "@/lib/generate-email";
+import { transporter, prisma, generateEmailHTML } from "@/lib";
 
 // Define a schema for validation based on your data model
 // Example: If you're importing users

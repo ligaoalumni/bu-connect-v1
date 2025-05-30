@@ -10,7 +10,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components";
-import { getOccupationStatusLabel } from "@/lib/utils";
+import { getOccupationStatusLabel } from "@/lib";
 import { OccupationStatus } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "sonner";

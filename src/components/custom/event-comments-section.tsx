@@ -12,7 +12,7 @@ import {
 	RefreshCw,
 } from "lucide-react";
 import CommentBox from "./comment-box-input";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { createBrowserClient } from "@/lib";
 import { CommentCard, CommentSkeleton } from "./comment";
 
 interface EventCommentsSectionProps {
