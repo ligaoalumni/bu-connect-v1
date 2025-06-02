@@ -1,6 +1,6 @@
 "use server";
 
-import { decrypt } from "@/lib";
+import { decrypt } from "@/lib/session";
 import { getSettings, updateSettings } from "@/repositories";
 import { cookies } from "next/headers";
 
