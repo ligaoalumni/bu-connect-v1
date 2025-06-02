@@ -1,6 +1,7 @@
 "use server";
 
-import { AlumniSchema, prisma, transporter, generateEmailHTML } from "@/lib";
+import { AlumniSchema, prisma, generateEmailHTML } from "@/lib";
+import { transporter } from "@/lib/email";
 import { readUser } from "@/repositories";
 import { AlumniFormData } from "@/types";
 import { User } from "@prisma/client";
