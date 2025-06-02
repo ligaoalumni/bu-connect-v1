@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { cookies } from "next/headers";
-import { decrypt } from "@/lib";
+import { decrypt } from "@/lib/session";
 import {
 	adminRoutes,
 	alumniRoutes,
