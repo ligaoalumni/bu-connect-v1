@@ -5,7 +5,8 @@ import { z } from "zod";
 import { Gender, User } from "@prisma/client";
 import { hash } from "bcryptjs";
 import { getMonth, getYear } from "date-fns";
-import { transporter, prisma, generateEmailHTML } from "@/lib";
+import { prisma, generateEmailHTML } from "@/lib";
+import { transporter } from "@/lib/email";
 
 // Define a schema for validation based on your data model
 // Example: If you're importing users
