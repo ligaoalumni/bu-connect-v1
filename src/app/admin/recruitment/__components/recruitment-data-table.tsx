@@ -38,6 +38,7 @@ export default function RecruitmentDataTable() {
 			enableHiding: true,
 			enableSorting: false,
 			header: () => <p className="max-w-fit">Title</p>,
+			cell: ({ row }) => row.original.eventTitle,
 		},
 		{
 			accessorKey: "status",
