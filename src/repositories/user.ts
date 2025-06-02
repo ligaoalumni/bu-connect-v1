@@ -10,7 +10,8 @@ import {
 import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes } from "date-fns";
-import { generateEmailHTML, prisma, transporter, formatAddress } from "@/lib";
+import { generateEmailHTML, prisma, formatAddress } from "@/lib";
+import { transporter } from "@/lib/email";
 
 const generateOTP = () => {
 	// Generate a 6-digit OTP

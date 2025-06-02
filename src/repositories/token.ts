@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma, transporter, generateEmailHTML } from "@/lib";
+import { prisma, generateEmailHTML } from "@/lib";
+import { transporter } from "@/lib/email";
 import { addMinutes, isPast } from "date-fns";
 
 const generateOTP = () => {
