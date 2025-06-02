@@ -1,5 +1,5 @@
 "use server";
-import { decrypt } from "@/lib";
+import { decrypt } from "@/lib/session";
 import {
 	applyToRecruitment,
 	createRecruitment,
