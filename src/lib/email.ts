@@ -1,4 +1,5 @@
 import "server-only";
+
 import nodemailer from "nodemailer";
 
 export const transporter = nodemailer.createTransport({
