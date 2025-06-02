@@ -1,6 +1,8 @@
 "use server";
 
-import { transporter, generateEmailHTML, decrypt, encrypt } from "@/lib";
+import { generateEmailHTML } from "@/lib";
+import { decrypt, encrypt } from "@/lib/session";
+import { transporter } from "@/lib/email";
 import {
 	changeEmail,
 	createUser,
