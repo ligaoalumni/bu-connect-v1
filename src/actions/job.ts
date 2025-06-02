@@ -1,6 +1,6 @@
 "use server";
 
-import { decrypt } from "@/lib";
+import { decrypt } from "@/lib/session";
 import { createJob, readJob, readJobs, updateJob } from "@/repositories";
 import { JobData, PaginationArgs, UpdateJob } from "@/types";
 import { Job, JobStatus } from "@prisma/client";
