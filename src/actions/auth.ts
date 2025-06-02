@@ -1,6 +1,7 @@
 "use server";
 
-import { decrypt, deleteSession, SignupFormSchema, encrypt } from "@/lib";
+import { SignupFormSchema } from "@/lib";
+import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, logLoginAttempt, readUser } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
