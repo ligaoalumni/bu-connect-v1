@@ -206,7 +206,7 @@ export const readUsersAction = async ({
 	role = ["ADMIN", "ALUMNI"],
 	batch,
 }: PaginationArgs<never, UserRole> & { batch?: number } = {}): Promise<
-	PaginationResult<Omit<User, "password" | "notifications">>
+	PaginationResult<Omit<User, "password" | "notifications" | "rate">>
 > => {
 	try {
 		return await readUsers({
