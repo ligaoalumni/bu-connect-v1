@@ -54,7 +54,7 @@ model User {
 
   verifiedAt DateTime?
   status     UserStatus @default(ACTIVE)
-  rate Float? @default(0) // Alumni rating, can be used for feedback or reputation
+  rate Float? @default(0) @db.Real // Alumni rating, can be used for feedback or reputation
 
   occupationStatus OccupationStatus @default(PREFER_NOT_TO_SAY)
 
