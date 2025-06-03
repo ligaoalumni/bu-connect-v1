@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "rate" SET DATA TYPE DECIMAL(2,1);
