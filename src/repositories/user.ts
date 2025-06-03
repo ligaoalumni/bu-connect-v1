@@ -19,10 +19,12 @@ const generateOTP = () => {
 	return newOTP;
 };
 
+type UserWithoutRate = Omit<User, "rate"> & { rate?: number };
+
 export const readUser = async (
 	id: number,
 	email?: string
-): Promise<User | null> => {
+): Promise<UserWithoutRate | null> => {
 	let where: Prisma.UserWhereUniqueInput = {
 		id,
 	};
@@ -39,7 +41,10 @@ export const readUser = async (
 
 	if (!user) return null;
 
-	return user;
+	return {
+		...user,
+		rate: user.rate ? user.rate.toNumber() : undefined,
+	};
 };
 
 export const createUser = async (
@@ -66,6 +71,9 @@ export const createUser = async (
 			birthDate: user.birthDate,
 			password: user.password,
 		},
+		omit: {
+			rate: true,
+		},
 	});
 
 	return createdUser;
@@ -79,7 +87,7 @@ export const readUsers = async ({
 	role = ["ADMIN", "ALUMNI"],
 	batch,
 }: PaginationArgs<never, UserRole> & { batch?: number } = {}): Promise<
-	PaginationResult<Omit<User, "password" | "notifications">>
+	PaginationResult<Omit<User, "password" | "notifications" | "rate">>
 > => {
 	let where: Prisma.UserWhereInput = {};
 
@@ -122,6 +130,7 @@ export const readUsers = async ({
 		take: pagination ? pagination.limit : undefined,
 		omit: {
 			password: true,
+			rate: true,
 		},
 		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
 	});
@@ -142,6 +151,9 @@ export const updateUserStatus = async (id: number, status: User["status"]) => {
 	const updatedUser = await prisma.user.update({
 		where: { id },
 		data: { status },
+		omit: {
+			rate: true,
+		},
 	});
 
 	return updatedUser;
@@ -154,6 +166,9 @@ export const updateLocationSharing = async (
 	return await prisma.user.update({
 		where: { id },
 		data: { shareLocation },
+		omit: {
+			rate: true,
+		},
 	});
 };
 
@@ -169,7 +184,10 @@ export const updateUser = async (id: number, data: UpdateUserArgs) => {
 	}
 
 	const updatedAccount = await prisma.user.update({
-		data,
+		data: {
+			...data,
+			rate: data.rate && new Prisma.Decimal(data.rate.toFixed(1)),
+		},
 		where: { id },
 	});
 
@@ -177,7 +195,10 @@ export const updateUser = async (id: number, data: UpdateUserArgs) => {
 		throw new Error("Failed to update account");
 	}
 
-	return updatedAccount;
+	return {
+		...updatedAccount,
+		rate: updatedAccount.rate?.toNumber(),
+	};
 };
 
 export const updateProfile = async (
@@ -338,6 +359,10 @@ export const updateEmail = async (id: number, email: string) => {
 			id,
 		},
 		data: { email },
+
+		omit: {
+			rate: true,
+		},
 	});
 };
 
@@ -349,12 +374,18 @@ export const getAdmins = async () => {
 			},
 			status: "ACTIVE",
 		},
+		omit: {
+			rate: true,
+		},
 	});
 };
 
 export const getUsersId = async () => {
 	const users = await prisma.user.findMany({
 		where: { role: "ALUMNI", status: "ACTIVE" },
+		omit: {
+			rate: true,
+		},
 	});
 
 	return users.map((user) => user.id);
