@@ -1,5 +1,5 @@
 "use server";
-import { createClient } from "@/lib";
+import { createClient } from "@/lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 
 export const uploadImageAction = async (
