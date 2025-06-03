@@ -56,7 +56,7 @@ export function StarRating({
 			setLoading(true);
 			setRating(selectedRating);
 			await updateUserAction({
-				rate: selectedRating,
+				rate: selectedRating as any,
 			});
 			toast.success("Rating updated successfully!", {
 				description: `You rated ${selectedRating} stars.`,
