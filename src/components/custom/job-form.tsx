@@ -141,7 +141,7 @@ export default function JobForm({ job }: JobFormProps) {
 									value={field.value.toString()}>
 									{/* Option to prompt user */}
 									<SelectTrigger className="w-full h-12">
-										<SelectValue placeholder="Select a year text-red-400" />
+										<SelectValue placeholder="Select Employment Type" />
 									</SelectTrigger>
 									<SelectContent>
 										<SelectGroup>
