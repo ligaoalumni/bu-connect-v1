@@ -43,7 +43,7 @@ export default async function Page({
 				)}
 			</div>
 
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 pb-10">
 				{users.count > 0 ? (
 					<>
 						{users.data.map((user) => (
