@@ -83,7 +83,7 @@ export const generateEmailHTML = (content: string) => {
     <div class="container">
         <div class="header">
             <img src="https://scontent.flgp1-1.fna.fbcdn.net/v/t39.30808-6/449198692_986550536594114_7319273666011228303_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=uAITklf1lWoQ7kNvgFerfj-&_nc_oc=AdjQ968hQ8Z9jN8POgnNSvE8Esour8UuWcSnziau5YYLhg4BPCTc9etPTCOcDPTu-bg&_nc_zt=23&_nc_ht=scontent.flgp1-1.fna&_nc_gid=L-a1-roALS5cV3r9egnDkw&oh=00_AYHa1bEmquNXZ1_7qFlh2fi2YRSy6W0WROWKOcGBJPHscw&oe=67DEAB23" alt="Company Logo" class="logo">
-            <h1>Welcome to Alumni</h1>
+            <h1>BU Connect</h1>
         </div>
 
         <div class="content">
@@ -92,7 +92,7 @@ export const generateEmailHTML = (content: string) => {
 
         <div class="footer">
             <p>This is an automated message, please do not reply to this email.</p>
-            <p>&copy; ${new Date().getFullYear()} LNHS | Alumni Association. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} BU Connect | Alumni Association. All rights reserved.</p>
         </div>
     </div>
 </body> 
