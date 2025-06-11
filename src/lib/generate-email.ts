@@ -5,7 +5,7 @@ export const generateEmailHTML = (content: string) => {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Admin Account Has Been Created</title>
+    <title>BU Connect</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
