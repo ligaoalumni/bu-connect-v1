@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma, generateEmailHTML } from "@/lib";
+import { verificationCodeEmailTemplate } from "@/constant";
+import { prisma } from "@/lib";
 import { transporter } from "@/lib/email";
 import { addMinutes, isPast } from "date-fns";
 
@@ -47,23 +48,10 @@ export const createToken = async (email: string) => {
 			},
 			to: email,
 			subject: "Account Credentials",
-			html: generateEmailHTML(`
-                <p>Hello ${user.firstName} ${user.lastName},</p>
-
-                <p>Your verification code is:</p>
-
-                <div style="background-color: #f4f4f4; padding: 20px; margin: 20px 0; text-align: center; font-size: 24px; letter-spacing: 5px; font-weight: bold;">
-                    ${token}
-                </div>
-
-                <p>This code will expire in 5 minutes.</p>
-
-                <p class="warning">Important: Never share this code with anyone. Our team will never ask for your verification code.</p>
-
-                <p>If you didn't request this code, please ignore this email.</p>
-
-                <p>Thank you,<br>The Team</p>
-            `),
+			html: verificationCodeEmailTemplate(
+				`${user.firstName} ${user.lastName}`,
+				token
+			),
 		};
 
 		await transporter.sendMail(mailOptions);
