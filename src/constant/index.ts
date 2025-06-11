@@ -1,6 +1,8 @@
 import { getEventStatus } from "@/lib";
 import { Job, User } from "@prisma/client";
+
 export * from "./blur-data";
+export * from "./email-templates";
 
 // 1. Specify protected and public routes
 export const adminRoutes = [
