@@ -11,3 +11,4 @@ export * from "./recruitment";
 export * from "./notifications";
 export * from "./login-logs";
 export * from "./settings";
+export * from "./forgot-password";

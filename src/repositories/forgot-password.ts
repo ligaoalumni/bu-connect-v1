@@ -11,7 +11,7 @@ const generateOTP = () => {
 	return newOTP;
 };
 
-export const sentResetOTPToken = async (email: string) => {
+export const sendResetOTPToken = async (email: string) => {
 	try {
 		const token = generateOTP();
 		const validUntil = addMinutes(new Date(), 5);

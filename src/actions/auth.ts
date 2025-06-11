@@ -3,7 +3,7 @@
 import { SignupFormSchema } from "@/lib";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, logLoginAttempt, readUser } from "@/repositories";
-import { sendResetOTPToken } from "@/repositories/forgot-password";
+import { sendResetOTPToken } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
