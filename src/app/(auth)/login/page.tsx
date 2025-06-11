@@ -81,7 +81,7 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className=" bg-[url('/images/austh-form-bg.png')] bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20   ">
+		<div className=" bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20   ">
 			<Card className="w-full md:min-w-[400px] pt-16 max-w-md mx-auto border-none bg-transparent relative">
 				<Image
 					src="/images/bup-logo.png"
