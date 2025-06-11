@@ -3,6 +3,7 @@
 import { SignupFormSchema } from "@/lib";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
 import { createUser, logLoginAttempt, readUser } from "@/repositories";
+import { sendResetOTPToken } from "@/repositories/forgot-password";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -146,4 +147,12 @@ export async function getInformation() {
 	}
 
 	return await readUser(-1, session.email);
+}
+
+export async function sendPasswordRequestTokenAction(email: string) {
+	try {
+		await sendResetOTPToken(email);
+	} catch (err) {
+		throw new Error((err as Error).message);
+	}
 }
