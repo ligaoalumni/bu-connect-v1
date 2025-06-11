@@ -171,8 +171,9 @@ const LoginForm = () => {
 										<Button
 											variant="link"
 											className="px-0 font-normal text-white    italic"
-											type="button">
-											Forgot password?
+											type="button"
+											asChild>
+											<Link href="/forgot-password">Forgot password?</Link>
 										</Button>
 									</div>
 
