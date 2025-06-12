@@ -2,7 +2,12 @@
 
 import { SignupFormSchema } from "@/lib";
 import { decrypt, deleteSession, encrypt } from "@/lib/session";
-import { createUser, logLoginAttempt, readUser } from "@/repositories";
+import {
+	createUser,
+	logLoginAttempt,
+	readUser,
+	validateToken,
+} from "@/repositories";
 import { sendResetOTPToken } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
@@ -152,6 +157,18 @@ export async function getInformation() {
 export async function sendPasswordRequestTokenAction(email: string) {
 	try {
 		await sendResetOTPToken(email);
+	} catch (err) {
+		throw new Error((err as Error).message);
+	}
+}
+
+export async function validateResetTokenAction(email: string, token: string) {
+	try {
+		const isTokenValid = await validateToken(email, token);
+
+		if (!isTokenValid) throw new Error("Token is invalid or expired");
+
+		return true;
 	} catch (err) {
 		throw new Error((err as Error).message);
 	}
