@@ -20,6 +20,10 @@ import {
 } from "@/components/ui/input-otp";
 import { ArrowLeft, Mail, Shield, Lock } from "lucide-react";
 import { toast } from "sonner";
+import {
+	sendPasswordRequestTokenAction,
+	validateResetTokenAction,
+} from "@/actions";
 
 type Step = "email" | "otp" | "reset";
 
@@ -57,15 +61,36 @@ export default function ForgotPassword() {
 		}
 
 		setIsLoading(true);
-		setCanResend(false);
 
-		// Simulate API call
-		setTimeout(() => {
-			setIsLoading(false);
-			toast.success("OTP sent to your email address");
+		try {
+			await sendPasswordRequestTokenAction(email);
+
+			toast.success("OTP sent to your email address", {
+				description: "Please check your inbox and spam folder.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
+			setCanResend(false);
 			setCurrentStep("otp");
-			setCountdown(300); // 5 minutes = 300 seconds
-		}, 2000);
+			setCountdown(300);
+		} catch {
+			toast.error("Failed to send OTP", {
+				description: "Please try again later or contact support.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+
+		// // Simulate API call
+		// setTimeout(() => {
+		// 	setIsLoading(false);
+		// 	setCurrentStep("otp");
+		// 	setCountdown(300); // 5 minutes = 300 seconds
+		// }, 2000);
 	};
 
 	const handleVerifyOTP = async (e: React.FormEvent) => {
@@ -77,18 +102,16 @@ export default function ForgotPassword() {
 
 		setIsLoading(true);
 
-		// Simulate API call
-		setTimeout(() => {
+		try {
+			await validateResetTokenAction(email, otp);
+			toast.success("OTP verified successfully");
+			setCurrentStep("reset");
+			setCountdown(0);
+		} catch {
+			toast.error("Invalid OTP. Please try again.");
+		} finally {
 			setIsLoading(false);
-			// Simulate OTP validation
-			if (otp === "123456") {
-				toast.success("OTP verified successfully");
-				setCurrentStep("reset");
-				setCountdown(0);
-			} else {
-				toast.error("Invalid OTP. Please try again.");
-			}
-		}, 1500);
+		}
 	};
 
 	const handleResetPassword = async (e: React.FormEvent) => {
