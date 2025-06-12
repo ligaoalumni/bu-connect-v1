@@ -28,7 +28,7 @@ export default function PostImages({ images }: { images: string[] }) {
 					.map((image, index) => (
 						<div
 							key={index}
-							className={`relative overflow-hidden rounded-md ${getImageHeightClass(
+							className={`relative overflow-hidden rounded-md  ${getImageHeightClass(
 								imageCount,
 								index
 							)}`}
