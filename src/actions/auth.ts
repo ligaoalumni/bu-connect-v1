@@ -6,6 +6,7 @@ import {
 	createUser,
 	logLoginAttempt,
 	readUser,
+	updateResetPassword,
 	validateToken,
 } from "@/repositories";
 import { sendResetOTPToken } from "@/repositories";
@@ -171,5 +172,28 @@ export async function validateResetTokenAction(email: string, token: string) {
 		return true;
 	} catch (err) {
 		throw new Error((err as Error).message);
+	}
+}
+
+export async function updateResetPasswordAction(
+	email: string,
+	password: string
+) {
+	try {
+		const user = await readUser(-1, email);
+
+		if (!user) {
+			throw new Error("User not found");
+		}
+
+		await updateResetPassword({
+			email,
+			newPassword: password,
+		});
+
+		return true;
+	} catch (error) {
+		console.log(`Error updating password: ${error}`);
+		throw error;
 	}
 }

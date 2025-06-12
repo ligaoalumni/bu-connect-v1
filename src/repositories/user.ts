@@ -300,6 +300,23 @@ export const updatePasswordWithCurrentPassword = async ({
 	});
 };
 
+export const updateResetPassword = async ({
+	email,
+	newPassword,
+}: {
+	email: string;
+	newPassword: string;
+}) => {
+	const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+	await prisma.user.update({
+		data: {
+			password: hashedPassword,
+		},
+		where: { email },
+	});
+};
+
 export const changeEmail = async ({ email }: { email: string }) => {
 	const isEmailExists = await prisma.user.findUnique({ where: { email } });
 
