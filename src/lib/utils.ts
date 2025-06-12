@@ -44,7 +44,7 @@ export function getImageHeightClass(count: number, index: number): string {
 	// Default heights
 	switch (count) {
 		case 1:
-			return "aspect-[16/9]";
+			return "aspect-video";
 		case 2:
 			return "aspect-square";
 		case 3:
