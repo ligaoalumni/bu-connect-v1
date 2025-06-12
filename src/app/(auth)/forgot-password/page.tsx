@@ -24,8 +24,9 @@ import {
 	updateResetPasswordAction,
 	validateResetTokenAction,
 } from "@/actions";
+import Link from "next/link";
 
-type Step = "email" | "otp" | "reset";
+type Step = "email" | "otp" | "reset" | "success";
 
 export default function ForgotPassword() {
 	const [currentStep, setCurrentStep] = useState<Step>("email");
@@ -151,19 +152,7 @@ export default function ForgotPassword() {
 		try {
 			await updateResetPasswordAction(email, password);
 
-			setCurrentStep("email");
-			setEmail("");
-			setOtp("");
-			setPassword("");
-			setConfirmPassword("");
-			setCountdown(0);
-			setCanResend(true);
-			toast.success("Password reset successfully", {
-				description: "You can now log in with your new password.",
-				duration: 5000,
-				richColors: true,
-				position: "top-center",
-			});
+			setCurrentStep("success");
 		} catch {
 			toast.error("Failed to reset password", {
 				description: "Please try again later or contact support.",
@@ -192,6 +181,8 @@ export default function ForgotPassword() {
 				return <Shield className="h-6 w-6" />;
 			case "reset":
 				return <Lock className="h-6 w-6" />;
+			case "success":
+				return <Shield className="h-6 w-6 text-orange-600" />;
 		}
 	};
 
@@ -203,6 +194,8 @@ export default function ForgotPassword() {
 				return "Verify OTP";
 			case "reset":
 				return "Reset Password";
+			case "success":
+				return "Password Reset Successful";
 		}
 	};
 
@@ -214,6 +207,8 @@ export default function ForgotPassword() {
 				return `We've sent a 6-digit code to ${email}. Enter it below to continue`;
 			case "reset":
 				return "Create a new password for your account";
+			case "success":
+				return "Your password has been successfully reset. You can now log in with your new password.";
 		}
 	};
 
@@ -263,6 +258,13 @@ export default function ForgotPassword() {
 							<Button type="submit" className="w-full" disabled={isLoading}>
 								{isLoading ? "Sending OTP..." : "Send OTP"}
 							</Button>
+							<div className="text-center mt-4">
+								<Link
+									href="/login"
+									className="text-sm text-muted-foreground hover:text-primary">
+									Back to Login
+								</Link>
+							</div>
 						</form>
 					)}
 
@@ -346,6 +348,27 @@ export default function ForgotPassword() {
 								{isLoading ? "Resetting Password..." : "Reset Password"}
 							</Button>
 						</form>
+					)}
+					{currentStep === "success" && (
+						<div className="space-y-4 text-center">
+							<div className="flex justify-center">
+								<div className="rounded-full bg-orange-100 p-3">
+									<Shield className="h-8 w-8 text-orange-600" />
+								</div>
+							</div>
+							<div className="space-y-2">
+								<h3 className="text-lg font-semibold text-orange-700">
+									Password Reset Complete
+								</h3>
+								<p className="text-sm text-muted-foreground">
+									Your password has been successfully updated. Please proceed to
+									login with your new credentials.
+								</p>
+							</div>
+							<Button asChild className="w-full">
+								<Link href="/login">Proceed to Login</Link>
+							</Button>
+						</div>
 					)}
 				</CardContent>
 			</Card>
