@@ -3,25 +3,25 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
+	Button,
+	Input,
+	Label,
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
-} from "@/components/ui/input-otp";
+} from "@/components";
+
 import { ArrowLeft, Mail, Shield, Lock } from "lucide-react";
 import { toast } from "sonner";
 import {
 	sendPasswordRequestTokenAction,
+	updateResetPasswordAction,
 	validateResetTokenAction,
 } from "@/actions";
 
@@ -117,29 +117,40 @@ export default function ForgotPassword() {
 	const handleResetPassword = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!password || !confirmPassword) {
-			toast.error("Please fill in all fields");
+			toast.error("Please fill in all fields", {
+				description: "Both password fields are required.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
 			return;
 		}
 
 		if (password !== confirmPassword) {
-			toast.error("Passwords do not match");
+			toast.error("Passwords do not match", {
+				description: "Please ensure both passwords are the same.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
 			return;
 		}
 
 		if (password.length < 8) {
-			toast.error("Password must be at least 8 characters long");
+			toast.error("Password must be at least 8 characters long", {
+				description: "Please ensure your password meets the requirements.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
 			return;
 		}
 
 		setIsLoading(true);
 
-		// Simulate API call
-		setTimeout(() => {
-			setIsLoading(false);
-			toast.success(
-				"Password reset successfully! You can now login with your new password."
-			);
-			// Reset form
+		try {
+			await updateResetPasswordAction(email, password);
+
 			setCurrentStep("email");
 			setEmail("");
 			setOtp("");
@@ -147,7 +158,22 @@ export default function ForgotPassword() {
 			setConfirmPassword("");
 			setCountdown(0);
 			setCanResend(true);
-		}, 2000);
+			toast.success("Password reset successfully", {
+				description: "You can now log in with your new password.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
+		} catch {
+			toast.error("Failed to reset password", {
+				description: "Please try again later or contact support.",
+				duration: 5000,
+				richColors: true,
+				position: "top-center",
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const goBack = () => {
