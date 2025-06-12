@@ -17,6 +17,7 @@ import Link from "next/link";
 
 const links = [
 	"/",
+	"/posts",
 	"/batch",
 	"/events",
 	"/jobs",

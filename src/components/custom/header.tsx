@@ -15,6 +15,7 @@ import { NotificationDropdown } from "./notification-dropdown";
 
 const links = [
 	"/",
+	"/posts",
 	"/batch",
 	"/events",
 	"/jobs",
