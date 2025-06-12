@@ -9,6 +9,7 @@ import { Button } from "../../../../components/ui/button";
 import { Job } from "@prisma/client";
 import { TPost } from "@/types";
 import { PostCard } from "./post-card";
+import Link from "next/link";
 
 export function PostsInfiniteScroll({
 	defaultData,
@@ -93,6 +94,13 @@ export function PostsInfiniteScroll({
 
 	return (
 		<div className={`${!isFilterChanging && "space-y-8"}     `}>
+			<div className="flex justify-between items-center mb-6">
+				<h1 className="text-2xl font-bold">Posts</h1>
+				<Button asChild>
+					<Link href="/posts/add">Create Post</Link>
+				</Button>
+			</div>
+
 			{/* <div className="flex flex-col gap-2 md:pt-4 ">
 				<div className="flex items-center justify-between">
 					<h2 className="text-3xl font-medium">Search</h2>

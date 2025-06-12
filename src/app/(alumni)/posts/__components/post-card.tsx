@@ -59,7 +59,7 @@ export function PostCard({ post }: PostCardProps) {
 					</Avatar>
 					<div className="flex flex-col">
 						<Link
-							href={`/profile/${post.postedBy.id}`}
+							href={`/users/${post.postedBy.id}`}
 							className="font-semibold hover:underline">
 							{name}
 						</Link>
