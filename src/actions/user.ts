@@ -9,7 +9,7 @@ import {
 	readUser,
 	readUsers,
 	updateLocationSharing,
-	updatePassword,
+	updatePasswordWithCurrentPassword,
 	updateProfile,
 	updateUser,
 	updateUserStatus,
@@ -176,7 +176,11 @@ export const updatePasswordAction = async ({
 	newPassword: string;
 }) => {
 	try {
-		await updatePassword({ currentPassword, id, newPassword });
+		await updatePasswordWithCurrentPassword({
+			currentPassword,
+			id,
+			newPassword,
+		});
 	} catch (err) {
 		throw new Error(
 			err instanceof Error

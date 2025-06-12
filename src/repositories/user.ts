@@ -270,7 +270,7 @@ export const updateProfile = async (
 	}
 };
 
-export const updatePassword = async ({
+export const updatePasswordWithCurrentPassword = async ({
 	currentPassword,
 	id,
 	newPassword,
