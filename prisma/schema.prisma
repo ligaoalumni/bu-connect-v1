@@ -32,7 +32,7 @@ model User {
   // phoneNumber String? @default("")
   nationality   String?  @default("")
   religion      String?  @default("")
-  address       Json?    @default("{}")
+  address       Json?    @default("{\"lat\": \"0\", \"lng\": \"0\", \"address\": \"0\"}")
   gender        Gender   @default(PREFER_NOT_TO_SAY)
   contactNumber String?  @default("")
   birthDate     DateTime
@@ -42,7 +42,7 @@ model User {
   batch     Int?    @default(0)
   course    String?
 
-  // POST GRAD INFO 
+  // POST GRAD INFO
   company           String? @default("")
   currentOccupation String? @default("")
   jobTitle          String? @default("")
@@ -54,7 +54,7 @@ model User {
 
   verifiedAt DateTime?
   status     UserStatus @default(ACTIVE)
-  rate Decimal? @db.Decimal(2,1 )   // Alumni rating, can be used for feedback or reputation
+  rate       Decimal?   @db.Decimal(2, 1) // Alumni rating, can be used for feedback or reputation
 
   occupationStatus OccupationStatus @default(PREFER_NOT_TO_SAY)
 
@@ -70,7 +70,7 @@ model User {
   job                  Job[]
   recruitment          Recruitment[]         @relation("RecruitmentApplicants") // Alumni can apply for multiple recruitments
   Votes                Vote[] // Alumni can vote on multiple polls
-  settings            Setting[] // Alumni can have multiple settings
+  settings             Setting[] // Alumni can have multiple settings
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -389,16 +389,15 @@ model LoginLog {
 }
 
 model Setting {
-  id          Int      @id @default(autoincrement())
-  websiteName String @default("BU Connect")
-  description String?  @default("")
+  id            Int     @id @default(autoincrement())
+  websiteName   String  @default("BU Connect")
+  description   String? @default("")
   isMaintenance Boolean @default(false)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdById Int
-  createdBy   User  @relation(fields: [createdById], references: [id])
+  createdBy   User     @relation(fields: [createdById], references: [id])
 
   @@map("settings")
 }
-
