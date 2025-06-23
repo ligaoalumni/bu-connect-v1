@@ -1,19 +1,35 @@
 import { readPollAction } from "@/actions";
 import { notFound } from "next/navigation";
 import React from "react";
+import AdminPollDetailPage from "./__components/details";
 
 export default async function Page({
-	params,
+  params,
 }: {
-	params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-	const { slug } = await params;
+  const { slug } = await params;
 
-	if (!slug) return notFound();
+  if (!slug) return notFound();
 
-	const poll = await readPollAction(Number(slug));
+  const poll = await readPollAction(Number(slug));
 
-	if (!poll) return notFound();
+  if (!poll) return notFound();
 
-	return <div>Page</div>;
+  return (
+    <AdminPollDetailPage
+      poll={{
+        ...poll,
+        options: poll.options.map((option) => ({
+          id: option.id,
+          pollId: option.pollId,
+          content: option.content,
+          votes: option.votes.map((vote) => ({
+            id: vote.id,
+            createdAt: vote.createdAt,
+          })),
+        })),
+      }}
+    />
+  );
 }
