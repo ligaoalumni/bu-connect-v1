@@ -1,6 +1,5 @@
 import { prisma } from "@/lib";
 import { PaginationArgs, PaginationResult, Poll, UpdatePoll } from "@/types";
-import { createPlugin } from "@fullcalendar/core/index.js";
 import { Prisma } from "@prisma/client";
 
 export const createPoll = async ({
