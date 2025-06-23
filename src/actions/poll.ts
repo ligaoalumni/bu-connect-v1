@@ -1,76 +1,92 @@
 "use server";
 import { decrypt } from "@/lib/session";
 import {
-	createPoll,
-	readPoll,
-	readPolls,
-	updatePoll,
-	vote,
+  createPoll,
+  readPoll,
+  readPolls,
+  updatePoll,
+  updatePollStatus,
+  vote,
 } from "@/repositories";
 import { PaginationArgs, PaginationResult, Poll, UpdatePoll } from "@/types";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const readPollsAction = async (
-	data: PaginationArgs<Poll["status"], never> = {}
+  data: PaginationArgs<Poll["status"], never> = {},
 ): Promise<PaginationResult<Poll>> => {
-	try {
-		return await readPolls({
-			...data,
-		});
-	} catch (error) {
-		console.log(error);
-		throw new Error("Failed to fetch polls");
-	}
+  try {
+    return await readPolls({
+      ...data,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch polls");
+  }
 };
 
 export const readPollAction = async (id: number) => {
-	try {
-		const poll = await readPoll(id);
+  try {
+    const poll = await readPoll(id);
 
-		if (!poll) return null;
+    if (!poll) return null;
 
-		return poll;
-	} catch (error) {
-		console.log(error);
-		throw new Error("Failed to fetch poll");
-	}
+    return poll;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch poll");
+  }
 };
 
 export const createPollAction = async (data: {
-	question: string;
-	options: string[];
+  question: string;
+  options: string[];
 }) => {
-	try {
-		return await createPoll({
-			options: data.options,
-			question: data.question,
-		});
-	} catch (error) {
-		console.log(error);
-		throw new Error("Failed to create job");
-	}
+  try {
+    return await createPoll({
+      options: data.options,
+      question: data.question,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to create job");
+  }
 };
 
 export const voteAction = async (optionId: number) => {
-	try {
-		const cookieStore = await cookies();
+  try {
+    const cookieStore = await cookies();
 
-		const session = await decrypt(cookieStore.get("session")?.value);
+    const session = await decrypt(cookieStore.get("session")?.value);
 
-		if (!session?.id) throw new Error("Unauthorized!");
+    if (!session?.id) throw new Error("Unauthorized!");
 
-		await vote(session.id, optionId);
-	} catch (error) {
-		console.log(error);
-		throw new Error("Failed to create job");
-	}
+    await vote(session.id, optionId);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to create job");
+  }
 };
 
 export const updatePollAction = async (id: number, values: UpdatePoll) => {
-	try {
-		await updatePoll(id, values);
-	} catch (error) {
-		console.log(error);
-		throw new Error("Failed to update poll");
-	}
+  try {
+    await updatePoll(id, values);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to update poll");
+  }
+};
+
+export const updatePollStatusAction = async (
+  id: number,
+  status: Poll["status"],
+) => {
+  try {
+    await updatePollStatus(id, status);
+    revalidatePath("/admin/polls");
+    revalidatePath("/admin/polls/" + id);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to update poll");
+  }
 };
