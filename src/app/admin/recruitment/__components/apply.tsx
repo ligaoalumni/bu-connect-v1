@@ -70,7 +70,7 @@ export default function ApplyDialog({
           onClick={() => setIsOpen(true)}
           size="lg"
           className="w-full md:max-w-[200px] disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={!isAllowedToApply}
+          disabled={!isAllowedToApply || applied}
         >
           {applied
             ? "Already applied"
