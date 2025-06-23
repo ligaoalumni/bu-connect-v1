@@ -156,7 +156,9 @@ export function ApplicantsList({ recruitmentId }: ApplicantsListProps) {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <Loader2 className="animate-spin" />
+            <div className="flex justify-center items-center min-h-[200px]">
+              <Loader2 className="animate-spin" />
+            </div>
           ) : total > 0 ? (
             <>
               <Table>
