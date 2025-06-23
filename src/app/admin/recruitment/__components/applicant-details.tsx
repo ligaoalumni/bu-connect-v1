@@ -13,20 +13,19 @@ import { Button } from "@/components/ui/button";
 import { User as PUser } from "@prisma/client";
 import { formatAddress } from "@/lib";
 
+type User = Omit<PUser, "rate"> & {
+  rate?: number;
+};
+
 interface ApplicantDetailsModalProps {
-  applicant: Omit<PUser, "rate"> & {
-    rate?: number;
-  };
-  setApplicant: Dispatch<SetStateAction<
-    Omit<PUser, "rate"> & { rate?: number }
-  > | null>;
+  applicant: User;
+  setApplicant: Dispatch<SetStateAction<User | null>>;
   loading: boolean;
 }
 
 const ApplicantDetailsModal: React.FC<ApplicantDetailsModalProps> = ({
   applicant,
   setApplicant,
-  loading,
 }) => {
   return (
     <Dialog open={!!applicant}>

@@ -287,7 +287,7 @@ export function ApplicantsList({ recruitmentId }: ApplicantsListProps) {
       {applicant && (
         <ApplicantDetailsModal
           loading={isFetchingApplicant}
-          setLoading={setIsFetchingApplicant}
+          setApplicant={setApplicant}
           applicant={applicant}
         />
       )}
