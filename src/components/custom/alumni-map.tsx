@@ -104,8 +104,7 @@ export default function AlumniMap({
   }
 
   const handleMapClick = async (lat: number, lng: number) => {
-    const data = await reverseGeocodeAction(lat, lng);
-    console.log(data, " qqq");
+    await reverseGeocodeAction(lat, lng);
   };
 
   const customIcon = createCustomIcon();

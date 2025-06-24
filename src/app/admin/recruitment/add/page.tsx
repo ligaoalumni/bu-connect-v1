@@ -3,15 +3,13 @@ import { RecruitmentForm } from "../__components/recruitment-form";
 import { readBatchesAction } from "@/actions";
 
 export default async function Page() {
-	const batches = await readBatchesAction();
+  const batches = await readBatchesAction();
 
-	const batchesOptions = batches.data.map((batch) => batch.batch);
+  const batchesOptions = batches.data.map((batch) => batch.batch);
 
-	console.log(batchesOptions);
-
-	return (
-		<div>
-			<RecruitmentForm batches={batchesOptions} />
-		</div>
-	);
+  return (
+    <div>
+      <RecruitmentForm batches={batchesOptions} />
+    </div>
+  );
 }
