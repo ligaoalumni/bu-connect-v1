@@ -20,12 +20,24 @@ import CompleteSlide from "./__components/complete-slide";
 import { type FormData, initialFormData } from "./types/form-data";
 import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
+import { useSearchParams } from "next/navigation";
+import { OccupationStatus } from "@prisma/client";
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isAnimating, setIsAnimating] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const params = useSearchParams();
+
+  const occupations = Object.values(OccupationStatus) as OccupationStatus[];
+
+  if (
+    !params.get("status") ||
+    !occupations.includes(params.get("status") as OccupationStatus)
+  ) {
+    window.history.back();
+  }
 
   const steps = getSteps(formData);
 
