@@ -2,8 +2,8 @@
 
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Briefcase, User, GraduationCap } from "lucide-react";
 import type { FormData } from "../types/form-data";
+import { OccupationStatus } from "@prisma/client";
 
 interface EmploymentSlideProps {
   formData: FormData;
