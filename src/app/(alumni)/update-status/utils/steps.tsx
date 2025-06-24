@@ -1,3 +1,4 @@
+import { OccupationStatus } from "@prisma/client";
 import type { FormData } from "../types/form-data";
 import {
   User,
@@ -10,12 +11,12 @@ import {
 
 export const getSteps = (formData: FormData) => {
   const baseSteps = [
-    {
-      id: "welcome",
-      title: "Alumni Status Update",
-      subtitle: "Help us keep your alumni profile up to date",
-      icon: <GraduationCap className="w-8 h-8" />,
-    },
+    // {
+    //   id: "welcome",
+    //   title: "Alumni Status Update",
+    //   subtitle: "Help us keep your alumni profile up to date",
+    //   icon: <GraduationCap className="w-8 h-8" />,
+    // },
     {
       id: "employment",
       title: "Current Employment Status",
@@ -26,8 +27,8 @@ export const getSteps = (formData: FormData) => {
 
   // Add conditional step based on employment status
   if (
-    formData.employmentStatus === "employed" ||
-    formData.employmentStatus === "freelancer"
+    formData.employmentStatus === OccupationStatus.EMPLOYED ||
+    formData.employmentStatus === OccupationStatus.SELF_EMPLOYED
   ) {
     baseSteps.push({
       id: "industry",
