@@ -29,6 +29,11 @@ export default function EmploymentSlide({
     });
   };
 
+  // Transform OccupationStatus into an array
+  const occupationStatusArray = Object.values(
+    OccupationStatus,
+  ) as OccupationStatus[];
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -37,34 +42,20 @@ export default function EmploymentSlide({
           value={formData.employmentStatus}
           onValueChange={updateEmploymentStatus}
         >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="employed" id="employed" />
-            <Label htmlFor="employed" className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              Currently Employed
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="unemployed" id="unemployed" />
-            <Label htmlFor="unemployed" className="flex items-center gap-2">
-              <User className="w-4 h-4" />
-              Currently Unemployed
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="student" id="student" />
-            <Label htmlFor="student" className="flex items-center gap-2">
-              <GraduationCap className="w-4 h-4" />
-              Student (Further Studies)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="freelancer" id="freelancer" />
-            <Label htmlFor="freelancer" className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              Freelancer/Self-Employed
-            </Label>
-          </div>
+          {occupationStatusArray.map((status, index) => (
+            <div
+              key={`${index}-${status}`}
+              className="flex items-center space-x-2"
+            >
+              <RadioGroupItem value={status} id={status} />
+              <Label
+                htmlFor={status}
+                className="flex items-center gap-2 capitalize"
+              >
+                {status.replaceAll("_", " ").toLowerCase()}
+              </Label>
+            </div>
+          ))}
         </RadioGroup>
       </div>
     </div>
