@@ -23,7 +23,7 @@ import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
 
 export default function AlumniStatusUpdateForm() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isAnimating, setIsAnimating] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -68,9 +68,6 @@ export default function AlumniStatusUpdateForm() {
     const stepId = steps[currentStep]?.id;
 
     switch (stepId) {
-      case "welcome":
-        return <WelcomeSlide />;
-
       case "employment":
         return (
           <EmploymentSlide
@@ -173,18 +170,26 @@ export default function AlumniStatusUpdateForm() {
             </div>
 
             {/* Navigation Buttons */}
-            {currentStep > 0 && currentStep < steps.length - 1 && (
-              <div className="flex justify-between mt-8 pt-6 border-t">
+            {/* {currentStep > 0 && currentStep < steps.length - 1 && ( */}
+
+            <div className="flex justify-between mt-8 pt-6 border-t">
+              {currentStep > 0 && currentStep < steps.length - 1 && (
                 <Button variant="outline" onClick={prevStep}>
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Previous
                 </Button>
-                <Button onClick={nextStep} disabled={!canProceed}>
+              )}
+              {currentStep < steps.length - 1 && (
+                <Button
+                  className={currentStep === 0 ? "ml-auto" : ""}
+                  onClick={nextStep}
+                  disabled={!canProceed}
+                >
                   Next
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
 
             {currentStep === steps.length - 1 && (
               <div className="flex justify-center mt-8 pt-6 border-t">
