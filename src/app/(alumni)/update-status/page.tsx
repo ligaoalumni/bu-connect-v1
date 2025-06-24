@@ -8,7 +8,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, ArrowRight, AlertCircle } from "lucide-react";
 
 // Import slide __components
-import WelcomeSlide from "./__components/welcome-slide";
 import EmploymentSlide from "./__components/employment-slide";
 import IndustrySlide from "./__components/industry-slide";
 import LocationSlide from "./__components/location-slide";
