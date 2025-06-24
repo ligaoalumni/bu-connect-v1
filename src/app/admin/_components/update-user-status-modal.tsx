@@ -22,7 +22,6 @@ import { AlertTriangle } from "lucide-react";
 import { userStatusColorMap } from "@/constant";
 import { updateUserStatusAction } from "@/actions";
 import { User } from "@prisma/client";
-import { useRouter } from "next/navigation";
 
 interface UpdateStatusModalProps {
   user: {
