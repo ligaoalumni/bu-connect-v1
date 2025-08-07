@@ -15,34 +15,14 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
       break;
 
     case "industry":
-      if (formData.industryInfo.selectedIndustries.length === 0) {
-        errors.push("Please select at least one industry");
-      }
-      if (
-        formData.industryInfo.selectedIndustries.includes("Other") &&
-        !formData.industryInfo.otherIndustry.trim()
-      ) {
-        errors.push("Please specify the other industry");
+      if (!formData.industryInfo) {
+        errors.push("Please select industry");
       }
       break;
 
     case "location":
-      if (!formData.locationInfo.selectedLocation.trim()) {
+      if (!formData.locationInfo.selectedLocation.address.trim()) {
         errors.push("Please enter your current location");
-      }
-      break;
-
-    case "alumni":
-      if (!formData.alumniInfo.isAlumni) {
-        errors.push("Please specify if you are an alumni");
-      }
-      if (formData.alumniInfo.isAlumni === "yes") {
-        if (!formData.alumniInfo.institution.trim()) {
-          errors.push("Please enter your institution name");
-        }
-        if (!formData.alumniInfo.graduationYear.trim()) {
-          errors.push("Please enter your graduation year");
-        }
       }
       break;
 
