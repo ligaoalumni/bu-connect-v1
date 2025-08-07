@@ -1,13 +1,6 @@
 import { OccupationStatus } from "@prisma/client";
 import type { FormData } from "../types/form-data";
-import {
-  User,
-  Briefcase,
-  GraduationCap,
-  MapPin,
-  Building,
-  Check,
-} from "lucide-react";
+import { User, Briefcase, MapPin, Building, Check } from "lucide-react";
 
 export const getSteps = (formData: FormData) => {
   const baseSteps = [
