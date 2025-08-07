@@ -45,10 +45,11 @@ export default function AlumniStatusUpdateForm() {
       const user = await getInformation();
 
       if (user) {
-        const address: AddressData =
-          typeof user.address === "string"
+        const address: AddressData = user
+          ? typeof user.address === "string"
             ? JSON.parse(user.address)
-            : user.address;
+            : user.address
+          : undefined;
 
         setFormData((prevData) => ({
           ...prevData,
@@ -62,7 +63,6 @@ export default function AlumniStatusUpdateForm() {
             phone: user.contactNumber?.toString() || "",
           },
           employmentStatus: status || "",
-          industryInfo: "",
         }));
       }
 

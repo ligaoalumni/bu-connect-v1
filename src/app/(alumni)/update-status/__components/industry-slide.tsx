@@ -25,7 +25,7 @@ export default function IndustrySlide({
           defaultValue={value}
           onValueChange={(v) => {
             handleChange(v);
-            if (v === "other") {
+            if (v === "") {
               setIsOther(true);
             } else {
               setIsOther(false);
@@ -42,7 +42,7 @@ export default function IndustrySlide({
               </div>
             ))}
             <div className="flex items-center space-x-2">
-              <RadioGroupItem id="other-industry" value="other" />
+              <RadioGroupItem id="other-industry" value="" />
               <Label htmlFor="other-industry" className="text-sm">
                 Other
               </Label>
