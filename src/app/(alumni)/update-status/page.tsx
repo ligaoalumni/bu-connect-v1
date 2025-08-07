@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -21,18 +21,59 @@ import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
 import { useSearchParams } from "next/navigation";
 import { OccupationStatus } from "@prisma/client";
+import { getInformation } from "@/actions";
+import { AddressData } from "@/types";
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isAnimating, setIsAnimating] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  const [loading, setIsLoading] = useState(false);
+
   const params = useSearchParams();
+
+  const status = params.get("status") as OccupationStatus | null;
 
   const occupations = Object.values(OccupationStatus) as OccupationStatus[];
 
+  useEffect(() => {
+    // GET USER INFO
+    (async () => {
+      setIsLoading(true);
+      const user = await getInformation();
+
+      if (user) {
+        const address: AddressData =
+          typeof user.address === "string"
+            ? JSON.parse(user.address)
+            : user.address;
+
+        setFormData((prevData) => ({
+          ...prevData,
+          locationInfo: {
+            selectedLocation: address,
+          },
+          personalInfo: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.contactNumber?.toString() || "",
+          },
+          employmentStatus: status || "",
+          industryInfo: "",
+        }));
+      }
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    })();
+  }, [status]);
+
   if (
-    !params.get("status") ||
+    !status ||
     !occupations.includes(params.get("status") as OccupationStatus)
   ) {
     window.history.back();
@@ -88,12 +129,25 @@ export default function AlumniStatusUpdateForm() {
 
       case "industry":
         return (
-          <IndustrySlide formData={formData} updateFormData={updateFormData} />
+          <IndustrySlide
+            value={formData.industryInfo}
+            handleChange={(value) =>
+              setFormData((prev) => ({ ...prev, industryInfo: value! }))
+            }
+          />
         );
 
       case "location":
         return (
-          <LocationSlide formData={formData} updateFormData={updateFormData} />
+          <LocationSlide
+            location={formData.locationInfo.selectedLocation}
+            handleUpdateLocaton={(value: AddressData) =>
+              setFormData((prev) => ({
+                ...prev,
+                locationInfo: { selectedLocation: value },
+              }))
+            }
+          />
         );
 
       // case "alumni":
