@@ -11,7 +11,6 @@ import { ArrowLeft, ArrowRight, AlertCircle } from "lucide-react";
 import EmploymentSlide from "./__components/employment-slide";
 import IndustrySlide from "./__components/industry-slide";
 import LocationSlide from "./__components/location-slide";
-import AlumniSlide from "./__components/alumni-slide";
 import PersonalSlide from "./__components/personal-slide";
 import AdditionalSlide from "./__components/additional-slide";
 import CompleteSlide from "./__components/complete-slide";
@@ -97,10 +96,10 @@ export default function AlumniStatusUpdateForm() {
           <LocationSlide formData={formData} updateFormData={updateFormData} />
         );
 
-      case "alumni":
-        return (
-          <AlumniSlide formData={formData} updateFormData={updateFormData} />
-        );
+      // case "alumni":
+      //   return (
+      //     <AlumniSlide formData={formData} updateFormData={updateFormData} />
+      //   );
 
       case "personal":
         return (
