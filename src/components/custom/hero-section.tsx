@@ -3,11 +3,6 @@
 import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
-import {
-  IconBrandFacebook,
-  IconBrandGoogle,
-  IconBrandLinkedin,
-} from "@tabler/icons-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts";
 
