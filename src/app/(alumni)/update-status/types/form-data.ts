@@ -1,3 +1,5 @@
+import { AddressData } from "@/types";
+
 export interface FormData {
   employmentStatus: string;
   industryInfo: {
@@ -5,7 +7,7 @@ export interface FormData {
     otherIndustry: string;
   };
   locationInfo: {
-    selectedLocation: string;
+    selectedLocation: AddressData;
   };
   alumniInfo: {
     isAlumni: string;
@@ -32,7 +34,11 @@ export const initialFormData: FormData = {
     otherIndustry: "",
   },
   locationInfo: {
-    selectedLocation: "",
+    selectedLocation: {
+      address: "",
+      lat: 0,
+      lng: 0,
+    },
   },
   alumniInfo: {
     isAlumni: "",
