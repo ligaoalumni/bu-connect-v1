@@ -35,16 +35,13 @@ export default function CompleteSlide({ formData }: CompleteSlideProps) {
             formData.employmentStatus === "freelancer") && (
             <p>
               <strong>Industries:</strong>{" "}
-              {formData.industryInfo.selectedIndustries.join(", ")}
-              {formData.industryInfo.otherIndustry &&
-                ` (Other: ${formData.industryInfo.otherIndustry})`}
             </p>
           )}
           {(formData.employmentStatus === "unemployed" ||
             formData.employmentStatus === "student") && (
             <p>
               <strong>Location:</strong>{" "}
-              {formData.locationInfo.selectedLocation || "Not specified"}
+              {formData.locationInfo.selectedLocation?.address}
             </p>
           )}
           <p>
