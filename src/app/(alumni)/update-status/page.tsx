@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 
 // Import slide __components
 import EmploymentSlide from "./__components/employment-slide";
@@ -179,6 +179,13 @@ export default function AlumniStatusUpdateForm() {
   };
 
   const canProceed = validationErrors.length === 0;
+
+  if (loading)
+    return (
+      <div className="w-full min-h-[75dvh] flex items-center justify-center">
+        <Loader2 className="animate-spin h-16 w-16" />
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
