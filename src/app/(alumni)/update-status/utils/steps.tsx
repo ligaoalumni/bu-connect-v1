@@ -36,30 +36,20 @@ export const getSteps = (formData: FormData) => {
       subtitle: "Which industries are you currently working in?",
       icon: <Building className="w-8 h-8" />,
     });
-  } else if (
-    formData.employmentStatus === "unemployed" ||
-    formData.employmentStatus === "student"
-  ) {
-    baseSteps.push({
-      id: "location",
-      title: "Current Location",
-      subtitle: "Where are you currently based?",
-      icon: <MapPin className="w-8 h-8" />,
-    });
   }
 
   baseSteps.push(
-    {
-      id: "alumni",
-      title: "Alumni Information",
-      subtitle: "Update your educational background details",
-      icon: <GraduationCap className="w-8 h-8" />,
-    },
     {
       id: "personal",
       title: "Contact Information",
       subtitle: "Ensure we have your current contact details",
       icon: <User className="w-8 h-8" />,
+    },
+    {
+      id: "location",
+      title: "Current Location",
+      subtitle: "Where are you currently based?",
+      icon: <MapPin className="w-8 h-8" />,
     },
     {
       id: "additional",
