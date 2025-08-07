@@ -3,9 +3,9 @@ import { OccupationStatus } from "@prisma/client";
 
 export interface FormData {
   employmentStatus: OccupationStatus | string;
-  industryInfo: string;
+  industryInfo?: string;
   locationInfo: {
-    selectedLocation: AddressData;
+    selectedLocation?: AddressData;
   };
   alumniInfo: {
     isAlumni: string;
@@ -27,13 +27,9 @@ export interface FormData {
 
 export const initialFormData: FormData = {
   employmentStatus: "",
-  industryInfo: "",
+  industryInfo: undefined,
   locationInfo: {
-    selectedLocation: {
-      address: "",
-      lat: 0,
-      lng: 0,
-    },
+    selectedLocation: undefined, // AddressData or undefined
   },
   alumniInfo: {
     isAlumni: "",
