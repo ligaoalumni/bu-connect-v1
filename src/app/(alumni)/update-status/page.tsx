@@ -24,6 +24,7 @@ import { OccupationStatus } from "@prisma/client";
 import { getInformation } from "@/actions";
 import { AddressData } from "@/types";
 import { parseAddress } from "@/lib";
+import PostStudiesSlide from "./__components/post-studies-slide";
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -121,6 +122,17 @@ export default function AlumniStatusUpdateForm() {
           <EmploymentSlide
             formData={formData}
             updateFormData={updateFormData}
+          />
+        );
+
+      case "post-study":
+        return (
+          <PostStudiesSlide
+            value={formData.postStudy}
+            handleUniversityChange={(value) => {
+              setFormData((prev) => ({ ...prev, postStudy: value! }));
+              setValidationErrors([]);
+            }}
           />
         );
 

@@ -1,6 +1,13 @@
 import { OccupationStatus } from "@prisma/client";
 import type { FormData } from "../types/form-data";
-import { User, Briefcase, MapPin, Building, Check } from "lucide-react";
+import {
+  User,
+  Briefcase,
+  MapPin,
+  Building,
+  Check,
+  GraduationCap,
+} from "lucide-react";
 
 export const getSteps = (formData: FormData) => {
   const baseSteps = [
@@ -17,6 +24,15 @@ export const getSteps = (formData: FormData) => {
       icon: <Briefcase className="w-8 h-8" />,
     },
   ];
+
+  if (formData.employmentStatus === OccupationStatus.POST_GRADUATE_STUDENT) {
+    baseSteps.push({
+      id: "post-study",
+      title: "Post Study Information",
+      subtitle: "Which university are you currently studying at?",
+      icon: <GraduationCap className="h-8 w-8" />,
+    });
+  }
 
   // Add conditional step based on employment status
   if (

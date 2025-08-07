@@ -8,6 +8,12 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
       // No validation needed for welcome step
       break;
 
+    case "post-study":
+      if (!formData.postStudy) {
+        errors.push("Please select your post study university");
+      }
+      break;
+
     case "employment":
       if (!formData.employmentStatus) {
         errors.push("Please select your current employment status");

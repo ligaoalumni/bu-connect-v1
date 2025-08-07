@@ -4,6 +4,7 @@ import { OccupationStatus } from "@prisma/client";
 export interface FormData {
   employmentStatus: OccupationStatus | string;
   industryInfo?: string;
+  postStudy?: string;
   locationInfo: {
     selectedLocation?: AddressData;
   };
