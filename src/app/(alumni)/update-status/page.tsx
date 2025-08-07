@@ -23,6 +23,7 @@ import { useSearchParams } from "next/navigation";
 import { OccupationStatus } from "@prisma/client";
 import { getInformation } from "@/actions";
 import { AddressData } from "@/types";
+import { parseAddress } from "@/lib";
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,11 +46,7 @@ export default function AlumniStatusUpdateForm() {
       const user = await getInformation();
 
       if (user) {
-        const address: AddressData = user
-          ? typeof user.address === "string"
-            ? JSON.parse(user.address)
-            : user.address
-          : undefined;
+        const address: AddressData = parseAddress(JSON.stringify(user.address));
 
         setFormData((prevData) => ({
           ...prevData,
