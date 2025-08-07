@@ -21,11 +21,17 @@ export default function EmploymentSlide({
       industryInfo:
         value === "employed" || value === "freelancer"
           ? formData.industryInfo
-          : { selectedIndustries: [], otherIndustry: "" },
+          : "",
       locationInfo:
         value === "unemployed" || value === "student"
           ? formData.locationInfo
-          : { selectedLocation: "" },
+          : {
+              selectedLocation: {
+                address: "",
+                lat: 14.5995,
+                lng: 120.9842,
+              },
+            },
     });
   };
 
