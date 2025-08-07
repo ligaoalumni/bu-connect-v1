@@ -42,11 +42,7 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
       if (!formData.personalInfo.lastName.trim()) {
         errors.push("Please enter your last name");
       }
-      if (!formData.personalInfo.email.trim()) {
-        errors.push("Please enter your email address");
-      } else if (!/\S+@\S+\.\S+/.test(formData.personalInfo.email)) {
-        errors.push("Please enter a valid email address");
-      }
+
       break;
 
     case "additional":

@@ -55,11 +55,15 @@ export default function AlumniStatusUpdateForm() {
             selectedLocation: address,
           },
           personalInfo: {
-            email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.contactNumber?.toString() || "",
+            birthDate: user.birthDate.toISOString() || "",
+            gender: user.gender || "",
+            nationality: user.nationality || "",
+            religion: user.religion || "",
           },
+
           employmentStatus: status || "",
         }));
       }

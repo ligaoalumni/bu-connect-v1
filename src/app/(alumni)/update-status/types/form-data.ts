@@ -18,8 +18,11 @@ export interface FormData {
   personalInfo: {
     firstName: string;
     lastName: string;
-    email: string;
     phone: string;
+    nationality: string;
+    religion: string;
+    gender: string;
+    birthDate: string; // ISO date string
   };
   additionalInfo: {
     comments: string;
@@ -42,7 +45,10 @@ export const initialFormData: FormData = {
   personalInfo: {
     firstName: "",
     lastName: "",
-    email: "",
+    birthDate: "",
+    gender: "",
+    nationality: "",
+    religion: "",
     phone: "",
   },
   additionalInfo: {
