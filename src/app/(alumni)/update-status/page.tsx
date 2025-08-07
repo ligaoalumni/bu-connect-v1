@@ -131,9 +131,10 @@ export default function AlumniStatusUpdateForm() {
         return (
           <IndustrySlide
             value={formData.industryInfo}
-            handleChange={(value) =>
-              setFormData((prev) => ({ ...prev, industryInfo: value! }))
-            }
+            handleChange={(value) => {
+              setFormData((prev) => ({ ...prev, industryInfo: value! }));
+              setValidationErrors([]);
+            }}
           />
         );
 
@@ -141,12 +142,13 @@ export default function AlumniStatusUpdateForm() {
         return (
           <LocationSlide
             location={formData.locationInfo.selectedLocation}
-            handleUpdateLocaton={(value: AddressData) =>
+            handleUpdateLocaton={(value: AddressData) => {
               setFormData((prev) => ({
                 ...prev,
                 locationInfo: { selectedLocation: value },
-              }))
-            }
+              }));
+              setValidationErrors([]);
+            }}
           />
         );
 
