@@ -1,5 +1,8 @@
 import { Check } from "lucide-react";
 import type { FormData } from "../types/form-data";
+import { Gender, OccupationStatus } from "@prisma/client";
+import { formatDate } from "date-fns";
+import { getGenderLabel } from "@/lib";
 
 interface CompleteSlideProps {
   formData: FormData;
@@ -26,34 +29,50 @@ export default function CompleteSlide({ formData }: CompleteSlideProps) {
             {formData.personalInfo.lastName}
           </p>
           <p>
-            <strong>Email:</strong> {formData.personalInfo.email}
+            <strong>Birth Date:</strong>{" "}
+            {formatDate(formData.personalInfo.birthDate, "MMMM dd, yyyy")}
           </p>
           <p>
-            <strong>Employment Status:</strong> {formData.employmentStatus}
+            <strong>Nationality:</strong> {formData.personalInfo.nationality}
           </p>
-          {(formData.employmentStatus === "employed" ||
-            formData.employmentStatus === "freelancer") && (
-            <p>
-              <strong>Industries:</strong>{" "}
-            </p>
-          )}
-          {(formData.employmentStatus === "unemployed" ||
-            formData.employmentStatus === "student") && (
-            <p>
-              <strong>Location:</strong>{" "}
-              {formData.locationInfo.selectedLocation?.address}
-            </p>
-          )}
           <p>
-            <strong>Alumni Status:</strong>{" "}
-            {formData.alumniInfo.isAlumni === "yes" ? "Yes" : "No"}
+            <strong>Phone Number:</strong> {formData.personalInfo.phone}
           </p>
-          {formData.alumniInfo.isAlumni === "yes" &&
-            formData.alumniInfo.institution && (
+          <p>
+            <strong>Religion:</strong> {formData.personalInfo.religion}
+          </p>
+          <p>
+            <strong>Gender:</strong>{" "}
+            {getGenderLabel(formData.personalInfo.gender as Gender)}
+          </p>
+          <p>
+            <strong>Employment Status:</strong>{" "}
+            {formData.employmentStatus.slice(0, 1)}
+            {formData.employmentStatus
+              .toLowerCase()
+              .slice(1)
+              .split("_")
+              .join(" ")}
+          </p>
+
+          {formData.employmentStatus === OccupationStatus.EMPLOYED && (
+            <>
               <p>
-                <strong>Institution:</strong> {formData.alumniInfo.institution}
+                <strong>Company:</strong> {formData.company}
               </p>
-            )}
+              <p>
+                <strong>Industry:</strong> {formData.industryInfo}
+              </p>
+            </>
+          )}
+
+          {formData.employmentStatus ===
+            OccupationStatus.POST_GRADUATE_STUDENT && (
+            <p>
+              <strong>University/College:</strong>
+              {formData.postStudy}
+            </p>
+          )}
         </div>
       </div>
     </div>
