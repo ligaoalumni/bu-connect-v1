@@ -1,6 +1,6 @@
 import { INDUSTRIES } from "@/constant";
-import { AddressData } from "@/types";
-import { NotificationType, OccupationStatus } from "@prisma/client";
+import { AddressData, Gender } from "@/types";
+import { Gender, NotificationType, OccupationStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -134,7 +134,7 @@ export function getNotificationTitle(type: NotificationType): string {
 }
 
 export const formatAddress = (address: any): AddressData => {
-  return typeof address === "string" ? JSON.parse(address) : address;
+  return address && typeof address === "string" ? JSON.parse(address) : address;
 };
 
 export function getOccupationStatusLabel(status: OccupationStatus): string {
@@ -174,3 +174,7 @@ export function parseAddress(
 
   return Object.keys(parsed).length === 0 ? defaultAddress : parsed;
 }
+
+export const getGenderLabel = (gender: Gender): string => {
+  return `${gender.slice(0, 1)}${gender.split("_").join(" ").toLowerCase().slice(1)}`;
+};
