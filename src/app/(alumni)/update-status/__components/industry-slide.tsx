@@ -7,12 +7,15 @@ import { RadioGroup, RadioGroupItem } from "@/components";
 import { useState } from "react";
 
 interface IndustrySlideProps {
-  value: string | undefined;
-  handleChange: (updates: string | undefined) => void;
+  values: {
+    industry?: string;
+    company?: string;
+  };
+  handleChange: (values: IndustrySlideProps["values"]) => void;
 }
 
 export default function IndustrySlide({
-  value,
+  values,
   handleChange,
 }: IndustrySlideProps) {
   const [isOther, setIsOther] = useState(false);
@@ -22,9 +25,9 @@ export default function IndustrySlide({
       <div className="space-y-4">
         <Label>Which industries are you currently working in? *</Label>
         <RadioGroup
-          defaultValue={value}
+          defaultValue={values.industry}
           onValueChange={(v) => {
-            handleChange(v);
+            handleChange({ ...values, industry: v });
             if (v === "") {
               setIsOther(true);
             } else {
@@ -57,12 +60,22 @@ export default function IndustrySlide({
             </Label>
             <Input
               id="otherIndustry"
-              value={value}
-              onChange={(v) => handleChange(v.target.value)}
+              value={values.industry}
+              onChange={(v) =>
+                handleChange({ ...values, industry: v.target.value })
+              }
               placeholder="Enter your industry"
             />
           </div>
         )}
+
+        <Label htmlFor="company">Company</Label>
+        <Input
+          id="company"
+          value={values.company}
+          onChange={(v) => handleChange({ ...values, company: v.target.value })}
+          placeholder="Enter your industry"
+        />
       </div>
     </div>
   );
