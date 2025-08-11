@@ -48,7 +48,7 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
 
       break;
 
-    case "additional":
+    case "review":
       // No required fields for additional info
       break;
 

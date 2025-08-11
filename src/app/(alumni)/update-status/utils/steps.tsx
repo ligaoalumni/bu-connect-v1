@@ -8,6 +8,7 @@ import {
   Check,
   GraduationCap,
 } from "lucide-react";
+import { IconDetails } from "@tabler/icons-react";
 
 export const getSteps = (formData: FormData) => {
   const baseSteps = [
@@ -60,17 +61,20 @@ export const getSteps = (formData: FormData) => {
       subtitle: "Where are you currently based?",
       icon: <MapPin className="w-8 h-8" />,
     },
+
     {
-      id: "additional",
-      title: "Additional Updates",
-      subtitle: "Any other information you'd like to share?",
-      icon: <User className="w-8 h-8" />,
+      id: "review",
+      title: "Review",
+      subtitle:
+        "Review and update existing data to keep it accurate and up to date.",
+      icon: <IconDetails className="w-8 h-8" />,
     },
     {
       id: "complete",
       title: "Status Updated!",
-      subtitle: "Your alumni profile has been successfully updated",
-      icon: <Check className="w-8 h-8" />,
+      subtitle:
+        "Thank you for keeping your alumni profile current. Your information helps us better serve our alumni community.",
+      icon: <Check className="w-8 h-8 text-green-600" />,
     },
   );
 
