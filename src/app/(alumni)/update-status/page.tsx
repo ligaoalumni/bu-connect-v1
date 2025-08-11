@@ -143,9 +143,16 @@ export default function AlumniStatusUpdateForm() {
       case "industry":
         return (
           <IndustrySlide
-            value={formData.industryInfo}
-            handleChange={(value) => {
-              setFormData((prev) => ({ ...prev, industryInfo: value! }));
+            values={{
+              company: formData.company,
+              industry: formData.industryInfo,
+            }}
+            handleChange={(values) => {
+              setFormData((prev) => ({
+                ...prev,
+                industryInfo: values.industry!,
+                company: values.company!,
+              }));
               setValidationErrors([]);
             }}
           />
