@@ -24,6 +24,9 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
       if (!formData.industryInfo) {
         errors.push("Please select industry");
       }
+      if (!formData.company) {
+        errors.push("Please input your company");
+      }
       break;
 
     case "location":
