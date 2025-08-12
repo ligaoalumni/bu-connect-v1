@@ -35,6 +35,10 @@ export default function ReviewSlide({ formData }: ReviewSlideProps) {
             {getGenderLabel(formData.personalInfo.gender as Gender)}
           </p>
           <p>
+            <strong>Address:</strong>{" "}
+            {formData.locationInfo.selectedLocation?.address}
+          </p>
+          <p>
             <strong>Employment Status:</strong>{" "}
             {formData.employmentStatus.slice(0, 1)}
             {formData.employmentStatus
