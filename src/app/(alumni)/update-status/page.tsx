@@ -20,8 +20,8 @@ import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
 import { useSearchParams } from "next/navigation";
 import { OccupationStatus } from "@prisma/client";
-import { getInformation } from "@/actions";
-import { AddressData } from "@/types";
+import { getInformation, updateProfileStatusAction } from "@/actions";
+import { AddressData, Gender } from "@/types";
 import { parseAddress } from "@/lib";
 import PostStudiesSlide from "./__components/post-studies-slide";
 import Link from "next/link";
@@ -52,6 +52,7 @@ export default function AlumniStatusUpdateForm() {
 
         setFormData((prevData) => ({
           ...prevData,
+          id: user.id,
           locationInfo: {
             selectedLocation: address,
           },
@@ -89,6 +90,24 @@ export default function AlumniStatusUpdateForm() {
       alert("SUBMIT");
 
       try {
+        await updateProfileStatusAction(formData.id, {
+          currentOccupation: formData.employmentStatus as OccupationStatus,
+          firstName: formData.personalInfo.firstName,
+          lastName: formData.personalInfo.lastName,
+          birthDate: formData.personalInfo.birthDate,
+          company: formData.company,
+          industry: formData.industryInfo,
+          gender: formData.personalInfo.gender as Gender,
+          address: formData.locationInfo.selectedLocation,
+          religion: formData.personalInfo.religion,
+          contactNumber: formData.personalInfo.phone,
+        });
+
+        toast.success("Your information has been successfully submitted!", {
+          description: "Thank you for updating your status.",
+          position: "top-center",
+          richColors: true,
+        });
       } catch {
         toast.error(
           "An error occurred while submitting your information. Please try again.",
