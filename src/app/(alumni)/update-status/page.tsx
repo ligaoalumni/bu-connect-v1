@@ -22,7 +22,7 @@ import { useSearchParams } from "next/navigation";
 import { OccupationStatus } from "@prisma/client";
 import { getInformation, updateProfileStatusAction } from "@/actions";
 import { AddressData, Gender } from "@/types";
-import { parseAddress } from "@/lib";
+import { formatAddress, parseAddress } from "@/lib";
 import PostStudiesSlide from "./__components/post-studies-slide";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -54,7 +54,7 @@ export default function AlumniStatusUpdateForm() {
           ...prevData,
           id: user.id,
           locationInfo: {
-            selectedLocation: address,
+            selectedLocation: address ? formatAddress(address) : undefined,
           },
           personalInfo: {
             firstName: user.firstName,
@@ -65,7 +65,10 @@ export default function AlumniStatusUpdateForm() {
             nationality: user.nationality || "",
             religion: user.religion || "",
           },
-
+          company: user.company || "",
+          industryInfo: user.industry || "",
+          jobTitle: user.jobTitle || "",
+          postStudy: user.postStudyUniversity || "",
           employmentStatus: status || "",
         }));
       }
@@ -87,8 +90,6 @@ export default function AlumniStatusUpdateForm() {
 
   const nextStep = async () => {
     if (currentStep === steps.length - 2) {
-      alert("SUBMIT");
-
       try {
         await updateProfileStatusAction(formData.id, {
           currentOccupation: formData.employmentStatus as OccupationStatus,
@@ -111,6 +112,12 @@ export default function AlumniStatusUpdateForm() {
           position: "top-center",
           richColors: true,
         });
+        setIsAnimating(true);
+        setTimeout(() => {
+          setCurrentStep(currentStep + 1);
+          setValidationErrors([]);
+          setIsAnimating(false);
+        }, 150);
       } catch {
         toast.error(
           "An error occurred while submitting your information. Please try again.",
@@ -202,7 +209,11 @@ export default function AlumniStatusUpdateForm() {
       case "location":
         return (
           <LocationSlide
-            location={formData.locationInfo.selectedLocation}
+            location={
+              formData.locationInfo.selectedLocation
+                ? formatAddress(formData.locationInfo.selectedLocation)
+                : undefined
+            }
             handleUpdateLocaton={(value: AddressData) => {
               setFormData((prev) => ({
                 ...prev,
@@ -308,6 +319,7 @@ export default function AlumniStatusUpdateForm() {
                   onClick={nextStep}
                   disabled={!canProceed}
                 >
+                  {steps.length} -{" "}
                   {currentStep === steps.length - 2 ? "Submit" : "Next"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
