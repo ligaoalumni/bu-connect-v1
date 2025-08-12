@@ -233,7 +233,7 @@ export default function AlumniStatusUpdateForm() {
         return <ReviewSlide formData={formData} />;
 
       case "complete":
-        return <h1>Complete</h1>;
+        return;
       default:
         return null;
     }
@@ -306,7 +306,9 @@ export default function AlumniStatusUpdateForm() {
             {/* Navigation Buttons */}
             {/* {currentStep > 0 && currentStep < steps.length - 1 && ( */}
 
-            <div className="flex justify-between mt-8 pt-6 border-t">
+            <div
+              className={`flex justify-between mt-8 pt-6  ${currentStep < steps.length - 1 ? "border-t" : ""}`}
+            >
               {currentStep > 0 && currentStep < steps.length - 1 && (
                 <Button variant="outline" onClick={prevStep}>
                   <ArrowLeft className="w-4 h-4 mr-2" />
@@ -319,7 +321,6 @@ export default function AlumniStatusUpdateForm() {
                   onClick={nextStep}
                   disabled={!canProceed}
                 >
-                  {steps.length} -{" "}
                   {currentStep === steps.length - 2 ? "Submit" : "Next"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
