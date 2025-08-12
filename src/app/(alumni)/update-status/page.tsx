@@ -12,8 +12,7 @@ import EmploymentSlide from "./__components/employment-slide";
 import IndustrySlide from "./__components/industry-slide";
 import LocationSlide from "./__components/location-slide";
 import PersonalSlide from "./__components/personal-slide";
-import AdditionalSlide from "./__components/additional-slide";
-import CompleteSlide from "./__components/complete-slide";
+import ReviewSlide from "./__components/review-slide";
 
 // Import types and validation
 import { type FormData, initialFormData } from "./types/form-data";
@@ -25,6 +24,8 @@ import { getInformation } from "@/actions";
 import { AddressData } from "@/types";
 import { parseAddress } from "@/lib";
 import PostStudiesSlide from "./__components/post-studies-slide";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -83,17 +84,33 @@ export default function AlumniStatusUpdateForm() {
 
   const steps = getSteps(formData);
 
-  const nextStep = () => {
-    const errors = validateStep(steps[currentStep].id, formData);
-    setValidationErrors(errors);
+  const nextStep = async () => {
+    if (currentStep === steps.length - 2) {
+      alert("SUBMIT");
 
-    if (errors.length === 0 && currentStep < steps.length - 1) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentStep(currentStep + 1);
-        setValidationErrors([]);
-        setIsAnimating(false);
-      }, 150);
+      try {
+      } catch {
+        toast.error(
+          "An error occurred while submitting your information. Please try again.",
+          {
+            description: "If the problem persists, contact support.",
+            position: "top-center",
+            richColors: true,
+          },
+        );
+      }
+    } else {
+      const errors = validateStep(steps[currentStep].id, formData);
+      setValidationErrors(errors);
+
+      if (errors.length === 0 && currentStep < steps.length - 1) {
+        setIsAnimating(true);
+        setTimeout(() => {
+          setCurrentStep(currentStep + 1);
+          setValidationErrors([]);
+          setIsAnimating(false);
+        }, 150);
+      }
     }
   };
 
@@ -172,27 +189,16 @@ export default function AlumniStatusUpdateForm() {
           />
         );
 
-      // case "alumni":
-      //   return (
-      //     <AlumniSlide formData={formData} updateFormData={updateFormData} />
-      //   );
-
       case "personal":
         return (
           <PersonalSlide formData={formData} updateFormData={updateFormData} />
         );
 
-      case "additional":
-        return (
-          <AdditionalSlide
-            formData={formData}
-            updateFormData={updateFormData}
-          />
-        );
+      case "review":
+        return <ReviewSlide formData={formData} />;
 
       case "complete":
-        return <CompleteSlide formData={formData} />;
-
+        return <h1>Complete</h1>;
       default:
         return null;
     }
@@ -278,7 +284,7 @@ export default function AlumniStatusUpdateForm() {
                   onClick={nextStep}
                   disabled={!canProceed}
                 >
-                  Next
+                  {currentStep === steps.length - 2 ? "Submit" : "Next"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               )}
@@ -286,11 +292,8 @@ export default function AlumniStatusUpdateForm() {
 
             {currentStep === steps.length - 1 && (
               <div className="flex justify-center mt-8 pt-6 border-t">
-                <Button
-                  onClick={() => window.location.reload()}
-                  variant="outline"
-                >
-                  Update Another Profile
+                <Button asChild variant="outline">
+                  <Link href="/">Return to feed</Link>
                 </Button>
               </div>
             )}
