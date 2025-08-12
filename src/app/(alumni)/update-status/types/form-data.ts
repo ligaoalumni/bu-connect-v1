@@ -25,6 +25,7 @@ export interface FormData {
     nationality: string;
     religion: string;
     gender: string;
+    middleName?: string;
     birthDate: string; // ISO date string
   };
   additionalInfo: {

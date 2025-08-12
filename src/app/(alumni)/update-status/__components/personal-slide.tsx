@@ -45,6 +45,17 @@ export default function PersonalSlide({
           />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="lastName">Middle Name *</Label>
+          <Input
+            id="lastName"
+            value={formData.personalInfo.lastName}
+            onChange={(e) =>
+              handlePersonalFieldChange("middleName", e.target.value)
+            }
+            placeholder="Enter your middle name"
+          />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="lastName">Last Name *</Label>
           <Input
             id="lastName"
