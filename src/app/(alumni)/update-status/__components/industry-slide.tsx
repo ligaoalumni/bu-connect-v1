@@ -10,6 +10,7 @@ interface IndustrySlideProps {
   values: {
     industry?: string;
     company?: string;
+    jobTitle?: string;
   };
   handleChange: (values: IndustrySlideProps["values"]) => void;
 }
@@ -78,6 +79,17 @@ export default function IndustrySlide({
               handleChange({ ...values, company: v.target.value })
             }
             placeholder="Enter your industry"
+          />
+        </div>
+        <div className="mt-3">
+          <Label htmlFor="jobTitle">Job Title</Label>
+          <Input
+            id="jobTitle"
+            value={values.jobTitle}
+            onChange={(v) =>
+              handleChange({ ...values, jobTitle: v.target.value })
+            }
+            placeholder="Enter your job"
           />
         </div>
       </div>
