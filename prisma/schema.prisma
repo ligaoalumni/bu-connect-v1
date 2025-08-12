@@ -43,10 +43,11 @@ model User {
   course    String?
 
   // POST GRAD INFO
-  company           String? @default("")
-  currentOccupation String? @default("")
-  jobTitle          String? @default("")
-  industry          String? @default("")
+  company             String? @default("")
+  currentOccupation   String? @default("")
+  jobTitle            String? @default("")
+  industry            String? @default("")
+  postStudyUniversity String? @default("")
 
   // User Settings
   shareLocation Boolean @default(false)
