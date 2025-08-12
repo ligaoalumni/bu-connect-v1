@@ -7,6 +7,7 @@ import {
   Building,
   Check,
   GraduationCap,
+  CheckCircle,
 } from "lucide-react";
 import { IconDetails } from "@tabler/icons-react";
 
@@ -71,10 +72,9 @@ export const getSteps = (formData: FormData) => {
     },
     {
       id: "complete",
-      title: "Status Updated!",
-      subtitle:
-        "Thank you for keeping your alumni profile current. Your information helps us better serve our alumni community.",
-      icon: <Check className="w-8 h-8 text-green-600" />,
+      title: "Update Completed!",
+      subtitle: "Your changes have been successfully applied and saved.",
+      icon: <CheckCircle className="w-8 h-8 text-green-600" />,
     },
   );
 
