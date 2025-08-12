@@ -101,6 +101,9 @@ export default function AlumniStatusUpdateForm() {
           address: formData.locationInfo.selectedLocation,
           religion: formData.personalInfo.religion,
           contactNumber: formData.personalInfo.phone,
+          nationality: formData.personalInfo.nationality,
+          jobTitle: formData.jobTitle,
+          middleName: formData.personalInfo.middleName,
         });
 
         toast.success("Your information has been successfully submitted!", {
@@ -182,12 +185,14 @@ export default function AlumniStatusUpdateForm() {
             values={{
               company: formData.company,
               industry: formData.industryInfo,
+              jobTitle: formData.jobTitle,
             }}
             handleChange={(values) => {
               setFormData((prev) => ({
                 ...prev,
                 industryInfo: values.industry!,
                 company: values.company!,
+                jobTitle: values.jobTitle!,
               }));
               setValidationErrors([]);
             }}
