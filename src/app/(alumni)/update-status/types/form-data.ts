@@ -33,7 +33,7 @@ export interface FormData {
 }
 
 export const initialFormData: FormData = {
-  id: "",
+  id: 0,
   employmentStatus: "",
   industryInfo: undefined,
   company: "",
