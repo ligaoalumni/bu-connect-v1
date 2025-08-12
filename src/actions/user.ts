@@ -166,6 +166,21 @@ export const updateProfileActions = async (
   }
 };
 
+export const updateProfileStatusAction = async (
+  id: number,
+  data: UpdateProfileData,
+) => {
+  try {
+    await updateProfile(id, data);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "An error occurred while updating your profile.",
+    );
+  }
+};
+
 export const updatePasswordAction = async ({
   currentPassword,
   id,
