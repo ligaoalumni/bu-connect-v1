@@ -69,13 +69,17 @@ export default function IndustrySlide({
           </div>
         )}
 
-        <Label htmlFor="company">Company</Label>
-        <Input
-          id="company"
-          value={values.company}
-          onChange={(v) => handleChange({ ...values, company: v.target.value })}
-          placeholder="Enter your industry"
-        />
+        <div className="mt-3">
+          <Label htmlFor="company">Company</Label>
+          <Input
+            id="company"
+            value={values.company}
+            onChange={(v) =>
+              handleChange({ ...values, company: v.target.value })
+            }
+            placeholder="Enter your industry"
+          />
+        </div>
       </div>
     </div>
   );
