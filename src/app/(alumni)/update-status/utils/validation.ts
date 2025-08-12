@@ -32,7 +32,7 @@ export const validateStep = (stepId: string, formData: FormData): string[] => {
     case "location":
       if (
         !formData.locationInfo.selectedLocation ||
-        formData.locationInfo.selectedLocation?.address.trim() === ""
+        (formData.locationInfo.selectedLocation?.address ?? "").trim() === ""
       ) {
         errors.push("Please enter your current location");
       }
