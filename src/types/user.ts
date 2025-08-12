@@ -22,7 +22,7 @@ export interface UpdateProfileData {
   middleName?: string;
   nationality?: string;
   religion?: string;
-
+  industry?: string;
   batch?: number;
 
   jobTitle?: string;
