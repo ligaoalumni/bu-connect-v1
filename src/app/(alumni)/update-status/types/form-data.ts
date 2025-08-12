@@ -2,6 +2,8 @@ import { AddressData } from "@/types";
 import { OccupationStatus } from "@prisma/client";
 
 export interface FormData {
+  id: number;
+  jobTitle?: string;
   employmentStatus: OccupationStatus | string;
   company?: string;
   industryInfo?: string;
@@ -31,6 +33,7 @@ export interface FormData {
 }
 
 export const initialFormData: FormData = {
+  id: "",
   employmentStatus: "",
   industryInfo: undefined,
   company: "",
