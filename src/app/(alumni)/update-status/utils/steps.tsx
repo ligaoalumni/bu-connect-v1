@@ -5,7 +5,6 @@ import {
   Briefcase,
   MapPin,
   Building,
-  Check,
   GraduationCap,
   CheckCircle,
 } from "lucide-react";
