@@ -259,6 +259,7 @@ export const updateProfile = async (
           currentOccupation,
           batch,
           industry,
+          shareLocation: address ? true : false,
         },
       });
       if (!user) throw new Error("Failed to update user profile.");
