@@ -20,7 +20,7 @@ import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
 import { useSearchParams } from "next/navigation";
 import { OccupationStatus } from "@prisma/client";
-import { getInformation } from "@/actions";
+import { getInformation, updateProfileStatusAction } from "@/actions";
 import { AddressData } from "@/types";
 import { formatAddress, parseAddress } from "@/lib";
 import PostStudiesSlide from "./__components/post-studies-slide";
