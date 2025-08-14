@@ -1,5 +1,5 @@
 import { INDUSTRIES } from "@/constant";
-import { AddressData, Gender } from "@/types";
+import { AddressData } from "@/types";
 import { Gender, NotificationType, OccupationStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
