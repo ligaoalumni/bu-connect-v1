@@ -19,7 +19,7 @@ import { type FormData, initialFormData } from "./types/form-data";
 import { validateStep } from "./utils/validation";
 import { getSteps } from "./utils/steps";
 import { useSearchParams } from "next/navigation";
-import { OccupationStatus } from "@prisma/client";
+import { Gender, OccupationStatus } from "@prisma/client";
 import { getInformation, updateProfileStatusAction } from "@/actions";
 import { AddressData } from "@/types";
 import { formatAddress, parseAddress } from "@/lib";
