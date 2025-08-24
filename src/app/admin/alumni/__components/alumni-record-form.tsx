@@ -260,7 +260,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
                 name="course"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Course</FormLabel>
+                    <FormLabel>Program</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -272,7 +272,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectLabel>Year</SelectLabel>
+                            <SelectLabel>Program</SelectLabel>
                             {[
                               "High School (Old Curriculum)",
                               "Junior High School",
