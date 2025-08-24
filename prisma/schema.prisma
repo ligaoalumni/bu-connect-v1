@@ -16,6 +16,21 @@ enum Gender {
   PREFER_NOT_TO_SAY
 }
 
+model OldAccount {
+  id Int @id @default(autoincrement())
+
+  firstName  String
+  lastName   String
+  middleName String?
+  birthDat   DateTime
+  program    String
+  batch      Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+}
+
 // User model: Handles both alumni and admin/super admin login.
 model User {
   id       Int     @id @default(autoincrement())
@@ -24,6 +39,10 @@ model User {
   role     Role
   avatar   String?
   bio      String? @default("")
+
+  isOldAccount Boolean?    @default(false)
+  oldAccount   OldAccount? @relation(fields: [oldAccountId], references: [id])
+  oldAccountId Int?
 
   // Personal Info
   firstName     String   @default("")
@@ -48,6 +67,7 @@ model User {
   jobTitle            String? @default("")
   industry            String? @default("")
   postStudyUniversity String? @default("")
+  years               Int?    @default(0) // Years take to get the job related to the program
 
   // User Settings
   shareLocation Boolean @default(false)
