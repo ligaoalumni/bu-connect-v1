@@ -51,8 +51,8 @@ export const getSteps = (formData: FormData) => {
   baseSteps.push(
     {
       id: "personal",
-      title: "Contact Information",
-      subtitle: "Ensure we have your current contact details",
+      title: "Personal Information",
+      subtitle: "Ensure we have your current personal details",
       icon: <User className="w-8 h-8" />,
     },
     {
