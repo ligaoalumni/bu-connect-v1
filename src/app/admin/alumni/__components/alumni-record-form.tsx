@@ -36,6 +36,7 @@ import {
 } from "@/actions";
 import { formatDate } from "date-fns";
 import { User } from "@prisma/client";
+import { programs } from "@/constant";
 
 // Define the form's type
 const currentYear = new Date().getFullYear() - 1; // Get the current year
@@ -268,18 +269,14 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
                       >
                         {/* Option to prompt user */}
                         <SelectTrigger className="w-full h-12">
-                          <SelectValue placeholder="Select education level" />
+                          <SelectValue placeholder="Select student's program" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>Program</SelectLabel>
-                            {[
-                              "High School (Old Curriculum)",
-                              "Junior High School",
-                              "Senior High School",
-                            ].map((year) => (
-                              <SelectItem value={year.toString()} key={year}>
-                                {year}
+                            {programs.map((program) => (
+                              <SelectItem value={program} key={program}>
+                                {program}
                               </SelectItem>
                             ))}
                           </SelectGroup>
