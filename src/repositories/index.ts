@@ -5,6 +5,7 @@ export * from "./announcement";
 export * from "./dashboard";
 export * from "./post";
 export * from "./job";
+export * from "./old-account";
 export * from "./poll";
 export * from "./batch";
 export * from "./recruitment";
