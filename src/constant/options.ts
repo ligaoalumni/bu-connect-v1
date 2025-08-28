@@ -207,3 +207,25 @@ export const nationalities = [
 ];
 
 export const genderOptions = ["MALE", "FEMALE", "PREFER_NOT_TO_SAY"];
+
+export const programs = [
+  "Bachelor of Elementary Education",
+  "Bachelor of Secondary Education Major in English",
+  "Bachelor of Secondary Education Major in Math",
+  "Bachelor of Science in Automotive Technology",
+  "Bachelor of Science in Computer Engineering",
+  "Bachelor of Science in Computer Science",
+  "Bachelor of Science in Electrical Technology",
+  "Bachelor of Science in Electronics Engineering",
+  "Bachelor of Science in Electronics Technology",
+  "Bachelor of Science in Entrepreneurship",
+  "Bachelor of Science in Information System",
+  "Bachelor of Science in Information Technology",
+  "Bachelor of Science in Information Technology (Animation)",
+  "Bachelor of Science in Mechanical Technology",
+  "Bachelor of Science in Nursing",
+  "B Technology and Livelihood Education (BTLed-ICT) ",
+  "B Technology and Livelihood Education (BTLED-Home Economics)",
+  "Bachelor of Science in Food Technology",
+  "Tech Voc",
+];
