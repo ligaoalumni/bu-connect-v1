@@ -24,6 +24,7 @@ import {
   User,
   Batch as TBatch,
   Recruitment,
+  OldAccount,
 } from "@prisma/client";
 
 export * from "./user";
@@ -38,6 +39,11 @@ export type JobData = Pick<
   Job,
   "company" | "description" | "jobTitle" | "location" | "title" | "type"
 > & { userId: number };
+
+export type OldAlumniDataInput = Omit<
+  OldAccount,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 export interface Attendant {
   avatar: string;

@@ -19,6 +19,7 @@ enum Gender {
 model OldAccount {
   id Int @id @default(autoincrement())
 
+  studentId  String   @unique
   firstName  String
   lastName   String
   middleName String?
