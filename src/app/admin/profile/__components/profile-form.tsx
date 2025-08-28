@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { AddressData, AdminProfileFormData } from "@/types";
-import { AdminProfileSchema } from "@/lib";
+import { AdminProfileSchema, formatAddress } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -59,7 +59,13 @@ export default function ProfileForm(user: ProfileFormProps) {
     contactNumber: user.contactNumber,
     religion: user.religion,
     nationality: user.nationality,
-    address: user.address,
+    address: user.address
+      ? formatAddress(user.address)
+      : {
+          lat: 14.5995,
+          lng: 120.9842,
+          address: "",
+        },
     avatar: user.avatar,
     gender: user.gender,
   };

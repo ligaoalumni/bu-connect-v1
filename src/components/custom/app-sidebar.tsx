@@ -128,13 +128,30 @@ const data = {
       items: [
         {
           icon: UserPlus2,
-          title: "Add",
+          title: "Add alumni account",
           url: "/admin/alumni/add",
         },
         {
           icon: Users2,
-          title: "List",
+          title: "List of accounts",
           url: "/admin/alumni",
+        },
+      ],
+    },
+    {
+      icon: GraduationCap,
+      title: "Old Alumni",
+      url: "#",
+      items: [
+        {
+          icon: UserPlus2,
+          title: "Add Data",
+          url: "/admin/alumni/old/add",
+        },
+        {
+          icon: Users2,
+          title: "List of old data",
+          url: "/admin/alumni/old",
         },
       ],
     },
