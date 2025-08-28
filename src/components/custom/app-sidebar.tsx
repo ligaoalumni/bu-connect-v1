@@ -23,6 +23,7 @@ import {
   UserPlus2,
   Users,
   Users2,
+  Users2Icon,
 } from "lucide-react";
 
 import {
@@ -136,25 +137,14 @@ const data = {
           title: "List of accounts",
           url: "/admin/alumni",
         },
-      ],
-    },
-    {
-      icon: GraduationCap,
-      title: "Old Alumni",
-      url: "#",
-      items: [
         {
-          icon: UserPlus2,
-          title: "Add Data",
-          url: "/admin/alumni/old/add",
-        },
-        {
-          icon: Users2,
-          title: "List of old data",
+          icon: Users2Icon,
+          title: "List of old alumni data",
           url: "/admin/alumni/old",
         },
       ],
     },
+
     {
       icon: FileUser,
       title: "Recruitment",
