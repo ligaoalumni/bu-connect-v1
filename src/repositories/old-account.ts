@@ -77,3 +77,29 @@ export const readOldAccounts = async ({
       : false,
   };
 };
+
+export const updateOldAccount = async (
+  id: number,
+  data: Partial<OldAlumniDataInput>,
+) => {
+  const isExist = await prisma.oldAccount.count({
+    where: { id },
+  });
+
+  if (!isExist) throw new Error("Old account does not exist");
+
+  const oldAccount = await prisma.oldAccount.update({
+    where: { id },
+    data,
+  });
+
+  return oldAccount;
+};
+
+export const deleteOldAccount = async (id: number) => {
+  const oldAccount = await prisma.oldAccount.delete({
+    where: { id },
+  });
+
+  return oldAccount;
+};
