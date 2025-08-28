@@ -5,7 +5,6 @@ import { ChevronDownIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -22,7 +21,7 @@ export function DatePicker({ onChange, value }: DatePicker) {
   const [date, setDate] = React.useState<Date | undefined>(value);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 z-50">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
