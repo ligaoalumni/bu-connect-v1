@@ -3,17 +3,17 @@
 import { prisma } from "@/lib";
 
 import {
-	Attendant,
-	DashboardEvent,
-	Event,
-	EventComment,
-	EventPartialRelation,
-	Events,
-	EventStatus,
-	EventWithPagination,
-	PaginationArgs,
-	PaginationResult,
-	TEventPagination,
+  Attendant,
+  DashboardEvent,
+  Event,
+  EventComment,
+  EventPartialRelation,
+  Events,
+  EventStatus,
+  EventWithPagination,
+  PaginationArgs,
+  PaginationResult,
+  TEventPagination,
 } from "@/types";
 import { NotificationType, Prisma } from "@prisma/client";
 import { format, isFuture } from "date-fns";
@@ -23,609 +23,611 @@ import { getNotificationMessage } from "@/lib";
 import { createNotifications } from "./notifications";
 
 export const readEvent = async (
-	slug: string | number
+  slug: string | number,
 ): Promise<EventPartialRelation | null> => {
-	let where: Prisma.EventWhereUniqueInput = { id: Number(slug) };
+  let where: Prisma.EventWhereUniqueInput = { id: Number(slug) };
 
-	if (typeof slug === "string") {
-		where = { slug };
-	}
+  if (typeof slug === "string") {
+    where = { slug };
+  }
 
-	const event = await prisma.event.findUnique({
-		where,
-		include: {
-			interested: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-					id: true,
-				},
-			},
-			alumni: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-					id: true,
-				},
-			},
-		},
-	});
+  const event = await prisma.event.findUnique({
+    where,
+    include: {
+      interested: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          id: true,
+        },
+      },
+      alumni: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          id: true,
+        },
+      },
+    },
+  });
 
-	if (!event) return null;
+  if (!event) return null;
 
-	return {
-		...event,
-		coverImg: event.coverImg || "",
-	};
+  return {
+    ...event,
+    coverImg: event.coverImg || "",
+  };
 };
 
 export const createEvent = async (
-	data: Omit<
-		Event,
-		"id" | "createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
-	>
+  data: Omit<
+    Event,
+    "id" | "createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
+  >,
 ) => {
-	const timestamp = Date.now(); // current timestamp
-	const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
-	const name = data.name.toLowerCase().replace(/ /g, "-");
-	const generatedSlug = slug(name);
+  const timestamp = Date.now(); // current timestamp
+  const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
+  const name = data.name.toLowerCase().replace(/ /g, "-");
+  const generatedSlug = slug(name);
+  const slugString =
+    `${name}-${timestamp}-${randomPart}-${generatedSlug}`.replace(/#/g, "");
 
-	const newEvent = await prisma.event.create({
-		data: {
-			...data,
-			endDate: data.endDate || data.startDate,
-			slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
-			// slug: "test-7-1740444042069-yoje5jym-394d791c",
-		},
-	});
+  const newEvent = await prisma.event.create({
+    data: {
+      ...data,
+      endDate: data.endDate || data.startDate,
+      slug: slugString,
+      // slug: "test-7-1740444042069-yoje5jym-394d791c",
+    },
+  });
 
-	if (!newEvent) throw new Error("Failed to create new event");
+  if (!newEvent) throw new Error("Failed to create new event");
 
-	const usersId = await getUsersId();
-	const link = `/events/${newEvent.slug}/info`;
+  const usersId = await getUsersId();
+  const link = `/events/${newEvent.slug}/info`;
 
-	const notifications = usersId.map((id) => ({
-		userId: id,
-		message: getNotificationMessage("EVENT"),
-		link,
-		type: "EVENT" as NotificationType,
-	}));
+  const notifications = usersId.map((id) => ({
+    userId: id,
+    message: getNotificationMessage("EVENT"),
+    link,
+    type: "EVENT" as NotificationType,
+  }));
 
-	await createNotifications(notifications);
+  await createNotifications(notifications);
 
-	return newEvent;
+  return newEvent;
 };
 
 export const readEvents = async ({
-	filter,
-	pagination,
-	order,
-	orderBy,
-	status,
+  filter,
+  pagination,
+  order,
+  orderBy,
+  status,
 }: PaginationArgs<EventStatus, never> = {}): Promise<
-	PaginationResult<EventWithPagination>
+  PaginationResult<EventWithPagination>
 > => {
-	let where: Prisma.EventWhereInput = {};
+  let where: Prisma.EventWhereInput = {};
 
-	if (filter && typeof filter === "number") {
-		where = {
-			id: filter,
-		};
-	}
+  if (filter && typeof filter === "number") {
+    where = {
+      id: filter,
+    };
+  }
 
-	if (status && status?.includes("Ongoing Event")) {
-		where = {
-			...where,
-			OR: [
-				{
-					startDate: {
-						lte: new Date(),
-					},
-					endDate: {
-						gte: new Date(),
-					},
-				},
-			],
-		};
-	} else if (status && status?.includes("Upcoming Event")) {
-		where = {
-			...where,
-			startDate: {
-				gt: new Date(),
-			},
-		};
-	} else if (status && status?.includes("Past Event")) {
-		where = {
-			...where,
-			OR: [
-				{
-					endDate: {
-						lt: new Date(),
-					},
-				},
-			],
-		};
-	}
+  if (status && status?.includes("Ongoing Event")) {
+    where = {
+      ...where,
+      OR: [
+        {
+          startDate: {
+            lte: new Date(),
+          },
+          endDate: {
+            gte: new Date(),
+          },
+        },
+      ],
+    };
+  } else if (status && status?.includes("Upcoming Event")) {
+    where = {
+      ...where,
+      startDate: {
+        gt: new Date(),
+      },
+    };
+  } else if (status && status?.includes("Past Event")) {
+    where = {
+      ...where,
+      OR: [
+        {
+          endDate: {
+            lt: new Date(),
+          },
+        },
+      ],
+    };
+  }
 
-	if (typeof filter === "string") {
-		where = {
-			OR: [{ name: { contains: filter, mode: "insensitive" } }],
-		};
-	}
+  if (typeof filter === "string") {
+    where = {
+      OR: [{ name: { contains: filter, mode: "insensitive" } }],
+    };
+  }
 
-	const events = await prisma.event.findMany({
-		where,
-		skip: pagination ? pagination.limit * pagination.page : undefined,
-		take: pagination ? pagination.limit : undefined,
-		orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
-		include: {
-			alumni: true,
-			interested: true,
-			_count: {
-				select: {
-					interested: true,
-					alumni: true,
-					comments: true,
-				},
-			},
-		},
-	});
+  const events = await prisma.event.findMany({
+    where,
+    skip: pagination ? pagination.limit * pagination.page : undefined,
+    take: pagination ? pagination.limit : undefined,
+    orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+    include: {
+      alumni: true,
+      interested: true,
+      _count: {
+        select: {
+          interested: true,
+          alumni: true,
+          comments: true,
+        },
+      },
+    },
+  });
 
-	const count = await prisma.event.count({ where });
+  const count = await prisma.event.count({ where });
 
-	return {
-		count,
-		hasMore: events.length === pagination?.limit,
-		data: events.map((event) => ({
-			...event,
-			alumni: event.alumni,
-			interested: event.interested,
-			_count: {
-				interested: event._count.interested,
-				alumni: event._count.alumni,
-				comments: event._count.comments,
-			},
-			coverImg: event.coverImg || "",
-		})),
-	};
+  return {
+    count,
+    hasMore: events.length === pagination?.limit,
+    data: events.map((event) => ({
+      ...event,
+      alumni: event.alumni,
+      interested: event.interested,
+      _count: {
+        interested: event._count.interested,
+        alumni: event._count.alumni,
+        comments: event._count.comments,
+      },
+      coverImg: event.coverImg || "",
+    })),
+  };
 };
 
 export const updateEvent = async (
-	data: Omit<
-		Event,
-		"createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
-	>
+  data: Omit<
+    Event,
+    "createdAt" | "updatedAt" | "interested" | "alumni" | "slug"
+  >,
 ) => {
-	const isExists = await prisma.event.findUnique({
-		where: { id: data.id },
-	});
+  const isExists = await prisma.event.findUnique({
+    where: { id: data.id },
+  });
 
-	if (!isExists) {
-		throw new Error("Event not found");
-	}
+  if (!isExists) {
+    throw new Error("Event not found");
+  }
 
-	let generatedSlug: string | undefined = undefined;
+  let generatedSlug: string | undefined = undefined;
 
-	if (isExists.name !== data.name) {
-		const timestamp = Date.now(); // current timestamp
-		const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
-		const name = data.name.toLowerCase().replace(/ /g, "-");
-		generatedSlug = `${name}-${timestamp}-${randomPart}-${slug(name)}`;
-	}
+  if (isExists.name !== data.name) {
+    const timestamp = Date.now(); // current timestamp
+    const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
+    const name = data.name.toLowerCase().replace(/ /g, "-");
+    generatedSlug = `${name}-${timestamp}-${randomPart}-${slug(name)}`;
+  }
 
-	const updatedEvent = await prisma.event.update({
-		data: {
-			...data,
-			endDate: data.endDate || data.startDate,
-			slug: generatedSlug,
-		},
-		where: {
-			id: isExists.id,
-		},
-	});
+  const updatedEvent = await prisma.event.update({
+    data: {
+      ...data,
+      endDate: data.endDate || data.startDate,
+      slug: generatedSlug,
+    },
+    where: {
+      id: isExists.id,
+    },
+  });
 
-	return updatedEvent;
+  return updatedEvent;
 };
 
 export const getDisabledEvents = async (): Promise<Events> => {
-	const allEvents = await readEvents();
-	const futureEvents = allEvents.data.filter((event) =>
-		isFuture(event.startDate)
-	);
+  const allEvents = await readEvents();
+  const futureEvents = allEvents.data.filter((event) =>
+    isFuture(event.startDate),
+  );
 
-	const setTimeOnDate = (date: Date, timeString: string) => {
-		// Split the timeString into hours and minutes
-		const [hours, minutes] = timeString.split(":").map(Number);
+  const setTimeOnDate = (date: Date, timeString: string) => {
+    // Split the timeString into hours and minutes
+    const [hours, minutes] = timeString.split(":").map(Number);
 
-		// Set the hours and minutes on the provided date
-		date.setHours(hours, minutes, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
-		return date;
-	};
+    // Set the hours and minutes on the provided date
+    date.setHours(hours, minutes, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+    return date;
+  };
 
-	return futureEvents.map((event) => {
-		// Start Date & Time
-		const start = setTimeOnDate(
-			event.startDate,
-			format(event.startTime, "HH:mm")
-		);
+  return futureEvents.map((event) => {
+    // Start Date & Time
+    const start = setTimeOnDate(
+      event.startDate,
+      format(event.startTime, "HH:mm"),
+    );
 
-		// End Date & Time
-		const endDate = event.endDate || event.startDate; // Use startDate if no endDate is provided
-		const end = setTimeOnDate(endDate, format(event.endTime, "HH:mm"));
+    // End Date & Time
+    const endDate = event.endDate || event.startDate; // Use startDate if no endDate is provided
+    const end = setTimeOnDate(endDate, format(event.endTime, "HH:mm"));
 
-		const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`;
+    const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 70%)`;
 
-		return {
-			id: event.slug,
-			start,
-			end,
-			location: event.location,
-			title: event.name,
-			backgroundColor: color,
-			borderColor: color,
-		};
-	});
+    return {
+      id: event.slug,
+      start,
+      end,
+      location: event.location,
+      title: event.name,
+      backgroundColor: color,
+      borderColor: color,
+    };
+  });
 };
 
 export const readOngoingEvent = async () => {
-	const event = await prisma.event.findFirst({
-		where: {
-			startDate: {
-				lte: new Date(),
-			},
-			endDate: {
-				gte: new Date(),
-			},
-		},
+  const event = await prisma.event.findFirst({
+    where: {
+      startDate: {
+        lte: new Date(),
+      },
+      endDate: {
+        gte: new Date(),
+      },
+    },
 
-		include: {
-			alumni: true,
-			interested: true,
-			_count: {
-				select: {
-					interested: true,
-					alumni: true,
-					comments: true,
-				},
-			},
-		},
-	});
+    include: {
+      alumni: true,
+      interested: true,
+      _count: {
+        select: {
+          interested: true,
+          alumni: true,
+          comments: true,
+        },
+      },
+    },
+  });
 
-	const upcomingEvent = await prisma.event.findFirst({
-		where: {
-			startDate: {
-				gt: new Date(),
-			},
-		},
-		orderBy: {
-			startDate: "asc",
-		},
-		include: {
-			alumni: true,
-			interested: true,
-			_count: {
-				select: {
-					interested: true,
-					alumni: true,
-					comments: true,
-				},
-			},
-		},
-	});
+  const upcomingEvent = await prisma.event.findFirst({
+    where: {
+      startDate: {
+        gt: new Date(),
+      },
+    },
+    orderBy: {
+      startDate: "asc",
+    },
+    include: {
+      alumni: true,
+      interested: true,
+      _count: {
+        select: {
+          interested: true,
+          alumni: true,
+          comments: true,
+        },
+      },
+    },
+  });
 
-	return {
-		ongoing: event ? formatDashboardEvent(event) : null,
-		nextEvent: upcomingEvent ? formatDashboardEvent(upcomingEvent) : null,
-	};
+  return {
+    ongoing: event ? formatDashboardEvent(event) : null,
+    nextEvent: upcomingEvent ? formatDashboardEvent(upcomingEvent) : null,
+  };
 };
 
 function formatDashboardEvent(event: EventWithPagination): DashboardEvent {
-	let oneDay = false;
+  let oneDay = false;
 
-	if (event && event.startDate === event.endDate) {
-		oneDay = true;
-	} else {
-		oneDay = false;
-	}
+  if (event && event.startDate === event.endDate) {
+    oneDay = true;
+  } else {
+    oneDay = false;
+  }
 
-	return {
-		id: event.id,
-		slug: event.slug,
-		name: event.name,
-		location: event.location,
-		attendees: event._count.alumni,
-		time: `${format(event.startTime, "h:mm a")} - ${format(
-			event.endTime,
-			"h:mm a"
-		)}`,
-		date: oneDay
-			? format(event.startDate, "MMMM d, yyyy")
-			: `${format(event.startDate, "MMMM d ")} - ${format(
-					event.endDate || event.startDate,
-					"MMMM d, yyyy"
-			  )}`,
-	};
+  return {
+    id: event.id,
+    slug: event.slug,
+    name: event.name,
+    location: event.location,
+    attendees: event._count.alumni,
+    time: `${format(event.startTime, "h:mm a")} - ${format(
+      event.endTime,
+      "h:mm a",
+    )}`,
+    date: oneDay
+      ? format(event.startDate, "MMMM d, yyyy")
+      : `${format(event.startDate, "MMMM d ")} - ${format(
+          event.endDate || event.startDate,
+          "MMMM d, yyyy",
+        )}`,
+  };
 }
 
 export const addEventAttendant = async ({
-	id,
-	eventId,
+  id,
+  eventId,
 }: {
-	eventId: number;
-	id: number;
+  eventId: number;
+  id: number;
 }) => {
-	return await prisma.$transaction(async (tx) => {
-		const attendantAlreadyExists = await tx.event.findFirst({
-			where: {
-				id: eventId,
-				alumni: {
-					some: {
-						id,
-					},
-				},
-			},
-		});
+  return await prisma.$transaction(async (tx) => {
+    const attendantAlreadyExists = await tx.event.findFirst({
+      where: {
+        id: eventId,
+        alumni: {
+          some: {
+            id,
+          },
+        },
+      },
+    });
 
-		if (attendantAlreadyExists) {
-			throw new Error("Attendant already exists");
-		}
+    if (attendantAlreadyExists) {
+      throw new Error("Attendant already exists");
+    }
 
-		await tx.event.update({
-			data: {
-				alumni: {
-					connect: {
-						id,
-					},
-				},
-			},
-			where: {
-				id: eventId,
-			},
-		});
-	});
+    await tx.event.update({
+      data: {
+        alumni: {
+          connect: {
+            id,
+          },
+        },
+      },
+      where: {
+        id: eventId,
+      },
+    });
+  });
 };
 
 export const readAttendants = async ({
-	slug,
-	pagination,
+  slug,
+  pagination,
 }: TEventPagination): Promise<PaginationResult<Attendant>> => {
-	const event = await prisma.event.findUnique({
-		where: {
-			slug,
-		},
-		select: {
-			alumni: {
-				skip: pagination ? pagination.limit * pagination.page : undefined,
-				take: pagination ? pagination.limit : undefined,
-				select: {
-					avatar: true,
-					batch: true,
-					studentId: true,
-					course: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			},
-		},
-	});
+  const event = await prisma.event.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      alumni: {
+        skip: pagination ? pagination.limit * pagination.page : undefined,
+        take: pagination ? pagination.limit : undefined,
+        select: {
+          avatar: true,
+          batch: true,
+          studentId: true,
+          course: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+    },
+  });
 
-	const total = await prisma.event.findUnique({
-		where: {
-			slug,
-		},
-		select: {
-			alumni: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			},
-		},
-	});
+  const total = await prisma.event.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      alumni: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+    },
+  });
 
-	if (!event)
-		return {
-			count: 0,
-			data: [],
-			hasMore: false,
-		};
+  if (!event)
+    return {
+      count: 0,
+      data: [],
+      hasMore: false,
+    };
 
-	return {
-		count: total?.alumni.length || 0,
-		data: event.alumni.map((attendant) => ({
-			avatar: attendant.avatar || "",
-			firstName: attendant.firstName,
-			lastName: attendant.lastName,
-			email: attendant.email,
-			course: attendant?.course || "",
-			batch: attendant.batch || 0,
-		})),
-		hasMore: event.alumni.length === pagination?.limit,
-	};
+  return {
+    count: total?.alumni.length || 0,
+    data: event.alumni.map((attendant) => ({
+      avatar: attendant.avatar || "",
+      firstName: attendant.firstName,
+      lastName: attendant.lastName,
+      email: attendant.email,
+      course: attendant?.course || "",
+      batch: attendant.batch || 0,
+    })),
+    hasMore: event.alumni.length === pagination?.limit,
+  };
 };
 
 export const readEventComments = async ({
-	slug,
-	pagination,
+  slug,
+  pagination,
 }: TEventPagination): Promise<PaginationResult<EventComment>> => {
-	const comments = await prisma.eventComment.findMany({
-		where: {
-			event: {
-				slug,
-			},
-		},
-		include: {
-			commentBy: {
-				select: {
-					firstName: true,
-					lastName: true,
-					email: true,
-					studentId: true,
-					batch: true,
-					avatar: true,
-				},
-			},
-		},
-		skip: pagination ? pagination.limit * pagination.page : undefined,
-		take: pagination ? pagination.limit : undefined,
-		orderBy: {
-			createdAt: "desc",
-		},
-	});
+  const comments = await prisma.eventComment.findMany({
+    where: {
+      event: {
+        slug,
+      },
+    },
+    include: {
+      commentBy: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          studentId: true,
+          batch: true,
+          avatar: true,
+        },
+      },
+    },
+    skip: pagination ? pagination.limit * pagination.page : undefined,
+    take: pagination ? pagination.limit : undefined,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-	const total = await prisma.eventComment.count({
-		where: {
-			event: {
-				slug,
-			},
-		},
-	});
+  const total = await prisma.eventComment.count({
+    where: {
+      event: {
+        slug,
+      },
+    },
+  });
 
-	return {
-		count: total || 0,
-		data: comments.map((comment) => ({
-			id: comment.id,
-			comment: comment.comment,
-			avatar: comment.commentBy?.avatar || "",
-			name: `${comment.commentBy.firstName} ${comment.commentBy.lastName}`,
-			studentId: comment.commentBy.studentId || "",
-			batch: comment.commentBy.batch?.toString() || "",
-			createdAt: comment.createdAt.toISOString(),
-		})),
-		hasMore: comments.length === pagination?.limit,
-	};
+  return {
+    count: total || 0,
+    data: comments.map((comment) => ({
+      id: comment.id,
+      comment: comment.comment,
+      avatar: comment.commentBy?.avatar || "",
+      name: `${comment.commentBy.firstName} ${comment.commentBy.lastName}`,
+      studentId: comment.commentBy.studentId || "",
+      batch: comment.commentBy.batch?.toString() || "",
+      createdAt: comment.createdAt.toISOString(),
+    })),
+    hasMore: comments.length === pagination?.limit,
+  };
 };
 
 export const addInterestEvent = async ({
-	eventId,
-	userId,
+  eventId,
+  userId,
 }: {
-	userId: number;
-	eventId: number;
+  userId: number;
+  eventId: number;
 }) => {
-	return await prisma.event.update({
-		data: {
-			interested: {
-				connect: {
-					id: userId,
-				},
-			},
-		},
-		where: {
-			id: eventId,
-		},
-	});
+  return await prisma.event.update({
+    data: {
+      interested: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+    where: {
+      id: eventId,
+    },
+  });
 };
 
 export const readInterestedAlumni = async ({
-	slug,
-	pagination,
+  slug,
+  pagination,
 }: TEventPagination) => {
-	const event = await prisma.event.findUnique({
-		where: {
-			slug,
-		},
-		select: {
-			interested: {
-				skip: pagination ? pagination.limit * pagination.page : undefined,
-				take: pagination ? pagination.limit : undefined,
-				select: {
-					avatar: true,
-					batch: true,
-					studentId: true,
-					course: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			},
-			_count: {
-				select: { interested: true },
-			},
-		},
-	});
+  const event = await prisma.event.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      interested: {
+        skip: pagination ? pagination.limit * pagination.page : undefined,
+        take: pagination ? pagination.limit : undefined,
+        select: {
+          avatar: true,
+          batch: true,
+          studentId: true,
+          course: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+      _count: {
+        select: { interested: true },
+      },
+    },
+  });
 
-	if (!event)
-		return {
-			count: 0,
-			data: [],
-			hasMore: false,
-		};
+  if (!event)
+    return {
+      count: 0,
+      data: [],
+      hasMore: false,
+    };
 
-	return {
-		count: event._count.interested || 0,
-		data: event.interested.map((attendant) => ({
-			avatar: attendant.avatar || "",
-			firstName: attendant.firstName,
-			lastName: attendant.lastName,
-			email: attendant.email,
-			course: attendant?.course || "",
-			batch: attendant.batch || 0,
-		})),
-		hasMore: event.interested.length === pagination?.limit,
-	};
+  return {
+    count: event._count.interested || 0,
+    data: event.interested.map((attendant) => ({
+      avatar: attendant.avatar || "",
+      firstName: attendant.firstName,
+      lastName: attendant.lastName,
+      email: attendant.email,
+      course: attendant?.course || "",
+      batch: attendant.batch || 0,
+    })),
+    hasMore: event.interested.length === pagination?.limit,
+  };
 };
 
 export const writeEventComment = async ({
-	comment,
-	eventId,
-	userId,
+  comment,
+  eventId,
+  userId,
 }: {
-	comment: string;
-	eventId: number;
-	userId: number;
+  comment: string;
+  eventId: number;
+  userId: number;
 }) => {
-	const newComment = await prisma.eventComment.create({
-		data: {
-			comment,
-			commentBy: {
-				connect: {
-					id: userId,
-				},
-			},
-			event: {
-				connect: {
-					id: eventId,
-				},
-			},
-		},
-		include: {
-			event: {
-				include: {
-					comments: {
-						select: {
-							commentById: true,
-						},
-					},
-				},
-			},
-		},
-	});
+  const newComment = await prisma.eventComment.create({
+    data: {
+      comment,
+      commentBy: {
+        connect: {
+          id: userId,
+        },
+      },
+      event: {
+        connect: {
+          id: eventId,
+        },
+      },
+    },
+    include: {
+      event: {
+        include: {
+          comments: {
+            select: {
+              commentById: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-	if (!newComment) throw new Error("Failed to post your comment.");
+  if (!newComment) throw new Error("Failed to post your comment.");
 
-	const { event, ...newCommentData } = newComment;
+  const { event, ...newCommentData } = newComment;
 
-	const ids = event.comments
-		.map((comment) => comment.commentById)
-		.filter((id) => id !== userId);
+  const ids = event.comments
+    .map((comment) => comment.commentById)
+    .filter((id) => id !== userId);
 
-	const uniqueIds = [...new Set(ids)];
+  const uniqueIds = [...new Set(ids)];
 
-	const link = `/events/${event.slug}/info#comment-${newCommentData.id}`;
+  const link = `/events/${event.slug}/info#comment-${newCommentData.id}`;
 
-	const notifications = uniqueIds.map((id) => ({
-		userId: id,
-		message: getNotificationMessage("EVENT_COMMENT"),
-		link,
-		type: "EVENT_COMMENT" as NotificationType,
-	}));
+  const notifications = uniqueIds.map((id) => ({
+    userId: id,
+    message: getNotificationMessage("EVENT_COMMENT"),
+    link,
+    type: "EVENT_COMMENT" as NotificationType,
+  }));
 
-	await createNotifications(notifications);
+  await createNotifications(notifications);
 
-	return newCommentData;
+  return newCommentData;
 };
