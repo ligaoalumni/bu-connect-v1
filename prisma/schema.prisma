@@ -22,13 +22,13 @@ model OldAccount {
   firstName  String
   lastName   String
   middleName String?
-  birthDat   DateTime
+  birthDate  DateTime
   program    String
   batch      Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User[]
+  User      User?
 }
 
 // User model: Handles both alumni and admin/super admin login.
@@ -42,7 +42,7 @@ model User {
 
   isOldAccount Boolean?    @default(false)
   oldAccount   OldAccount? @relation(fields: [oldAccountId], references: [id])
-  oldAccountId Int?
+  oldAccountId Int?        @unique
 
   // Personal Info
   firstName     String   @default("")
