@@ -101,6 +101,7 @@ export function OldAccountModal({ initialValue }: OldAccountModalProps) {
           middleName: data.middleName || "",
           batch: Number(data.batch),
           birthDate: new Date(data.birthDate),
+          studentId: data.studentID,
         });
       }
 
