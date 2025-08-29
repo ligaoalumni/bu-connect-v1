@@ -1,4 +1,5 @@
 // SHADCN
+export * from "./custom/overlay-loader";
 export * from "./ui/alert-dialog";
 export * from "./ui/button";
 export * from "./ui/dropdown-menu";
