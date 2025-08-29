@@ -166,7 +166,11 @@ export interface AddressData {
   address: string;
 }
 
-export interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData, TValue, FOption> {
+  options?: FOption[];
+  optionLabel?: string;
+  onOptionChange?: (option: string) => void;
+  optionValue?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   rowCount: number;

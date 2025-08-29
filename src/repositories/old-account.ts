@@ -45,9 +45,10 @@ export const createOldAccount = async ({
 export const readOldAccounts = async ({
   filter,
   pagination,
-}: PaginationArgs<never, never> = {}): Promise<
-  PaginationResult<OldAccount>
-> => {
+  batch,
+}: PaginationArgs<never, never> & {
+  batch?: string;
+} = {}): Promise<PaginationResult<OldAccount>> => {
   let where: Prisma.OldAccountWhereInput = {};
 
   if (filter && filter.toString().trim() !== "") {
@@ -59,6 +60,12 @@ export const readOldAccounts = async ({
         { program: { contains: filter.toString(), mode: "insensitive" } },
         { batch: isNaN(Number(filter)) ? undefined : Number(filter) },
       ],
+    };
+  }
+
+  if (batch && batch.trim() !== "" && !isNaN(Number(batch.trim()))) {
+    where = {
+      AND: [{ ...where }, { batch: Number(batch) }],
     };
   }
 
@@ -106,16 +113,8 @@ export const deleteOldAccount = async (id: number) => {
   return oldAccount;
 };
 
-export const readOldAccount = async (id: string | number) => {
-  let where: Prisma.OldAccountWhereUniqueInput;
-
-  if (typeof id === "number") {
-    where = { id };
-  } else {
-    where = { studentId: id };
-  }
-
+export const readOldAccount = async (studentId: string) => {
   return await prisma.oldAccount.findUnique({
-    where,
+    where: { studentId },
   });
 };

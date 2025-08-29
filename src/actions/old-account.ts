@@ -4,8 +4,10 @@ import {
   createOldAccount,
   readOldAccount,
   readOldAccounts,
+  updateOldAccount,
 } from "@/repositories";
 import { OldAlumniDataInput, PaginationArgs } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const createOldAccountAction = async (data: OldAlumniDataInput) => {
   try {
@@ -17,7 +19,9 @@ export const createOldAccountAction = async (data: OldAlumniDataInput) => {
 };
 
 export const readOldAccountsAction = async (
-  data: PaginationArgs<never, never>,
+  data: PaginationArgs<never, never> & {
+    batch?: string;
+  },
 ) => {
   try {
     return await readOldAccounts(data);
@@ -27,11 +31,27 @@ export const readOldAccountsAction = async (
   }
 };
 
-export const readOldAccountAction = async (id: number | string) => {
+export const readOldAccountAction = async (id: string) => {
   try {
-    const data = await readOldAccount(id);
-    if (!data) throw new Error("Old account not found");
-    return data;
+    return await readOldAccount(id);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch data");
+  }
+};
+
+export const updateOldAccountAction = async (
+  id: number,
+  data: Partial<OldAlumniDataInput>,
+) => {
+  try {
+    console.log(data, "qqq");
+
+    const updatedData = await updateOldAccount(id, data);
+
+    if (!updatedData) throw new Error("Failed to update data!");
+
+    return updatedData;
   } catch (error) {
     console.log(error);
     throw new Error("Failed to fetch data");
