@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import { TableSkeleton } from "../../_components/table-skeleton";
 import OldAlumniDataTable from "../../_components/old-alumni-data-table";
-import { OldAccountModal } from "../__components";
+import { Button } from "@/components";
+import Link from "next/link";
 
 export default async function OldAlumniPage() {
   return (
-    <div className="space-y-5">
+    <div className="space-y-5  ">
       <div className="flex justify-between">
         <div>
           <h1 className="font-medium text-2xl">List of old alumni</h1>
@@ -13,19 +14,9 @@ export default async function OldAlumniPage() {
             List of old alumni data imported from external sources.
           </p>
         </div>
-        <OldAccountModal
-          initialValue={{
-            batch: 23,
-            birthDate: new Date(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            firstName: "sda",
-            id: 1,
-            lastName: "ads",
-            middleName: "",
-            program: "dsas",
-          }}
-        />
+        <Button variant="outline" asChild>
+          <Link href="/admin/alumni/old/add">Add Old Alumni</Link>
+        </Button>
       </div>
       <Suspense fallback={<TableSkeleton />}>
         <OldAlumniDataTable />
