@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 
 // async function getEvents() {
@@ -28,16 +29,22 @@ import { ReactNode } from "react";
 // }
 
 export default async function Layout({
-	children,
+  children,
 }: Readonly<{
-	children: ReactNode;
+  children: ReactNode;
 }>) {
-	return (
-		<div className="relative ">
-			<div className="bg-[#F3CA92] z-10 absolute w-full h-full " />
-			<div className="relative p-5 z-10 min-h-screen w-screen flex   md:justify-end  md:p-10 items-center bg-[url('/images/bu-torch-auth-bg.png')] justify-center bg-no-repeat bg-origin-content bg-left lg:col-span-4 lg:py-10 lg:pl-10 lg:pr-52">
-				{children}
-			</div>
-		</div>
-	);
+  return (
+    <div className="relative ">
+      {/*<div className="relative p-5 z-10 min-h-screen w-screen flex   md:justify-end  md:p-10 items-center bg-[url('/images/bu-torch-auth-bg.png')] justify-center bg-no-repeat bg-origin-content bg-left lg:col-span-4 lg:py-10 lg:pl-10 lg:pr-52">*/}
+      <div className="relative bg-[#24517D] p-5 z-10 min-h-screen w-screen flex   md:justify-end  md:p-10 items-center   justify-center bg-no-repeat   lg:col-span-4 lg:py-10 lg:pl-10 lg:pr-52">
+        <Image
+          className="absolute  opacity-40 lg:opacity-100 object-cover  "
+          fill
+          alt="torch"
+          src="/images/torch.png"
+        />
+        {children}
+      </div>
+    </div>
+  );
 }
