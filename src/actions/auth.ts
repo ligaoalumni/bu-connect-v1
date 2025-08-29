@@ -208,6 +208,13 @@ export const loginWithGoogleAction = async (data: {
   try {
     const user = await loginWithGoogle(data);
 
+    if (!user) {
+      await logLoginAttempt(data.email, false);
+      return {
+        error: { message: "User is not registered" },
+      };
+    }
+
     if (user.status === "DELETED" || user.status === "BLOCKED") {
       await logLoginAttempt(data.email, false);
       return {

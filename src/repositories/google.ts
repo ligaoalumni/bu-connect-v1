@@ -15,22 +15,7 @@ export const loginWithGoogle = async ({
   firstName: string;
   lastName: string;
 }) => {
-  const user = await prisma.user.findFirst({
+  return await prisma.user.findFirst({
     where: { email },
   });
-
-  if (!user) {
-    await logLoginAttempt(email, false);
-    redirect(
-      "/register?email=" +
-        email +
-        "&firstName=" +
-        firstName +
-        "&lastName=" +
-        lastName +
-        (photo ? "&photo=" + photo : ""),
-    );
-  }
-
-  return user;
 };
