@@ -36,7 +36,7 @@ import { useState } from "react";
 import { TabsContent, TabsList, TabsTrigger } from "@/components";
 import { Tabs } from "@radix-ui/react-tabs";
 import CSVUploader from "../../_components/csv-uploader";
-import { createOldAccountAction } from "@/actions";
+import { createOldAccountAction, revalidatePathAction } from "@/actions";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -103,6 +103,7 @@ export function OldAccountModal({ initialValue }: OldAccountModalProps) {
           birthDate: new Date(data.birthDate),
           studentId: data.studentID,
         });
+        revalidatePathAction("/admin/alumni/old");
       }
 
       toast.success(
@@ -273,7 +274,9 @@ export function OldAccountModal({ initialValue }: OldAccountModalProps) {
             >
               Cancel
             </Button>
-            <Button type="submit">Add Student</Button>
+            <Button type="submit">
+              {form.formState.isSubmitting ? "Saving" : "Save"}
+            </Button>
           </div>
         </form>
       </Form>

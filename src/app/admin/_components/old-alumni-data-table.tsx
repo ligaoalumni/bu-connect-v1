@@ -15,16 +15,19 @@ import { toast } from "sonner";
 import { OldAccount } from "@prisma/client";
 import { formatDate } from "date-fns";
 import { readOldAccountsAction } from "@/actions/old-account";
+import Link from "next/link";
+import { OldAlumniViewModal } from "../alumni/__components/view-old-modal";
 
 export default function OldAlumniDataTable() {
+  const [filterBatch, setFilterBatch] = useState<string | undefined>(undefined);
   const [data, setData] = useState<OldAccount[]>([]);
   const [total, setTotal] = useState(0);
-  const [, setUpdateAdmin] = useState<OldAccount | null>(null);
+  const [onOpen, onOpenChange] = useState(false);
+  const [oldAcc, setOldAcc] = useState<OldAccount | null>(null);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size
   });
-  const [, setViewAdmin] = useState<OldAccount | null>(null);
   const [loading, setLoading] = useState(false);
 
   const columns: ColumnDef<OldAccount>[] = [
@@ -75,6 +78,12 @@ export default function OldAlumniDataTable() {
     },
 
     {
+      accessorKey: "batch",
+      header: "Batch",
+      enableHiding: true,
+      enableSorting: true,
+    },
+    {
       accessorKey: "birthDate",
       header: "Birth Date",
       enableHiding: true,
@@ -98,18 +107,23 @@ export default function OldAlumniDataTable() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => setViewAdmin(row.original)}
+                onClick={() => {
+                  setOldAcc(row.original);
+                  onOpenChange(true);
+                }}
                 className="cursor-pointer"
               >
                 <Info />
-                View Details
+                View
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setUpdateAdmin(row.original)}
+                asChild
                 className="  cursor-pointer flex items-center "
               >
-                <Pencil />
-                Update Status
+                <Link href={`/admin/alumni/old/${row.original.studentId}`}>
+                  <Pencil />
+                  Edit
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -119,7 +133,7 @@ export default function OldAlumniDataTable() {
   ];
 
   const handleFetchData = useCallback(
-    async (filter?: string) => {
+    async ({ filter, batch }: { filter?: string; batch?: string } = {}) => {
       try {
         setLoading(true);
         const users = await readOldAccountsAction({
@@ -128,6 +142,7 @@ export default function OldAlumniDataTable() {
             limit: pagination.pageSize,
             page: pagination.pageIndex,
           },
+          batch: batch === "all" ? undefined : batch,
         });
 
         setData(users.data);
@@ -147,20 +162,37 @@ export default function OldAlumniDataTable() {
   );
 
   useEffect(() => {
-    handleFetchData();
-  }, [handleFetchData]);
+    handleFetchData({ batch: filterBatch });
+  }, [handleFetchData, filterBatch]);
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 10 }, (_, i) => currentYear - i).map((s) =>
+    s.toString(),
+  );
 
   return (
     <>
       <DataTable
+        optionLabel={
+          !!filterBatch && filterBatch !== "all"
+            ? `Batch ${filterBatch}`
+            : "All Batches"
+        }
+        options={years}
+        onOptionChange={setFilterBatch}
+        optionValue={filterBatch}
         pagination={pagination}
         setPagination={setPagination}
         columns={columns}
         data={data}
-        filterName="email"
+        // filterName="email"
         rowCount={total}
         loading={loading}
-        handleSearch={handleFetchData}
+      />
+      <OldAlumniViewModal
+        open={onOpen}
+        onOpenChange={onOpenChange}
+        student={oldAcc}
       />
     </>
   );
