@@ -11,6 +11,7 @@ export const createOldAccount = async ({
   lastName,
   middleName,
   program,
+  studentId,
 }: OldAlumniDataInput) => {
   const isExists = await prisma.oldAccount.count({
     where: {
@@ -34,6 +35,7 @@ export const createOldAccount = async ({
       lastName,
       middleName,
       program,
+      studentId,
     },
   });
 
@@ -102,4 +104,18 @@ export const deleteOldAccount = async (id: number) => {
   });
 
   return oldAccount;
+};
+
+export const readOldAccount = async (id: string | number) => {
+  let where: Prisma.OldAccountWhereUniqueInput;
+
+  if (typeof id === "number") {
+    where = { id };
+  } else {
+    where = { studentId: id };
+  }
+
+  return await prisma.oldAccount.findUnique({
+    where,
+  });
 };

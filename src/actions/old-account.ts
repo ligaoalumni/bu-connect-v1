@@ -1,6 +1,10 @@
 "use server";
 
-import { createOldAccount, readOldAccounts } from "@/repositories";
+import {
+  createOldAccount,
+  readOldAccount,
+  readOldAccounts,
+} from "@/repositories";
 import { OldAlumniDataInput, PaginationArgs } from "@/types";
 
 export const createOldAccountAction = async (data: OldAlumniDataInput) => {
@@ -8,7 +12,7 @@ export const createOldAccountAction = async (data: OldAlumniDataInput) => {
     return await createOldAccount(data);
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to fetch polls");
+    throw new Error("Failed to fetch data");
   }
 };
 
@@ -19,6 +23,17 @@ export const readOldAccountsAction = async (
     return await readOldAccounts(data);
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to fetch polls");
+    throw new Error("Failed to fetch data");
+  }
+};
+
+export const readOldAccountAction = async (id: number | string) => {
+  try {
+    const data = await readOldAccount(id);
+    if (!data) throw new Error("Old account not found");
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch data");
   }
 };
