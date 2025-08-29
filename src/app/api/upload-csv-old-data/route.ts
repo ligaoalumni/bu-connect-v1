@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const formSchema = z.object({
+  studentId: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   middleName: z.string().optional(),
@@ -18,12 +19,13 @@ const parseCSV = (item: any) => {
 
   // Map the values to the correct fields
   return {
-    firstName: values[0],
-    lastName: values[1],
-    middleName: values[2],
-    birthDate: new Date(String(values[3])).toISOString(),
-    program: values[4],
-    batch: Number(values[5]), // Convert to number
+    studentId: values[0],
+    firstName: values[1],
+    lastName: values[2],
+    middleName: values[3],
+    birthDate: new Date(String(values[4])).toISOString(),
+    program: values[5],
+    batch: Number(values[6]), // Convert to number
   };
 };
 
