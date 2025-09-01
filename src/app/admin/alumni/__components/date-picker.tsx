@@ -10,26 +10,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib";
 
 interface DatePicker {
   value?: Date;
   onChange: (date?: Date) => void;
+  className?: string;
+  label?: string;
 }
 
-export function DatePicker({ onChange, value }: DatePicker) {
+export function DatePicker({ onChange, value, className, label }: DatePicker) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(value);
 
   return (
-    <div className="flex flex-col gap-3 z-50">
+    <div className={cn("flex flex-col gap-3 z-50")}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             id="date"
-            className="w-full justify-between font-normal"
+            className={cn("w-full justify-between font-normal", className)}
           >
-            {date ? date.toLocaleDateString() : "Select date"}
+            {date ? date.toLocaleDateString() : (label ?? "Select date")}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
