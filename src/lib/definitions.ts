@@ -41,10 +41,8 @@ export const SignupFormSchema = z
     confirmPassword: z.string().trim(),
     batchYear: z.string().min(1, "Batch is required"),
     middleName: z.string().optional(),
-
     birthDate: z.string().min(1, "Birth date is required"),
     program: z.string().min(1, "Program is required"),
-    batch: z.string().min(1, "Batch is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",

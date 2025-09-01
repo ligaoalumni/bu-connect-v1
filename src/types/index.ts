@@ -56,6 +56,7 @@ export interface Attendant {
 
 export interface QRCodeValues {
   id: number;
+  targetURL?: string;
   studentId: string;
   email: string;
   middleName?: string;
