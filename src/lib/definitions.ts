@@ -18,6 +18,7 @@ export const EventFormSchema = z.object({
 
 export const SignupFormSchema = z
   .object({
+    photo: z.string().optional(),
     firstName: z
       .string()
       .min(2, { message: "Name must be at least 2 characters long." })
