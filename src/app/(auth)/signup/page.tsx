@@ -11,6 +11,7 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 	Input,
 	InputWithIcon,
@@ -29,7 +30,9 @@ import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import Approval from "../__components/approval";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { programs } from "@/constant";
+import { DatePicker } from "@/app/admin/alumni/__components/date-picker";
 
 // Define the form's type
 const currentYear = new Date().getFullYear() - 1; // Get the current year
@@ -37,16 +40,22 @@ const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a
 
 export default function SignupForm() {
 	const router = useRouter();
+	const params = useSearchParams();
+	const emailParam = params.get("email");
+	const firstNameParam = params.get("firstName");
+	const lastNameParam = params.get("lastName");
+	const photo = params.get("photo");
 
 	const form = useForm<z.infer<typeof SignupFormSchema>>({
 		resolver: zodResolver(SignupFormSchema),
 		defaultValues: {
-			email: "",
-			firstName: "",
+			email: emailParam || "",
+			firstName: firstNameParam || "",
 			middleName: "",
-			lastName: "",
+			lastName: lastNameParam || "",
 			password: "",
 			batchYear: "",
+			program: "",
 		},
 	});
 	const [showPassword, setShowPassword] = useState(false);
@@ -100,22 +109,24 @@ export default function SignupForm() {
 
 	return (
 		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(handleSignUp)}
-				className="max-w-xl mt-20 md:mt-0 lg:min-w-[24rem] bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65 pt-14  w-full border border-black/5 p-5   shadow-sm pb-10 flex flex-col justify-between">
-				<Image
-					src="/icon.svg"
-					height={120}
-					width={120}
-					alt="LNHS Logo"
-					className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
-				/>
-				{success ? (
-					<Approval handleClick={() => router.replace("/login")} />
-				) : (
-					<>
-						<div className="flex flex-col mt-8 px-5 md:flex-row gap-5 justify-between">
-							<div className="space-y-4">
+			<div className=" z-50 bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20  px-10">
+				<form
+					onSubmit={form.handleSubmit(handleSignUp)}
+					className="w-full md:min-w-[24rem] pt-[4.15rem] max-w-md mx-auto border-none bg-transparent relative"
+					// className="z-50 max-w-xl mt-20 md:mt-0 lg:min-w-[24rem] bg-[url('/images/auth-form-bg.png')] bg-cover bg-center rounded-[2rem] ring-4 ring-[#949494] bg-opacity-65 pt-14  w-full border border-black/5 p-5   shadow-sm pb-10 flex flex-col justify-between"
+				>
+					<Image
+						src="/images/bup-logo.png"
+						height={120}
+						width={120}
+						alt="LNHS Logo"
+						className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
+					/>
+					{success ? (
+						<Approval handleClick={() => router.replace("/login")} />
+					) : (
+						<>
+							<div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5  mt-8 ">
 								<FormField
 									control={form.control}
 									name="firstName"
@@ -125,6 +136,23 @@ export default function SignupForm() {
 												<Input
 													readOnly={form.formState.isSubmitting}
 													placeholder="Enter first name"
+													className="bg-white border-none h-12 rounded-md"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>{" "}
+								<FormField
+									control={form.control}
+									name="lastName"
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												<Input
+													readOnly={form.formState.isSubmitting}
+													placeholder="Enter last name"
 													className="bg-white border-none h-12 rounded-md"
 													{...field}
 												/>
@@ -152,79 +180,6 @@ export default function SignupForm() {
 								/>
 								<FormField
 									control={form.control}
-									name="lastName"
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<Input
-													readOnly={form.formState.isSubmitting}
-													placeholder="Enter last name"
-													className="bg-white border-none h-12 rounded-md"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="lrn"
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<Input
-													readOnly={form.formState.isSubmitting}
-													placeholder="Enter LRN"
-													className="bg-white border-none h-12 rounded-md"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</div>
-							<div className="space-y-4">
-								<FormField
-									control={form.control}
-									name="batchYear"
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												{/* <Input
-											readOnly={form.formState.isSubmitting}
-											placeholder="Batch Year"
-											className="bg-white border-none h-12 rounded-md"
-											{...field}
-										/> */}
-												<Select
-													onValueChange={(value: string) =>
-														field.onChange(String(value))
-													}
-													value={field.value.toString()}>
-													{/* Option to prompt user */}
-													<SelectTrigger className="w-full bg-white h-12">
-														<SelectValue placeholder="Select a year" />
-													</SelectTrigger>
-													<SelectContent>
-														<SelectGroup>
-															<SelectLabel>Year</SelectLabel>
-															{years.map((year) => (
-																<SelectItem value={year.toString()} key={year}>
-																	{year}
-																</SelectItem>
-															))}
-														</SelectGroup>
-													</SelectContent>
-												</Select>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
 									name="email"
 									render={({ field }) => (
 										<FormItem>
@@ -235,6 +190,61 @@ export default function SignupForm() {
 													className="bg-white border-none h-12 rounded-md"
 													{...field}
 												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="birthDate"
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												{/*<DatePicker value={field.value} onChange={field.onChange} />*/}
+												{/*<Input type="date" {...field} />*/}
+												<DatePicker
+													label="Birth Date *"
+													className="h-12"
+													onChange={(v) => {
+														if (!v) return;
+														field.onChange(v.toISOString());
+													}}
+													value={
+														field.value ? new Date(field.value) : undefined
+													}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="batchYear"
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												<Select
+													onValueChange={(value: string) =>
+														field.onChange(String(value))
+													}
+													value={field.value.toString()}>
+													{/* Option to prompt user */}
+													<SelectTrigger className="bg-white border-none h-12 rounded-md w-full  ">
+														<SelectValue placeholder="Select a year" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectGroup>
+															<SelectLabel>Batch Year</SelectLabel>
+															{years.map((year) => (
+																<SelectItem value={year.toString()} key={year}>
+																	{year}
+																</SelectItem>
+															))}
+														</SelectGroup>
+													</SelectContent>
+												</Select>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -331,43 +341,77 @@ export default function SignupForm() {
 										</FormItem>
 									)}
 								/>
+								<FormField
+									control={form.control}
+									name="program"
+									render={({ field }) => (
+										<FormItem className="lg:col-span-2">
+											<FormLabel>Program *</FormLabel>
+											<Select
+												onValueChange={(v) => {
+													field.onChange(v);
+													form.clearErrors("program");
+												}}
+												value={field.value}>
+												<FormControl>
+													<SelectTrigger className="bg-white border-none h-12 rounded-md w-full  ">
+														<SelectValue placeholder="Select student's program" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectGroup>
+														<SelectLabel>Program</SelectLabel>
+														{programs.map((program) => (
+															<SelectItem value={program} key={program}>
+																{program}
+															</SelectItem>
+														))}
+													</SelectGroup>
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 							</div>
-						</div>
-						<div className="flex items-center mt-5 gap-2 justify-center">
-							<Checkbox
-								onCheckedChange={(check) =>
-									setAcceptTermsAndConditions(!!check)
-								}
-								className="rounded-none data-[state=checked]:bg-black border-black data-[state=checked]:text-white"
-							/>
-							<p className="text-white text-xs">
-								Agree to our terms and have read and acknowledge our privacy
-								policy
-							</p>
-						</div>
-						<Button
-							disabled={
-								form.formState.isSubmitting || !acceptTermsAndConditions
-							}
-							type="submit"
-							size="lg"
-							className={`max-w-fit mx-auto  mt-5 ${
-								form.formState.isSubmitting && "cursor-wait"
-							}`}>
-							{form.formState.isSubmitting && (
-								<Loader2 className="animate-spin" />
-							)}
-							{form.formState.isSubmitting ? "Signing up..." : "Sign up"}
-						</Button>
-						<div className="flex gap-2 items-center justify-center text-xs mt-5">
-							<p className="text-white">Already have an account?</p>
-							<Link href="/login" className="text-primary hover:underline">
-								Log in here
-							</Link>
-						</div>
-					</>
-				)}
-			</form>
+							<div className="flex items-center mt-5 gap-2 justify-center">
+								<Checkbox
+									onCheckedChange={(check) =>
+										setAcceptTermsAndConditions(!!check)
+									}
+									className="rounded-none data-[state=checked]:bg-black border-black data-[state=checked]:text-white"
+								/>
+								<p className="text-white text-xs">
+									Agree to our terms and have read and acknowledge our privacy
+									policy
+								</p>
+							</div>
+							<center>
+								<Button
+									disabled={
+										form.formState.isSubmitting || !acceptTermsAndConditions
+									}
+									type="submit"
+									size="lg"
+									className={`max-w-fit mx-auto  mt-5 ${
+										form.formState.isSubmitting && "cursor-wait"
+									}`}>
+									{form.formState.isSubmitting && (
+										<Loader2 className="animate-spin" />
+									)}
+									{form.formState.isSubmitting ? "Signing up..." : "Sign up"}
+								</Button>
+							</center>
+							<div className="flex mb-5 gap-2 items-center justify-center text-xs mt-5">
+								<p className="text-white">Already have an account?</p>
+								<Link href="/login" className="text-blue-300 hover:underline">
+									Log in here
+								</Link>
+							</div>
+						</>
+					)}
+				</form>
+			</div>
 		</Form>
 	);
 }
