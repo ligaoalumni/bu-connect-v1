@@ -37,6 +37,7 @@ export async function signUpAction(
       batchYear,
       birthDate,
       program,
+      photo,
     } = validatedFields.data;
 
     const isExists = await readUser(-1, email);
@@ -60,6 +61,7 @@ export async function signUpAction(
       birthDate: new Date(birthDate),
       batchYear: Number(batchYear),
       program: program,
+      avatar: photo || "",
     });
 
     if (!user) {

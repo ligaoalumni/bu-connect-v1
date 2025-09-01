@@ -57,6 +57,7 @@ export const createUser = async (
     | "lastName"
     | "middleName"
     | "birthDate"
+    | "avatar"
   > & { batchYear: number; program: string },
 ) => {
   const createdUser = await prisma.user.create({
