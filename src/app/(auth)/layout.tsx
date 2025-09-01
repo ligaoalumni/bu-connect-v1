@@ -38,7 +38,7 @@ export default async function Layout({
       {/*<div className="relative p-5 z-10 min-h-screen w-screen flex   md:justify-end  md:p-10 items-center bg-[url('/images/bu-torch-auth-bg.png')] justify-center bg-no-repeat bg-origin-content bg-left lg:col-span-4 lg:py-10 lg:pl-10 lg:pr-52">*/}
       <div className="relative bg-[#24517D] p-5 z-10 min-h-screen w-screen flex   md:justify-end  md:p-10 items-center   justify-center bg-no-repeat   lg:col-span-4 lg:py-10 lg:pl-10 lg:pr-52">
         <Image
-          className="absolute  opacity-40 lg:opacity-100 object-cover  "
+          className="absolute  opacity-40 lg:opacity-100 object-cover  z-10"
           fill
           alt="torch"
           src="/images/torch.png"
