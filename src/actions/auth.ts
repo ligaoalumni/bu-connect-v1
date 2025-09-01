@@ -29,7 +29,15 @@ export async function signUpAction(
     }
 
     // 2. Prepare data for insertion into database
-    const { email, password, firstName, lastName } = validatedFields.data;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      batchYear,
+      birthDate,
+      program,
+    } = validatedFields.data;
 
     const isExists = await readUser(-1, email);
 
@@ -49,7 +57,9 @@ export async function signUpAction(
       middleName: validatedFields.data.middleName || "",
       role: userRole,
       // TODO: TO FIX
-      birthDate: new Date(),
+      birthDate: new Date(birthDate),
+      batchYear: Number(batchYear),
+      program: program,
     });
 
     if (!user) {

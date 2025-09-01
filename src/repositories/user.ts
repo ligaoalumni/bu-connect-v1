@@ -57,9 +57,7 @@ export const createUser = async (
     | "lastName"
     | "middleName"
     | "birthDate"
-  > & {
-    alumniData?: { batchYear: number; lrn: string };
-  },
+  > & { batchYear: number; program: string },
 ) => {
   const createdUser = await prisma.user.create({
     data: {
@@ -70,6 +68,10 @@ export const createUser = async (
       middleName: user.middleName,
       birthDate: user.birthDate,
       password: user.password,
+      batch: user.batchYear,
+      course: user.program,
+      isOldAccount: true,
+      status: "PENDING",
     },
     omit: {
       rate: true,
