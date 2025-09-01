@@ -1,6 +1,8 @@
 "use client";
+import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -14,19 +16,23 @@ import {
   Card,
   CardContent,
   Checkbox,
+  OverlayLoading,
 } from "@/components";
 import { Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib";
 import { LoginFormData } from "@/types";
-import { loginAction, revalidatePathAction } from "@/actions";
-import { useRouter } from "next/navigation";
+import {
+  loginAction,
+  loginWithGoogleAction,
+  revalidatePathAction,
+} from "@/actions";
 import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import Approval from "../__components/approval";
 
 const LoginForm = () => {
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const form = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
@@ -38,6 +44,7 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
     let success = false;
     try {
       const response = await loginAction(data.email, data.password);
@@ -50,14 +57,7 @@ const LoginForm = () => {
         throw new Error(response.error.message);
       }
 
-      await revalidatePathAction("/");
       success = true;
-      toast.success("Success", {
-        description: "Welcome back!",
-        position: "top-center",
-        richColors: true,
-        duration: 5000,
-      });
     } catch (err) {
       success = false;
 
@@ -67,9 +67,17 @@ const LoginForm = () => {
         richColors: true,
         duration: 5000,
       });
-    }
-    if (success) {
-      router.replace("/");
+    } finally {
+      if (success) {
+        toast.success("Success", {
+          description: "Welcome back!",
+          position: "top-center",
+          richColors: true,
+          duration: 5000,
+        });
+        await revalidatePathAction("/", "/");
+      }
+      setIsLoading(false);
     }
   };
 
@@ -78,8 +86,80 @@ const LoginForm = () => {
     form.reset();
   };
 
+  const handleLoginWithGoogle = async (credential: CredentialResponse) => {
+    if (credential.credential) {
+      setIsLoading(true);
+      const data: {
+        email: string;
+        family_name: string;
+        given_name: string;
+        picture?: string;
+      } = jwtDecode(credential.credential);
+
+      let success = false;
+      let redirectToRegister = "";
+
+      try {
+        const response = await loginWithGoogleAction({
+          email: data.email,
+          firstName: data.given_name,
+          lastName: data.family_name,
+          photo: data.picture || "",
+        });
+
+        if (response?.error.message === "User is not registered") {
+          redirectToRegister =
+            "/signup?email=" +
+            data.email +
+            "&firstName=" +
+            data.given_name +
+            "&lastName=" +
+            data.family_name +
+            (data.picture ? "&photo=" + data.picture : "");
+        } else if (response?.error.message) {
+          if (response.error.isPending) {
+            setIsPending(true);
+          }
+
+          throw new Error(response.error.message);
+        }
+
+        success = true;
+      } catch (err) {
+        success = false;
+
+        toast.error("Log in Error", {
+          description: (err as Error).message,
+          position: "top-center",
+          richColors: true,
+          duration: 5000,
+        });
+      } finally {
+        if (redirectToRegister) {
+          await revalidatePathAction(redirectToRegister, redirectToRegister);
+        } else if (success) {
+          toast.success("Success", {
+            description: "Welcome back!",
+            position: "top-center",
+            richColors: true,
+            duration: 5000,
+          });
+          await revalidatePathAction("/", "/");
+        }
+        setIsLoading(false);
+      }
+    } else {
+      toast.error("Google Sign In failed. Try again later.", {
+        richColors: true,
+        duration: 5000,
+        description: "If the problem persists, contact the administrator.",
+        position: "top-center",
+      });
+    }
+  };
+
   return (
-    <div className=" bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20   ">
+    <div className="z-50 bg-[#94949440]  bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20   ">
       <Card className="w-full md:min-w-[400px] pt-[4.15rem] max-w-md mx-auto border-none bg-transparent relative">
         <Image
           src="/images/bup-logo.png"
@@ -186,10 +266,43 @@ const LoginForm = () => {
                   </Button>
                 </form>
               </Form>
+
+              <div className="flex flex-row my-3 items-center gap-2">
+                <div className="w-full bg-[#FF950060] h-0.5" />
+                <p className="text-white  text-nowrap">Sign in with</p>
+                <div className="w-full bg-[#FF950060] h-0.5" />
+              </div>
+              <div className="max-w-11 rounded relative overflow-hidden mx-auto">
+                <GoogleLogin
+                  theme="outline"
+                  locale="en-PH"
+                  shape="circle"
+                  onSuccess={handleLoginWithGoogle}
+                  onError={() => {
+                    toast.error(
+                      "Google Sign In was unsuccessful. Try again later.",
+                      {
+                        richColors: true,
+                        duration: 5000,
+                        description:
+                          "If the problem persists, contact the administrator.",
+                        position: "top-center",
+                      },
+                    );
+                  }}
+                />
+              </div>
             </CardContent>
           </>
         )}
       </Card>
+
+      <OverlayLoading
+        isLoading={isLoading}
+        message="Processing your request..."
+        backdrop="blur"
+        spinnerSize="md"
+      />
     </div>
   );
 };
