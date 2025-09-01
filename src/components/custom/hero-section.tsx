@@ -29,7 +29,7 @@ export function HeroSection() {
           {user === null && (
             <div className="flex items-center gap-4">
               <Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
-                <Link href="/register">Register</Link>
+                <Link href="/signup">Register</Link>
               </Button>
               <Button asChild className="bg-white text-black">
                 <Link href="/login">Log in</Link>
