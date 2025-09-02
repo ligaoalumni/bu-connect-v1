@@ -1,12 +1,21 @@
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { BookOpen, Hash, Mail, User } from "lucide-react";
-import { Calendar } from "../ui/calendar";
+import { BookOpen, Hash, Mail, User, Calendar } from "lucide-react";
 import { User as UserT } from "@prisma/client";
+import Link from "next/link";
 
 interface ViewQRCodeDetailProps {
-  alumni: UserT;
+  alumni: Pick<
+    UserT,
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "studentId"
+    | "email"
+    | "course"
+    | "batch"
+  >;
 }
 
 const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
@@ -31,9 +40,11 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 <User className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <CardTitle className="text-2xl text-balance">
-                  {fullName}
-                </CardTitle>
+                <Link href={`/`}>
+                  <CardTitle className="text-2xl text-balance capitalize">
+                    {fullName}
+                  </CardTitle>
+                </Link>
                 <p className="text-muted-foreground">
                   Student ID: {alumni.studentId}
                 </p>
