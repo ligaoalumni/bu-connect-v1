@@ -24,6 +24,7 @@ import {
   Users,
   Users2,
   Users2Icon,
+  Verified,
 } from "lucide-react";
 
 import {
@@ -141,6 +142,11 @@ const data = {
           icon: Users2Icon,
           title: "List of old alumni data",
           url: "/admin/alumni/old",
+        },
+        {
+          icon: Verified,
+          title: "Verify accounts",
+          url: "/admin/alumni/old/verify",
         },
       ],
     },
