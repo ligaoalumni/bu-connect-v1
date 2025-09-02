@@ -141,6 +141,11 @@ export async function loginAction(email: string, password: string) {
       sameSite: "lax",
       path: "/",
     });
+    return {
+      // error: { message: "Invalid password" },
+      error: null,
+      role,
+    };
   } catch (error) {
     console.log(`Error signing up: ${error}`);
     throw error;
@@ -269,6 +274,8 @@ export const loginWithGoogleAction = async (data: {
       sameSite: "lax",
       path: "/",
     });
+
+    return { error: null, role };
   } catch (error) {
     console.log(`Error signing up: ${error}`);
     throw error;

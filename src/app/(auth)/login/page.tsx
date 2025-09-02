@@ -46,10 +46,11 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     let success = false;
+    let isAdmin = false;
     try {
       const response = await loginAction(data.email, data.password);
 
-      if (response?.error.message) {
+      if (response?.error && response?.error.message) {
         if (response.error.isPending) {
           setIsPending(true);
         }
@@ -58,6 +59,9 @@ const LoginForm = () => {
       }
 
       success = true;
+      if (response.role && response.role !== "ALUMNI") {
+        isAdmin = true;
+      }
     } catch (err) {
       success = false;
 
@@ -75,7 +79,7 @@ const LoginForm = () => {
           richColors: true,
           duration: 5000,
         });
-        await revalidatePathAction("/", "/");
+        await revalidatePathAction("/", isAdmin ? "/admin" : "/");
       }
       setIsLoading(false);
     }
@@ -97,6 +101,7 @@ const LoginForm = () => {
       } = jwtDecode(credential.credential);
 
       let success = false;
+      let isAdmin = false;
       let redirectToRegister = "";
 
       try {
@@ -107,7 +112,10 @@ const LoginForm = () => {
           photo: data.picture || "",
         });
 
-        if (response?.error.message === "User is not registered") {
+        if (
+          response.error &&
+          response?.error.message === "User is not registered"
+        ) {
           redirectToRegister =
             "/signup?email=" +
             data.email +
@@ -116,14 +124,16 @@ const LoginForm = () => {
             "&lastName=" +
             data.family_name +
             (data.picture ? "&photo=" + data.picture : "");
-        } else if (response?.error.message) {
+        } else if (response.error && response?.error.message) {
           if (response.error.isPending) {
             setIsPending(true);
           }
 
           throw new Error(response.error.message);
         }
-
+        if (response.role && response.role !== "ALUMNI") {
+          isAdmin = true;
+        }
         success = true;
       } catch (err) {
         success = false;
@@ -144,7 +154,7 @@ const LoginForm = () => {
             richColors: true,
             duration: 5000,
           });
-          await revalidatePathAction("/", "/");
+          await revalidatePathAction("/", isAdmin ? "/admin" : "/");
         }
         setIsLoading(false);
       }
