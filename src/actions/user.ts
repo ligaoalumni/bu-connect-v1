@@ -6,6 +6,7 @@ import { transporter } from "@/lib/email";
 import {
   changeEmail,
   createUser,
+  getOldAccountsToVerify,
   readUser,
   readUsers,
   updateLocationSharing,
@@ -46,10 +47,16 @@ export const createAdmin = async (
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const newAdmin = await createUser({
-      ...data,
+      avatar: null,
       middleName: data.middleName || "",
       password: hashedPassword,
       birthDate: new Date(),
+      batchYear: -1,
+      program: "",
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      role: data.role as UserRole,
     });
 
     if (!newAdmin) {
@@ -291,6 +298,20 @@ export const updateUserAction = async (data: UpdateUserArgs) => {
       err instanceof Error
         ? err.message
         : "An error occurred while updating the user.",
+    );
+  }
+};
+
+export const getOldAccountsToVerifyAction = async (
+  args: PaginationArgs<never, UserRole>,
+) => {
+  try {
+    return await getOldAccountsToVerify(args);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "An error occurred while sending OTP to your new email address.",
     );
   }
 };

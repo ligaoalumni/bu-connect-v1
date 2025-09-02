@@ -440,3 +440,66 @@ export const readUserLocations = async () => {
     address: formatAddress(user.address),
   }));
 };
+
+export const getOldAccountsToVerify = async ({
+  filter,
+  order,
+  orderBy,
+  pagination,
+  role,
+}: PaginationArgs<never, UserRole>) => {
+  let where: Prisma.UserWhereInput = {};
+
+  if (filter && typeof filter === "number") {
+    where = {
+      id: filter,
+    };
+  }
+
+  if (typeof filter === "string") {
+    where = {
+      OR: [
+        {
+          email: { contains: filter, mode: "insensitive" },
+        },
+        {
+          firstName: { contains: filter, mode: "insensitive" },
+        },
+        {
+          lastName: { contains: filter, mode: "insensitive" },
+        },
+      ],
+    };
+  }
+
+  where.role = {
+    in: role,
+  };
+
+  const users = await prisma.user.findMany({
+    where: {
+      AND: [
+        { ...where },
+        { isOldAccount: true },
+        { status: "PENDING" },
+        { verifiedAt: null },
+      ],
+    },
+    skip: pagination ? pagination.limit * pagination.page : undefined,
+    take: pagination ? pagination.limit : undefined,
+    omit: {
+      password: true,
+      rate: true,
+    },
+    orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
+  });
+
+  const count = await prisma.user.count({ where });
+
+  return {
+    count,
+    hasMore: users.length === pagination?.limit,
+    // data: users.map((u) => ({ years: u.years || null, address: u.address || null, ...u })),
+    data: users,
+  };
+};
