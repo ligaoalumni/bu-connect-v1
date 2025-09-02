@@ -118,3 +118,26 @@ export const readOldAccount = async (studentId: string) => {
     where: { studentId },
   });
 };
+
+export const readOldAccountByCurrentAccount = async ({
+  batch,
+  birthDate,
+  firstName,
+  program,
+}: {
+  birthDate: string;
+  batch: number;
+  program: string;
+  firstName: string;
+}) => {
+  return await prisma.oldAccount.findMany({
+    where: {
+      AND: [
+        { firstName: { contains: firstName, mode: "insensitive" } },
+        { birthDate },
+        { batch },
+        { program: { contains: program, mode: "insensitive" } },
+      ],
+    },
+  });
+};
