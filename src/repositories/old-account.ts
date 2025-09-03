@@ -139,5 +139,8 @@ export const readOldAccountByCurrentAccount = async ({
         { program: { contains: program, mode: "insensitive" } },
       ],
     },
+    include: {
+      User: true,
+    },
   });
 };
