@@ -2,12 +2,12 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, GraduationCap, Hash } from "lucide-react";
+import { Calendar, GraduationCap, Hash, Loader2 } from "lucide-react";
 import SystemInfoDisplay from "./system-info-display";
 import { formatDate } from "date-fns";
 import { useEffect, useState } from "react";
 import { readOldAccountByCurrentAccountAction } from "@/actions";
-import { OldAccount } from "@prisma/client";
+import { OldAccount, User } from "@prisma/client";
 import { ScrollArea } from "@/components";
 
 interface UserInfo {
@@ -18,6 +18,7 @@ interface UserInfo {
   program: string;
   birthDay: string;
   id: number;
+  phoneNumber?: string;
 }
 
 type SystemRecordStatus = "found" | "not-found" | "already-connected";
@@ -27,12 +28,11 @@ interface UserInfoDisplayProps {
   systemRecordStatus: SystemRecordStatus;
 }
 
-export function UserInfoDisplay({
-  userInfo,
-  systemRecordStatus,
-}: UserInfoDisplayProps) {
+export function UserInfoDisplay({ userInfo }: UserInfoDisplayProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<OldAccount[]>([]);
+  const [data, setData] = useState<Array<OldAccount & { User: User | null }>>(
+    [],
+  );
 
   useEffect(() => {
     (async () => {
@@ -56,20 +56,22 @@ export function UserInfoDisplay({
   }, [userInfo.id]);
 
   return (
-    <div className="relative max-w-2xl mx-auto flex flex-col gap-5 items-center  ">
+    <div className="relative  mx-auto grid grid-cols-1 md:grid-cols-2  gap-5   ">
       {/* User Information Card */}
-      <Card className="shadow-sm space-y-6   ">
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
+      <Card className="shadow-sm max-h-fit space-y-6  z-20 bg-white! md:block sticky top-10 ">
+        <CardHeader className="pb-4 bg-white!">
+          <div className="flex items-center gap-3 bg-white!">
             <div>
               <CardTitle className="text-xl font-semibold text-balance">
                 Account Information
-              </CardTitle>
-              <p className="text-sm text-muted-foreground"></p>
+              </CardTitle>{" "}
+              <p className="text-sm text-muted-foreground">
+                View and manage your alumni account details below.
+              </p>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4  ">
+        <CardContent className="space-y-4  bg-white!">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
               <Hash className="h-4 w-4 text-muted-foreground" />
@@ -110,7 +112,7 @@ export function UserInfoDisplay({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 col-span-2">
               <GraduationCap className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">Program</p>
@@ -120,7 +122,7 @@ export function UserInfoDisplay({
               </div>
             </div>
 
-            <div className="flex items-center gap-3 md:col-span-2">
+            <div className="flex items-center gap-3  col-span-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">Birthday</p>
@@ -133,82 +135,35 @@ export function UserInfoDisplay({
         </CardContent>
       </Card>
 
-      <ScrollArea className="h-[50dvh] p-3   rounded-md border">
-        {/* System Record Status */}
-        <div className="my-3">
-          <SystemInfoDisplay
-            // account={{
-            //   batch: userInfo.batch,
-            //   firstName: userInfo.firstName,
-            //   lastName: userInfo.lastName,
-            //   program: userInfo.program,
-            //   id: userInfo.id,
-            //   middleName: userInfo.middleName || "",
-            //   studentId: userInfo.
-            //   // birthDate: userInfo.birthDay,
-            // }}
-            isLoading={isLoading}
-          />
-        </div>
-        <div className="my-3">
-          <SystemInfoDisplay
-            // account={{
-            //   batch: userInfo.batch,
-            //   firstName: userInfo.firstName,
-            //   lastName: userInfo.lastName,
-            //   program: userInfo.program,
-            //   id: userInfo.id,
-            //   middleName: userInfo.middleName || "",
-            //   studentId: userInfo.
-            //   // birthDate: userInfo.birthDay,
-            // }}
-            isLoading={isLoading}
-          />
-        </div>
-        <div className="my-3">
-          <SystemInfoDisplay
-            // account={{
-            //   batch: userInfo.batch,
-            //   firstName: userInfo.firstName,
-            //   lastName: userInfo.lastName,
-            //   program: userInfo.program,
-            //   id: userInfo.id,
-            //   middleName: userInfo.middleName || "",
-            //   studentId: userInfo.
-            //   // birthDate: userInfo.birthDay,
-            // }}
-            isLoading={isLoading}
-          />
-        </div>
-        <div className="my-3">
-          <SystemInfoDisplay
-            // account={{
-            //   batch: userInfo.batch,
-            //   firstName: userInfo.firstName,
-            //   lastName: userInfo.lastName,
-            //   program: userInfo.program,
-            //   id: userInfo.id,
-            //   middleName: userInfo.middleName || "",
-            //   studentId: userInfo.
-            //   // birthDate: userInfo.birthDay,
-            // }}
-            isLoading={isLoading}
-          />
-        </div>
-        <div className="my-3">
-          <SystemInfoDisplay
-            // account={{
-            //   batch: userInfo.batch,
-            //   firstName: userInfo.firstName,
-            //   lastName: userInfo.lastName,
-            //   program: userInfo.program,
-            //   id: userInfo.id,
-            //   middleName: userInfo.middleName || "",
-            //   studentId: userInfo.
-            //   // birthDate: userInfo.birthDay,
-            // }}
-            isLoading={isLoading}
-          />
+      <ScrollArea className="relative md:h-[75dvh]  p-3 z-10  rounded-md border">
+        <div className="sticky top-0 bg-white">
+          <h1 className="text-xl ">Old Alumni Records</h1>
+          <hr className="my-3" />
+          {isLoading ? (
+            <div className="flex flex-col md:h-[72dvh] items-center justify-center ">
+              <Loader2 className="animate-spin h-20 w-20" />
+              <p className="text-black/70">Searching for data...</p>
+            </div>
+          ) : data.length > 0 ? (
+            <div className="space-y-3">
+              {data.map((d) => (
+                <SystemInfoDisplay
+                  accountId={userInfo.id}
+                  key={d.id}
+                  account={d}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col md:h-[72dvh] items-center justify-center text-center px-3">
+              <h2 className="text-2xl font-semibold mb-2">No Records Found</h2>
+              <p className="text-muted-foreground md:px-5 md:max-w-[80%] mb-4">
+                We couldn&apos;t find any matching records in the old alumni
+                database. Please verify your information or contact support for
+                assistance.
+              </p>
+            </div>
+          )}
         </div>
       </ScrollArea>
     </div>
