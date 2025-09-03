@@ -18,21 +18,19 @@ export default async function VerifyAccountPage({
   if (!alumni) return <h1>Alumni not found</h1>;
 
   return (
-    <main className="min-h-screen pt-8 px-4">
-      <div className="container mx-auto">
-        <UserInfoDisplay
-          userInfo={{
-            batch: alumni.batch || 0,
-            birthDay: new Date(alumni.birthDate).toISOString(),
-            firstName: alumni.firstName,
-            id: alumni.id,
-            lastName: alumni.lastName,
-            middleName: alumni.middleName || "",
-            program: alumni.course || "",
-          }}
-          systemRecordStatus={systemRecordStatus}
-        />
-      </div>
-    </main>
+    <div className="container mx-auto     ">
+      <UserInfoDisplay
+        userInfo={{
+          batch: alumni.batch || 0,
+          birthDay: new Date(alumni.birthDate).toISOString(),
+          firstName: alumni.firstName,
+          id: alumni.id,
+          lastName: alumni.lastName,
+          middleName: alumni.middleName || "",
+          program: alumni.course || "",
+        }}
+        systemRecordStatus={systemRecordStatus}
+      />
+    </div>
   );
 }
