@@ -35,7 +35,7 @@ export function MainNav({
   }, [user]);
 
   return showMainNavRoutes.includes(path) ? (
-    <header className="absolute top-2  md:top-10 z-50 w-screen  bg-transparent   ">
+    <header className="absolute top-2  md:top-30 z-50 w-screen  bg-transparent   ">
       <div className="mx-auto container  justify-between  px-5 md:px-0 flex h-14  items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
