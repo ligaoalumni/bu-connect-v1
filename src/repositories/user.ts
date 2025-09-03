@@ -503,3 +503,24 @@ export const getOldAccountsToVerify = async ({
     data: users,
   };
 };
+
+export const connectAccount = async ({
+  id,
+  oldAccountId,
+}: {
+  id: number;
+  oldAccountId: number;
+}) => {
+  return await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      oldAccount: {
+        connect: {
+          id: oldAccountId,
+        },
+      },
+    },
+  });
+};
