@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { User } from "@prisma/client";
 import { formatDate } from "date-fns";
@@ -21,8 +21,6 @@ export default function VerifyAccountDataTable() {
   const [filterBatch, setFilterBatch] = useState<string | undefined>(undefined);
   const [data, setData] = useState<User[]>([]);
   const [total, setTotal] = useState(0);
-  const [onOpen, onOpenChange] = useState(false);
-  const [oldAcc, setOldAcc] = useState<User | null>(null);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size

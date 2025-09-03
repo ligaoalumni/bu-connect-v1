@@ -9,7 +9,6 @@ import {
   GraduationCap,
   Hash,
   MessageCircleQuestionIcon,
-  Terminal,
 } from "lucide-react";
 import { OldAccount, User } from "@prisma/client";
 import {
