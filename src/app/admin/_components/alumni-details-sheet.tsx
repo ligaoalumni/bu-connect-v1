@@ -124,14 +124,15 @@ export default function AlumniDetailsSheet({
                   </p>
                   <p className="flex justify-between">
                     <strong>Contact Number:</strong>{" "}
-                    <span>{alumni.contactNumber}</span>
+                    <span>{alumni.contactNumber || "No Data"}</span>
                   </p>
                   <p className="flex justify-between">
                     <strong>Nationality:</strong>{" "}
-                    <span>{alumni.nationality}</span>
+                    <span>{alumni.nationality || "No Data"}</span>
                   </p>
                   <p className="flex justify-between">
-                    <strong>Religion:</strong> <span>{alumni.religion}</span>
+                    <strong>Religion:</strong>{" "}
+                    <span>{alumni.religion || "No Data"}</span>
                   </p>
                   <p className="flex justify-between">
                     <strong>Address:</strong>{" "}
@@ -144,7 +145,8 @@ export default function AlumniDetailsSheet({
                     Academic Information
                   </h3>
                   <p className="flex justify-between">
-                    <strong>Student ID:</strong> <span>{alumni.studentId}</span>
+                    <strong>Student ID:</strong>{" "}
+                    <span>{alumni.studentId || "N/A"}</span>
                   </p>
                   <p className="flex justify-between">
                     <strong>email:</strong> <span>{alumni.email}</span>
@@ -154,9 +156,6 @@ export default function AlumniDetailsSheet({
                   </p>
                   <p className="flex justify-between">
                     <strong>Batch:</strong> <span>{alumni.batch}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <strong>Ba:</strong> <span>{alumni.email}</span>
                   </p>
                 </div>
 
