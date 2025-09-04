@@ -47,7 +47,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 <User className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <Link href={`/`}>
+                <Link href={`#`}>
                   <CardTitle className="text-2xl text-balance capitalize">
                     {fullName}
                   </CardTitle>
@@ -57,9 +57,16 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 </p>
               </div>
             </div>
-            <Badge variant="secondary" className="text-sm font-medium">
-              Batch {alumni.batch}
-            </Badge>
+            <div className="flex flex-col items-end gap-2">
+              <Badge variant="secondary" className="text-sm font-medium">
+                Batch {alumni.batch}
+              </Badge>
+              {alumni.isOldAccount && (
+                <Badge variant="default" className="text-sm font-medium">
+                  Old Alumni Account
+                </Badge>
+              )}
+            </div>
           </div>
         </CardHeader>
 
@@ -115,7 +122,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                <Calendar className="w-5 h-5 text-primary" />
+                <BookOpen className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">Post Graduate</p>
                   <p className="font-medium">
@@ -154,7 +161,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                  <Calendar className="w-5 h-5 text-primary" />
+                  <BookOpen className="w-5 h-5 text-primary" />
                   <div>
                     <p className="text-sm text-muted-foreground">Company</p>
                     <p className="font-medium">{alumni.company || "No data"}</p>
