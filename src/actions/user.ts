@@ -5,6 +5,7 @@ import { decrypt, encrypt } from "@/lib/session";
 import { transporter } from "@/lib/email";
 import {
   changeEmail,
+  connectAccount,
   createUser,
   getOldAccountsToVerify,
   readUser,
@@ -307,6 +308,21 @@ export const getOldAccountsToVerifyAction = async (
 ) => {
   try {
     return await getOldAccountsToVerify(args);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "An error occurred while sending OTP to your new email address.",
+    );
+  }
+};
+
+export const connectAccountAction = async (data: {
+  id: number;
+  oldAccountId: number;
+}) => {
+  try {
+    return await connectAccount(data);
   } catch (err) {
     throw new Error(
       err instanceof Error
