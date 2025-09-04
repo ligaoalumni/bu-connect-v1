@@ -23,6 +23,7 @@ import {
 import { formatDate } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
+import { connectAccountAction, revalidatePathAction } from "@/actions";
 
 interface SystemInfoDisplayProps {
   account?: OldAccount & {
@@ -31,15 +32,21 @@ interface SystemInfoDisplayProps {
   accountId: number;
 }
 
-export default function SystemInfoDisplay({ account }: SystemInfoDisplayProps) {
+export default function SystemInfoDisplay({
+  account,
+  accountId,
+}: SystemInfoDisplayProps) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleConnect = () => {
+  const handleConnect = async () => {
     // Logic to connect the old account to a new user account
-
+    if (!account) return;
+    let success = false;
     try {
       setIsLoading(true);
+      await connectAccountAction({ id: accountId, oldAccountId: account.id });
 
+      success = true;
       toast.success("Success!", {
         description: "Account connected successfully.",
         richColors: true,
@@ -54,6 +61,12 @@ export default function SystemInfoDisplay({ account }: SystemInfoDisplayProps) {
       });
     } finally {
       setIsLoading(false);
+      if (success) {
+        await revalidatePathAction(
+          "/alumni/old/verify",
+          "/admin/alumni/old/verify",
+        );
+      }
     }
   };
 
