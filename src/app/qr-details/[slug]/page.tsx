@@ -48,6 +48,13 @@ export default async function QRDetails({
         lastName: alumni.lastName,
         studentId: alumni.studentId,
         middleName: alumni.middleName || "",
+        company: alumni.company || "",
+        currentOccupation: alumni.currentOccupation || "",
+        industry: alumni.industry || "",
+        isOldAccount: alumni.isOldAccount,
+        jobTitle: alumni.jobTitle || "",
+        postStudyUniversity: alumni.postStudyUniversity || "",
+        years: alumni.years || 0,
       }}
     />
   );
