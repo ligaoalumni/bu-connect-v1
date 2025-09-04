@@ -15,6 +15,13 @@ interface ViewQRCodeDetailProps {
     | "email"
     | "course"
     | "batch"
+    | "industry"
+    | "company"
+    | "jobTitle"
+    | "currentOccupation"
+    | "isOldAccount"
+    | "years"
+    | "postStudyUniversity"
   >;
 }
 
@@ -46,7 +53,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                   </CardTitle>
                 </Link>
                 <p className="text-muted-foreground">
-                  Student ID: {alumni.studentId}
+                  Student ID: {alumni.studentId || "No data"}
                 </p>
               </div>
             </div>
@@ -68,7 +75,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                 <Hash className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">Student ID</p>
-                  <p className="font-medium">{alumni.studentId}</p>
+                  <p className="font-medium">{alumni.studentId || "No data"}</p>
                 </div>
               </div>
 
@@ -107,6 +114,71 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                   <p className="font-medium">{alumni.batch}</p>
                 </div>
               </div>
+              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                <Calendar className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Post Graduate</p>
+                  <p className="font-medium">
+                    {alumni.postStudyUniversity || "No data"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Academic Information */}
+            <div className="space-y-4 md:col-span-2">
+              <h3 className="text-lg font-semibold text-foreground mb-3">
+                Employment Information
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Current Occupation
+                    </p>
+                    <p className="font-medium">
+                      {alumni.currentOccupation || "No data"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Industry</p>
+                    <p className="font-medium">
+                      {alumni.industry || "No data"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                  <Calendar className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Company</p>
+                    <p className="font-medium">{alumni.company || "No data"}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Job Title</p>
+                    <p className="font-medium">
+                      {alumni.jobTitle || "No data"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/*<div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                <Calendar className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Years to get this job</p>
+                  <p className="font-medium">{alumni.years || "|| "No data""}</p>
+                </div>
+              </div>*/}
             </div>
           </div>
         </CardContent>
