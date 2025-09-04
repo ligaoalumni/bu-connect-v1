@@ -8,7 +8,6 @@ import {
   updateOldAccount,
 } from "@/repositories";
 import { OldAlumniDataInput, PaginationArgs } from "@/types";
-import { revalidatePath } from "next/cache";
 
 export const createOldAccountAction = async (data: OldAlumniDataInput) => {
   try {
