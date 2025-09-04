@@ -6,7 +6,6 @@ import {
   addDays,
   eachDayOfInterval,
   format,
-  isSameDay,
   isWithinInterval,
 } from "date-fns";
 import { Calendar as CalendarIcon, X } from "lucide-react";
