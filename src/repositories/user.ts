@@ -517,6 +517,7 @@ export const connectAccount = async ({
       id,
     },
     data: {
+      status: "ACTIVE",
       oldAccount: {
         connect: {
           id: oldAccountId,
