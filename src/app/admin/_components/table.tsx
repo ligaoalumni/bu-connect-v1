@@ -145,7 +145,6 @@ export default function DataTable<TData, TValue, FOption>({
                     onValueChange={(v) => {
                       if (onOptionChange) {
                         onOptionChange(v);
-                        console.log(v, "qqqq");
                       }
                     }}
                   >
