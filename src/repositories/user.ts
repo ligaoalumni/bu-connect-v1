@@ -483,6 +483,7 @@ export const getOldAccountsToVerify = async ({
         { isOldAccount: true },
         { status: "PENDING" },
         { verifiedAt: null },
+        { oldAccount: null },
       ],
     },
     skip: pagination ? pagination.limit * pagination.page : undefined,
