@@ -30,6 +30,7 @@ import {
 export * from "./user";
 export * from "./event";
 export * from "./poll";
+export * from "./stats";
 
 export type CreatePost = Omit<Post, "slug" | "createdAt" | "id" | "updatedAt">;
 export type UpdateJob = Partial<
