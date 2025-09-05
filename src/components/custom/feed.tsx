@@ -75,11 +75,13 @@ export async function Feed() {
             <div className="space-y-2 flex items-center justify-between">
               <div>
                 <h4 className="text-xl font-medium">{jobs.data[0].jobTitle}</h4>
-                <span>
-                  {formatDistanceToNow(jobs.data[0].createdAt, {
-                    addSuffix: true,
-                  })}
-                </span>
+                {jobs.data[0]?.createdAt && (
+                  <span>
+                    {formatDistanceToNow(jobs.data[0].createdAt, {
+                      addSuffix: true,
+                    })}
+                  </span>
+                )}
               </div>
               <Button asChild>
                 <Link href={`/jobs/${jobs.data[0].id}`}>View</Link>
@@ -98,9 +100,13 @@ export async function Feed() {
               <div>
                 <h4 className="text-xl font-medium">{news.data[0].title}</h4>
                 <span>
-                  {formatDistanceToNow(jobs.data[0].createdAt, {
-                    addSuffix: true,
-                  })}
+                  {jobs.data[0]?.createdAt && (
+                    <span>
+                      {formatDistanceToNow(jobs.data[0].createdAt, {
+                        addSuffix: true,
+                      })}
+                    </span>
+                  )}
                 </span>
               </div>
               <Button asChild>
