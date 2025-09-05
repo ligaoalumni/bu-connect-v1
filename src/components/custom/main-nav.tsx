@@ -39,7 +39,7 @@ export function MainNav({
       <div className="mx-auto container  justify-between  px-5 md:px-0 flex h-14  items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="/icon.svg" height={100} width={100} alt="LNHS Logo" />
+            <Image src="/icon.svg" height={100} width={100} alt="BUP Logo" />
           </Link>
         </div>
         <Sheet>

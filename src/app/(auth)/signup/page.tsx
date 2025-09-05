@@ -119,7 +119,7 @@ export default function SignupForm() {
             src="/images/bup-logo.png"
             height={120}
             width={120}
-            alt="LNHS Logo"
+            alt="BUPC Logo"
             className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
           />
           {success ? (

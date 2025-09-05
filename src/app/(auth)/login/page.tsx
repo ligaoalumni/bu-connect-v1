@@ -175,7 +175,7 @@ const LoginForm = () => {
           src="/images/bup-logo.png"
           height={120}
           width={120}
-          alt="LNHS Logo"
+          alt="BUP Logo"
           className="absolute -translate-y-[105%] -translate-x-[50%] left-[50%]"
         />
 

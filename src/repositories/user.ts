@@ -334,7 +334,7 @@ export const changeEmail = async ({ email }: { email: string }) => {
   const mailOptions = {
     from: process.env.EMAIL,
     sender: {
-      name: "LNHS | Alumni Association",
+      name: "BU Connect",
       address: process.env.EMAIL!,
     },
     to: email,

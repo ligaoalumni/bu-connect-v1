@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
     const mailOptions = {
       from: process.env.EMAIL,
       sender: {
-        name: "LNHS | Alumni Association",
+        name: "BU Connect",
         address: process.env.EMAIL!,
       },
       to: alumni.map((acc) => acc.email).join(", "),

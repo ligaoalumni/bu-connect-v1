@@ -67,7 +67,7 @@ export const createAdmin = async (
     const mailOptions = {
       from: process.env.EMAIL,
       sender: {
-        name: "LNHS | Alumni Association",
+        name: "BU Connect",
         address: process.env.EMAIL!,
       },
       to: data.email,
