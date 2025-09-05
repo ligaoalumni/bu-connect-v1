@@ -10,6 +10,7 @@ import {
   getOldAccountsToVerify,
   readUser,
   readUsers,
+  readUsersUpdatedInLastDays,
   updateLocationSharing,
   updatePasswordWithCurrentPassword,
   updateProfile,
@@ -323,6 +324,18 @@ export const connectAccountAction = async (data: {
 }) => {
   try {
     return await connectAccount(data);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "An error occurred while sending OTP to your new email address.",
+    );
+  }
+};
+
+export const readUsersUpdatedInLastDaysAction = async (days?: number) => {
+  try {
+    return await readUsersUpdatedInLastDays(days);
   } catch (err) {
     throw new Error(
       err instanceof Error

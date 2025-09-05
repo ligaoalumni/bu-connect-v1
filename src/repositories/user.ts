@@ -9,7 +9,7 @@ import {
 } from "@/types";
 import { Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { addMinutes } from "date-fns";
+import { addMinutes, getDaysInMonth, sub } from "date-fns";
 import { generateEmailHTML, prisma, formatAddress } from "@/lib";
 import { transporter } from "@/lib/email";
 
@@ -523,6 +523,21 @@ export const connectAccount = async ({
           id: oldAccountId,
         },
       },
+    },
+  });
+};
+
+export const readUsersUpdatedInLastDays = async (days?: number) => {
+  const sinceDate = new Date();
+  const daysInMonth = getDaysInMonth(sinceDate);
+  return await prisma.user.findMany({
+    where: {
+      updatedAt: {
+        gte: sub(sinceDate, { days: days || daysInMonth }),
+      },
+    },
+    omit: {
+      password: true,
     },
   });
 };
