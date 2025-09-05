@@ -15,6 +15,14 @@ export default async function AllEvents() {
     },
   });
 
+  const ongoingEvents = await readEventsAction({
+    status: ["Ongoing Event"],
+    pagination: {
+      limit: 3,
+      page: 0,
+    },
+  });
+
   const pastEvents = await readEventsAction({
     status: ["Past Event"],
     pagination: {
@@ -41,11 +49,16 @@ export default async function AllEvents() {
         <h1 className="text-2xl md:text-3xl font-bold text-center ">
           Upcoming Events
         </h1>
-        {upcomingEvents.data.length > 0 ? (
+        {ongoingEvents.data.length > 0 || upcomingEvents.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {upcomingEvents.data.map((event) => (
-              <EventCard key={event.slug} {...event} />
-            ))}
+            {ongoingEvents.data.length > 0 &&
+              ongoingEvents.data.map((event) => (
+                <EventCard key={event.slug} {...event} />
+              ))}
+            {upcomingEvents.data.length > 0 &&
+              upcomingEvents.data.map((event) => (
+                <EventCard key={event.slug} {...event} />
+              ))}
           </div>
         ) : (
           <div className="flex justify-center items-center">
