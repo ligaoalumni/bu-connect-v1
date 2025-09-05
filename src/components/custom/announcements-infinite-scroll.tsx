@@ -43,7 +43,6 @@ export function AnnouncementsInfiniteScroll({
     rootMargin: "0px 0px 500px 0px", // Load more content before user reaches the end
   });
 
-  // eslint-disable-next-line
   const loadMorePosts = async (resetData = false, currentFilter = filter) => {
     if (loading) return;
 
