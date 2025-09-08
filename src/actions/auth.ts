@@ -13,6 +13,7 @@ import {
 } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
@@ -141,6 +142,7 @@ export async function loginAction(email: string, password: string) {
       sameSite: "lax",
       path: "/",
     });
+
     return {
       // error: { message: "Invalid password" },
       error: null,
@@ -149,6 +151,8 @@ export async function loginAction(email: string, password: string) {
   } catch (error) {
     console.log(`Error signing up: ${error}`);
     throw error;
+  } finally {
+    revalidatePath("/");
   }
 }
 
