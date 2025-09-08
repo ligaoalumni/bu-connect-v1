@@ -6,6 +6,7 @@ import {
   readAnnouncementsAction,
   readEventsAction,
   readJobsAction,
+  readPostsAction,
   readUserLocationAction,
 } from "@/actions";
 import { Button, EmptyState } from "@/components";
@@ -15,6 +16,7 @@ import { StarRating } from "./star-rating";
 import { StatusSelection } from "./status-selection";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import { PostsInfiniteScroll } from "@/app/(alumni)/posts/__components/posts-infinite-scroll";
 
 export async function Feed() {
   const upcomingEvents = await readEventsAction({
@@ -25,6 +27,12 @@ export async function Feed() {
     },
   });
   const information = await getInformation();
+  const posts = await readPostsAction({
+    pagination: {
+      page: 0,
+      limit: 10,
+    },
+  });
   const jobs = await readJobsAction({
     pagination: {
       limit: 1,
@@ -136,6 +144,10 @@ export async function Feed() {
             <EmptyState showRedirectButton={false} />
           </div>
         )}
+      </section>
+
+      <section>
+        <PostsInfiniteScroll defaultData={posts.data} />
       </section>
 
       <section>
