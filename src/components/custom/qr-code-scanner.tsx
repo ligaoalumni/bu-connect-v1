@@ -36,8 +36,7 @@ export function QRCodeScanner({ eventId }: QRCodeScannerProps) {
         });
         return;
       }
-
-      const values: QRCodeValues = JSON.parse(qrCode);
+      const id = qrCode.split("/").pop();
 
       setLastProcessedCode(qrCode);
       setLoading(true);
@@ -46,7 +45,7 @@ export function QRCodeScanner({ eventId }: QRCodeScannerProps) {
         // Process the QR code with database
         const result = await addEventAttendantAction({
           eventId,
-          id: values.id,
+          id: Number(id),
         });
 
         // Update status and show toast
