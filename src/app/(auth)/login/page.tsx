@@ -30,10 +30,12 @@ import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import Approval from "../__components/approval";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -63,7 +65,7 @@ const LoginForm = () => {
         isAdmin = true;
       }
     } catch (err) {
-      success = false;
+      // success = false;
 
       toast.error("Log in Error", {
         description: (err as Error).message,
@@ -79,9 +81,11 @@ const LoginForm = () => {
           richColors: true,
           duration: 5000,
         });
-        await revalidatePathAction("/", isAdmin ? "/admin" : "/");
-      }
-      setIsLoading(false);
+
+        setTimeout(() => {
+          router.push(isAdmin ? "/admin" : "/");
+        }, 2000);
+      } else setIsLoading(false);
     }
   };
 
