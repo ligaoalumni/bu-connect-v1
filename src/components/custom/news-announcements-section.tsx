@@ -2,7 +2,6 @@ import { readAnnouncementsAction } from "@/actions";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@iconify/react";
 import { Announcement } from "@prisma/client";
-import { Loader2 } from "lucide-react";
 import Image from "next/image";
 
 export async function NewsAndAnnouncementsSection() {
