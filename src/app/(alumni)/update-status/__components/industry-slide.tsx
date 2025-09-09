@@ -11,6 +11,7 @@ interface IndustrySlideProps {
     industry?: string;
     company?: string;
     jobTitle?: string;
+    years?: number;
   };
   handleChange: (values: IndustrySlideProps["values"]) => void;
 }
@@ -19,7 +20,8 @@ export default function IndustrySlide({
   values,
   handleChange,
 }: IndustrySlideProps) {
-  const [isOther, setIsOther] = useState(false);
+  const industry = values.industry && industries.includes(values.industry);
+  const [isOther, setIsOther] = useState(!!industry);
 
   return (
     <div className="space-y-6">
@@ -90,6 +92,22 @@ export default function IndustrySlide({
               handleChange({ ...values, jobTitle: v.target.value })
             }
             placeholder="Enter your job"
+          />
+        </div>
+        <div className="mt-3">
+          <Label htmlFor="years">
+            Years to get this job (if this job is related to your program)
+          </Label>
+          <Input
+            id="years"
+            value={values.years}
+            onChange={(v) => {
+              handleChange({ ...values, years: Number(v.target.value) });
+            }}
+            pattern="\d*"
+            type="number"
+            inputMode="numeric"
+            placeholder=""
           />
         </div>
       </div>

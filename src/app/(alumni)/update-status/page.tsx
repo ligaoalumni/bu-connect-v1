@@ -70,6 +70,7 @@ export default function AlumniStatusUpdateForm() {
           jobTitle: user.jobTitle || "",
           postStudy: user.postStudyUniversity || "",
           employmentStatus: status || "",
+          years: user.years || 0,
         }));
       }
 
@@ -105,6 +106,8 @@ export default function AlumniStatusUpdateForm() {
           nationality: formData.personalInfo.nationality,
           jobTitle: formData.jobTitle,
           middleName: formData.personalInfo.middleName,
+          postStudyUniversity: formData.postStudy,
+          years: formData.years,
         });
 
         toast.success("Your information has been successfully submitted!", {
@@ -193,6 +196,7 @@ export default function AlumniStatusUpdateForm() {
               company: formData.company,
               industry: formData.industryInfo,
               jobTitle: formData.jobTitle,
+              years: formData.years,
             }}
             handleChange={(values) => {
               setFormData((prev) => ({
@@ -200,6 +204,7 @@ export default function AlumniStatusUpdateForm() {
                 industryInfo: values.industry!,
                 company: values.company!,
                 jobTitle: values.jobTitle!,
+                years: values.years || 0,
               }));
               setValidationErrors([]);
             }}
