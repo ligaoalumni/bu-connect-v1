@@ -58,7 +58,7 @@ export default async function RootLayout({
             <MaintenancePage />
           ) : (
             <>
-              <Header user={user} />
+              {user && <Header user={user} />}
               {children}
               {/* <Footer /> */}
             </>
