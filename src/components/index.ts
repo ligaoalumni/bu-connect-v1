@@ -81,6 +81,7 @@ export * from "./custom/interested-alumni-section";
 export * from "./custom/comment";
 export * from "./custom/feed";
 export * from "./custom/star-rating";
+export * from "./custom/news-announcements-section";
 
 // LOCATION PICKER
 export * from "./custom/location-picker/location-picker";

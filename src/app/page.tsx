@@ -1,5 +1,11 @@
 import { getInformation } from "@/actions";
-import { About, Feed, Footer, HeroSection } from "@/components";
+import {
+  About,
+  Feed,
+  Footer,
+  HeroSection,
+  NewsAndAnnouncementsSection,
+} from "@/components";
 import { Metadata } from "next";
 
 // either Static metadata
@@ -15,6 +21,7 @@ export default async function Home() {
       <>
         <HeroSection />
         <About />
+        <NewsAndAnnouncementsSection />
         <Footer />
       </>
     );
