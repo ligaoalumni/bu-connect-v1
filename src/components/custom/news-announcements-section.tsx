@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@iconify/react";
 import { Announcement } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 
 export async function NewsAndAnnouncementsSection() {
   const announcemenets = await readAnnouncementsAction({
@@ -97,21 +98,23 @@ export function MiniAnnouncementCard({ announcement }: AnnouncementCardProps) {
   const { title } = announcement;
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
-      <div className="relative aspect-video w-full">
-        <Image
-          src={`/images/placeholder.jpg`}
-          alt={title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-balance">
-          {title}
-        </CardTitle>
-      </CardHeader>
-    </Card>
+    <Link href={`/announcements/${announcement.id}`}>
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+        <div className="relative aspect-video w-full">
+          <Image
+            src={`/images/placeholder.jpg`}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold text-balance">
+            {title}
+          </CardTitle>
+        </CardHeader>
+      </Card>
+    </Link>
   );
 }

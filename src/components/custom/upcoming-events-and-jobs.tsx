@@ -43,6 +43,7 @@ export async function UpComingEventsAndJobs() {
                 key={event.id}
                 content={event.location}
                 date={formatDate(event.startDate, "MMM d, yyyy")}
+                link={`/events/${event.slug}/info`}
               />
             ))
           ) : (
@@ -76,6 +77,7 @@ export async function UpComingEventsAndJobs() {
                 title={job.jobTitle}
                 content={`Company: ${job.company}`}
                 location={job.location}
+                link={`/jobs/${job.id}`}
               />
             ))
           ) : (

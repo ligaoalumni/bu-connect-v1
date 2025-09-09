@@ -16,7 +16,7 @@ import EventCard from "@/components/custom/event-card";
 import AlumniMap from "@/components/custom/alumni-map";
 import { StarRating } from "./star-rating";
 import { StatusSelection } from "./status-selection";
-import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import { MiniPostCard } from "./mini-post-card";
 import Image from "next/image";
@@ -44,12 +44,6 @@ export async function Feed() {
     order: "desc",
     status: ["OPEN"],
     orderBy: "createdAt",
-  });
-  const news = await readAnnouncementsAction({
-    pagination: {
-      limit: 3,
-      page: 0,
-    },
   });
 
   const locations = await readUserLocationAction();
