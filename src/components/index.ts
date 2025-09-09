@@ -82,6 +82,7 @@ export * from "./custom/comment";
 export * from "./custom/feed";
 export * from "./custom/star-rating";
 export * from "./custom/news-announcements-section";
+export * from "./custom/upcoming-events-and-jobs";
 
 // LOCATION PICKER
 export * from "./custom/location-picker/location-picker";

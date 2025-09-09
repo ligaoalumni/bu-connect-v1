@@ -5,6 +5,7 @@ import {
   Footer,
   HeroSection,
   NewsAndAnnouncementsSection,
+  UpComingEventsAndJobs,
 } from "@/components";
 import { Metadata } from "next";
 
@@ -22,6 +23,7 @@ export default async function Home() {
         <HeroSection />
         <About />
         <NewsAndAnnouncementsSection />
+        <UpComingEventsAndJobs />
         <Footer />
       </>
     );
