@@ -220,6 +220,7 @@ export interface TPost extends Post {
     firstName: string;
     lastName: string;
     image?: string;
+    batch: number | null;
   };
 }
 
