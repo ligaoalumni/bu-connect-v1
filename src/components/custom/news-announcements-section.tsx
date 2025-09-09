@@ -28,7 +28,7 @@ export async function NewsAndAnnouncementsSection() {
         <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
           {!(announcemenets.data.length > 0) ? (
             announcemenets.data.map((announcement) => (
-              <AnnouncementCard
+              <MiniAnnouncementCard
                 announcement={announcement}
                 key={announcement.id}
               />
@@ -93,7 +93,7 @@ interface AnnouncementCardProps {
   announcement: Announcement;
 }
 
-export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
+export function MiniAnnouncementCard({ announcement }: AnnouncementCardProps) {
   const { title } = announcement;
 
   return (

@@ -1,22 +1,25 @@
 // import { readEventsAction } from "@/actions";
+import { Icon } from "@iconify/react";
 // import { InfiniteScroll } from "@/components";
 
 import {
   getInformation,
+  readAlumniMemoriesAction,
   readAnnouncementsAction,
   readEventsAction,
   readJobsAction,
   readPostsAction,
   readUserLocationAction,
 } from "@/actions";
-import { Button, EmptyState } from "@/components";
+import { Button, EmptyState, MiniAnnouncementCard } from "@/components";
 import EventCard from "@/components/custom/event-card";
 import AlumniMap from "@/components/custom/alumni-map";
 import { StarRating } from "./star-rating";
 import { StatusSelection } from "./status-selection";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
-import { PostsInfiniteScroll } from "@/app/(alumni)/posts/__components/posts-infinite-scroll";
+import { MiniPostCard } from "./mini-post-card";
+import Image from "next/image";
 
 export async function Feed() {
   const upcomingEvents = await readEventsAction({
@@ -35,29 +38,35 @@ export async function Feed() {
   });
   const jobs = await readJobsAction({
     pagination: {
-      limit: 1,
+      limit: 3,
       page: 0,
     },
     order: "desc",
+    status: ["OPEN"],
     orderBy: "createdAt",
   });
   const news = await readAnnouncementsAction({
     pagination: {
-      limit: 1,
+      limit: 3,
       page: 0,
     },
-    order: "desc",
-    orderBy: "createdAt",
   });
+
   const locations = await readUserLocationAction();
+  const images = await readAlumniMemoriesAction(6);
+  const announcemenets = await readAnnouncementsAction({
+    orderBy: "createdAt",
+    order: "desc",
+    pagination: {
+      limit: 3,
+      page: 0,
+    },
+  });
 
   return (
-    <div className="container mx-auto space-y-10 pb-10   px-5 md:px-0">
-      <section className="bg-[#15497A] p-5 md:p-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-center text-white py-5">
-          Welcome Back, {information?.firstName} {information?.lastName}!
-        </h1>
-        <div className="flex flex-col md:flex-row smd:justify-between gap-4">
+    <div className="container mx-auto  px-5 md:px-0">
+      <section className="md:px-10 px-5 py-8">
+        <div className="container mx-auto  flex flex-col md:flex-row smd:justify-between gap-4">
           <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
             <h2 className="font-medium">Where are you now?</h2>
             <StatusSelection initialValue={information?.occupationStatus} />
@@ -76,65 +85,15 @@ export async function Feed() {
         </div>
       </section>
 
-      <section className="flex flex-col md:flex-row smd:justify-between gap-4 md:px-10 p-5">
-        <div className="bg-[#CEE1FF] rounded-md border border-black/50 p-5 md:p-8 w-full min-w-[80d%] md:min-w-[40d%]">
-          <h2 className="text-3xl font-medium">Job Opportunities</h2>
-          {jobs.data.length > 0 ? (
-            <div className="space-y-2 flex items-center justify-between">
-              <div>
-                <h4 className="text-xl font-medium">{jobs.data[0].jobTitle}</h4>
-                {jobs.data[0]?.createdAt && (
-                  <span>
-                    {formatDistanceToNow(jobs.data[0].createdAt, {
-                      addSuffix: true,
-                    })}
-                  </span>
-                )}
-              </div>
-              <Button asChild>
-                <Link href={`/jobs/${jobs.data[0].id}`}>View</Link>
-              </Button>
-            </div>
-          ) : (
-            <>
-              <p>No record of jobs!</p>
-            </>
-          )}
+      <section className="md:px-10 px-5 py-8">
+        <div className="flex items-center gap-2">
+          <Icon icon="noto:confetti-ball" width="32" height="32" />
+          <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+            Upcoming Events
+          </h1>
         </div>
-        <div className="bg-[#CEE1FF] rounded-md border border-black/50 p-5 md:p-8 w-full min-w-[80d%] md:min-w-[40d%]">
-          <h2 className="text-3xl font-medium">News</h2>
-          {news.data.length > 0 ? (
-            <div className="space-y-2 flex items-center justify-between">
-              <div>
-                <h4 className="text-xl font-medium">{news.data[0].title}</h4>
-                <span>
-                  {jobs.data[0]?.createdAt && (
-                    <span>
-                      {formatDistanceToNow(jobs.data[0].createdAt, {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  )}
-                </span>
-              </div>
-              <Button asChild>
-                <Link href={`/announcements/${news.data[0].slug}`}>View</Link>
-              </Button>
-            </div>
-          ) : (
-            <>
-              <p>No record of news!</p>
-            </>
-          )}
-        </div>
-      </section>
-
-      <section>
-        <h1 className="text-2xl md:text-3xl font-bold text-center ">
-          Upcoming Events
-        </h1>
         {upcomingEvents.data.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {upcomingEvents.data.map((event) => (
               <EventCard key={event.slug} {...event} />
             ))}
@@ -146,17 +105,202 @@ export async function Feed() {
         )}
       </section>
 
-      <section>
+      {/*<section>
         <PostsInfiniteScroll defaultData={posts.data} />
+      </section>*/}
+
+      <section className="mx-auto container bg-[#195287] md:px-10 px-5 pt-10">
+        {/* JOB AND HIGHLIGHTS */}
+        <div className="grid md:grid-cols-2 md:gap-10 gap-2">
+          <div className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm max-h-min">
+            <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+              Job Opportunities
+            </h1>
+            <div>
+              {jobs.data.length > 0 ? (
+                jobs.data.map((job) => (
+                  <div
+                    key={job.id}
+                    className="flex items-start justify-between gap-2"
+                  >
+                    <div className="flex gap-2 items-start">
+                      <Icon
+                        icon="fluent:briefcase-search-24-filled"
+                        width="24"
+                        height="24"
+                        style={{ color: "#195287" }}
+                      />
+                      <div>
+                        <h4 className="font-bold text-[#195287]">
+                          {job.jobTitle}
+                        </h4>
+                        <p className="text-sm text-[#195287]">
+                          {formatDistanceToNowStrict(job.createdAt, {
+                            addSuffix: true,
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <Button asChild>
+                      <Link href={`/jobs/${job.id}`}>Apply Now</Link>
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col min-h-[200px] items-center justify-center">
+                  <Icon
+                    icon="mage:folder-cross"
+                    width="50"
+                    height="50"
+                    style={{ color: "#195287" }}
+                  />
+                  <p>No jobs found!</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm">
+            <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+              Highlights
+            </h1>
+            <div>
+              <div className="flex flex-col min-h-[100px] items-center justify-center">
+                <Icon
+                  icon="mage:folder-cross"
+                  width="50"
+                  height="50"
+                  style={{ color: "#195287" }}
+                />
+                <p>No highlights found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* POSTS */}
+        <div className="">
+          <div className="flex items-center gap-2">
+            <Icon icon="emojione-v1:note-pad" width="32" height="32" />
+            <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+              Recent Posts
+            </h1>
+          </div>
+          <div className="space-y-3 mt-5 ">
+            {posts.data.length > 0 ? (
+              posts.data.map((post) => (
+                <MiniPostCard
+                  key={post.id}
+                  likedByIds={post.likedBy.map((i) => i.id) || []}
+                  post={{
+                    id: post.id,
+                    avatar: post.postedBy.image || "",
+                    name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
+                    batch: post.postedBy.batch || 0,
+                    comments_count: post._count.comments,
+                    content: post.title,
+                    likes_count: post._count.comments,
+                    slug: post.slug,
+                  }}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col min-h-[100px] items-center justify-center">
+                <Icon
+                  icon="mage:folder-cross"
+                  width="50"
+                  height="50"
+                  style={{ color: "#195287" }}
+                />
+                <p>No recent posts</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className=" container mx-auto   py-10">
+          <div className="flex  items-center gap-3 justify-center">
+            <Icon
+              icon="fluent-color:megaphone-loud-16"
+              width="24"
+              height="24"
+            />
+            <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+              News &#x26; Announcesments
+            </h1>
+          </div>
+
+          {/* ANNOUNCEMENTS */}
+          <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
+            {!(announcemenets.data.length > 0) ? (
+              announcemenets.data.map((announcement) => (
+                <MiniAnnouncementCard
+                  announcement={announcement}
+                  key={announcement.id}
+                />
+              ))
+            ) : (
+              <div className="flex items-center justify-center w-full min-h-[300px] md:col-span-3">
+                {/*<Loader2 className="h-20 animate-spin" />*/}
+                <div className="flex flex-col items-center gap-3">
+                  <Icon
+                    icon="mage:folder-cross"
+                    width="100"
+                    height="100"
+                    color="#FFFFFF"
+                  />
+                  <p className="text-white text-lg">No Announcements Found</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
-      <section>
-        <h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
+      <section className="bg-[#195287] md:px-10 px-5 pb-10">
+        {images.length > 0 && (
+          <div className=" container mx-auto   py-10">
+            <div className="flex  items-center gap-3 justify-center">
+              <Icon
+                icon="fluent-emoji-flat:camera-with-flash"
+                width="24"
+                height="24"
+              />
+              <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+                Alumni Memories
+              </h1>
+            </div>
+
+            <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
+              {images.map((image, index) => (
+                <div
+                  key={`Alumni Memory Card #${index + 1}`}
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    maxWidth: "408px",
+                  }}
+                >
+                  <Image
+                    src={image || "/images/placeholder.jpg"}
+                    alt={`Alumni Memory ${index + 1}`}
+                    width={408}
+                    height={375}
+                    layout="responsive"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <h1 className="text-2xl text-[#E6750C] mb-10 md:text-3xl font-bold text-center ">
           Alumni Map
         </h1>
-        <AlumniMap initialMarkers={locations || []} />
+        <div className="p-5">
+          <AlumniMap initialMarkers={locations || []} />
+        </div>
       </section>
-
       {/* <InfiniteScroll defaultData={events.data} moreData={events.hasMore} /> */}
     </div>
   );
