@@ -11,8 +11,9 @@ import { toast } from "sonner";
 import { AlertCircle, MessageSquare, RefreshCw } from "lucide-react";
 import CommentBox from "./comment-box-input";
 import { createBrowserClient } from "@/lib";
-import { useContentData } from "@/contexts";
+import { useAuth, useContentData } from "@/contexts";
 import { CommentCard, CommentSkeleton } from "./comment";
+import { LoginAlert } from "./login-alert";
 
 interface AnnouncementCommentsSectionProps {
   announcementId: number;
@@ -22,6 +23,7 @@ export function AnnouncementCommentsSection({
   announcementId,
 }: AnnouncementCommentsSectionProps) {
   const { setData: setContentData } = useContentData();
+  const { user } = useAuth();
   const [data, setData] = useState<
     PaginationResult<AnnouncementCommentWithUser>
   >({
@@ -231,7 +233,11 @@ export function AnnouncementCommentsSection({
       )}
 
       <div>
-        <CommentBox onSubmit={handleComment} />
+        {user ? (
+          <CommentBox onSubmit={handleComment} />
+        ) : (
+          <LoginAlert action="comment" />
+        )}
       </div>
 
       {/* Content State */}
