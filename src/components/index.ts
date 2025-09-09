@@ -75,6 +75,7 @@ export * from "./custom/job-details-card";
 export * from "./custom/not-found";
 export * from "./custom/event-info";
 export * from "./custom/announcements-infinite-scroll";
+export * from "./custom/login-alert";
 export * from "./custom/announcement-comment-section";
 export * from "./custom/reactions";
 export * from "./custom/interested-alumni-section";
