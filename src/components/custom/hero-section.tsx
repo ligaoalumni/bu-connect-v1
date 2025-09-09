@@ -10,7 +10,30 @@ export function HeroSection() {
   const { user } = useAuth();
   return (
     <section className="px-5 md:px-0">
-      <div className="container    mx-auto min-h-[500px] h-full md:min-h-[664px] relative">
+      <div className="container    mx-auto min-h-[500px] h-full md:min-h-[764px]  lg:min-h-[964px] relative">
+        <div className="flex justify-between items-center  absolute z-50 top-0 left-0 right-0 md:px-10 px-5 pt-10">
+          <div className="flex items-center  gap-3">
+            <div className="bg-white rounded-full">
+              <Image
+                src="/images/bup-logo.png"
+                height={70}
+                width={70}
+                alt="BUP Logo"
+              />
+            </div>
+            <div>
+              <h1 className="text-lg font-extrabold text-[#E6750C] font-poppins">
+                BU Connect
+              </h1>
+              <p className="text-lg font-extrabold text-[#E6750C] font-poppins">
+                Polangui
+              </p>
+            </div>
+          </div>
+          <Button asChild className="bg-[#E6750C] hover:bg-[#E6750CAA]">
+            <Link href="/login">Login</Link>
+          </Button>
+        </div>
         <Image
           alt="BUP Hero Image"
           className="absolute z-10 "
@@ -31,7 +54,10 @@ export function HeroSection() {
               <Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
                 <Link href="/signup">Register</Link>
               </Button>
-              <Button asChild className="bg-white text-black">
+              <Button
+                asChild
+                className="bg-[#E6750C] hover:bg-[#E6750C90] text-white"
+              >
                 <Link href="/login">Log in</Link>
               </Button>
             </div>
