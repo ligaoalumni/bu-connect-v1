@@ -17,3 +17,4 @@ export * from "./map";
 export * from "./login-logs";
 export * from "./settings";
 export * from "./old-account";
+export * from "./gallery";

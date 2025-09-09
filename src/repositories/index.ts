@@ -1,4 +1,5 @@
 export * from "./user";
+export * from "./gallery";
 export * from "./event";
 export * from "./token";
 export * from "./announcement";
