@@ -8,6 +8,7 @@ export interface FormData {
   company?: string;
   industryInfo?: string;
   postStudy?: string;
+  years?: number;
   locationInfo: {
     selectedLocation?: AddressData;
   };
@@ -39,6 +40,7 @@ export const initialFormData: FormData = {
   industryInfo: undefined,
   company: "",
   postStudy: "",
+  years: undefined,
   locationInfo: {
     selectedLocation: undefined, // AddressData or undefined
   },
