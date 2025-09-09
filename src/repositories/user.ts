@@ -7,7 +7,7 @@ import {
   UpdateUserArgs,
   UserRole,
 } from "@/types";
-import { Prisma, User } from "@prisma/client";
+import { OccupationStatus, Prisma, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addMinutes, getDaysInMonth, sub } from "date-fns";
 import { generateEmailHTML, prisma, formatAddress } from "@/lib";
@@ -225,6 +225,8 @@ export const updateProfile = async (
     religion,
     batch,
     industry,
+    postStudyUniversity,
+    years,
   } = data;
 
   // Input validation
@@ -258,10 +260,14 @@ export const updateProfile = async (
           gender,
           company,
           course,
+          postStudyUniversity,
           jobTitle,
           currentOccupation,
+          occupationStatus: currentOccupation as OccupationStatus,
           batch,
           industry,
+          years,
+
           shareLocation: address ? true : false,
         },
       });
