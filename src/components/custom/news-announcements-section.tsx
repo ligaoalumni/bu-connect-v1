@@ -1,4 +1,4 @@
-import { readAnnouncementsAction } from "@/actions";
+import { readAlumniMemoriesAction, readAnnouncementsAction } from "@/actions";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@iconify/react";
 import { Announcement } from "@prisma/client";
@@ -13,13 +13,14 @@ export async function NewsAndAnnouncementsSection() {
       page: 0,
     },
   });
+  const images = await readAlumniMemoriesAction(3);
 
   return (
     <section className="px-5 md:px-0">
       <div className=" container mx-auto bg-[#195287]  py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon icon="fluent-color:megaphone-loud-16" width="24" height="24" />
-          <h1 className="text-[#E6750C] text-2xl font-bold">
+          <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
             News &#x26; Announcesments
           </h1>
         </div>
@@ -48,6 +49,42 @@ export async function NewsAndAnnouncementsSection() {
           )}
         </div>
       </div>
+
+      {images.length > 0 && (
+        <div className=" container mx-auto bg-[#195287]  py-10">
+          <div className="flex  items-center gap-3 justify-center">
+            <Icon
+              icon="fluent-emoji-flat:camera-with-flash"
+              width="24"
+              height="24"
+            />
+            <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+              Alumni Memories
+            </h1>
+          </div>
+
+          <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
+            {images.map((image, index) => (
+              <div
+                key={`Alumni Memory Card #${index + 1}`}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  maxWidth: "408px",
+                }}
+              >
+                <Image
+                  src={image || "/images/placeholder.jpg"}
+                  alt={`Alumni Memory ${index + 1}`}
+                  width={408}
+                  height={375}
+                  layout="responsive"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
