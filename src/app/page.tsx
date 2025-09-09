@@ -29,5 +29,10 @@ export default async function Home() {
     );
   }
 
-  return <Feed />;
+  return (
+    <>
+      <Feed />
+      <Footer />
+    </>
+  );
 }
