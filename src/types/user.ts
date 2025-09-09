@@ -24,7 +24,8 @@ export interface UpdateProfileData {
   religion?: string;
   industry?: string;
   batch?: number;
-
+  postStudyUniversity?: string;
+  years?: number;
   jobTitle?: string;
   course?: string;
   currentOccupation?: string;
