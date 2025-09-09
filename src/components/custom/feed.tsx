@@ -22,6 +22,7 @@ import { MiniPostCard } from "./mini-post-card";
 import Image from "next/image";
 
 export async function Feed() {
+  const user = await getInformation();
   const upcomingEvents = await readEventsAction({
     status: ["Upcoming Event"],
     pagination: {
@@ -59,6 +60,15 @@ export async function Feed() {
 
   return (
     <div className="container mx-auto  px-5 md:px-0">
+      <section className="space-y-2 bg-[#15497A] py-10 px-5 md:px-10 mb-10">
+        <h1 className="text-white text-2xl md:text-3xl capitalize font-bold">
+          Welcome, {user?.firstName}!
+        </h1>
+        <p className="text-white md:text-xl">
+          Stay connected with your fellow alumni and explore opportunities!
+        </p>
+      </section>
+
       <section className="md:px-10 px-5 py-8">
         <div className="container mx-auto  flex flex-col md:flex-row smd:justify-between gap-4">
           <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
