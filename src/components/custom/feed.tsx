@@ -59,8 +59,8 @@ export async function Feed() {
   });
 
   return (
-    <div className="container mx-auto  px-5 md:px-0">
-      <section className="space-y-2 bg-[#15497A] py-10 px-5 md:px-10 mb-10">
+    <div className="container mx-auto ">
+      <section className="space-y-2 bg-[#15497A] py-10  mb-10 px-5 md:px-10">
         <h1 className="text-white text-2xl md:text-3xl capitalize font-bold">
           Welcome, {user?.firstName}!
         </h1>

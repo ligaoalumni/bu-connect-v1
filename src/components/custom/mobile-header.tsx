@@ -28,8 +28,17 @@ export function MobileDrawer() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Iconify icon="line-md:menu-fold-left" width="24" height="24" />
+        <Button
+          variant="ghost"
+          className="hover:bg-[#FFA629AA] bg-transparent"
+          size="icon"
+        >
+          <Iconify
+            icon="line-md:menu-fold-left"
+            width="24"
+            height="24"
+            style={{ color: "#FFF" }}
+          />
         </Button>
       </SheetTrigger>
       <SheetContent>

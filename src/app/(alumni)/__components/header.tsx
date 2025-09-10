@@ -46,7 +46,7 @@ export function Header() {
         </div>
 
         <div className="flex gap-2 items-center">
-          <div className={`  z-50 hidden md:flex py-2 bg-[#15497A] gap-2 `}>
+          <div className={`  z-50 hidden lg:flex py-2 bg-[#15497A] gap-2 `}>
             {links.map((link, index) => (
               <Button
                 key={`${link}-${index}`}
@@ -74,7 +74,7 @@ export function Header() {
             </Button>
           )}
 
-          <div className="md:hidden block">
+          <div className="lg:hidden block">
             <MobileDrawer />
           </div>
         </div>

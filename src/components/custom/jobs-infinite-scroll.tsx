@@ -154,9 +154,9 @@ export function JobsInfiniteScroll({
     <div
       className={`${
         !isFilterChanging && "space-y-8"
-      } grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-10  `}
+      } grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-10 relative `}
     >
-      <div className="flex flex-col gap-2 md:pt-4 ">
+      <div className="flex flex-col gap-2 md:pt-4 top-10 sticky ">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-medium">Search</h2>
           {user && (
