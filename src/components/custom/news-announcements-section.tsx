@@ -17,8 +17,8 @@ export async function NewsAndAnnouncementsSection() {
   const images = await readAlumniMemoriesAction(3);
 
   return (
-    <section className="px-5 md:px-0">
-      <div className=" container mx-auto bg-[#195287]  py-10">
+    <section className="">
+      <div className="px-5 md:px-10 container mx-auto bg-[#195287]  py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon icon="fluent-color:megaphone-loud-16" width="24" height="24" />
           <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
@@ -52,7 +52,7 @@ export async function NewsAndAnnouncementsSection() {
       </div>
 
       {images.length > 0 && (
-        <div className=" container mx-auto bg-[#195287]  py-10">
+        <div className="px-5 md:px-10 container mx-auto bg-[#195287]  py-10">
           <div className="flex  items-center gap-3 justify-center">
             <Icon
               icon="fluent-emoji-flat:camera-with-flash"
