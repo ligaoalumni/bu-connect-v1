@@ -17,6 +17,7 @@ import { Check, Loader2 } from "lucide-react";
 import { Poll } from "@/types";
 import { useAuth } from "@/contexts";
 import { voteAction } from "@/actions";
+import Link from "next/link";
 
 export function PollCard({ defaultPoll }: { defaultPoll: Poll }) {
   const { user } = useAuth();
@@ -86,7 +87,12 @@ export function PollCard({ defaultPoll }: { defaultPoll: Poll }) {
   return (
     <Card className="w-full  ">
       <CardHeader>
-        <CardTitle className="text-2xl">{poll.question}</CardTitle>
+        <Link
+          key={`link-to-poll-${poll.id}`}
+          href={`/highlights/polls/${poll.id}`}
+        >
+          <CardTitle className="text-2xl">{poll.question}</CardTitle>
+        </Link>
         {/* <CardDescription>{poll.}</CardDescription> */}
       </CardHeader>
       <CardContent>

@@ -25,12 +25,7 @@ export default async function Page() {
         <div className="space-y-4 mt-5">
           {polls.data.length > 0 ? (
             polls.data.map((poll) => (
-              <Link
-                key={`link-to-poll-${poll.id}`}
-                href={`/highlights/polls/${poll.id}`}
-              >
-                <PollCard defaultPoll={poll} key={poll.id} />
-              </Link>
+              <PollCard defaultPoll={poll} key={poll.id} />
             ))
           ) : (
             <EmptyState
