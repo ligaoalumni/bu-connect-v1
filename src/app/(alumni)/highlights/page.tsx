@@ -7,6 +7,7 @@ import { EmptyState } from "@/components";
 import React from "react";
 import { PollCard } from "./__components/poll-card";
 import RecruitmentInfo from "@/app/admin/recruitment/__components/recruitment-info";
+import Link from "next/link";
 
 export default async function Page() {
   const polls = await readPollsAction({
@@ -24,7 +25,12 @@ export default async function Page() {
         <div className="space-y-4 mt-5">
           {polls.data.length > 0 ? (
             polls.data.map((poll) => (
-              <PollCard defaultPoll={poll} key={poll.id} />
+              <Link
+                key={`link-to-poll-${poll.id}`}
+                href={`/highlights/polls/${poll.id}`}
+              >
+                <PollCard defaultPoll={poll} key={poll.id} />
+              </Link>
             ))
           ) : (
             <EmptyState
@@ -41,11 +47,16 @@ export default async function Page() {
         <div className="space-y-4 mt-5">
           {recruitments.data.length > 0 ? (
             recruitments.data.map((recruitment) => (
-              <RecruitmentInfo
-                recruitment={recruitment}
-                batches={batches.data.map((b) => b.batch)}
+              <Link
+                href={`/highlights/recruitments/${recruitment.id}`}
+                key={`link-to-recruitment-${recruitment.id}`}
+              >
+                <RecruitmentInfo
+                  recruitment={recruitment}
+                  batches={batches.data.map((b) => b.batch)}
+                />
                 key={recruitment.id}
-              />
+              </Link>
             ))
           ) : (
             <EmptyState

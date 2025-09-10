@@ -7,6 +7,7 @@ import {
   readAlumniMemoriesAction,
   readAnnouncementsAction,
   readEventsAction,
+  readHighlightsAction,
   readJobsAction,
   readPostsAction,
   readUserLocationAction,
@@ -16,7 +17,7 @@ import EventCard from "@/components/custom/event-card";
 import AlumniMap from "@/components/custom/alumni-map";
 import { StarRating } from "./star-rating";
 import { StatusSelection } from "./status-selection";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import { MiniPostCard } from "./mini-post-card";
 import Image from "next/image";
@@ -45,6 +46,12 @@ export async function Feed() {
     order: "desc",
     status: ["OPEN"],
     orderBy: "createdAt",
+  });
+  const highlights = await readHighlightsAction({
+    pagination: {
+      limit: 3,
+      page: 0,
+    },
   });
 
   const locations = await readUserLocationAction();
@@ -169,15 +176,79 @@ export async function Feed() {
               Highlights
             </h1>
             <div>
-              <div className="flex flex-col min-h-[100px] items-center justify-center">
-                <Icon
-                  icon="mage:folder-cross"
-                  width="50"
-                  height="50"
-                  style={{ color: "#195287" }}
-                />
-                <p>No highlights found</p>
-              </div>
+              {highlights.length > 0 ? (
+                highlights.map((highlight) => {
+                  if ("question" in highlight) {
+                    return (
+                      <Link
+                        href={`/highlights/polls/${highlight.id}`}
+                        key={`link-poll-highlight-#${highlight.id}`}
+                      >
+                        <div
+                          className="flex gap-2"
+                          key={`poll-highlight-#${highlight.id}`}
+                        >
+                          <Icon
+                            icon="fluent-color:poll-20"
+                            width="24"
+                            height="24"
+                          />
+                          <div>
+                            <h4 className="text-lg font-semibold">
+                              {highlight.question}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {formatDistanceToNow(highlight.createdAt, {
+                                addSuffix: true,
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  } else if ("recruiting" in highlight) {
+                    return (
+                      <Link
+                        href={`/highlights/recruitments/${highlight.id}`}
+                        key={`link-recruitment-highlight-#${highlight.id}`}
+                      >
+                        <div
+                          className="flex gap-2"
+                          key={`recruitment-highlight-#${highlight.id}`}
+                        >
+                          <Icon
+                            icon="hugeicons:job-search"
+                            width="24"
+                            height="24"
+                          />
+                          <div>
+                            <h4 className="text-lg font-semibold">
+                              {highlight.recruiting}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {formatDistanceToNow(highlight.createdAt, {
+                                addSuffix: true,
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  } else {
+                    return null;
+                  }
+                })
+              ) : (
+                <div className="flex flex-col min-h-[100px] items-center justify-center">
+                  <Icon
+                    icon="mage:folder-cross"
+                    width="50"
+                    height="50"
+                    style={{ color: "#195287" }}
+                  />
+                  <p>No highlights found</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
