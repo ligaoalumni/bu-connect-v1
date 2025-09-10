@@ -87,7 +87,6 @@ export function QRCodeViewer({
             className="mx-auto p-5 bg-white"
             ref={canvasRef}
           />
-          {qrValue}
         </div>
         <DialogFooter>
           <Button
