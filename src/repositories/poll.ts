@@ -98,7 +98,7 @@ export const readPolls = async ({
 };
 
 export const readPoll = async (id: number) => {
-  return await prisma.poll.findUnique({
+  const poll = await prisma.poll.findUnique({
     where: {
       id,
     },
@@ -108,6 +108,7 @@ export const readPoll = async (id: number) => {
           votes: {
             select: {
               id: true,
+              userId: true,
               createdAt: true,
               user: {
                 select: {
@@ -121,10 +122,22 @@ export const readPoll = async (id: number) => {
               },
             },
           },
+          _count: {
+            select: {
+              votes: true,
+            },
+          },
         },
       },
     },
   });
+
+  if (!poll) return null;
+
+  return {
+    ...poll,
+    votes: poll.options.reduce((acc, option) => acc + option._count.votes, 0),
+  };
 };
 
 export const updatePoll = async (
