@@ -46,7 +46,7 @@ export function Header({
   return (
     showMainNavRoutes.includes(path) && (
       <>
-        <header className="  mx-auto bg-white dark:bg-transparent container px-5 md:px-0 py-5 flex items-center justify-between">
+        <header className="  mx-auto bg-[#15497A] container px-5 md:px-10 py-5 flex items-center justify-between">
           <div className="flex items-center  gap-3">
             <Image
               src="/images/bup-logo.png"
@@ -55,11 +55,29 @@ export function Header({
               alt="BUP Logo"
             />
             <div>
-              <h1 className="text-lg font-bold font-poppins">BU Connect</h1>
-              <p className="text-lg font-poppins">Polangui</p>
+              <h1 className="text-lg font-bold font-poppins text-[#FFA629]">
+                BU Connect
+              </h1>
+              <p className="text-lg font-bold font-poppins text-[#FFA629]">
+                Polangui
+              </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center bg-[#15497A]">
+            <div className={`  z-50 hidden md:flex py-2  gap-2 `}>
+              {links.map((link, index) => (
+                <Button
+                  key={`${link}-${index}`}
+                  variant="link"
+                  asChild
+                  className={`  text-lg capitalize ${path == link ? "text-[#FFA629] font-bold" : "text-white"}`}
+                >
+                  <Link href={link}>
+                    {link === "/" ? "Home" : link.slice(1)}
+                  </Link>
+                </Button>
+              ))}
+            </div>
             <ThemeSwitcher />
             {user ? (
               <>
@@ -80,22 +98,6 @@ export function Header({
             </div>
           </div>
         </header>
-        <div
-          className={`sticky top-0 ${
-            path !== "/" && "shadow-md"
-          }  z-50 hidden md:flex py-2 bg-[#15497A]  mx-auto container justify-center gap-4`}
-        >
-          {links.map((link, index) => (
-            <Button
-              key={`${link}-${index}`}
-              variant="link"
-              asChild
-              className="text-white text-lg capitalize"
-            >
-              <Link href={link}>{link === "/" ? "Home" : link.slice(1)}</Link>
-            </Button>
-          ))}
-        </div>
       </>
     )
   );
