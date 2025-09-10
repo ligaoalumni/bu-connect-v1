@@ -48,7 +48,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
+        className={`bg-[#F2F6FB] ${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
       >
         <Providers>
           {settings &&
