@@ -15,3 +15,4 @@ export * from "./login-logs";
 export * from "./settings";
 export * from "./forgot-password";
 export * from "./google";
+export * from "./highlights";
