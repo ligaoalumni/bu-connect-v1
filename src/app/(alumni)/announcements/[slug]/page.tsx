@@ -4,22 +4,24 @@ import React from "react";
 import Announcement from "../__components/announcement";
 
 export default async function Page({
-	params,
+  params,
 }: {
-	params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-	const { slug } = await params;
+  const { slug } = await params;
 
-	const announcement = await readAnnouncementAction(slug);
+  const announcement = await readAnnouncementAction(slug);
 
-	if (!announcement) return notFound();
+  if (!announcement) return notFound();
 
-	return (
-		<Announcement
-			announcement={announcement}
-			comments={announcement._count.comments}
-			likedByIds={announcement.likedBy.map((like) => like.id)}
-			likes={announcement._count.likedBy}
-		/>
-	);
+  return (
+    <div className="mt-10 px-5 md:px-10">
+      <Announcement
+        announcement={announcement}
+        comments={announcement._count.comments}
+        likedByIds={announcement.likedBy.map((like) => like.id)}
+        likes={announcement._count.likedBy}
+      />
+    </div>
+  );
 }

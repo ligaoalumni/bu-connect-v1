@@ -22,7 +22,7 @@ export default async function Page() {
   const user = await getInformation();
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3   px-5 md:px-10 mt-10">
       <h1 className=" text-center text-lg font-medium">User Profile</h1>
       <div className="rounded-3xl space-y-5 px-5 bg-[#2F61A0] py-10 dark:bg-[#5473a8]">
         <div className="flex flex-col items-center ">
