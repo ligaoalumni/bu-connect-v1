@@ -18,7 +18,7 @@ import {
   Checkbox,
   OverlayLoading,
 } from "@/components";
-import { Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { LoginFormSchema } from "@/lib";
 import { LoginFormData } from "@/types";
 import {
@@ -36,6 +36,7 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -226,11 +227,20 @@ const LoginForm = () => {
                             <Lock className="absolute left-2 top-[50%] translate-y-[-50%] h-4 w-4 text-muted-foreground" />
                             <Input
                               readOnly={form.formState.isSubmitting}
-                              type="password"
+                              type={showPassword ? "text" : "password"}
                               placeholder="Enter password"
                               className="pl-8 rounded-none dark:text-black dark:selection:bg-black/15 bg-white border-none h-10"
                               {...field}
                             />
+                            <Button
+                              size="icon"
+                              onClick={() => setShowPassword((p) => !p)}
+                              className="absolute z-30 right-2 -translate-y-[50%] top-[50%] "
+                              variant="ghost"
+                              type="button"
+                            >
+                              {showPassword ? <Eye /> : <EyeOff />}
+                            </Button>
                           </div>
                         </FormControl>
                         <FormMessage />
