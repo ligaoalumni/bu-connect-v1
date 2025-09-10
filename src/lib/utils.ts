@@ -8,6 +8,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function shuffleArray<T>(array: T[]): T[] {
+  const result = [...array]; // Make a copy to avoid mutating the original
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 // Helper functions for image grid layout
 export function getImageGridClass(count: number): string {
   switch (count) {
