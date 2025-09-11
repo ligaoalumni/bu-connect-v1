@@ -57,7 +57,6 @@ export default function VerifyAccountPage() {
         richColors: true,
         position: "top-center",
       });
-    } finally {
       setResendOTP(false);
     }
   };
@@ -88,7 +87,6 @@ export default function VerifyAccountPage() {
         richColors: true,
         position: "top-center",
       });
-    } finally {
       setVerifying(false);
     }
 
