@@ -98,7 +98,7 @@ export function AlumniRecordForm({ alumni }: AlumniRecordFormProps) {
           lastName: "",
           middleName: "",
           birthDate: "",
-          batch: new Date().getFullYear(),
+          batch: new Date().getFullYear() - 1,
           email: "",
           course: "",
         });

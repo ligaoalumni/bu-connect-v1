@@ -66,11 +66,7 @@ export const AlumniSchema = z.object({
   lastName: z.string().min(1, { message: "Last name is required" }),
   middleName: z.string().optional(),
   birthDate: z.string().min(1, { message: "Birth date is required" }),
-  batch: z.coerce
-    .number()
-    .int()
-    .min(2000, { message: "Year must be at least 2000" })
-    .max(2100, { message: "Year must be at most 2100" }),
+  batch: z.coerce.number().int(),
   email: z.string().email({ message: "Please enter a valid email address" }),
   course: z.string().min(1, { message: "Course is required" }),
 });
