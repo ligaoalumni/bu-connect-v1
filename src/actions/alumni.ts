@@ -7,7 +7,6 @@ import { AlumniFormData } from "@/types";
 import { User } from "@prisma/client";
 
 import { hash } from "bcryptjs";
-import { getDay, getMonth, getYear } from "date-fns";
 import { revalidatePath } from "next/cache";
 
 export const addAlumniData = async (
@@ -32,10 +31,21 @@ export const addAlumniData = async (
       throw new Error("Invalid form fields");
     }
 
-    const year = getYear(data.birthDate);
-    const month = getMonth(data.birthDate) + 1; // Months are zero-indexed in JavaScript
-    const day = getDay(data.birthDate);
-    const password = `${data.lastName.toLowerCase()}${year}${month}${day}`;
+    const isDataExists = await prisma.user.findFirst({
+      where: {
+        OR: [{ studentId: data.studentId }, { email: data.email }],
+      },
+    });
+
+    if (isDataExists) throw new Error("Student ID or Email already exists");
+
+    const year = data.birthDate.getFullYear();
+    // const month = format(getMonth(data.birthDate), "MM"); // Months are zero-indexed in JavaScript
+    const month = String(data.birthDate.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-indexed in JavaScript
+    // const day = format(getDay(data.birthDate), "dd");
+    const day = data.birthDate.getUTCDate().toString().padStart(2, "0");
+    const password =
+      `${data.lastName.toLowerCase().trim()}${year}${month}${day}`.trim();
 
     const hashedPassword = await hash(password, 10);
 
