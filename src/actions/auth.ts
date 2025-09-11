@@ -10,6 +10,7 @@ import {
   sendResetOTPToken,
   validateToken,
   loginWithGoogle,
+  createToken,
 } from "@/repositories";
 import { UserRole } from "@/types";
 import * as bcrypt from "bcryptjs";
@@ -119,6 +120,10 @@ export async function loginAction(email: string, password: string) {
       return {
         error: { message: "Invalid password" },
       };
+    }
+
+    if (user.verifiedAt === null || !user.verifiedAt) {
+      await createToken(user.email);
     }
 
     // Create user session
