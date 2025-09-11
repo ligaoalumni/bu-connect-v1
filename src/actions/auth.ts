@@ -236,6 +236,12 @@ export const loginWithGoogleAction = async (data: {
 
     if (!user) {
       await logLoginAttempt(data.email, false);
+      if (data.email.includes("bicol-u.edu.ph")) {
+        return {
+          error: { message: "You do not have an account yet." },
+        };
+      }
+
       return {
         error: { message: "User is not registered" },
       };
