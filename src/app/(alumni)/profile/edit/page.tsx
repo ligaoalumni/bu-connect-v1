@@ -19,7 +19,7 @@ export default async function Page() {
   };
 
   return (
-    <div>
+    <div className="px-5 md:px-10 mt-10">
       <EditProfileForm user={data} />
     </div>
   );
