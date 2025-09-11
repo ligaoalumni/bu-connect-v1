@@ -11,29 +11,31 @@ export function HeroSection() {
   return (
     <section className="">
       <div className="container   px-5 md:px-10 mx-auto min-h-[500px] h-full md:min-h-[764px]  lg:min-h-[964px] relative">
-        <div className="flex justify-between items-center  absolute z-50 top-0 left-0 right-0 md:px-10 px-5 pt-10">
-          <div className="flex items-center  gap-3">
-            <div className="bg-white rounded-full">
-              <Image
-                src="/images/bup-logo.png"
-                height={70}
-                width={70}
-                alt="BUP Logo"
-              />
+        {!user && (
+          <div className="flex justify-between items-center  absolute z-50 top-0 left-0 right-0 md:px-10 px-5 pt-10">
+            <div className="flex items-center  gap-3">
+              <div className="bg-white rounded-full">
+                <Image
+                  src="/images/bup-logo.png"
+                  height={70}
+                  width={70}
+                  alt="BUP Logo"
+                />
+              </div>
+              <div>
+                <h1 className="text-lg font-extrabold text-[#E6750C] font-poppins">
+                  BU Connect
+                </h1>
+                <p className="text-lg font-extrabold text-[#E6750C] font-poppins">
+                  Polangui
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-extrabold text-[#E6750C] font-poppins">
-                BU Connect
-              </h1>
-              <p className="text-lg font-extrabold text-[#E6750C] font-poppins">
-                Polangui
-              </p>
-            </div>
+            <Button asChild className="bg-[#E6750C] hover:bg-[#E6750CAA]">
+              <Link href="/login">Login</Link>
+            </Button>
           </div>
-          <Button asChild className="bg-[#E6750C] hover:bg-[#E6750CAA]">
-            <Link href="/login">Login</Link>
-          </Button>
-        </div>
+        )}
         <Image
           alt="BUP Hero Image"
           className="absolute z-10 "
