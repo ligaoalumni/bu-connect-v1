@@ -12,7 +12,15 @@ import {
   readPostsAction,
   readUserLocationAction,
 } from "@/actions";
-import { Button, EmptyState, MiniAnnouncementCard } from "@/components";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  EmptyState,
+  Input,
+  MiniAnnouncementCard,
+} from "@/components";
 import EventCard from "@/components/custom/event-card";
 import AlumniMap from "@/components/custom/alumni-map";
 import { StarRating } from "./star-rating";
@@ -77,7 +85,22 @@ export async function Feed() {
       </section>
 
       <section className="md:px-10 px-5 py-8">
-        <div className="container mx-auto  flex flex-col md:flex-row smd:justify-between gap-4">
+        <div className="container mx-auto  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Link
+            href="/posts/add"
+            className="md:col-span-2 flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+          >
+            <Avatar className="border border-gray-100">
+              <AvatarImage src={user?.avatar || ""} />
+              <AvatarFallback className="capitalize">
+                {user?.firstName.charAt(0)}
+                {user?.lastName.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <p className="text-gray-500 border w-full border-gray-900/30 rounded-xl p-4">
+              What&apos;s on your mind?
+            </p>
+          </Link>
           <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
             <h2 className="font-medium">Where are you now?</h2>
             <StatusSelection initialValue={information?.occupationStatus} />
