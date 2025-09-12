@@ -24,7 +24,7 @@ export const Footer = () => {
             </h1>
             <div className=" flex flex-col gap-0.5 justify-start ">
               <Link
-                classNamefont-roboto="text-white hover:underline"
+                className="font-roboto text-white hover:underline"
                 href="/#about"
               >
                 About
