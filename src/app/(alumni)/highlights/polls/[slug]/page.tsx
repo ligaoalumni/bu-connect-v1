@@ -1,6 +1,15 @@
 import { readPollAction } from "@/actions";
 import { notFound } from "next/navigation";
 import { PollCard } from "../../__components/poll-card";
+import Link from "next/link";
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components";
+import { ChevronLeft } from "lucide-react";
 
 export default async function Page({
   params,
@@ -16,8 +25,25 @@ export default async function Page({
   if (!poll) return notFound();
 
   return (
-    <div className="mt-10 px-5 md:px-10">
-      <h3 className="text-2xl font-bold">Poll</h3>
+    <div className="mt-10 px-5 md:px-10  ">
+      <div className="flex gap-4 mb-5">
+        <TooltipProvider>
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger asChild>
+              <Button size="icon" asChild>
+                <Link href="/highlights">
+                  <ChevronLeft />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Back to highlights</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <h3 className="text-2xl font-bold">Poll</h3>
+      </div>
       <PollCard
         defaultPoll={{
           ...poll,

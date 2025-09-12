@@ -17,6 +17,7 @@ export default async function Page({
   return (
     <div className="mt-10 px-5 md:px-10">
       <Announcement
+        backToPath="/announcements"
         announcement={announcement}
         comments={announcement._count.comments}
         likedByIds={announcement.likedBy.map((like) => like.id)}

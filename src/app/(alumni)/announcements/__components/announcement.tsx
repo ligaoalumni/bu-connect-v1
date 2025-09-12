@@ -10,6 +10,10 @@ import {
   CardHeader,
   Reactions,
   RichTextEditor,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@/components";
 import { useAuth, useContentData } from "@/contexts";
 import { Announcement as TAnnouncement } from "@prisma/client";
@@ -17,17 +21,20 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ChevronLeft } from "lucide-react";
 
 export default function Announcement({
   announcement,
   comments,
   likedByIds,
+  backToPath,
   likes,
 }: {
   announcement: TAnnouncement;
   likes: number;
   comments: number;
   likedByIds: number[];
+  backToPath: string;
 }) {
   const { setData, data } = useContentData();
   const { user } = useAuth();
@@ -104,6 +111,20 @@ export default function Announcement({
       <Card className="overflow-hidden bg-transparent shadow-none border-none hover:shadow-sm transition-shadow duration-300 ease-in-out">
         <CardHeader>
           <div className="flex items-center space-x-4 p-4">
+            <TooltipProvider>
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <Button size="icon" asChild>
+                    <Link href="/highlights">
+                      <ChevronLeft />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Back to {backToPath}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <div>
               <h2 className="text-lg font-semibold">{announcement.title}</h2>
               <p className="text-sm text-muted-foreground">
@@ -125,7 +146,7 @@ export default function Announcement({
           />
         </CardFooter>
       </Card>
-      <div className="space-y-4 mt-4">
+      <div className="space-y-4 mt-4 px-6">
         <AnnouncementCommentsSection announcementId={announcement.id} />
       </div>
     </div>

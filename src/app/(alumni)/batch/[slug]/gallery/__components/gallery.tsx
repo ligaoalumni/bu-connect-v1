@@ -1,93 +1,118 @@
 "use client";
 import { ImageGalleryDialog } from "@/app/admin/batches-gallery/__components/image-gallery-upload";
 import { ImageUploadDialog } from "@/app/admin/batches-gallery/__components/image-upload-dialog";
-import { Button } from "@/components";
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components";
 
 import { Batch } from "@/types";
-import { ImagePlus, Users } from "lucide-react";
+import { ChevronLeft, ImagePlus, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function BatchGallery({
-	batch,
-	userBatch,
+  batch,
+  userBatch,
 }: {
-	batch: Batch;
-	userBatch: number;
+  batch: Batch;
+  userBatch: number;
 }) {
-	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-	const [viewImageIndex, setViewImageIndex] = useState<number | null>(null);
-	const [images, setImages] = useState<string[]>(batch.images);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [viewImageIndex, setViewImageIndex] = useState<number | null>(null);
+  const [images, setImages] = useState<string[]>(batch.images);
 
-	return (
-		<div className="p-6">
-			<div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-				<div>
-					<h1 className="text-2xl font-bold">Batch {batch.batch} Gallery</h1>
-					<div className="flex items-center mt-1 text-muted-foreground">
-						<Users className="mr-1 h-4 w-4" />
-						<span>{batch.students} students</span>
-						<span className="mx-2">•</span>
-						<span>
-							{images.length} {images.length === 1 ? "image" : "images"}
-						</span>
-					</div>
-				</div>
-				{userBatch === batch.batch && (
-					<Button
-						onClick={() => setUploadDialogOpen(true)}
-						className="w-full sm:w-auto">
-						<ImagePlus className="mr-2 h-4 w-4" />
-						Upload Images
-					</Button>
-				)}
-			</div>
+  return (
+    <div className="p-6">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex gap-2">
+          <TooltipProvider>
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <Button size="icon" asChild>
+                  <Link href={`/batch`}>
+                    <ChevronLeft />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Back to batch list</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <div>
+            <h1 className="text-2xl font-bold">Batch {batch.batch} Gallery</h1>
+            <div className="flex items-center mt-1 text-muted-foreground">
+              <Users className="mr-1 h-4 w-4" />
+              <span>{batch.students} students</span>
+              <span className="mx-2">•</span>
+              <span>
+                {images.length} {images.length === 1 ? "image" : "images"}
+              </span>
+            </div>
+          </div>
+        </div>
+        {userBatch === batch.batch && (
+          <Button
+            onClick={() => setUploadDialogOpen(true)}
+            className="w-full sm:w-auto"
+          >
+            <ImagePlus className="mr-2 h-4 w-4" />
+            Upload Images
+          </Button>
+        )}
+      </div>
 
-			{images.length > 0 ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{images.map((image, index) => (
-						<div
-							key={index}
-							className="relative aspect-video cursor-pointer overflow-hidden rounded-lg border bg-muted hover:opacity-90 transition-opacity"
-							onClick={() => setViewImageIndex(index)}>
-							<Image
-								fill
-								src={image || "/placeholder.svg"}
-								alt={`Batch ${batch.batch} image ${index + 1}`}
-								className="h-full w-full object-cover"
-							/>
-						</div>
-					))}
-				</div>
-			) : (
-				<div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
-					<p className="text-muted-foreground">
-						No images have been uploaded for this batch yet.
-					</p>
-					{userBatch === batch.batch && (
-						<Button onClick={() => setUploadDialogOpen(true)} className="mt-4">
-							<ImagePlus className="mr-2 h-4 w-4" />
-							Upload First Image
-						</Button>
-					)}
-				</div>
-			)}
+      {images.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className="relative aspect-video cursor-pointer overflow-hidden rounded-lg border bg-muted hover:opacity-90 transition-opacity"
+              onClick={() => setViewImageIndex(index)}
+            >
+              <Image
+                fill
+                src={image || "/placeholder.svg"}
+                alt={`Batch ${batch.batch} image ${index + 1}`}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
+          <p className="text-muted-foreground">
+            No images have been uploaded for this batch yet.
+          </p>
+          {userBatch === batch.batch && (
+            <Button onClick={() => setUploadDialogOpen(true)} className="mt-4">
+              <ImagePlus className="mr-2 h-4 w-4" />
+              Upload First Image
+            </Button>
+          )}
+        </div>
+      )}
 
-			<ImageUploadDialog
-				handleUploadedImages={(imgs) => setImages((prev) => [...prev, ...imgs])}
-				batchNumber={batch.batch}
-				open={uploadDialogOpen}
-				onOpenChange={setUploadDialogOpen}
-			/>
+      <ImageUploadDialog
+        handleUploadedImages={(imgs) => setImages((prev) => [...prev, ...imgs])}
+        batchNumber={batch.batch}
+        open={uploadDialogOpen}
+        onOpenChange={setUploadDialogOpen}
+      />
 
-			{viewImageIndex !== null && (
-				<ImageGalleryDialog
-					batchNumber={batch.batch}
-					images={images}
-					open={viewImageIndex !== null}
-					onOpenChange={() => setViewImageIndex(null)}
-				/>
-			)}
-		</div>
-	);
+      {viewImageIndex !== null && (
+        <ImageGalleryDialog
+          batchNumber={batch.batch}
+          images={images}
+          open={viewImageIndex !== null}
+          onOpenChange={() => setViewImageIndex(null)}
+        />
+      )}
+    </div>
+  );
 }
