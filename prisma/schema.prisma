@@ -229,11 +229,11 @@ model AnnouncementComment {
 }
 
 model Announcement {
-  id      Int    @id @default(autoincrement())
-  slug    String @unique
-  title   String @db.Text
-  content String @db.Text
-
+  id       Int                   @id @default(autoincrement())
+  slug     String                @unique
+  title    String                @db.Text
+  content  String                @db.Text
+  image    String?               @default("")
   likedBy  User[]                @relation("AnnouncementLikes") // Many-to-many with alumni
   comments AnnouncementComment[]
 
