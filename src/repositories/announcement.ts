@@ -14,9 +14,9 @@ import { getAdmins, getUsersId } from "./user";
 
 export const createAnnouncement = async ({
   content,
-
+  image,
   title,
-}: Pick<Announcement, "title" | "content">) => {
+}: Pick<Announcement, "title" | "content"> & { image?: string }) => {
   const timestamp = Date.now(); // current timestamp
   const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
   const name = title.toLowerCase().replace(/ /g, "-");
@@ -25,6 +25,7 @@ export const createAnnouncement = async ({
   const newAnnouncement = await prisma.announcement.create({
     data: {
       title,
+      image,
       content,
       slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
     },
@@ -47,7 +48,7 @@ export const createAnnouncement = async ({
 
 export const updateAnnouncement = async (
   toUpdate: string,
-  values: Partial<Pick<Announcement, "title" | "content">>,
+  values: Partial<Pick<Announcement, "title" | "content" | "image">>,
 ) => {
   return await prisma.announcement.update({
     where: {

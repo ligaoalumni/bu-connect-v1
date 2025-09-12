@@ -20,11 +20,13 @@ import { cookies } from "next/headers";
 export const createAnnouncementAction = async ({
   content,
   title,
-}: Pick<Announcement, "content" | "title">) => {
+  image,
+}: Pick<Announcement, "content" | "title"> & { image?: string }) => {
   try {
     const announcement = await createAnnouncement({
       content,
       title,
+      image,
     });
 
     if (!announcement) {
@@ -46,7 +48,7 @@ export const createAnnouncementAction = async ({
 
 export const updateAnnouncementAction = async (
   slug: string,
-  data: Partial<Pick<Announcement, "title" | "content">>,
+  data: Partial<Pick<Announcement, "title" | "content" | "image">>,
 ) => {
   try {
     const updatedAnnouncement = await updateAnnouncement(slug, data);
