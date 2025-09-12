@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | BU Connect",
     default: "BU Connect",
   },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/images/bup-logo.png" },
 };
 
 export default async function RootLayout({
