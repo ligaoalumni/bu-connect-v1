@@ -22,10 +22,10 @@ export function HeroSection() {
               />
             </div>
             <div>
-              <h1 className="text-lg font-extrabold text-[#E6750C] font-poppins">
+              <h1 className="text-2xl tracking-tighter  font-extrabold text-[#FF7903] font-poppins">
                 BU Connect
               </h1>
-              <p className="text-lg font-extrabold text-[#E6750C] font-poppins">
+              <p className="text-2xl tracking-tighter  font-extrabold text-[#FF7903] font-poppins">
                 Polangui
               </p>
             </div>
@@ -42,12 +42,12 @@ export function HeroSection() {
           fill
           objectFit="cover"
         />
-        <div className="absolute  z-20 h-full w-full  flex flex-col justify-center left-0 bg-[#15497A85]">
+        <div className="absolute  z-20 h-full w-full  flex flex-col justify-center left-0 bg-[#15497AC4]">
           <div className="px-5 md:px-10 space-y-5">
-            <h1 className="font-bold   max text-white text-2xl md:text-6xl text-left max-w-[90dvw] md:max-w-[40dvw]  ">
+            <h1 className="font-roboto font-bold   max text-white text-2xl md:text-6xl text-left max-w-[90dvw] md:max-w-[40dvw]  ">
               Strengthening Alumni Ties Through Seamless Digital Engagement
             </h1>
-            <p className="text-white text-lg md:text-xl max-w-[80dvw] md:max-w-[30dvw]  ">
+            <p className="font-roboto text-white text-lg md:text-xl max-w-[80dvw] md:max-w-[30dvw]  ">
               Connect with fellow BU Polangui alumni, share memories, and be
               updated on news and events
             </p>
@@ -58,7 +58,7 @@ export function HeroSection() {
                 </Button>
                 <Button
                   asChild
-                  className="bg-[#E6750C] hover:bg-[#E6750C90] text-white"
+                  className="text-[#E6750C]  hover:bg-white/80 bg-white"
                 >
                   <Link href="/login">Log in</Link>
                 </Button>

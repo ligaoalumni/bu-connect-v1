@@ -31,7 +31,7 @@ export async function UpComingEventsAndJobs() {
             height="28"
             style={{ color: "#E6750C" }}
           />
-          <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+          <h1 className="font-poppins text-[#E6750C] text-2xl font-bold uppercase">
             Upcoming Events
           </h1>
         </div>
@@ -65,7 +65,7 @@ export async function UpComingEventsAndJobs() {
       <div className=" container mx-auto bg-[#1D4263]  py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon icon="twemoji:briefcase" width="24" height="24" />
-          <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+          <h1 className="font-poppins text-[#E6750C] text-2xl font-bold uppercase">
             Job Opportunities
           </h1>
         </div>
@@ -117,7 +117,7 @@ export const CardComponent = ({
     <Link href={link}>
       <Card>
         <CardHeader>
-          <CardTitle className="font-bold text-xl text-[#E6750C]">
+          <CardTitle className="font-extrabold font-poppins text-xl text-[#E6750C]">
             {title}
           </CardTitle>
         </CardHeader>
@@ -129,7 +129,7 @@ export const CardComponent = ({
                 width="24"
                 height="24"
               />
-              <p>{content}</p>
+              <p className="font-poppins">{content}</p>
             </div>
           ) : (
             <p>{content}</p>
@@ -137,7 +137,7 @@ export const CardComponent = ({
           {date && (
             <div className="flex items-center gap-2">
               <Icon icon="flat-color-icons:calendar" width="24" height="24" />
-              <p>{date}</p>
+              <p className="font-poppins">{date}</p>
             </div>
           )}
           {location && (
@@ -147,7 +147,7 @@ export const CardComponent = ({
                 width="24"
                 height="24"
               />
-              <p>{location}</p>
+              <p className="font-poppins">{location}</p>
             </div>
           )}
         </CardContent>

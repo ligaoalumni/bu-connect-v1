@@ -48,10 +48,10 @@ export function About() {
     <section id="about" className="">
       <div className="container mx-auto py-20 px-5 md:px-10">
         <div>
-          <h1 className="text-[#043265] dark:text-[#d5e9ff] text-2xl md:text-6xl font-bold">
+          <h1 className="font-poppins text-[#043265] dark:text-[#d5e9ff] text-2xl md:text-6xl font-bold">
             About BUConnect
           </h1>
-          <p className="text-[#043265] dark:text-[#d5e9ff] text-lg md:text-xl md:leading-loose">
+          <p className="text-[#043265] font-poppins dark:text-[#d5e9ff] text-lg md:text-xl md:leading-loose">
             BUConnect Polangui is a digital platform designed to foster strong
             connections among BU Polangui alumni. Our mission is to provide a
             seamless way for alumni to engage, share, and collaborate. BUConnect
@@ -96,10 +96,10 @@ const AboutCard = ({
         className="mx-auto mb-5"
         style={{ color: "#E8770B" }}
       />
-      <h2 className="text-xl font-semibold text-center dark:text-white">
+      <h2 className="font-roboto text-xl font-semibold text-center dark:text-white">
         {title}
       </h2>
-      <p className="text-gray-600 dark:text-white/90 mt-2 text-center">
+      <p className="font-roboto text-gray-600 dark:text-white/90 mt-2 text-center">
         {description}
       </p>
     </Link>

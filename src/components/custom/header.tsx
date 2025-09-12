@@ -55,10 +55,10 @@ export function Header({
               alt="BUP Logo"
             />
             <div>
-              <h1 className="text-lg font-bold font-poppins text-[#FFA629]">
+              <h1 className="text-lg font-bold font-poppins text-[#FF7903]">
                 BU Connect
               </h1>
-              <p className="text-lg font-bold font-poppins text-[#FFA629]">
+              <p className="text-lg font-bold font-poppins text-[#FF7903]">
                 Polangui
               </p>
             </div>
@@ -70,7 +70,7 @@ export function Header({
                   key={`${link}-${index}`}
                   variant="link"
                   asChild
-                  className={`  text-lg capitalize ${path == link ? "text-[#FFA629] font-bold" : "text-white"}`}
+                  className={`  text-lg capitalize ${path == link ? "text-[#FF7903] font-bold" : "text-white"}`}
                 >
                   <Link href={link}>
                     {link === "/" ? "Home" : link.slice(1)}

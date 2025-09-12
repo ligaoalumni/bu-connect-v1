@@ -23,25 +23,34 @@ export const Footer = () => {
               Quick Links
             </h1>
             <div className=" flex flex-col gap-0.5 justify-start ">
-              <Link className="text-white hover:underline" href="/#about">
+              <Link
+                classNamefont-roboto="text-white hover:underline"
+                href="/#about"
+              >
                 About
               </Link>
               <Link
-                className="text-white hover:underline"
+                className="font-roboto text-white hover:underline"
                 href="/#announcements"
               >
                 Announcements
               </Link>
               <Link
-                className="text-white hover:underline"
+                className="font-roboto text-white hover:underline"
                 href="/#alumni-memories"
               >
                 Alumni Memories
               </Link>
-              <Link className="text-white hover:underline" href="/#events">
+              <Link
+                className="font-roboto text-white hover:underline"
+                href="/#events"
+              >
                 Events
               </Link>
-              <Link className="text-white hover:underline" href="/#jobs">
+              <Link
+                className="font-roboto text-white hover:underline"
+                href="/#jobs"
+              >
                 Jobs
               </Link>
             </div>
@@ -58,7 +67,7 @@ export const Footer = () => {
                   width={24}
                   icon="tabler:mail-filled"
                 />
-                <p className="text-white">alumni@gmail.com</p>
+                <p className="text-white font-roboto">alumni@gmail.com</p>
               </div>
               <div className="flex gap-2">
                 <Iconify
@@ -67,7 +76,7 @@ export const Footer = () => {
                   className="text-white"
                   icon="mingcute:phone-fill"
                 />
-                <p className="text-white">+1 (555) 000-0000</p>
+                <p className="text-white font-roboto">+1 (555) 000-0000</p>
               </div>
               <div className="flex gap-2">
                 <Iconify
@@ -76,12 +85,12 @@ export const Footer = () => {
                   className="text-white"
                   icon="fluent:location-12-filled"
                 />
-                <p className="text-white">Polangui, Albay</p>
+                <p className="font-roboto text-white">Polangui, Albay</p>
               </div>
             </div>
           </div>
         </div>
-        <p className="z-30 bottom-2 md:bottom-5 text-white absolute">
+        <p className="z-30 bottom-2 md:bottom-5 text-white absolute font-roboto">
           &copy; {new Date().getFullYear()} BUConnect Polangui Alumni.
         </p>
       </div>

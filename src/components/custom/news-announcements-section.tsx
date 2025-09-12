@@ -21,7 +21,7 @@ export async function NewsAndAnnouncementsSection() {
       <div className="px-5 md:px-10 container mx-auto bg-[#195287]  py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon icon="fluent-color:megaphone-loud-16" width="24" height="24" />
-          <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+          <h1 className="font-poppins text-[#E6750C] text-2xl font-bold uppercase">
             News &#x26; Announcesments
           </h1>
         </div>
@@ -110,7 +110,7 @@ export function MiniAnnouncementCard({ announcement }: AnnouncementCardProps) {
           />
         </div>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-balance">
+          <CardTitle className="font-inter text-lg font-bold text-balance">
             {title}
           </CardTitle>
         </CardHeader>
