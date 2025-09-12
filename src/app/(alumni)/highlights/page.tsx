@@ -50,7 +50,6 @@ export default async function Page() {
                   recruitment={recruitment}
                   batches={batches.data.map((b) => b.batch)}
                 />
-                key={recruitment.id}
               </Link>
             ))
           ) : (
