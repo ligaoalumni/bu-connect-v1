@@ -28,6 +28,7 @@ import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import { MiniPostCard } from "./mini-post-card";
 import Image from "next/image";
+import { Bell } from "lucide-react";
 
 export async function Feed() {
   const user = await getInformation();
@@ -109,8 +110,9 @@ export async function Feed() {
           </Link>
           <Link
             href="/announcements/add"
-            className="  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+            className="  flex items-start gap-3 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
           >
+            <Bell className="h-8 min-w-8 border  p-1.5 rounded-full" />
             <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
               Post an announcement
             </p>
