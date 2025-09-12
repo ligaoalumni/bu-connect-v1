@@ -18,7 +18,6 @@ import {
   AvatarImage,
   Button,
   EmptyState,
-  Input,
   MiniAnnouncementCard,
 } from "@/components";
 import EventCard from "@/components/custom/event-card";
@@ -34,6 +33,13 @@ export async function Feed() {
   const user = await getInformation();
   const upcomingEvents = await readEventsAction({
     status: ["Upcoming Event"],
+    pagination: {
+      limit: 3,
+      page: 0,
+    },
+  });
+  const ongoingEvents = await readEventsAction({
+    status: ["Ongoing Event"],
     pagination: {
       limit: 3,
       page: 0,
@@ -126,8 +132,12 @@ export async function Feed() {
             Upcoming Events
           </h1>
         </div>
-        {upcomingEvents.data.length > 0 ? (
+        {ongoingEvents.data.length > 0 || upcomingEvents.data.length > 0 ? (
           <div className="grid mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {ongoingEvents.data.length > 0 &&
+              ongoingEvents.data.map((event) => (
+                <EventCard key={event.slug} {...event} />
+              ))}
             {upcomingEvents.data.map((event) => (
               <EventCard key={event.slug} {...event} />
             ))}

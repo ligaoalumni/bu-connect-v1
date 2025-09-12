@@ -55,6 +55,7 @@ export default async function AllEvents() {
               ongoingEvents.data.map((event) => (
                 <EventCard key={event.slug} {...event} />
               ))}
+
             {upcomingEvents.data.length > 0 &&
               upcomingEvents.data.map((event) => (
                 <EventCard key={event.slug} {...event} />
