@@ -15,6 +15,7 @@ export default {
         tangerine: ["var(--font-tangerine)", "cursive"],
         poppins: ["var(--font-poppins)", "sans-serif"],
         roboto: ["var(--font-roboto)", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

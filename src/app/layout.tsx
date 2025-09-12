@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   Geist,
   Geist_Mono,
+  Inter,
   Poppins,
   Roboto,
   Tangerine,
@@ -26,6 +27,12 @@ const poppins = Poppins({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "300"],
 });
 
 const tangerine = Tangerine({
@@ -61,7 +68,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`bg-[#F2F6FB] ${roboto.variable} ${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
+        className={`bg-[#F2F6FB] ${inter.variable} ${roboto.variable} ${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
       >
         <Providers>
           {settings &&
