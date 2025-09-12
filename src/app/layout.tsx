@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Tangerine } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Poppins,
+  Roboto,
+  Tangerine,
+} from "next/font/google";
 import "./globals.css";
 import Providers from "../providers";
 import { Header } from "@/components";
@@ -29,6 +35,13 @@ const tangerine = Tangerine({
   style: "normal",
 });
 
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
   title: {
     template: "%s | BU Connect",
@@ -48,7 +61,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`bg-[#F2F6FB] ${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
+        className={`bg-[#F2F6FB] ${roboto.variable} ${geistSans.variable} ${poppins.variable} ${tangerine.variable} ${geistMono.variable} antialiased `}
       >
         <Providers>
           {settings &&
