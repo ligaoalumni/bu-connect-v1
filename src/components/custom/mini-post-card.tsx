@@ -1,6 +1,7 @@
 "use client";
 
 import { likePostAction, unlikePostAction } from "@/actions";
+import PostImages from "@/app/(alumni)/posts/__components/post-images";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -21,6 +22,7 @@ interface MiniPostCardProps {
     batch: number;
     likes_count: number;
     comments_count: number;
+    images: string[];
     slug: string;
   };
 }
@@ -71,6 +73,7 @@ export function MiniPostCard({ post, likedByIds }: MiniPostCardProps) {
       setIsLoading(false);
     }
   };
+  const hasImages = post.images.length > 0;
 
   return (
     <Card className="w-full   hover:shadow-md transition-shadow">
@@ -106,6 +109,8 @@ export function MiniPostCard({ post, likedByIds }: MiniPostCardProps) {
           <p className="text-lg font-semibold text-muted-foreground mb-4 leading-relaxed">
             {post.content}
           </p>
+
+          {hasImages && <PostImages disableModal images={post.images} />}
         </Link>
         <div className="flex items-center gap-4">
           <Button

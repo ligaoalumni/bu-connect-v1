@@ -307,6 +307,7 @@ export async function Feed() {
                   key={post.id}
                   likedByIds={post.likedBy.map((i) => i.id) || []}
                   post={{
+                    images: post.images,
                     id: post.id,
                     avatar: post.postedBy.image || "",
                     name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
