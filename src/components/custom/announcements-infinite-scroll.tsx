@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import Image from "next/image";
 
 export function AnnouncementsInfiniteScroll({
   defaultData,
@@ -184,6 +185,15 @@ export function AnnouncementsInfiniteScroll({
                 </div>
               </CardHeader>
               <CardContent className="overflow-hidden max-h-[300px] mt-0 pt-0 relative">
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={announcement?.image || `/images/placeholder.jpg`}
+                    alt={announcement.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
                 <RichTextEditor content={announcement.content} />
                 <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between p-4 backdrop-blur-md bg-opacity-10 rounded-t-md">
                   <div className="flex w-full items-center justify-center space-x-4">

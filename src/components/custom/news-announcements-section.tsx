@@ -95,14 +95,14 @@ interface AnnouncementCardProps {
 }
 
 export function MiniAnnouncementCard({ announcement }: AnnouncementCardProps) {
-  const { title } = announcement;
+  const { title, image } = announcement;
 
   return (
     <Link href={`/announcements/${announcement.id}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
         <div className="relative aspect-video w-full">
           <Image
-            src={`/images/placeholder.jpg`}
+            src={image || `/images/placeholder.jpg`}
             alt={title}
             fill
             className="object-cover"

@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ChevronLeft } from "lucide-react";
+import Image from "next/image";
 
 export default function Announcement({
   announcement,
@@ -134,6 +135,15 @@ export default function Announcement({
           </div>
         </CardHeader>
         <CardContent className=" ">
+          <div className="relative aspect-video w-full">
+            <Image
+              src={announcement?.image || `/images/placeholder.jpg`}
+              alt={announcement.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
           <RichTextEditor content={announcement.content} />
         </CardContent>
         <CardFooter>
