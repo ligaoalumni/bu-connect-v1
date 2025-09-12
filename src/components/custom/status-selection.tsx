@@ -68,8 +68,8 @@ export function StatusSelection({ initialValue }: StatusSelectionProps) {
 
   return (
     <Select value={selectedStatus} onValueChange={handleChange}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a status">
+      <SelectTrigger className="w-full dark:text-black">
+        <SelectValue className="dark:text-black" placeholder="Select a status">
           {selectedStatus
             ? getOccupationStatusLabel(selectedStatus)
             : "Select a status"}

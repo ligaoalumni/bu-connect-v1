@@ -91,10 +91,10 @@ export async function Feed() {
       </section>
 
       <section className="md:px-10 px-5 py-8">
-        <div className="container mx-auto  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="container mx-auto  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
             href="/posts/add"
-            className="md:col-span-2 flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+            className="  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
           >
             <Avatar className="border border-gray-100">
               <AvatarImage src={user?.avatar || ""} />
@@ -103,16 +103,26 @@ export async function Feed() {
                 {user?.lastName.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <p className="text-gray-500 border w-full border-gray-900/30 rounded-xl p-4">
+            <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
               What&apos;s on your mind?
             </p>
           </Link>
+          <Link
+            href="/announcements/add"
+            className="  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+          >
+            <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
+              Post an announcement
+            </p>
+          </Link>
           <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
-            <h2 className="font-medium">Where are you now?</h2>
+            <h2 className="font-medium dark:text-black">Where are you now?</h2>
             <StatusSelection initialValue={information?.occupationStatus} />
           </div>
           <div className="bg-white space-y-2 rounded-md shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
-            <h2 className="font-medium">How did BU Connect help you?</h2>
+            <h2 className="font-medium dark:text-black">
+              How did BU Connect help you?
+            </h2>
             <div className="flex justify-center items-center gap-2">
               <StarRating
                 size="lg"
@@ -158,7 +168,7 @@ export async function Feed() {
         <div className="grid md:grid-cols-2 md:gap-10 gap-2">
           <div
             id="jobs"
-            className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm max-h-min"
+            className="p-5 md:p-10 space-y-3 bg-white  rounded-lg shadow-sm max-h-min"
           >
             <h1 className="font-roboto text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Job Opportunities
