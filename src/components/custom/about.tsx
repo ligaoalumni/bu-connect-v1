@@ -45,7 +45,7 @@ const about = [
 
 export function About() {
   return (
-    <section className="">
+    <section id="about" className="">
       <div className="container mx-auto py-20 px-5 md:px-10">
         <div>
           <h1 className="text-[#043265] dark:text-[#d5e9ff] text-2xl md:text-6xl font-bold">

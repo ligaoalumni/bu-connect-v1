@@ -6,22 +6,50 @@ export const Footer = () => {
     <footer className="mx-auto container mb-10  ">
       <div className="flex flex-col md:flex-row justify-center items-center min-h-[450px] md:min-h-[324px]  relative py-14">
         <div className="h-full w-full absolute bg-no-repeat bg-right z-10 bg-[url('/images/bu-torch.png')]" />
-        <div className="px-5 md:px-10 bg-[#15406ADD] p-5 h-full w-full absolute z-20 flex flex-col md:flex-row gap-y-10 md:gap-y-0 md:justify-between md:items-center">
+        <div className="px-5 md:px-10 bg-[#15406ADD] p-5 h-full w-full absolute z-20 flex flex-col md:flex-row  gap-y-10 md:gap-y-0 md:justify-between md:items-start">
           <div className="space-y-2 ">
-            <p className="  text-lg text-white md:max-w-[500px]">
+            <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
+              About BUConnect
+            </h1>
+            <p className="font-roboto  text-lg text-white md:max-w-[500px]">
               BUConnect aims to build a stronger, more cohesive community by
               providing easy access to university news, updates, and resources,
               while creating opportunities for collaboration and networking
               across various departments and alumni networks.
             </p>
-            <div className="  gap-3 hidden md:flex">
-              <Socials />
+          </div>
+          <div className="space-y-2">
+            <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
+              Quick Links
+            </h1>
+            <div className=" flex flex-col gap-0.5 justify-start ">
+              <Link className="text-white hover:underline" href="/#about">
+                About
+              </Link>
+              <Link
+                className="text-white hover:underline"
+                href="/#announcements"
+              >
+                Announcements
+              </Link>
+              <Link
+                className="text-white hover:underline"
+                href="/#alumni-memories"
+              >
+                Alumni Memories
+              </Link>
+              <Link className="text-white hover:underline" href="/#events">
+                Events
+              </Link>
+              <Link className="text-white hover:underline" href="/#jobs">
+                Jobs
+              </Link>
             </div>
           </div>
           <div className="">
-            <h3 className="text-3xl text-white md:min-w-[300px]">
+            <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
               Get in touch
-            </h3>
+            </h1>
             <div className="space-y-3 mt-3">
               <div className="flex gap-2 ">
                 <Iconify
@@ -51,13 +79,10 @@ export const Footer = () => {
                 <p className="text-white">Polangui, Albay</p>
               </div>
             </div>
-            <div className="mt-5  gap-3 md:hidden flex">
-              <Socials />
-            </div>
           </div>
         </div>
         <p className="z-30 bottom-2 md:bottom-5 text-white absolute">
-          &copy; {new Date().getFullYear()} BUConnect. All rights reserved.
+          &copy; {new Date().getFullYear()} BUConnect Polangui Alumni.
         </p>
       </div>
     </footer>

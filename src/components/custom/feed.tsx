@@ -96,7 +96,7 @@ export async function Feed() {
         </div>
       </section>
 
-      <section className="md:px-10 px-5 py-8">
+      <section id="events" className="md:px-10 px-5 py-8">
         <div className="flex items-center gap-2">
           <Icon icon="noto:confetti-ball" width="32" height="32" />
           <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
@@ -123,7 +123,10 @@ export async function Feed() {
       <section className="mx-auto container bg-[#195287] md:px-10 px-5 pt-10">
         {/* JOB AND HIGHLIGHTS */}
         <div className="grid md:grid-cols-2 md:gap-10 gap-2">
-          <div className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm max-h-min">
+          <div
+            id="jobs"
+            className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm max-h-min"
+          >
             <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Job Opportunities
             </h1>
@@ -171,7 +174,10 @@ export async function Feed() {
             </div>
           </div>
 
-          <div className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm">
+          <div
+            id="highlights"
+            className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm"
+          >
             <h1 className="text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Highlights
             </h1>
@@ -293,7 +299,7 @@ export async function Feed() {
           </div>
         </div>
 
-        <div className=" container mx-auto   py-10">
+        <div id="announcements" className=" container mx-auto   py-10">
           <div className="flex  items-center gap-3 justify-center">
             <Icon
               icon="fluent-color:megaphone-loud-16"
@@ -301,13 +307,13 @@ export async function Feed() {
               height="24"
             />
             <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
-              News &#x26; Announcesments
+              News &#x26; Announcements
             </h1>
           </div>
 
           {/* ANNOUNCEMENTS */}
           <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
-            {!(announcemenets.data.length > 0) ? (
+            {announcemenets.data.length > 0 ? (
               announcemenets.data.map((announcement) => (
                 <MiniAnnouncementCard
                   announcement={announcement}
@@ -332,7 +338,10 @@ export async function Feed() {
         </div>
       </section>
 
-      <section className="bg-[#195287] md:px-10 px-5 pb-10">
+      <section
+        id="alumni-memories"
+        className="bg-[#195287] md:px-10 px-5 pb-10"
+      >
         {images.length > 0 && (
           <div className=" container mx-auto   py-10">
             <div className="flex  items-center gap-3 justify-center">
