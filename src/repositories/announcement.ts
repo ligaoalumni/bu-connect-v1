@@ -80,7 +80,8 @@ export const readAnnouncements = async ({
   order,
   orderBy,
   pagination,
-}: PaginationArgs<never, never> = {}): Promise<
+  id,
+}: PaginationArgs<never, never> & { id?: number } = {}): Promise<
   PaginationResult<Announcement>
 > => {
   let where: Prisma.AnnouncementWhereInput = {};
@@ -94,6 +95,12 @@ export const readAnnouncements = async ({
   if (typeof filter === "string" && filter !== "POPULAR") {
     where = {
       OR: [{ title: { contains: filter, mode: "insensitive" } }],
+    };
+  }
+
+  if (id) {
+    where = {
+      AND: [where, { createdBy: { id } }],
     };
   }
 

@@ -91,7 +91,7 @@ export const deleteAnnouncementAction = async (slug: string) => {
 };
 
 export const readAnnouncementsAction = async (
-  args: PaginationArgs<never, never> = {},
+  args: PaginationArgs<never, never> & { id?: number } = {},
 ) => {
   try {
     return await readAnnouncements(args);
