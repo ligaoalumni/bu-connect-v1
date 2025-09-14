@@ -1,8 +1,9 @@
-import { readAnnouncementsAction } from "@/actions";
+import { getInformation, readAnnouncementsAction } from "@/actions";
 import { AnnouncementsInfiniteScroll } from "@/components";
 import React from "react";
 
 export default async function Page() {
+  const user = await getInformation();
   const announcements = await readAnnouncementsAction({
     pagination: {
       page: 0,
@@ -12,8 +13,11 @@ export default async function Page() {
   });
 
   return (
-    <div className="mt-10 px-5 md:px-10">
-      <AnnouncementsInfiniteScroll defaultData={announcements.data} />
+    <div className="py-10 px-5 md:px-10">
+      <AnnouncementsInfiniteScroll
+        userId={user?.id}
+        defaultData={announcements.data}
+      />
     </div>
   );
 }

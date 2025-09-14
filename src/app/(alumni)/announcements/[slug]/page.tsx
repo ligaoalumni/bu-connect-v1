@@ -17,7 +17,14 @@ export default async function Page({
   return (
     <div className="mt-10 px-5 md:px-10">
       <Announcement
-        backToPath="/announcements"
+        createdBy={{
+          batch: announcement.createdBy.batch,
+          firstName: announcement.createdBy.firstName,
+          lastName: announcement.createdBy.lastName,
+          id: announcement.createdBy.id,
+          role: announcement.createdBy.role,
+        }}
+        backToPath="/announcements/list"
         announcement={announcement}
         comments={announcement._count.comments}
         likedByIds={announcement.likedBy.map((like) => like.id)}

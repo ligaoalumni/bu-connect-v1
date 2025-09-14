@@ -1,21 +1,22 @@
-import { Suspense } from "react";
-import { TableSkeleton } from "../_components/table-skeleton";
-import AnnouncementsDataTable from "../_components/announcement-table";
+import AnnouncementsDataTable from "@/app/admin/_components/announcement-table";
+import { TableSkeleton } from "@/app/admin/_components/table-skeleton";
 import { Button } from "@/components";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function Page() {
+export default function Page() {
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-5 px-5 md:px-10 mt-5">
         <div>
           <h1 className="text-2xl font-medium">Announcements</h1>
           <p className="text-sm text-gray-600">Manage your announcements.</p>
         </div>
         <Button>
-          <Link href="/admin/announcements/add">Add Announcement</Link>
+          <Link href="/announcements/add">Add Announcement</Link>
         </Button>
       </div>
+
       <Suspense fallback={<TableSkeleton />}>
         <AnnouncementsDataTable />
       </Suspense>
