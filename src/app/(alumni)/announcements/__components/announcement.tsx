@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components";
 import { useAuth, useContentData } from "@/contexts";
-import { Announcement as TAnnouncement } from "@prisma/client";
+import { Announcement as TAnnouncement, User } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -29,9 +29,11 @@ export default function Announcement({
   comments,
   likedByIds,
   backToPath,
+  createdBy,
   likes,
 }: {
   announcement: TAnnouncement;
+  createdBy: Pick<User, "id" | "firstName" | "lastName" | "batch" | "role">;
   likes: number;
   comments: number;
   likedByIds: number[];
@@ -116,7 +118,7 @@ export default function Announcement({
               <Tooltip delayDuration={300}>
                 <TooltipTrigger asChild>
                   <Button size="icon" asChild>
-                    <Link href="/highlights">
+                    <Link href={backToPath}>
                       <ChevronLeft />
                     </Link>
                   </Button>
@@ -126,6 +128,7 @@ export default function Announcement({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+
             <div>
               <h2 className="text-lg font-semibold">{announcement.title}</h2>
               <p className="text-sm text-muted-foreground">
@@ -147,13 +150,31 @@ export default function Announcement({
           <RichTextEditor content={announcement.content} />
         </CardContent>
         <CardFooter>
-          <Reactions
-            isLoading={loading}
-            handleLike={handleLike}
-            comments={data?.comments || comments}
-            likes={data?.likes || likes}
-            isLiked={data?.isLiked || likedByIds.includes(Number(user?.id))}
-          />
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-4">
+              <h1 className="text-gray-600">
+                Posted by:{" "}
+                {createdBy?.role === "ALUMNI" ? (
+                  <span className="font-bold">
+                    <Link
+                      href={`/batch/${createdBy.batch}/alumni/${createdBy.id}`}
+                    >
+                      {createdBy.firstName} {createdBy.lastName}
+                    </Link>
+                  </span>
+                ) : (
+                  <span className="font-bold">Admin</span>
+                )}
+              </h1>
+            </div>
+            <Reactions
+              isLoading={loading}
+              handleLike={handleLike}
+              comments={data?.comments || comments}
+              likes={data?.likes || likes}
+              isLiked={data?.isLiked || likedByIds.includes(Number(user?.id))}
+            />
+          </div>
         </CardFooter>
       </Card>
       <div className="space-y-4 mt-4 px-6">

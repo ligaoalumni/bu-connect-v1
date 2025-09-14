@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { readAnnouncementsAction } from "@/actions";
 import { Button } from "../ui/button";
-import { Announcement } from "@prisma/client";
+import { Announcement, User } from "@prisma/client";
 import { RichTextEditor } from "./rich-text-editor";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
@@ -21,17 +21,25 @@ import {
   SelectValue,
 } from "../ui/select";
 import Image from "next/image";
+import { useAuth } from "@/contexts";
 
 export function AnnouncementsInfiniteScroll({
   defaultData,
   moreData = false,
+  userId,
 }: {
-  defaultData: Announcement[];
+  defaultData: Array<Announcement & { createdBy: User }>;
   moreData?: boolean;
+  userId?: number;
 }) {
-  const [announcements, setAnnouncements] = useState<Announcement[]>(
-    defaultData || [],
-  );
+  const [announcements, setAnnouncements] = useState<
+    Array<
+      Announcement & {
+        createdBy: User;
+      }
+    >
+  >(defaultData || []);
+  const { user } = useAuth();
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(moreData);
@@ -57,6 +65,7 @@ export function AnnouncementsInfiniteScroll({
           page: currentPage,
           limit: 8,
         },
+        id: userId,
         filter: currentFilter === "POPULAR" ? "POPULAR" : undefined,
         order:
           currentFilter === "POPULAR"
@@ -144,25 +153,32 @@ export function AnnouncementsInfiniteScroll({
         <div className="flex items-center justify-between my-2">
           <h1 className="text-3xl font-medium">Announcements</h1>
           <div className="flex gap-2 items-center">
-            <Label className="text-lg">Filter</Label>
-            <Select
-              disabled={loading}
-              value={filter}
-              onValueChange={handleFilterChange}
-            >
-              <SelectTrigger className="w-full smax-w-[180px]">
-                <SelectValue placeholder="Filter Event" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Filter</SelectLabel>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="POPULAR">Popular</SelectItem>
-                  <SelectItem value="LATEST">Latest</SelectItem>
-                  <SelectItem value="OLDER">Older</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2 items-center">
+              <Label className="text-lg">Filter</Label>
+              <Select
+                disabled={loading}
+                value={filter}
+                onValueChange={handleFilterChange}
+              >
+                <SelectTrigger className="w-full smax-w-[180px]">
+                  <SelectValue placeholder="Filter Event" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Filter</SelectLabel>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="POPULAR">Popular</SelectItem>
+                    <SelectItem value="LATEST">Latest</SelectItem>
+                    <SelectItem value="OLDER">Older</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            {user && user.role === "ALUMNI" && (
+              <Button asChild>
+                <Link href="/announcements/list">Manage Announcements</Link>
+              </Button>
+            )}
           </div>
         </div>
         <div className="space-y-5">
@@ -172,7 +188,7 @@ export function AnnouncementsInfiniteScroll({
               className="overflow-hidden bg-white	 shadow-none border-none hover:shadow-sm transition-shadow duration-300 ease-in-out"
             >
               <CardHeader>
-                <div className="flex items-center space-x-4 p-4">
+                <div className="flex justify-between items-center space-x-4 p-4">
                   <div>
                     <h2 className="text-lg font-semibold">
                       {announcement.title}
@@ -180,6 +196,23 @@ export function AnnouncementsInfiniteScroll({
                     <p className="text-sm text-muted-foreground">
                       {formatDistanceToNow(new Date(announcement.createdAt))}{" "}
                       ago
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="text-gray-600">
+                      Posted by:{" "}
+                      <span className="font-bold">
+                        {announcement.createdBy.role === "ALUMNI" ? (
+                          <Link
+                            href={`/batch/${announcement.createdBy.batch}/alumni`}
+                          >
+                            {announcement.createdBy.firstName}{" "}
+                            {announcement.createdBy.lastName}
+                          </Link>
+                        ) : (
+                          "Admin"
+                        )}
+                      </span>
                     </p>
                   </div>
                 </div>
