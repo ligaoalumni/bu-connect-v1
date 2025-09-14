@@ -240,7 +240,7 @@ model Announcement {
   createdBy   User @relation(fields: [createdById], references: [id])
 
   likedBy  User[]                @relation("AnnouncementLikes") // Many-to-many with alumni
-  comments AnnouncementComment[]sd
+  comments AnnouncementComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
