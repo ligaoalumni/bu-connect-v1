@@ -81,9 +81,7 @@ export const readAnnouncements = async ({
   orderBy,
   pagination,
   id,
-}: PaginationArgs<never, never> & { id?: number } = {}): Promise<
-  PaginationResult<Announcement>
-> => {
+}: PaginationArgs<never, never> & { id?: number } = {}) => {
   let where: Prisma.AnnouncementWhereInput = {};
 
   if (filter && typeof filter === "number") {
