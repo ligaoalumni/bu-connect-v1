@@ -171,6 +171,7 @@ export const ChangePasswordSchema = z
 export const AnnouncementSchema = z.object({
   title: z.string().nonempty("Title is required"),
   content: z.string().nonempty("Content is required"),
+  image: z.string().optional(),
 });
 
 export const JobSchema = z.object({
