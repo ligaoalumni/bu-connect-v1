@@ -16,7 +16,11 @@ export const createAnnouncement = async ({
   content,
   image,
   title,
-}: Pick<Announcement, "title" | "content"> & { image?: string }) => {
+  id,
+}: Pick<Announcement, "title" | "content"> & {
+  image?: string;
+  id: number;
+}) => {
   const timestamp = Date.now(); // current timestamp
   const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
   const name = title.toLowerCase().replace(/ /g, "-");
@@ -28,6 +32,11 @@ export const createAnnouncement = async ({
       image,
       content,
       slug: `${name}-${timestamp}-${randomPart}-${generatedSlug}`,
+      createdBy: {
+        connect: {
+          id,
+        },
+      },
     },
   });
 
@@ -95,6 +104,7 @@ export const readAnnouncements = async ({
 
     orderBy: orderBy ? { [orderBy]: order || "asc" } : { id: "asc" },
     include: {
+      createdBy: true,
       _count: {
         select: {
           comments: true,
@@ -130,6 +140,7 @@ export const readAnnouncement = async (slug: string) => {
           likedBy: true,
         },
       },
+      createdBy: true,
       likedBy: {
         select: {
           id: true,

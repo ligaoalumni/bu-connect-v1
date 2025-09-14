@@ -23,10 +23,16 @@ export const createAnnouncementAction = async ({
   image,
 }: Pick<Announcement, "content" | "title"> & { image?: string }) => {
   try {
+    const cookieStore = await cookies();
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session) throw new Error("Unauthorized");
+
     const announcement = await createAnnouncement({
       content,
       title,
       image,
+      id: session.id,
     });
 
     if (!announcement) {
