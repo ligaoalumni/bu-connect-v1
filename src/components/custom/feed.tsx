@@ -112,8 +112,8 @@ export async function Feed() {
             href="/announcements/add"
             className="  flex items-start gap-3 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
           >
-            <Bell className="h-8 min-w-8 border  p-1.5 rounded-full" />
-            <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
+            <Bell className="min-h-8 min-w-8 border  p-1.5 rounded-full" />
+            <p className="text-gray-500 dark:text-black border w-[80%] md:w-full border-gray-900/30 rounded-xl p-4">
               Post an announcement
             </p>
           </Link>
