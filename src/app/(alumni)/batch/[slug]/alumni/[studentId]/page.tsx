@@ -141,20 +141,25 @@ export default async function Page({
                 <CardTitle>Post - Graduation Information</CardTitle>
               </CardHeader>
               <CardContent className="px-5 pt-2 pb-4 grid grid-cols-2 gap-3 sms:grid-cols-2 md:grid-cols-3  ">
+                <AlumniData label="Industry" data={user?.industry} />
+                <AlumniData label="Company" data={user?.company} />
+                <AlumniData label="Job Title" data={user?.jobTitle} />
                 <AlumniData
-                  useDefaultColors
-                  label="Company"
-                  data={user?.company}
+                  label="Years to get this job (if job is related to your course)"
+                  data={user?.years ? user.years.toString() : ""}
                 />
                 <AlumniData
-                  useDefaultColors
                   label="Name of University/College"
-                  data={user?.jobTitle}
+                  data={user?.postStudyUniversity}
                 />
                 <AlumniData
-                  useDefaultColors
                   label="Current Occupation"
-                  data={user?.currentOccupation}
+                  data={
+                    user?.currentOccupation
+                      ? user.currentOccupation.slice(0, 1).toUpperCase() +
+                        user.currentOccupation.slice(1).toLowerCase()
+                      : ""
+                  }
                 />
               </CardContent>
             </Card>
