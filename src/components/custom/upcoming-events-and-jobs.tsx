@@ -22,8 +22,8 @@ export async function UpComingEventsAndJobs() {
   });
 
   return (
-    <section className="px-5 md:px-0">
-      <div className=" container mx-auto bg-[#1D4263]  py-10">
+    <section className=" ">
+      <div className=" container mx-auto bg-[#1D4263] px-5 py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon
             icon="mingcute:celebrate-fill"
@@ -62,7 +62,7 @@ export async function UpComingEventsAndJobs() {
         </div>
       </div>
 
-      <div className=" container mx-auto bg-[#1D4263]  py-10">
+      <div className=" container mx-auto bg-[#1D4263] px-5 py-10">
         <div className="flex  items-center gap-3 justify-center">
           <Icon icon="twemoji:briefcase" width="24" height="24" />
           <h1 className="font-poppins text-[#E6750C] text-2xl font-bold uppercase">

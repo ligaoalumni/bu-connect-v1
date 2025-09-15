@@ -82,7 +82,7 @@ export async function Feed() {
 
   return (
     <div className="container mx-auto ">
-      <section className="space-y-2 bg-[#15497A] py-10  mb-10 px-5 md:px-10">
+      <section className="space-y-2 bg-[#15497A] py-10    px-5 md:px-10">
         <h1 className="text-white text-2xl md:text-3xl capitalize font-bold">
           Welcome, {user?.firstName}!
         </h1>
@@ -91,11 +91,11 @@ export async function Feed() {
         </p>
       </section>
 
-      <section className="md:px-10 px-5 py-8">
-        <div className="container mx-auto  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="md:px-10 px-5 py-8 space-y-3">
+        <div className="container mx-auto ">
           <Link
             href="/posts/add"
-            className="  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+            className="mx-auto lg:max-w-screen-md  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
           >
             <Avatar className="border border-gray-100">
               <AvatarImage src={user?.avatar || ""} />
@@ -108,6 +108,12 @@ export async function Feed() {
               What&apos;s on your mind?
             </p>
           </Link>
+        </div>
+        <div className="container mx-auto  grid grid-cols-1   lg:grid-cols-3 gap-4">
+          <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
+            <h2 className="font-medium dark:text-black">Where are you now?</h2>
+            <StatusSelection initialValue={information?.occupationStatus} />
+          </div>
           <Link
             href="/announcements/add"
             className="  flex items-start gap-3 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
@@ -117,10 +123,6 @@ export async function Feed() {
               Post an announcement
             </p>
           </Link>
-          <div className="bg-white space-y-2 rounded-md  shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
-            <h2 className="font-medium dark:text-black">Where are you now?</h2>
-            <StatusSelection initialValue={information?.occupationStatus} />
-          </div>
           <div className="bg-white space-y-2 rounded-md shadow-md p-5 w-full min-w-[80d%] md:min-w-[40d%]">
             <h2 className="font-medium dark:text-black">
               How did BU Connect help you?
@@ -167,7 +169,7 @@ export async function Feed() {
 
       <section className="mx-auto container bg-[#195287] md:px-10 px-5 pt-10">
         {/* JOB AND HIGHLIGHTS */}
-        <div className="grid md:grid-cols-2 md:gap-10 gap-2">
+        <div className="grid md:grid-cols-2 md:gap-10 gap-5">
           <div
             id="jobs"
             className="p-5 md:p-10 space-y-3 bg-white  rounded-lg shadow-sm max-h-min"
@@ -305,31 +307,36 @@ export async function Feed() {
         </div>
 
         {/* POSTS */}
-        <div className="">
+        <div className="mt-8">
           <div className="flex items-center gap-2">
             <Icon icon="emojione-v1:note-pad" width="32" height="32" />
             <h1 className="font-roboto text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Recent Posts
             </h1>
           </div>
-          <div className="space-y-3 mt-5 ">
+          <div className="space-y-5 mt-5 ">
             {posts.data.length > 0 ? (
               posts.data.map((post) => (
-                <MiniPostCard
-                  key={post.id}
-                  likedByIds={post.likedBy.map((i) => i.id) || []}
-                  post={{
-                    images: post.images,
-                    id: post.id,
-                    avatar: post.postedBy.image || "",
-                    name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
-                    batch: post.postedBy.batch || 0,
-                    comments_count: post._count.comments,
-                    content: post.title,
-                    likes_count: post._count.comments,
-                    slug: post.slug,
-                  }}
-                />
+                <div
+                  className="mx-auto max-w-screen-md"
+                  key={`post-card-container-${post.id}`}
+                >
+                  <MiniPostCard
+                    key={post.id}
+                    likedByIds={post.likedBy.map((i) => i.id) || []}
+                    post={{
+                      images: post.images,
+                      id: post.id,
+                      avatar: post.postedBy.image || "",
+                      name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
+                      batch: post.postedBy.batch || 0,
+                      comments_count: post._count.comments,
+                      content: post.title,
+                      likes_count: post._count.comments,
+                      slug: post.slug,
+                    }}
+                  />
+                </div>
               ))
             ) : (
               <div className="flex flex-col min-h-[100px] items-center justify-center">
@@ -345,8 +352,8 @@ export async function Feed() {
           </div>
         </div>
 
-        <div id="announcements" className=" container mx-auto   py-10">
-          <div className="flex  items-center gap-3 justify-center">
+        <div id="announcements" className=" container mx-auto  mt-5">
+          <div className="flex  items-center gap-3 justify-center mb-5">
             <Icon
               icon="fluent-color:megaphone-loud-16"
               width="24"
@@ -358,7 +365,7 @@ export async function Feed() {
           </div>
 
           {/* ANNOUNCEMENTS */}
-          <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
+          <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 ">
             {announcemenets.data.length > 0 ? (
               announcemenets.data.map((announcement) => (
                 <MiniAnnouncementCard
@@ -389,7 +396,7 @@ export async function Feed() {
         className="bg-[#195287] md:px-10 px-5 pb-10"
       >
         {images.length > 0 && (
-          <div className=" container mx-auto   py-10">
+          <div className=" container mx-auto   py-5">
             <div className="flex  items-center gap-3 justify-center">
               <Icon
                 icon="fluent-emoji-flat:camera-with-flash"
@@ -401,7 +408,7 @@ export async function Feed() {
               </h1>
             </div>
 
-            <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
+            <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-5">
               {images.map((image, index) => (
                 <div
                   key={`Alumni Memory Card #${index + 1}`}
@@ -424,7 +431,7 @@ export async function Feed() {
           </div>
         )}
 
-        <h1 className="font-roboto   text-2xl text-[#E6750C] mb-10 md:text-3xl font-bold text-center ">
+        <h1 className="font-roboto   text-2xl text-[#E6750C] mb-5 md:text-3xl font-bold text-center ">
           Alumni Map
         </h1>
         <div className="p-5">

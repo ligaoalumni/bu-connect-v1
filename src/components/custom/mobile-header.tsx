@@ -74,10 +74,6 @@ export function MobileDrawer() {
             </SheetClose>
           ))}
         </div>
-
-        <div className="absolute bottom-0 w-full flex flex-col gap-3 items-center p-5">
-          <Socials />
-        </div>
       </SheetContent>
     </Sheet>
   );

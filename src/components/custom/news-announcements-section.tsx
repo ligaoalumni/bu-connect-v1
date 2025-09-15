@@ -27,7 +27,7 @@ export async function NewsAndAnnouncementsSection() {
         </div>
 
         <div className="px-5 grid grid-cols-1 md:grid-cols-3 gap-5 py-10">
-          {!(announcemenets.data.length > 0) ? (
+          {announcemenets.data.length > 0 ? (
             announcemenets.data.map((announcement) => (
               <MiniAnnouncementCard
                 announcement={announcement}
@@ -98,7 +98,7 @@ export function MiniAnnouncementCard({ announcement }: AnnouncementCardProps) {
   const { title, image } = announcement;
 
   return (
-    <Link href={`/announcements/${announcement.id}`}>
+    <Link href={`/announcements/${announcement.slug}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
         <div className="relative aspect-video w-full">
           <Image

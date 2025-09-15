@@ -39,10 +39,11 @@ export default async function Page() {
 
       <section>
         <h1 className="text-2xl font-medium">Recruitment</h1>
-        <div className="space-y-4 mt-5">
+        <div className="flex flex-col gap-y-5 mt-5">
           {recruitments.data.length > 0 ? (
             recruitments.data.map((recruitment) => (
               <Link
+                className="mb-3"
                 href={`/highlights/recruitments/${recruitment.id}`}
                 key={`link-to-recruitment-${recruitment.id}`}
               >
