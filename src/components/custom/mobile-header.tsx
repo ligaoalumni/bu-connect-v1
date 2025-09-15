@@ -9,7 +9,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  Socials,
 } from "@/components";
 import { Iconify } from "./iconify";
 import Image from "next/image";
