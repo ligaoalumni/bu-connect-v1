@@ -16,7 +16,7 @@ interface UserInfo {
   middleName?: string;
   batch: number;
   program: string;
-  birthDay: string;
+  birthDay: Date;
   id: number;
   phoneNumber?: string;
 }

@@ -35,6 +35,7 @@ import {
 } from "@/actions";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { DatePicker } from "./date-picker";
 
 const formSchema = z.object({
   studentID: z
@@ -64,8 +65,8 @@ interface OldAccountProps {
   initialValue?: OldAccount;
 }
 
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
+const currentYear = new Date().getFullYear() - 1;
+const years = Array.from({ length: 75 }, (_, i) => currentYear - i);
 
 export const OldAlumniForm = ({ initialValue }: OldAccountProps) => {
   const form = useForm<OldAccountFormData>({
@@ -244,7 +245,16 @@ export const OldAlumniForm = ({ initialValue }: OldAccountProps) => {
                   <FormLabel>Birth Date *</FormLabel>
                   <FormControl>
                     {/*<DatePicker value={field.value} onChange={field.onChange} />*/}
-                    <Input type="date" {...field} />
+                    {/*<Input type="date" {...field} />*/}
+                    <DatePicker
+                      label="Birth Date *"
+                      className="h-12"
+                      onChange={(v) => {
+                        if (!v) return;
+                        field.onChange(v.toISOString());
+                      }}
+                      value={field.value ? new Date(field.value) : undefined}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

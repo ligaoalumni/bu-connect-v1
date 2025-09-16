@@ -3,6 +3,7 @@
 import { prisma } from "@/lib";
 import { OldAlumniDataInput, PaginationArgs, PaginationResult } from "@/types";
 import { OldAccount, Prisma } from "@prisma/client";
+import { add, sub } from "date-fns";
 
 export const createOldAccount = async ({
   batch,
@@ -125,7 +126,7 @@ export const readOldAccountByCurrentAccount = async ({
   firstName,
   program,
 }: {
-  birthDate: string;
+  birthDate: Date;
   batch: number;
   program: string;
   firstName: string;
@@ -134,7 +135,20 @@ export const readOldAccountByCurrentAccount = async ({
     where: {
       AND: [
         { firstName: { contains: firstName, mode: "insensitive" } },
-        { birthDate },
+        {
+          AND: [
+            {
+              birthDate: {
+                gte: sub(new Date(birthDate), { days: 1 }),
+              },
+            },
+            {
+              birthDate: {
+                lte: add(new Date(birthDate), { days: 1 }),
+              },
+            },
+          ],
+        },
         { batch },
         { program: { contains: program, mode: "insensitive" } },
       ],

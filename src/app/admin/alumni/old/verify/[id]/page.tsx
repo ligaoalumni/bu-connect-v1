@@ -22,7 +22,7 @@ export default async function VerifyAccountPage({
       <UserInfoDisplay
         userInfo={{
           batch: alumni.batch || 0,
-          birthDay: new Date(alumni.birthDate).toISOString(),
+          birthDay: alumni.birthDate,
           firstName: alumni.firstName,
           id: alumni.id,
           lastName: alumni.lastName,
