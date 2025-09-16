@@ -165,8 +165,8 @@ export default function OldAlumniDataTable() {
     handleFetchData({ batch: filterBatch });
   }, [handleFetchData, filterBatch]);
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i).map((s) =>
+  const currentYear = new Date().getFullYear() - 1;
+  const years = Array.from({ length: 75 }, (_, i) => currentYear - i).map((s) =>
     s.toString(),
   );
 

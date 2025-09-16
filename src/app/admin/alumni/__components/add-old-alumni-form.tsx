@@ -38,6 +38,7 @@ import { Tabs } from "@radix-ui/react-tabs";
 import CSVUploader from "../../_components/csv-uploader";
 import { createOldAccountAction, revalidatePathAction } from "@/actions";
 import { toast } from "sonner";
+import { sub } from "date-fns";
 
 const formSchema = z.object({
   studentID: z
@@ -67,8 +68,8 @@ interface OldAccountModalProps {
   initialValue?: OldAccount;
 }
 
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
+const currentYear = sub(new Date(), { years: 1 }).getFullYear() - 1;
+const years = Array.from({ length: 75 }, (_, i) => currentYear - i);
 
 export function OldAccountModal({ initialValue }: OldAccountModalProps) {
   const [isOpen, setIsOpen] = useState(false);

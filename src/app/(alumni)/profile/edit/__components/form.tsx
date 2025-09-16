@@ -36,7 +36,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const currentYear = new Date().getFullYear() - 1; // Get the current year
-const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
+const years = Array.from({ length: 75 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 interface EditProfileFormProps {
   user: Omit<User, "address" | "rate"> & {

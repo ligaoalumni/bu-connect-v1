@@ -40,7 +40,7 @@ import { programs } from "@/constant";
 
 // Define the form's type
 const currentYear = new Date().getFullYear() - 1; // Get the current year
-const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
+const years = Array.from({ length: 75 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 interface AlumniRecordFormProps {
   alumni?: Omit<User, "rate"> & { rate?: number };

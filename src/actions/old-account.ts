@@ -59,7 +59,7 @@ export const updateOldAccountAction = async (
 };
 
 export const readOldAccountByCurrentAccountAction = async (args: {
-  birthDate: string;
+  birthDate: Date;
   batch: number;
   program: string;
   firstName: string;
