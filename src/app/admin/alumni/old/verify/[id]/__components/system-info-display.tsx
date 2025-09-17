@@ -71,7 +71,7 @@ export default function SystemInfoDisplay({
   };
 
   return account ? (
-    <Card className="shadow-sm pt-12 max-h-fit space-y-6  z-20 bg-white! md:block sticky top-10 ">
+    <Card className="shadow-sm pt-12 max-h-fit space-y-6  z-20 bg-white! md:block sticky top-12 ">
       <CardContent className="space-y-4  bg-white!">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-3">

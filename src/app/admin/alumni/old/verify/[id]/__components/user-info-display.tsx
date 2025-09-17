@@ -135,10 +135,12 @@ export function UserInfoDisplay({ userInfo }: UserInfoDisplayProps) {
         </CardContent>
       </Card>
 
-      <ScrollArea className="relative md:h-[75dvh]  p-3 z-10  rounded-md border">
-        <div className="sticky top-0 bg-white">
-          <h1 className="text-xl ">Old Alumni Records</h1>
-          <hr className="my-3" />
+      <ScrollArea className="relative  md:h-[75dvh]  p-3 z-10  rounded-md border">
+        <div className="pb-[300px] relative bg-white">
+          <div className="sticky top-0 bg-white z-50">
+            <h1 className="text-xl ">Old Alumni Records</h1>
+            <hr className="my-3" />
+          </div>
           {isLoading ? (
             <div className="flex flex-col md:h-[72dvh] items-center justify-center ">
               <Loader2 className="animate-spin h-20 w-20" />
