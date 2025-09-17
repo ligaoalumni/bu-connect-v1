@@ -45,5 +45,5 @@ next-env.d.ts
 
 # csvs
 csvs/**
-!csvs/old-data.csv
+!csvs/old-alumni-data.csv
 !csvs/alumni-data.csv
