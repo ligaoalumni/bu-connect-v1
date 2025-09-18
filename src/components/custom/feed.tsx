@@ -203,7 +203,7 @@ export async function Feed() {
                       </div>
                     </div>
                     <Button asChild>
-                      <Link href={`/jobs/${job.id}`}>Apply Now</Link>
+                      <Link href={`/jobs/${job.id}`}>View Details</Link>
                     </Button>
                   </div>
                 ))
