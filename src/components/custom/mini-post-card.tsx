@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from "@/contexts";
+import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,6 +25,7 @@ interface MiniPostCardProps {
     comments_count: number;
     images: string[];
     slug: string;
+    createdAt: string;
   };
 }
 
@@ -112,6 +114,11 @@ export function MiniPostCard({ post, likedByIds }: MiniPostCardProps) {
 
           {hasImages && <PostImages disableModal images={post.images} />}
         </Link>
+        <span className="text-xs text-black/60">
+          {formatDistanceToNow(post.createdAt, {
+            addSuffix: true,
+          })}
+        </span>
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"

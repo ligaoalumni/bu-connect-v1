@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 md:px-10 px-5">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Create Post</CardTitle>
