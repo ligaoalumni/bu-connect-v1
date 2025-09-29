@@ -142,7 +142,7 @@ export async function Feed() {
       <section id="events" className="md:px-10 px-5 py-8">
         <div className="flex items-center gap-2">
           <Icon icon="noto:confetti-ball" width="32" height="32" />
-          <h1 className="font-roboto   text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+          <h1 className="font-poppins   text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
             Upcoming Events
           </h1>
         </div>
@@ -174,7 +174,7 @@ export async function Feed() {
             id="jobs"
             className="p-5 md:p-10 space-y-3 bg-white  rounded-lg shadow-sm max-h-min"
           >
-            <h1 className="font-roboto text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+            <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Job Opportunities
             </h1>
             <div>
@@ -225,7 +225,7 @@ export async function Feed() {
             id="highlights"
             className="p-5 md:p-10 space-y-3 bg-white rounded-lg shadow-sm"
           >
-            <h1 className="font-roboto text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+            <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Highlights
             </h1>
             <div>
@@ -310,7 +310,7 @@ export async function Feed() {
         <div className="mt-8">
           <div className="flex items-center gap-2">
             <Icon icon="emojione-v1:note-pad" width="32" height="32" />
-            <h1 className="font-roboto text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+            <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
               Recent Posts
             </h1>
           </div>
@@ -359,7 +359,7 @@ export async function Feed() {
               width="24"
               height="24"
             />
-            <h1 className="font-roboto text-[#E6750C] text-2xl font-bold  ">
+            <h1 className="font-poppins text-[#E6750C] text-2xl font-bold  ">
               News &#x26; Announcements
             </h1>
           </div>
@@ -403,7 +403,7 @@ export async function Feed() {
                 width="24"
                 height="24"
               />
-              <h1 className="text-[#E6750C] text-2xl font-bold uppercase">
+              <h1 className="text-[#E6750C] font-poppins text-2xl font-bold uppercase">
                 Alumni Memories
               </h1>
             </div>
@@ -431,7 +431,7 @@ export async function Feed() {
           </div>
         )}
 
-        <h1 className="font-roboto   text-2xl text-[#E6750C] mb-5 md:text-3xl font-bold text-center ">
+        <h1 className="font-poppins   text-2xl text-[#E6750C] mb-5 md:text-3xl font-bold text-center ">
           Alumni Map
         </h1>
         <div className="p-5">
