@@ -96,10 +96,10 @@ const AboutCard = ({
         className="mx-auto mb-5"
         style={{ color: "#E8770B" }}
       />
-      <h2 className="font-roboto text-xl font-semibold text-center dark:text-white">
+      <h2 className="font-poppins text-xl font-semibold text-center dark:text-white">
         {title}
       </h2>
-      <p className="font-roboto text-gray-600 dark:text-white/90 mt-2 text-center">
+      <p className="font-poppins text-gray-600 dark:text-white/90 mt-2 text-center">
         {description}
       </p>
     </Link>

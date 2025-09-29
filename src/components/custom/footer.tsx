@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
 import { Iconify } from "./iconify";
+import { useAuth } from "@/contexts";
 
 export const Footer = () => {
+  const { user } = useAuth();
+
   return (
     <footer className="mx-auto container    ">
       <div className="flex flex-col md:flex-row   justify-center items-center h-full min-h-[700px] md:min-h-[324px]  relative  ">
@@ -11,50 +15,52 @@ export const Footer = () => {
             <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
               About BUConnect
             </h1>
-            <p className="font-roboto  text-lg text-white md:max-w-[500px]">
+            <p className="font-poppins  text-lg text-white md:max-w-[500px]">
               BUConnect aims to build a stronger, more cohesive community by
               providing easy access to university news, updates, and resources,
               while creating opportunities for collaboration and networking
               across various departments and alumni networks.
             </p>
           </div>
-          <div className="space-y-2">
-            <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
-              Quick Links
-            </h1>
-            <div className=" flex flex-col gap-0.5 justify-start ">
-              <Link
-                className="font-roboto text-white hover:underline"
-                href="/#about"
-              >
-                About
-              </Link>
-              <Link
-                className="font-roboto text-white hover:underline"
-                href="/#announcements"
-              >
-                Announcements
-              </Link>
-              <Link
-                className="font-roboto text-white hover:underline"
-                href="/#alumni-memories"
-              >
-                Alumni Memories
-              </Link>
-              <Link
-                className="font-roboto text-white hover:underline"
-                href="/#events"
-              >
-                Events
-              </Link>
-              <Link
-                className="font-roboto text-white hover:underline"
-                href="/#jobs"
-              >
-                Jobs
-              </Link>
+          {!user && (
+            <div className="space-y-2">
+              <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
+                Quick Links
+              </h1>
+              <div className=" flex flex-col gap-0.5 justify-start ">
+                <Link
+                  className="font-poppins text-white hover:underline"
+                  href="/#about"
+                >
+                  About
+                </Link>
+                <Link
+                  className="font-poppins text-white hover:underline"
+                  href="/#announcements"
+                >
+                  Announcements
+                </Link>
+                <Link
+                  className="font-poppins text-white hover:underline"
+                  href="/#alumni-memories"
+                >
+                  Alumni Memories
+                </Link>
+                <Link
+                  className="font-poppins text-white hover:underline"
+                  href="/#events"
+                >
+                  Events
+                </Link>
+                <Link
+                  className="font-poppins text-white hover:underline"
+                  href="/#jobs"
+                >
+                  Jobs
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
           <div className="">
             <h1 className="font-poppins font-bold text-2xl md:text-3xl text-[#F9AA5F]">
               Get in touch
@@ -67,7 +73,7 @@ export const Footer = () => {
                   width={24}
                   icon="tabler:mail-filled"
                 />
-                <p className="text-white font-roboto">alumni@gmail.com</p>
+                <p className="text-white font-poppins">alumni@gmail.com</p>
               </div>
               <div className="flex gap-2">
                 <Iconify
@@ -76,7 +82,7 @@ export const Footer = () => {
                   className="text-white"
                   icon="mingcute:phone-fill"
                 />
-                <p className="text-white font-roboto">+1 (555) 000-0000</p>
+                <p className="text-white font-poppins">+1 (555) 000-0000</p>
               </div>
               <div className="flex gap-2">
                 <Iconify
@@ -85,12 +91,12 @@ export const Footer = () => {
                   className="text-white"
                   icon="fluent:location-12-filled"
                 />
-                <p className="font-roboto text-white">Polangui, Albay</p>
+                <p className="font-poppins text-white">Polangui, Albay</p>
               </div>
             </div>
           </div>
         </div>
-        <p className="z-30  bottom-5 text-white absolute font-roboto">
+        <p className="z-30  bottom-5 text-white absolute font-poppins">
           &copy; {new Date().getFullYear()} BUConnect Polangui Alumni.
         </p>
       </div>
