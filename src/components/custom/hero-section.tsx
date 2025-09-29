@@ -4,10 +4,8 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { useAuth } from "@/contexts";
 
 export function HeroSection() {
-  const { user } = useAuth();
   return (
     <section className="">
       <div className="container   px-5 md:px-10 mx-auto min-h-[500px] h-full md:min-h-[764px]  lg:min-h-[964px] relative">
@@ -44,26 +42,24 @@ export function HeroSection() {
         />
         <div className="absolute  z-20 h-full w-full  flex flex-col justify-center left-0 bg-[#15497AC4]">
           <div className="px-5 md:px-10 space-y-5">
-            <h1 className="font-roboto font-bold   max text-white text-2xl md:text-6xl text-left max-w-[90dvw] md:max-w-[40dvw]  ">
+            <h1 className="font-poppins font-bold   max text-white text-2xl md:text-6xl text-left max-w-[90dvw] md:max-w-[40dvw]  ">
               Strengthening Alumni Ties Through Seamless Digital Engagement
             </h1>
-            <p className="font-roboto text-white text-lg md:text-xl max-w-[80dvw] md:max-w-[30dvw]  ">
+            <p className="font-poppins text-white text-lg md:text-xl max-w-[80dvw] md:max-w-[30dvw]  ">
               Connect with fellow BU Polangui alumni, share memories, and be
               updated on news and events
             </p>
-            {user === null && (
-              <div className="flex items-center gap-4">
-                <Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
-                  <Link href="/signup">Register</Link>
-                </Button>
-                <Button
-                  asChild
-                  className="text-[#E6750C]  hover:bg-white/80 bg-white"
-                >
-                  <Link href="/login">Log in</Link>
-                </Button>
-              </div>
-            )}
+            <div className="flex items-center gap-4">
+              <Button asChild className="bg-[#E6750C] hover:bg-[#E6750C90]">
+                <Link href="/signup">Register</Link>
+              </Button>
+              <Button
+                asChild
+                className="text-[#E6750C]  hover:bg-white/80 bg-white"
+              >
+                <Link href="/login">Log in</Link>
+              </Button>
+            </div>
             {/*<div className="flex items-center gap-2">
 						<Button
 							className="rounded-full bg-white hover:bg-white/80 "
