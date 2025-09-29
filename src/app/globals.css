@@ -2,75 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    font-family: var(--font-poppins), sans-serif;
+}
+
 @layer base {
-	:root {
-		--background: 213 100% 100%;
-		--foreground: 213 5% 10%;
-		--card: 213 50% 100%;
-		--card-foreground: 213 5% 15%;
-		--popover: 213 100% 100%;
-		--popover-foreground: 213 100% 10%;
-		--primary: 213 54.6% 40.6%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 213 30% 90%;
-		--secondary-foreground: 0 0% 0%;
-		--muted: 175 30% 95%;
-		--muted-foreground: 213 5% 40%;
-		--accent: 175 30% 90%;
-		--accent-foreground: 213 5% 15%;
-		--destructive: 0 100% 50%;
-		--destructive-foreground: 213 5% 100%;
-		--border: 213 30% 82%;
-		--input: 213 30% 50%;
-		--ring: 213 54.6% 40.6%;
-		--radius: 0.5rem;
+    :root {
+        --background: 213 100% 100%;
+        --foreground: 213 5% 10%;
+        --card: 213 50% 100%;
+        --card-foreground: 213 5% 15%;
+        --popover: 213 100% 100%;
+        --popover-foreground: 213 100% 10%;
+        --primary: 213 54.6% 40.6%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 213 30% 90%;
+        --secondary-foreground: 0 0% 0%;
+        --muted: 175 30% 95%;
+        --muted-foreground: 213 5% 40%;
+        --accent: 175 30% 90%;
+        --accent-foreground: 213 5% 15%;
+        --destructive: 0 100% 50%;
+        --destructive-foreground: 213 5% 100%;
+        --border: 213 30% 82%;
+        --input: 213 30% 50%;
+        --ring: 213 54.6% 40.6%;
+        --radius: 0.5rem;
 
-		--sidebar-background: hsl(213, 100%, 100%);
-		--sidebar-foreground: hsl(213, 5%, 10%);
-		--sidebar-border: hsl(213, 30%, 82%);
-		--sidebar-hover-background: hsl(213, 30%, 90%);
-		--sidebar-hover-foreground: hsl(0, 0%, 0%);
-		--sidebar-active-background: hsl(213, 54.6%, 40.6%);
-		--sidebar-active-foreground: hsl(0, 0%, 100%);
-		--sidebar-muted: hsl(175, 30%, 95%);
-		--sidebar-muted-foreground: hsl(213, 5%, 40%);
-		--sidebar-radius: 0.5rem;
-	}
-	.dark {
-		--background: 213 50% 10%;
-		--foreground: 213 5% 100%;
-		--card: 213 50% 10%;
-		--card-foreground: 213 5% 100%;
-		--popover: 213 50% 5%;
-		--popover-foreground: 213 5% 100%;
-		--primary: 213 54.6% 40.6%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 213 30% 20%;
-		--secondary-foreground: 0 0% 100%;
-		--muted: 175 30% 25%;
-		--muted-foreground: 213 5% 65%;
-		--accent: 175 30% 25%;
-		--accent-foreground: 213 5% 95%;
-		--destructive: 0 100% 50%;
-		--destructive-foreground: 213 5% 100%;
-		--border: 213 30% 50%;
-		--input: 213 30% 50%;
-		--ring: 213 54.6% 40.6%;
-		--radius: 0.5rem;
+        --sidebar-background: hsl(213, 100%, 100%);
+        --sidebar-foreground: hsl(213, 5%, 10%);
+        --sidebar-border: hsl(213, 30%, 82%);
+        --sidebar-hover-background: hsl(213, 30%, 90%);
+        --sidebar-hover-foreground: hsl(0, 0%, 0%);
+        --sidebar-active-background: hsl(213, 54.6%, 40.6%);
+        --sidebar-active-foreground: hsl(0, 0%, 100%);
+        --sidebar-muted: hsl(175, 30%, 95%);
+        --sidebar-muted-foreground: hsl(213, 5%, 40%);
+        --sidebar-radius: 0.5rem;
+    }
+    .dark {
+        --background: 213 50% 10%;
+        --foreground: 213 5% 100%;
+        --card: 213 50% 10%;
+        --card-foreground: 213 5% 100%;
+        --popover: 213 50% 5%;
+        --popover-foreground: 213 5% 100%;
+        --primary: 213 54.6% 40.6%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 213 30% 20%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 175 30% 25%;
+        --muted-foreground: 213 5% 65%;
+        --accent: 175 30% 25%;
+        --accent-foreground: 213 5% 95%;
+        --destructive: 0 100% 50%;
+        --destructive-foreground: 213 5% 100%;
+        --border: 213 30% 50%;
+        --input: 213 30% 50%;
+        --ring: 213 54.6% 40.6%;
+        --radius: 0.5rem;
 
-		--sidebar-background: hsl(213, 50%, 10%);
-		--sidebar-foreground: hsl(213, 5%, 100%);
-		--sidebar-border: hsl(213, 30%, 50%);
-		--sidebar-hover-background: hsl(213, 30%, 20%);
-		--sidebar-hover-foreground: hsl(0, 0%, 100%);
-		--sidebar-active-background: hsl(213, 54.6%, 40.6%);
-		--sidebar-active-foreground: hsl(0, 0%, 100%);
-		--sidebar-muted: hsl(175, 30%, 25%);
-		--sidebar-muted-foreground: hsl(213, 5%, 65%);
-		--sidebar-radius: 0.5rem;
-	}
+        --sidebar-background: hsl(213, 50%, 10%);
+        --sidebar-foreground: hsl(213, 5%, 100%);
+        --sidebar-border: hsl(213, 30%, 50%);
+        --sidebar-hover-background: hsl(213, 30%, 20%);
+        --sidebar-hover-foreground: hsl(0, 0%, 100%);
+        --sidebar-active-background: hsl(213, 54.6%, 40.6%);
+        --sidebar-active-foreground: hsl(0, 0%, 100%);
+        --sidebar-muted: hsl(175, 30%, 25%);
+        --sidebar-muted-foreground: hsl(213, 5%, 65%);
+        --sidebar-radius: 0.5rem;
+    }
 
-	/* :root {
+    /* :root {
 		--background: 225 100% 100%;
 		--foreground: 225 5% 10%;
 		--card: 225 50% 100%;
@@ -114,25 +118,27 @@
 		--ring: 225 84.2% 44.7%;
 		--radius: 0.5rem;
 	} */
-	.theme {
-		--animate-marquee: marquee var(--duration) infinite linear;
-		--animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
-	}
-	* {
-		@apply border-border outline-ring/50;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
+    .theme {
+        --animate-marquee: marquee var(--duration) infinite linear;
+        --animate-marquee-vertical: marquee-vertical var(--duration) linear
+            infinite;
+    }
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 :root::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
 
 :root {
-	scrollbar-width: none;
-	-ms-overflow-style: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    font-family: var(--font-poppins), sans-serif;
 }
 
 /* Heading styles */
@@ -142,193 +148,193 @@
 .tiptap h4,
 .tiptap h5,
 .tiptap h6 {
-	line-height: 1.1;
-	margin-top: 0.5rem;
-	text-wrap: pretty;
+    line-height: 1.1;
+    margin-top: 0.5rem;
+    text-wrap: pretty;
 }
 
 .tiptap code {
-	background-color: var(--purple-light);
-	border-radius: 0.4rem;
-	color: var(--black);
-	font-size: 0.85rem;
-	padding: 0.25em 0.3em;
+    background-color: var(--purple-light);
+    border-radius: 0.4rem;
+    color: var(--black);
+    font-size: 0.85rem;
+    padding: 0.25em 0.3em;
 }
 
 /* Link styles */
 
 .tiptap a {
-	color: purple;
-	cursor: pointer;
+    color: purple;
+    cursor: pointer;
 }
 .tiptap a:hover {
-	color: rgba(128, 0, 128, 0.732);
+    color: rgba(128, 0, 128, 0.732);
 }
 
 .tiptap h1,
 .tiptap h2 {
-	margin-top: 1.5rem;
-	margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .tiptap h1 {
-	font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 
 .tiptap h2 {
-	font-size: 1.6rem;
+    font-size: 1.6rem;
 }
 
 .tiptap h3 {
-	font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 /* Code and preformatted text styles */
 .tiptap code {
-	background-color: #d6a2e8; /* Example for var(--purple-light) */
-	border-radius: 0.4rem;
-	color: #000000; /* Example for var(--black) */
-	font-size: 0.85rem;
-	padding: 0.25em 0.3em;
+    background-color: #d6a2e8; /* Example for var(--purple-light) */
+    border-radius: 0.4rem;
+    color: #000000; /* Example for var(--black) */
+    font-size: 0.85rem;
+    padding: 0.25em 0.3em;
 }
 
 .tiptap pre {
-	background: #000000; /* Example for var(--black) */
-	border-radius: 0.5rem;
-	color: #ffffff; /* Example for var(--white) */
-	font-family: "JetBrainsMono", monospace;
-	margin: 1.5rem 0;
-	padding: 0.75rem 1rem;
+    background: #000000; /* Example for var(--black) */
+    border-radius: 0.5rem;
+    color: #ffffff; /* Example for var(--white) */
+    font-family: "JetBrainsMono", monospace;
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
 }
 
 .tiptap div,
 .tiptap div:active,
 .tiptap div:focus {
-	background: #000000; /* Example for var(--black) */
-	border-radius: 0.5rem;
-	border: transparent;
-	color: #ffffff; /* Example for var(--white) */
-	font-family: "JetBrainsMono", monospace;
-	margin: 1.5rem 0;
-	padding: 0.75rem 1rem;
+    background: #000000; /* Example for var(--black) */
+    border-radius: 0.5rem;
+    border: transparent;
+    color: #ffffff; /* Example for var(--white) */
+    font-family: "JetBrainsMono", monospace;
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
 }
 
 .tiptap ul {
-	list-style-type: disc;
-	margin-top: 0px;
-	padding-left: 2rem;
-	/* margin-left: 30px; */
+    list-style-type: disc;
+    margin-top: 0px;
+    padding-left: 2rem;
+    /* margin-left: 30px; */
 }
 
 .tiptap ol {
-	list-style-type: decimal;
-	margin-top: 0px;
-	padding-left: 2rem;
+    list-style-type: decimal;
+    margin-top: 0px;
+    padding-left: 2rem;
 }
 
 .tiptap pre code {
-	background: none;
-	color: inherit;
-	font-size: 0.8rem;
-	padding: 0;
+    background: none;
+    color: inherit;
+    font-size: 0.8rem;
+    padding: 0;
 }
 
 .tiptap blockquote {
-	border-left: 3px solid #b0b0b0; /* Example for var(--gray-3) */
-	margin: 1.5rem 0;
-	padding-left: 1rem;
+    border-left: 3px solid #b0b0b0; /* Example for var(--gray-3) */
+    margin: 1.5rem 0;
+    padding-left: 1rem;
 }
 
 .tiptap hr {
-	border: none;
-	border-top: 1px solid #d0d0d0; /* Example for var(--gray-2) */
-	margin: 2rem 0;
+    border: none;
+    border-top: 1px solid #d0d0d0; /* Example for var(--gray-2) */
+    margin: 2rem 0;
 }
 
 /* Hide the arrows in Chrome, Safari, Edge, and Opera */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Hide the arrows in Firefox */
 input[type="number"] {
-	-moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .hero-section {
-	background-image: url("/public/images/hero-img.png");
-	background-size: cover;
-	background-position: center;
-	width: 100%;
-	height: 100vh;
+    background-image: url("/public/images/hero-img.png");
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
 .scrollbar-hide {
-	-ms-overflow-style: none; /* IE/Edge */
-	scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 @layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 @theme inline {
-	@keyframes marquee {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(calc(-100% - var(--gap)));
-		}
-	}
-	@keyframes marquee-vertical {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(calc(-100% - var(--gap)));
-		}
-	}
-	@keyframes marquee {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(calc(-100% - var(--gap)));
-		}
-	}
-	@keyframes marquee-vertical {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(calc(-100% - var(--gap)));
-		}
-	}
-	@keyframes marquee {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(calc(-100% - var(--gap)));
-		}
-	}
-	@keyframes marquee-vertical {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(calc(-100% - var(--gap)));
-		}
-	}
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+    @keyframes marquee-vertical {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(calc(-100% - var(--gap)));
+        }
+    }
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+    @keyframes marquee-vertical {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(calc(-100% - var(--gap)));
+        }
+    }
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+    @keyframes marquee-vertical {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(calc(-100% - var(--gap)));
+        }
+    }
 }
