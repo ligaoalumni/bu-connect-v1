@@ -50,7 +50,7 @@ export default function PostStudySlide({
 
       try {
         const response = await fetch(
-          `http://universities.hipolabs.com/search?name=${debouncedQuery}`,
+          `/api/universities?name=${debouncedQuery}`,
         );
 
         if (!response.ok) {
