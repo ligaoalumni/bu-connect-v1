@@ -56,7 +56,10 @@ export default async function Page({
                 <div>
                   <Avatar className="h-24 w-24">
                     {user.avatar ? (
-                      <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                      <AvatarImage
+                        className="object-cover"
+                        src={user.avatar || "/placeholder.svg"}
+                      />
                     ) : (
                       <AvatarFallback className="text-2xl">
                         {user.firstName.charAt(0)}

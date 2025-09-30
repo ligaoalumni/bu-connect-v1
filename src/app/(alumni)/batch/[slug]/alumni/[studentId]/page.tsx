@@ -33,7 +33,7 @@ export default async function Page({
         <div className="rounded-3xl shadow-md   space-y-5 pb-10 m-2   dark:bg-[#5473a8]">
           <div className="flex  items-center shadow-md  p-5 rounded-2xl bg-[#15497a]">
             <Avatar className="h-[120px] w-[120px]">
-              <AvatarImage src={user.avatar || ""} />
+              <AvatarImage src={user.avatar || ""} className="object-cover" />
               <AvatarFallback className="text-3xl text-black dark:text-white">
                 {user.firstName[0]}
                 {user.lastName[0]}
