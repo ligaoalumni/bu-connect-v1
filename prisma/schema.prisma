@@ -68,7 +68,7 @@ model User {
   jobTitle            String? @default("")
   industry            String? @default("")
   postStudyUniversity String? @default("")
-  years               Int?    @default(0) // Years take to get the job related to the program
+  years               Int? // Years take to get the job related to the program
 
   // User Settings
   shareLocation Boolean @default(false)
