@@ -33,7 +33,7 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
       {/* Header Section */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          Alumnni Profile
+          Alumni Profile
         </h1>
         <p className="text-muted-foreground">Academic Information Portal</p>
       </div>
