@@ -45,9 +45,9 @@ export default function PersonalSlide({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Middle Name *</Label>
+          <Label htmlFor="middleName">Middle Name *</Label>
           <Input
-            id="lastName"
+            id="middleName"
             value={formData.personalInfo.lastName}
             onChange={(e) =>
               handlePersonalFieldChange("middleName", e.target.value)

@@ -2,6 +2,8 @@ import type { FormData } from "../types/form-data";
 import { Gender, OccupationStatus } from "@prisma/client";
 import { formatDate } from "date-fns";
 import { getGenderLabel } from "@/lib";
+import { Alert, AlertDescription, AlertTitle } from "@/components";
+import { CheckCircle2Icon } from "lucide-react";
 
 interface ReviewSlideProps {
   formData: FormData;
@@ -14,8 +16,14 @@ export default function ReviewSlide({ formData }: ReviewSlideProps) {
         <h3 className="font-semibold mb-2">Update Summary:</h3>
         <div className="text-sm space-y-1">
           <p>
-            <strong>Name:</strong> {formData.personalInfo.firstName}{" "}
-            {formData.personalInfo.lastName}
+            <strong>First Name:</strong> {formData.personalInfo.firstName}
+          </p>
+          <p>
+            <strong>Middle Name:</strong>{" "}
+            {formData.personalInfo.middleName || "N/A"}
+          </p>
+          <p>
+            <strong>Last Name:</strong> {formData.personalInfo.lastName}
           </p>
           <p>
             <strong>Birth Date:</strong>{" "}
@@ -67,6 +75,14 @@ export default function ReviewSlide({ formData }: ReviewSlideProps) {
             </p>
           )}
         </div>
+        <Alert className="mt-2" variant="warning">
+          <CheckCircle2Icon />
+          <AlertTitle>Review Required</AlertTitle>
+          <AlertDescription>
+            Please review your information carefully to ensure accuracy before
+            submitting any updates to the system.
+          </AlertDescription>
+        </Alert>
       </div>
     </div>
   );

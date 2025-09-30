@@ -8,7 +8,7 @@ export interface FormData {
   company?: string;
   industryInfo?: string;
   postStudy?: string;
-  years?: number;
+  years?: string;
   locationInfo: {
     selectedLocation?: AddressData;
   };

@@ -5,7 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  AlertCircle,
+  Loader2,
+  Loader,
+} from "lucide-react";
 
 // Import slide __components
 import EmploymentSlide from "./__components/employment-slide";
@@ -34,6 +40,7 @@ export default function AlumniStatusUpdateForm() {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [loading, setIsLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const params = useSearchParams();
 
@@ -70,7 +77,7 @@ export default function AlumniStatusUpdateForm() {
           jobTitle: user.jobTitle || "",
           postStudy: user.postStudyUniversity || "",
           employmentStatus: status || "",
-          years: user.years || 0,
+          years: user.years?.toString() || "",
         }));
       }
 
@@ -92,6 +99,7 @@ export default function AlumniStatusUpdateForm() {
   const nextStep = async () => {
     if (currentStep === steps.length - 2) {
       try {
+        setSubmitting(true);
         await updateProfileStatusAction(formData.id, {
           currentOccupation: formData.employmentStatus as OccupationStatus,
           firstName: formData.personalInfo.firstName,
@@ -107,7 +115,7 @@ export default function AlumniStatusUpdateForm() {
           jobTitle: formData.jobTitle,
           middleName: formData.personalInfo.middleName,
           postStudyUniversity: formData.postStudy,
-          years: formData.years,
+          years: Number(formData.years),
         });
 
         toast.success("Your information has been successfully submitted!", {
@@ -130,6 +138,8 @@ export default function AlumniStatusUpdateForm() {
             richColors: true,
           },
         );
+      } finally {
+        setSubmitting(false);
       }
     } else {
       const errors = validateStep(steps[currentStep].id, formData);
@@ -204,7 +214,7 @@ export default function AlumniStatusUpdateForm() {
                 industryInfo: values.industry!,
                 company: values.company!,
                 jobTitle: values.jobTitle!,
-                years: values.years || 0,
+                years: values.years || "",
               }));
               setValidationErrors([]);
             }}
@@ -315,7 +325,11 @@ export default function AlumniStatusUpdateForm() {
               className={`flex justify-between mt-8 pt-6  ${currentStep < steps.length - 1 ? "border-t" : ""}`}
             >
               {currentStep > 0 && currentStep < steps.length - 1 && (
-                <Button variant="outline" onClick={prevStep}>
+                <Button
+                  variant="outline"
+                  disabled={submitting}
+                  onClick={prevStep}
+                >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Previous
                 </Button>
@@ -324,10 +338,18 @@ export default function AlumniStatusUpdateForm() {
                 <Button
                   className={currentStep === 0 ? "ml-auto" : ""}
                   onClick={nextStep}
-                  disabled={!canProceed}
+                  disabled={!canProceed || submitting}
                 >
-                  {currentStep === steps.length - 2 ? "Submit" : "Next"}
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  {submitting ? (
+                    <>
+                      <Loader className="animate-spin" /> <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      {currentStep === steps.length - 2 ? "Submit" : "Next"}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
                 </Button>
               )}
             </div>

@@ -11,7 +11,7 @@ interface IndustrySlideProps {
     industry?: string;
     company?: string;
     jobTitle?: string;
-    years?: number;
+    years?: string;
   };
   handleChange: (values: IndustrySlideProps["values"]) => void;
 }
@@ -104,8 +104,7 @@ export default function IndustrySlide({
             onChange={(v) => {
               handleChange({ ...values, years: Number(v.target.value) });
             }}
-            pattern="\d*"
-            type="number"
+            // pattern="\d*"
             inputMode="numeric"
             placeholder=""
           />

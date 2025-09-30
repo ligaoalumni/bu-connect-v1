@@ -7,8 +7,8 @@ import {
   Building,
   GraduationCap,
   CheckCircle,
+  FileText,
 } from "lucide-react";
-import { IconDetails } from "@tabler/icons-react";
 
 export const getSteps = (formData: FormData) => {
   const baseSteps = [
@@ -67,7 +67,7 @@ export const getSteps = (formData: FormData) => {
       title: "Review",
       subtitle:
         "Review and update existing data to keep it accurate and up to date.",
-      icon: <IconDetails className="w-8 h-8" />,
+      icon: <FileText className="w-8 h-8" />,
     },
     {
       id: "complete",
