@@ -25,6 +25,8 @@ export default async function Page({
       limit: ITEMS_PER_PAGE,
       page: offset,
     },
+    order: "asc",
+    orderBy: "firstName",
   });
 
   const totalPages = Math.ceil(users.count / ITEMS_PER_PAGE);

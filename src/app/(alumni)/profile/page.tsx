@@ -142,7 +142,10 @@ export default async function Page() {
               data={
                 user?.currentOccupation
                   ? user.currentOccupation.slice(0, 1).toUpperCase() +
-                    user.currentOccupation.slice(1).toLowerCase()
+                    user.currentOccupation
+                      .slice(1)
+                      .toLowerCase()
+                      .replace(/"_"/g, " ")
                   : ""
               }
             />
