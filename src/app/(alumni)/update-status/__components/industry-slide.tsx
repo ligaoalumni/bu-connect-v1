@@ -102,7 +102,7 @@ export default function IndustrySlide({
             id="years"
             value={values.years}
             onChange={(v) => {
-              handleChange({ ...values, years: Number(v.target.value) });
+              handleChange({ ...values, years: v.target.value });
             }}
             // pattern="\d*"
             inputMode="numeric"
