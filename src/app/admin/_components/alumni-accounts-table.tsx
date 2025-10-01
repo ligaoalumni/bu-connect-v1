@@ -10,12 +10,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, MoreHorizontal, ShieldEllipsis } from "lucide-react";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  ShieldEllipsis,
+  Trash,
+} from "lucide-react";
 import { toast } from "sonner";
 import AlumniDetailsSheet from "./alumni-details-sheet";
 import { readAlumniAccounts } from "@/actions/alumni-account";
 import { AlumniDataTableColumns } from "@/types";
 import { User } from "@prisma/client";
+import { DeleteModal } from "./delete-modal";
+import { deleteAlumniAction } from "@/actions";
 
 export default function AlumniAccountsDataTable() {
   const [data, setData] = useState<User[]>([]);
@@ -26,6 +33,8 @@ export default function AlumniAccountsDataTable() {
   });
   const [alumniAccount, setAlumniAccount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [toDelete, setToDelete] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const columns: ColumnDef<AlumniDataTableColumns>[] = [
     {
@@ -227,6 +236,19 @@ export default function AlumniAccountsDataTable() {
                 <ShieldEllipsis />
                 View Full Details
               </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                className="  cursor-pointer flex items-center "
+              >
+                <Button
+                  variant="ghost"
+                  className="w-full text-destructive flex items-center justify-start"
+                  onClick={() => setToDelete(row.original.id)}
+                >
+                  <Trash />
+                  Delete
+                </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -282,6 +304,44 @@ export default function AlumniAccountsDataTable() {
         <AlumniDetailsSheet
           id={alumniAccount}
           closeSheet={() => setAlumniAccount(null)}
+        />
+      )}
+      {toDelete && (
+        <DeleteModal
+          description={`Are you sure you want to delete this alumni account? This action cannot be undone.`}
+          id={toDelete}
+          onClose={() => setToDelete(null)}
+          onDelete={async () => {
+            try {
+              setDeleting(true);
+
+              await deleteAlumniAction(toDelete);
+
+              toast.success("Alumni account deleted successfully.", {
+                description: "The alumni account has been removed.",
+                richColors: true,
+                position: "top-center",
+                duration: 5000,
+              });
+              setData((pData) => pData.filter((d) => d.id !== toDelete));
+              setToDelete(null);
+            } catch (error) {
+              toast.error(
+                "Failed to delete alumni account. Please try again.",
+                {
+                  description: (error as Error).message,
+                  richColors: true,
+                  position: "top-center",
+                  duration: 5000,
+                },
+              );
+            } finally {
+              setDeleting(false);
+            }
+          }}
+          title="Delete Alumni"
+          deleteBTNTitle="Confirm Delete"
+          loading={deleting}
         />
       )}
     </>
