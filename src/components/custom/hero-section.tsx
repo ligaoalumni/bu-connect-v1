@@ -19,13 +19,12 @@ export function HeroSection() {
                 alt="BUP Logo"
               />
             </div>
-            <div>
-              <h1 className="text-2xl tracking-tighter  font-extrabold text-[#FF7903] font-poppins">
+            <div className="!-space-y-4">
+              <h1 className="!leading-none text-2xl font-bold font-poppins text-[#FFA629]">
                 BU Connect
-              </h1>
-              <p className="text-2xl tracking-tighter  font-extrabold text-[#FF7903] font-poppins">
+                <br />
                 Polangui
-              </p>
+              </h1>
             </div>
           </div>
           <Button asChild className="bg-[#E6750C] hover:bg-[#E6750CAA]">

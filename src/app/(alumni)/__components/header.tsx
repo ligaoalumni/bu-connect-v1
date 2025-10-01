@@ -35,13 +35,12 @@ export function Header() {
             width={70}
             alt="BUP Logo"
           />
-          <div>
-            <h1 className="text-lg font-bold font-poppins text-[#FFA629]">
+          <div className="!-space-y-4">
+            <h1 className="!leading-none text-2xl font-bold font-poppins text-[#FFA629]">
               BU Connect
-            </h1>
-            <p className="text-lg font-bold font-poppins text-[#FFA629]">
+              <br />
               Polangui
-            </p>
+            </h1>
           </div>
         </div>
 

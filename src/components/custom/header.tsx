@@ -54,13 +54,12 @@ export function Header({
               width={70}
               alt="BUP Logo"
             />
-            <div>
-              <h1 className="text-lg font-bold font-poppins text-[#FF7903]">
+            <div className="!-space-y-4">
+              <h1 className="!leading-none text-lg font-bold font-poppins text-[#FFA629]">
                 BU Connect
-              </h1>
-              <p className="text-lg font-bold font-poppins text-[#FF7903]">
+                <br />
                 Polangui
-              </p>
+              </h1>
             </div>
           </div>
           <div className="flex gap-2 items-center bg-[#15497A]">
