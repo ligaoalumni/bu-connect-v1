@@ -140,7 +140,7 @@ const data = {
         },
         {
           icon: Users2Icon,
-          title: "List of old alumni data",
+          title: "List of old data",
           url: "/admin/alumni/old",
         },
         {

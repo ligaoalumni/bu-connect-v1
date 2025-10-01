@@ -296,7 +296,7 @@ const LoginForm = () => {
                 <p className="text-white  text-nowrap">Sign in with</p>
                 <div className="w-full bg-[#FF950060] h-0.5" />
               </div>
-              <div className="max-w-11 rounded relative overflow-hidden mx-auto">
+              <div className="md:max-w-[70%] rounded relative overflow-hidden mx-auto">
                 <GoogleLogin
                   theme="outline"
                   locale="en-PH"
