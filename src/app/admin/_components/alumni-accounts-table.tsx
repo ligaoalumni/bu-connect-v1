@@ -295,7 +295,7 @@ export default function AlumniAccountsDataTable() {
         setPagination={setPagination}
         columns={columns}
         data={data}
-        filterName="email"
+        filterName="name"
         rowCount={total}
         loading={loading}
         handleSearch={handleFetchData}
