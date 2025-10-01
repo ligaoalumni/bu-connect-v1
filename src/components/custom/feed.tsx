@@ -52,6 +52,8 @@ export async function Feed() {
       page: 0,
       limit: 10,
     },
+    order: "desc",
+    orderBy: "createdAt",
   });
   const jobs = await readJobsAction({
     pagination: {
@@ -334,6 +336,7 @@ export async function Feed() {
                       content: post.title,
                       likes_count: post._count.comments,
                       slug: post.slug,
+                      createdAt: post.createdAt.toISOString(),
                     }}
                   />
                 </div>
