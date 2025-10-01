@@ -23,6 +23,7 @@ import {
 } from "@/actions/stats";
 import { EmploymentStatistics } from "./employment-stat";
 import { Suspense } from "react";
+import Link from "next/link";
 
 async function EmploymentTab() {
   try {
@@ -113,9 +114,11 @@ export default async function DiffViewTabs() {
             <TabsTrigger value="engagement">Engagement</TabsTrigger>
             <TabsTrigger value="employment">Employment</TabsTrigger>
           </TabsList>
-          <Button variant="outline" size="sm">
-            <Users className="mr-2 h-4 w-4" />
-            View All Alumni
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/alumni">
+              <Users className="mr-2 h-4 w-4" />
+              View All Alumni
+            </Link>
           </Button>
         </div>
         <TabsContent value="recent" className="space-y-4">
