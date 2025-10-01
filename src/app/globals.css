@@ -5,6 +5,12 @@
 :root {
     font-family: var(--font-poppins), sans-serif;
 }
+/*
+    orange: #ee7620
+    yellow: #faa231
+    light: #ebebeb
+blue: #0fa6dd
+*/
 
 @layer base {
     :root {

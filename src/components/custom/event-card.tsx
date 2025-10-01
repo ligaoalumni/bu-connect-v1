@@ -76,15 +76,18 @@ export default function EventCard(event: EventCardProps) {
         {status === "Ongoing Event" && (
           <Badge className="absolute left-3 top-3 z-10 ">On going</Badge>
         )}
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-96 w-full overflow-hidden">
           <Image
             fill
             src={event.coverImg || "/images/placeholder.jpg"}
             alt={event.name}
             className={`${
-              event.coverImg ? "object-contain" : "object-cover"
+              event.coverImg ? "object-cover" : "object-cover"
             } h-full w-full `}
           />
+          <h1 className="absolute left-3 right-3 bottom-5 text-2xl md:text-3xl font-bold md:font-extrabold text-white ">
+            {event.name}
+          </h1>
           {event.showStatus && (
             <Badge
               variant={eventStatusColorMap[status]}
