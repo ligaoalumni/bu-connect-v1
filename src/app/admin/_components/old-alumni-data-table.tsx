@@ -10,13 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, Info, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { OldAccount } from "@prisma/client";
 import { formatDate } from "date-fns";
-import { readOldAccountsAction } from "@/actions/old-account";
+import {
+  deleteOldAccountAction,
+  readOldAccountsAction,
+} from "@/actions/old-account";
 import Link from "next/link";
 import { OldAlumniViewModal } from "../alumni/__components/view-old-modal";
+import { DeleteModal } from "./delete-modal";
 
 export default function OldAlumniDataTable() {
   const [filterBatch, setFilterBatch] = useState<string | undefined>(undefined);
@@ -28,6 +32,8 @@ export default function OldAlumniDataTable() {
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size
   });
+  const [toDelete, setToDelete] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const columns: ColumnDef<OldAccount>[] = [
@@ -125,6 +131,19 @@ export default function OldAlumniDataTable() {
                   Edit
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                className="  cursor-pointer flex items-center "
+              >
+                <Button
+                  variant="ghost"
+                  className="w-full text-destructive flex items-center justify-start"
+                  onClick={() => setToDelete(row.original.id)}
+                >
+                  <Trash />
+                  Delete
+                </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -194,6 +213,44 @@ export default function OldAlumniDataTable() {
         onOpenChange={onOpenChange}
         student={oldAcc}
       />
+      {toDelete && (
+        <DeleteModal
+          description={`Are you sure you want to delete this old alumni data? This action cannot be undone.`}
+          id={toDelete}
+          onClose={() => setToDelete(null)}
+          onDelete={async () => {
+            try {
+              setDeleting(true);
+
+              await deleteOldAccountAction(toDelete);
+
+              toast.success("Old alumni data deleted successfully.", {
+                description: "The old alumni data has been removed.",
+                richColors: true,
+                position: "top-center",
+                duration: 5000,
+              });
+              setData((pData) => pData.filter((d) => d.id !== toDelete));
+              setToDelete(null);
+            } catch (error) {
+              toast.error(
+                "Failed to delete alumni account. Please try again.",
+                {
+                  description: (error as Error).message,
+                  richColors: true,
+                  position: "top-center",
+                  duration: 5000,
+                },
+              );
+            } finally {
+              setDeleting(false);
+            }
+          }}
+          title="Delete Old data"
+          deleteBTNTitle="Confirm Delete"
+          loading={deleting}
+        />
+      )}
     </>
   );
 }
