@@ -1,13 +1,16 @@
 "use server";
 
+import { decrypt } from "@/lib/session";
 import {
   createOldAccount,
+  deleteOldAccount,
   readOldAccount,
   readOldAccountByCurrentAccount,
   readOldAccounts,
   updateOldAccount,
 } from "@/repositories";
 import { OldAlumniDataInput, PaginationArgs } from "@/types";
+import { cookies } from "next/headers";
 
 export const createOldAccountAction = async (data: OldAlumniDataInput) => {
   try {
@@ -66,6 +69,20 @@ export const readOldAccountByCurrentAccountAction = async (args: {
 }) => {
   try {
     return await readOldAccountByCurrentAccount(args);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch data");
+  }
+};
+
+export const deleteOldAccountAction = async (id: number) => {
+  try {
+    const cookieStore = await cookies();
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session) throw new Error("Unauthorized");
+
+    return await deleteOldAccount(id);
   } catch (error) {
     console.log(error);
     throw new Error("Failed to fetch data");

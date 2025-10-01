@@ -2,12 +2,14 @@
 
 import { AlumniSchema, prisma, generateEmailHTML } from "@/lib";
 import { transporter } from "@/lib/email";
-import { readUser } from "@/repositories";
+import { decrypt } from "@/lib/session";
+import { deleteUser, readUser } from "@/repositories";
 import { AlumniFormData } from "@/types";
 import { User } from "@prisma/client";
 
 import { hash } from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const addAlumniData = async (
   data: Pick<
@@ -158,5 +160,21 @@ export const readAlumniAction = async (id: number) => {
   } catch (err) {
     console.error(err);
     throw new Error((err as Error).message);
+  }
+};
+
+export const deleteAlumniAction = async (id: number) => {
+  try {
+    const cookieStore = await cookies();
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session) throw new Error("Unauthorized");
+
+    await deleteUser(id);
+
+    revalidatePath("/admin/alumni");
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch data");
   }
 };
