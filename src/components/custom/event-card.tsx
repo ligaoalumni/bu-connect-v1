@@ -128,7 +128,7 @@ export default function EventCard(event: EventCardProps) {
                 <Button
                   disabled={loading}
                   onClick={!isInterested ? handleInterest : undefined}
-                  className="bg-emerald-600 hover:bg-emerald-500"
+                  className={` ${isInterested ? "bg-[#ffa629] hover:bg-[#ffa629]" : "bg-emerald-600 hover:bg-emerald-500"}`}
                 >
                   {isInterested ? "Interested" : "Join"}
                 </Button>
