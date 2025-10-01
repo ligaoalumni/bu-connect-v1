@@ -107,11 +107,31 @@ export const updateOldAccount = async (
 };
 
 export const deleteOldAccount = async (id: number) => {
-  const oldAccount = await prisma.oldAccount.delete({
-    where: { id },
-  });
+  return await prisma.$transaction(async (tx) => {
+    const oldAccount = await tx.oldAccount.findUnique({
+      where: { id },
+      include: {
+        User: true,
+      },
+    });
 
-  return oldAccount;
+    if (!oldAccount) throw new Error("Old account does not exist");
+
+    if (!!oldAccount.User) {
+      await tx.user.update({
+        where: { id: oldAccount.User.id },
+        data: {
+          oldAccount: {
+            disconnect: true,
+          },
+        },
+      });
+    }
+
+    return await tx.oldAccount.delete({
+      where: { id },
+    });
+  });
 };
 
 export const readOldAccount = async (studentId: string) => {

@@ -547,3 +547,31 @@ export const readUsersUpdatedInLastDays = async (days?: number) => {
     },
   });
 };
+
+export const deleteUser = async (id: number) => {
+  return await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id },
+      include: {
+        oldAccount: true,
+      },
+    });
+
+    if (!user) throw new Error("User does not exist");
+
+    if (!!user.oldAccount) {
+      await tx.oldAccount.update({
+        where: { id: user.oldAccount.id },
+        data: {
+          User: {
+            disconnect: true,
+          },
+        },
+      });
+    }
+
+    return await tx.user.delete({
+      where: { id },
+    });
+  });
+};
