@@ -166,9 +166,12 @@ export function MiniPostCard({
               </Avatar>
               <div className="flex-1">
                 <div className="space-y-0.5">
-                  <h3 className="font-bold leading-none text-[#EC9848] capitalize">
+                  <Link
+                    href={`/batch/${post.batch}/alumni/${postedById}`}
+                    className="font-bold leading-none text-[#EC9848] capitalize"
+                  >
                     {post.name}
-                  </h3>
+                  </Link>
                   {!!post.batch && (
                     <p className="text-sm leading-none text-[#EC9848]">
                       {post.batch}
