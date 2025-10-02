@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { readPostsAction } from "@/actions";
 import { Button } from "../../../../components/ui/button";
-import { Job } from "@prisma/client";
 import { TPost } from "@/types";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components";
@@ -21,7 +20,6 @@ export function PostsInfiniteScroll({
   moreData?: boolean;
 }) {
   const { posts, setPosts } = useContentData();
-  const [filter] = useState<Job["status"] | "all">("all");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(moreData);
   const [loading, setLoading] = useState(false);
@@ -35,7 +33,7 @@ export function PostsInfiniteScroll({
     rootMargin: "0px 0px 500px 0px",
   });
 
-  const loadMorePosts = async (resetData = false, currentFilter = filter) => {
+  const loadMorePosts = async (resetData = false) => {
     // Prevent multiple simultaneous requests
     if (loadingRef.current) return;
 
@@ -46,11 +44,12 @@ export function PostsInfiniteScroll({
       const currentPage = resetData ? 0 : page;
 
       const result = await readPostsAction({
-        filter: currentFilter,
         pagination: {
           page: currentPage,
           limit: 8,
         },
+        order: "desc",
+        orderBy: "createdAt",
       });
 
       if (resetData) {
@@ -86,9 +85,9 @@ export function PostsInfiniteScroll({
   // Handle filter changes
   useEffect(() => {
     if (isFilterChanging) {
-      loadMorePosts(true, filter);
+      loadMorePosts(true);
     }
-  }, [isFilterChanging, filter]);
+  }, [isFilterChanging]);
 
   useEffect(() => {
     setPosts(defaultData);
@@ -109,24 +108,23 @@ export function PostsInfiniteScroll({
 
   return (
     <div className={`${!isFilterChanging && "space-y-8"} px-5`}>
-      <Link
-        href="/posts/add"
-        className="mx-auto mt-8 lg:max-w-screen-md flex items-start gap-5 lg:col-span-1 bg-white rounded-md shadow-md p-5 w-full"
-      >
-        <Avatar className="border border-gray-100">
-          <AvatarImage src={user?.avatar || ""} />
-          <AvatarFallback className="capitalize">
-            {user?.firstName?.charAt(0)}
-            {user?.lastName?.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
-        <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
-          What&apos;s on your mind?
-        </p>
-      </Link>
-
-      <div className="md:max-w-screen-lg md:mx-auto overflow-y-auto max-h-[80vh] scrollbar-hide">
+      <div className="md:max-w-screen-lg md:mx-auto overflow-y-auto max-h-[88vh] scrollbar-hide">
         <div className="space-y-5">
+          <Link
+            href="/posts/add"
+            className="mx-auto mt-8 lg:max-w-screen-md flex items-start gap-5 lg:col-span-1 bg-white rounded-md shadow-md p-5 w-full"
+          >
+            <Avatar className="border border-gray-100">
+              <AvatarImage src={user?.avatar || ""} />
+              <AvatarFallback className="capitalize">
+                {user?.firstName?.charAt(0)}
+                {user?.lastName?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
+              What&apos;s on your mind?
+            </p>
+          </Link>
           {posts.map((post) => (
             <div className="mx-auto max-w-screen-md" key={post.id}>
               <MiniPostCard
@@ -150,7 +148,7 @@ export function PostsInfiniteScroll({
         </div>
 
         {loading && (
-          <div className="space-y-5 mt-5">
+          <div className="space-y-5 mt-5 lg:max-w-screen-md mx-auto">
             {Array.from({ length: 2 }).map((_, index) => (
               <LoadingSkeleton key={index} />
             ))}
