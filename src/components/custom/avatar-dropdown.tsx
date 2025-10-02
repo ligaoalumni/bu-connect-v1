@@ -61,7 +61,7 @@ export const AvatarDropdown = () => {
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link href={isAdmin ? "/my-posts" : "/profile"}>
+          <Link href={"/my-posts"}>
             <Files className="mr-2 h-4 w-4" />
             <span>My Posts</span>
           </Link>
