@@ -145,7 +145,7 @@ export default function AnnouncementForm({
               </p>
             </div>
           </div>
-          {!readOnly && <Actions />}
+          {/*{!readOnly && <Actions />}*/}
         </div>
         <FormField
           disabled={form.formState.isSubmitting}
