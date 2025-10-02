@@ -13,6 +13,7 @@ import {
 import { NotificationType, Prisma } from "@prisma/client";
 import uniqueSlug from "unique-slug";
 import { createNotifications } from "./notifications";
+import { revalidatePath } from "next/cache";
 
 export const createPost = async ({
   content,
@@ -335,4 +336,15 @@ export const likePost = async ({
   ]);
 
   return likedPost;
+};
+
+export const deletePost = async (postId: number, postedById: number) => {
+  const posts = await prisma.post.delete({
+    where: {
+      id: postId,
+      postedById: postedById,
+    },
+  });
+
+  return posts;
 };
