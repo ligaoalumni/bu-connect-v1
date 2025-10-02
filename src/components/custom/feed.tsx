@@ -50,7 +50,7 @@ export async function Feed() {
   const posts = await readPostsAction({
     pagination: {
       page: 0,
-      limit: 10,
+      limit: 5,
     },
     order: "desc",
     orderBy: "createdAt",
