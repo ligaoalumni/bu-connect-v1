@@ -3,6 +3,7 @@
 import { decrypt } from "@/lib/session";
 import {
   createPost,
+  deletePost,
   likePost,
   readPost,
   readPostComments,
@@ -167,6 +168,20 @@ export const readMyPostsAction = async (
     if (!session?.id) throw new Error("Unauthorized");
 
     return await readPosts({ ...data, postedBy: session.id });
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Failed to fetch posts");
+  }
+};
+
+export const deleteMyPostAction = async (postId: number) => {
+  try {
+    const cookieStore = await cookies();
+
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session?.id) throw new Error("Unauthorized");
+
+    return await deletePost(postId, session.id);
   } catch (error) {
     throw new Error((error as Error)?.message || "Failed to fetch posts");
   }
