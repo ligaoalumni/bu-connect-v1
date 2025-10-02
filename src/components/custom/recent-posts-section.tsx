@@ -4,6 +4,8 @@ import { TPost } from "@/types";
 import { Icon } from "@iconify/react";
 import { useEffect } from "react";
 import { MiniPostCard } from "./mini-post-card";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface RecentPostsSectionProps {
   defaultData?: TPost[];
@@ -19,11 +21,24 @@ export default function RecentPostsSection({
 
   return (
     <div className="mt-8">
-      <div className="flex items-center gap-2">
-        <Icon icon="emojione-v1:note-pad" width="32" height="32" />
-        <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
-          Recent Posts
-        </h1>
+      <div className="flex items-center  justify-between">
+        <div className="flex items-center gap-2">
+          <Icon icon="emojione-v1:note-pad" width="32" height="32" />
+          <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
+            Recent Posts
+          </h1>
+        </div>
+
+        <div>
+          <Button asChild variant="link">
+            <Link
+              href="/posts"
+              className="font-poppins text-sm md:text-md font-semibold  text-white  "
+            >
+              View All Posts
+            </Link>
+          </Button>
+        </div>
       </div>
       <div className="space-y-5 mt-5 ">
         {(posts || defaultData).length > 0 ? (
