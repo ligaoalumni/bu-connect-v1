@@ -12,6 +12,7 @@ import { PostCard } from "./post-card";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components";
 import { useAuth } from "@/contexts";
+import { MiniPostCard } from "@/components/custom/mini-post-card";
 
 export function PostsInfiniteScroll({
   defaultData,
@@ -97,23 +98,21 @@ export function PostsInfiniteScroll({
 
   return (
     <div className={`${!isFilterChanging && "space-y-8"}     px-5 `}>
-      <div className="mt-8  md:max-w-2xl md:mx-auto">
-        <Link
-          href="/posts/add"
-          className="mx-auto lg:max-w-screen-md  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
-        >
-          <Avatar className="border border-gray-100">
-            <AvatarImage src={user?.avatar || ""} />
-            <AvatarFallback className="capitalize">
-              {user?.firstName.charAt(0)}
-              {user?.lastName.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
-            What&apos;s on your mind?
-          </p>
-        </Link>
-      </div>
+      <Link
+        href="/posts/add"
+        className="mx-auto mt-8  lg:max-w-screen-md  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
+      >
+        <Avatar className="border border-gray-100">
+          <AvatarImage src={user?.avatar || ""} />
+          <AvatarFallback className="capitalize">
+            {user?.firstName.charAt(0)}
+            {user?.lastName.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+        <p className="text-gray-500 dark:text-black border w-full border-gray-900/30 rounded-xl p-4">
+          What&apos;s on your mind?
+        </p>
+      </Link>
       {/* <div className="flex flex-col gap-2 md:pt-4 ">
 				<div className="flex items-center justify-between">
 					<h2 className="text-3xl font-medium">Search</h2>
@@ -150,7 +149,27 @@ export function PostsInfiniteScroll({
       <div className="  md:max-w-screen-lg md:mx-auto overflow-y-auto max-h-[80vh] scrollbar-hide">
         <div className="space-y-5">
           {posts.map((post, index) => (
-            <PostCard post={post} key={index} />
+            <div
+              className="mx-auto max-w-screen-md"
+              key={`post-card-container-${post.id}`}
+            >
+              <MiniPostCard
+                post={{
+                  images: post.images,
+                  id: post.id,
+                  avatar: post.postedBy.image || "",
+                  name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
+                  batch: post.postedBy.batch || 0,
+                  comments_count: post._count.comments,
+                  content: post.title,
+                  likes_count: post._count.comments,
+                  slug: post.slug,
+                  createdAt: post.createdAt.toISOString(),
+                }}
+                likedByIds={post.likedBy.map((i) => i.id) || []}
+                key={index}
+              />
+            </div>
           ))}
         </div>
 
