@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Settings, User, LayoutDashboard } from "lucide-react";
+import { Settings, User, LayoutDashboard, Files } from "lucide-react";
 import { LogoutButton } from "./logout-button";
 import Link from "next/link";
 import { useAuth } from "@/contexts";
@@ -45,7 +45,9 @@ export const AvatarDropdown = () => {
               {user?.firstName} {user?.lastName}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
+              {user?.email && user.email.length > 25
+                ? `${user.email.substring(0, 25)}...`
+                : user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -55,6 +57,13 @@ export const AvatarDropdown = () => {
           <Link href={isAdmin ? "/admin/profile" : "/profile"}>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href={isAdmin ? "/my-posts" : "/profile"}>
+            <Files className="mr-2 h-4 w-4" />
+            <span>My Posts</span>
           </Link>
         </DropdownMenuItem>
 
