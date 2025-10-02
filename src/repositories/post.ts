@@ -13,7 +13,6 @@ import {
 import { NotificationType, Prisma } from "@prisma/client";
 import uniqueSlug from "unique-slug";
 import { createNotifications } from "./notifications";
-import { revalidatePath } from "next/cache";
 
 export const createPost = async ({
   content,

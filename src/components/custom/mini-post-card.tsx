@@ -9,7 +9,7 @@ import PostImages from "@/app/(alumni)/posts/__components/post-images";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useAuth, useContentData } from "@/contexts";
+import { useAuth } from "@/contexts";
 import { formatDistanceToNow } from "date-fns";
 import {
   EllipsisVertical,
@@ -60,7 +60,6 @@ export function MiniPostCard({
   const [isLiked, setIsLiked] = useState(
     !!likedByIds.includes(Number(user?.id)),
   );
-  const { setPosts } = useContentData();
   const router = useRouter();
   const [count, setCount] = useState(post.likes_count);
   const [isPending, startTransition] = useTransition();
