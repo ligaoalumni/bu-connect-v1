@@ -155,3 +155,19 @@ export const likePostAction = async ({
     throw new Error("Failed to fetch interested alumni");
   }
 };
+
+export const readMyPostsAction = async (
+  data: PaginationArgs<never, never> = {},
+) => {
+  try {
+    const cookieStore = await cookies();
+
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session?.id) throw new Error("Unauthorized");
+
+    return await readPosts({ ...data, postedBy: session.id });
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Failed to fetch posts");
+  }
+};
