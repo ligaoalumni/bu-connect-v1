@@ -7,11 +7,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from "@/contexts";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle } from "lucide-react";
+import {
+  EllipsisVertical,
+  Heart,
+  MessageCircle,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface MiniPostCardProps {
   likedByIds: number[];
@@ -79,30 +99,62 @@ export function MiniPostCard({ post, likedByIds }: MiniPostCardProps) {
 
   return (
     <Card className="w-full   hover:shadow-md transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarImage
-              src={post.avatar || "/placeholder.svg"}
-              alt={post.name}
-            />
-            <AvatarFallback className="text-[#EC9848]">
-              {post.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <div className="space-y-1">
-              <h3 className="font-bold text-[#EC9848] capitalize">
-                {post.name}
-              </h3>
-              {!!post.batch && (
-                <p className="text-sm text-[#EC9848]">{post.batch}</p>
-              )}
+      <CardHeader className="pb-3 ">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarImage
+                src={post.avatar || "/placeholder.svg"}
+                alt={post.name}
+              />
+              <AvatarFallback className="text-[#EC9848]">
+                {post.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <div className="space-y-0.5 ">
+                <h3 className="font-bold leading-none text-[#EC9848] capitalize">
+                  {post.name}
+                </h3>
+                {!!post.batch && (
+                  <p className="text-sm leading-none text-[#EC9848]">
+                    {post.batch}
+                  </p>
+                )}
+              </div>
             </div>
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <EllipsisVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuLabel>Post Options</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Link
+                      href={`/my-posts/${post.slug}/edit`}
+                      className="flex items-center gap-1 justify-start"
+                    >
+                      <Pencil />
+                      Edit
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <div className="flex items-center gap-1 text-destructive justify-start">
+                      <Trash /> Delete
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
