@@ -8,7 +8,6 @@ import { readPostsAction } from "@/actions";
 import { Button } from "../../../../components/ui/button";
 import { Job } from "@prisma/client";
 import { TPost } from "@/types";
-import { PostCard } from "./post-card";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components";
 import { useAuth } from "@/contexts";
