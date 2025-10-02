@@ -26,9 +26,9 @@ import { StarRating } from "./star-rating";
 import { StatusSelection } from "./status-selection";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
-import { MiniPostCard } from "./mini-post-card";
 import Image from "next/image";
 import { Bell } from "lucide-react";
+import RecentPostsSection from "./recent-posts-section";
 
 export async function Feed() {
   const user = await getInformation();
@@ -309,51 +309,7 @@ export async function Feed() {
         </div>
 
         {/* POSTS */}
-        <div className="mt-8">
-          <div className="flex items-center gap-2">
-            <Icon icon="emojione-v1:note-pad" width="32" height="32" />
-            <h1 className="font-poppins text-2xl md:text-3xl font-bold  text-[#E6750C]  ">
-              Recent Posts
-            </h1>
-          </div>
-          <div className="space-y-5 mt-5 ">
-            {posts.data.length > 0 ? (
-              posts.data.map((post) => (
-                <div
-                  className="mx-auto max-w-screen-md"
-                  key={`post-card-container-${post.id}`}
-                >
-                  <MiniPostCard
-                    key={post.id}
-                    likedByIds={post.likedBy.map((i) => i.id) || []}
-                    post={{
-                      images: post.images,
-                      id: post.id,
-                      avatar: post.postedBy.image || "",
-                      name: `${post.postedBy.firstName} ${post.postedBy.lastName}`,
-                      batch: post.postedBy.batch || 0,
-                      comments_count: post._count.comments,
-                      content: post.title,
-                      likes_count: post._count.comments,
-                      slug: post.slug,
-                      createdAt: post.createdAt.toISOString(),
-                    }}
-                  />
-                </div>
-              ))
-            ) : (
-              <div className="flex flex-col min-h-[100px] items-center justify-center">
-                <Icon
-                  icon="mage:folder-cross"
-                  width="50"
-                  height="50"
-                  style={{ color: "#195287" }}
-                />
-                <p>No recent posts</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <RecentPostsSection defaultData={posts.data} />
 
         <div id="announcements" className=" container mx-auto  mt-5">
           <div className="flex  items-center gap-3 justify-center mb-5">

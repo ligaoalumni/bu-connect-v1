@@ -130,11 +130,10 @@ export function PostForm({ post }: PostFormProps) {
       const values = { ...data, images: data.images || [] };
       if (post) {
         await updatePostAction(post.slug, values);
-        router.push("/");
       } else {
         await createPostAction(values);
-        router.push("/");
       }
+      router.push("/");
 
       toast.success(post ? "Post updated!" : "Post created!", {
         description: `Your post has been successfully  ${
