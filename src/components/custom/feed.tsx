@@ -362,7 +362,7 @@ export async function Feed() {
                 width="24"
                 height="24"
               />
-              <h1 className="text-[#E6750C] font-poppins text-2xl font-bold uppercase">
+              <h1 className="text-[#E6750C] font-poppins text-2xl font-bold capitalize">
                 Alumni Memories
               </h1>
             </div>
