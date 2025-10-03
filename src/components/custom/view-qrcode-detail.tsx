@@ -146,7 +146,10 @@ const ViewQRCodeDetail = ({ alumni }: ViewQRCodeDetailProps) => {
                       Current Occupation
                     </p>
                     <p className="font-medium">
-                      {alumni.currentOccupation || "No data"}
+                      {alumni?.currentOccupation
+                        ? alumni.currentOccupation.slice(0, 1).toUpperCase() +
+                          alumni.currentOccupation.slice(1).toLowerCase()
+                        : "No Data"}
                     </p>
                   </div>
                 </div>

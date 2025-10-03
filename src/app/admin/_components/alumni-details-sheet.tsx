@@ -168,7 +168,10 @@ export default function AlumniDetailsSheet({
                         !alumni.currentOccupation && "italic text-gray-600"
                       }`}
                     >
-                      {alumni.currentOccupation || "No Data"}
+                      {alumni?.currentOccupation
+                        ? alumni.currentOccupation.slice(0, 1).toUpperCase() +
+                          alumni.currentOccupation.slice(1).toLowerCase()
+                        : "No Data"}
                     </span>
                   </p>
 
