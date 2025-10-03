@@ -76,7 +76,7 @@ export default function ApplyDialog({
             ? "Already applied"
             : isAllowedToApply
               ? "Apply now"
-              : "Not allowed to applly"}
+              : "Not allowed to apply"}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
