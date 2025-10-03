@@ -10,12 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components";
-import { ArrowUpDown, Info, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, Info, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
-import { readAnnouncementsAction } from "@/actions";
+import { deleteAnnouncementAction, readAnnouncementsAction } from "@/actions";
 import { toast } from "sonner";
 import { Announcement } from "@prisma/client";
 import { useAuth } from "@/contexts";
+import { DeleteModal } from "./delete-modal";
 
 export default function AnnouncementsDataTable() {
   const { user } = useAuth();
@@ -26,6 +27,8 @@ export default function AnnouncementsDataTable() {
     pageSize: 10, //default page size
   });
   const [loading, setLoading] = useState(false);
+  const [toDelete, setToDelete] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const columns: ColumnDef<Announcement>[] = [
     {
@@ -97,6 +100,19 @@ export default function AnnouncementsDataTable() {
                   Edit Details
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                className="  cursor-pointer flex items-center "
+              >
+                <Button
+                  className="flex !text-black !text-destructive !bg-none !hover:bg-none !ring-0 !outline-none !border-none items-center gap-2 justify-start w-full"
+                  variant="ghost"
+                  onClick={() => setToDelete(row.original.slug)}
+                >
+                  <Trash />
+                  Delete
+                </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -138,15 +154,51 @@ export default function AnnouncementsDataTable() {
   }, [handleFetchData]);
 
   return (
-    <DataTable
-      pagination={pagination}
-      setPagination={setPagination}
-      columns={columns}
-      data={data}
-      filterName="title"
-      rowCount={total}
-      loading={loading}
-      handleSearch={handleFetchData}
-    />
+    <>
+      <DataTable
+        pagination={pagination}
+        setPagination={setPagination}
+        columns={columns}
+        data={data}
+        filterName="title"
+        rowCount={total}
+        loading={loading}
+        handleSearch={handleFetchData}
+      />
+      {toDelete && (
+        <DeleteModal
+          title="Delete Announcement"
+          description="Are you sure you want to delete this announcement? This action cannot be undone."
+          onClose={() => setToDelete(null)}
+          id={toDelete}
+          onDelete={async () => {
+            try {
+              setDeleting(true);
+
+              await deleteAnnouncementAction(toDelete);
+              setData((prev) => prev.filter((item) => item.slug !== toDelete));
+              toast.success("Announcement deleted successfully", {
+                richColors: true,
+                position: "top-center",
+                duration: 5000,
+                description: "Announcement has been deleted.",
+              });
+              setToDelete(null);
+            } catch (error) {
+              toast.error(`Failed to delete announcement`, {
+                description: (error as Error).message || "Something went wrong",
+                richColors: true,
+                position: "top-center",
+                duration: 5000,
+              });
+            } finally {
+              setDeleting(false);
+            }
+          }}
+          deleteBTNTitle="Confirm"
+          loading={deleting}
+        />
+      )}
+    </>
   );
 }

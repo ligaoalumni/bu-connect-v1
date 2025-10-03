@@ -3,6 +3,8 @@
 import { createAnnouncementAction } from "@/actions";
 import {
   Button,
+  Card,
+  CardContent,
   Form,
   FormControl,
   FormField,
@@ -20,6 +22,7 @@ import { AnnouncementFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Announcement } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -193,25 +196,45 @@ export default function AnnouncementForm({
               )}
             />
           </div>
-
-          <div className="lg:col-span-3">
-            <FormField
-              control={form.control}
-              name="image"
-              render={() => (
-                <FormItem className="w-full">
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <ImageUpload
-                      defaultValue={form.getValues().image}
-                      handleValueChange={(img) => form.setValue("image", img)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          {readOnly ? (
+            announcement?.image ? (
+              <div className="lg:col-span-3">
+                <Card className="w-full  min-h-[200px]  lg:min-h-[300px]">
+                  <CardContent className="pt-6">
+                    <div
+                      className={`relative flex min-h-[200px] dark:bg-zinc-800 lg:min-h-[300px] w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center`}
+                    >
+                      <Image
+                        src={announcement.image}
+                        alt="Preview"
+                        fill
+                        className={`w-full rounded  object-contain  `}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : null
+          ) : (
+            <div className="lg:col-span-3">
+              <FormField
+                control={form.control}
+                name="image"
+                render={() => (
+                  <FormItem className="w-full">
+                    <FormLabel>Image</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        defaultValue={form.getValues().image}
+                        handleValueChange={(img) => form.setValue("image", img)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
         </div>
 
         <div className="mt-5  block ml-auto">
