@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 
 interface DeleteModalProps {
-  id: number;
+  id: number | string;
   onDelete: VoidFunction;
   onClose: VoidFunction;
   title: string;
