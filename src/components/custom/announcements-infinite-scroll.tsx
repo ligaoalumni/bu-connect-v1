@@ -76,7 +76,7 @@ export function AnnouncementsInfiniteScroll({
         orderBy:
           currentFilter === "POPULAR"
             ? undefined
-            : currentFilter !== "all"
+            : currentFilter === "all" || currentFilter === "LATEST"
               ? "createdAt"
               : undefined,
         // type: jobType === "all" ? undefined : jobType,

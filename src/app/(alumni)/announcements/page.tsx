@@ -9,6 +9,8 @@ export default async function Page() {
       page: 0,
       limit: 10,
     },
+    order: "desc",
+    orderBy: "createdAt",
     // status: ["OPEN", "COMPLETED", "CLOSED"],
   });
 

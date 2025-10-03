@@ -17,9 +17,11 @@ export default function Page() {
         </Button>
       </div>
 
-      <Suspense fallback={<TableSkeleton />}>
-        <AnnouncementsDataTable />
-      </Suspense>
+      <div className="px-5 md:px-10 mb-10">
+        <Suspense fallback={<TableSkeleton />}>
+          <AnnouncementsDataTable />
+        </Suspense>
+      </div>
     </div>
   );
 }
