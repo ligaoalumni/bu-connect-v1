@@ -17,7 +17,7 @@ export default async function BatchGalleryPage({
 
   return (
     <div className="px-5 md:px-10">
-      <BatchGallery userBatch={user?.batch || -1} batch={batch} />;
+      <BatchGallery userBatch={user?.batch || -1} batch={batch} />
     </div>
   );
 }
