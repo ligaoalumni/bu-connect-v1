@@ -67,10 +67,11 @@ export const updateAnnouncement = async (
   });
 };
 
-export const deleteAnnouncement = async (toDelete: string) => {
+export const deleteAnnouncement = async (toDelete: string, userId: number) => {
   return await prisma.announcement.delete({
     where: {
       slug: toDelete,
+      createdById: userId,
     },
   });
 };

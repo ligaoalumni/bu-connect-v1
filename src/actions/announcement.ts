@@ -77,7 +77,13 @@ export const updateAnnouncementAction = async (
 
 export const deleteAnnouncementAction = async (slug: string) => {
   try {
-    await deleteAnnouncement(slug);
+    const cookieStore = await cookies();
+
+    const session = await decrypt(cookieStore.get("session")?.value);
+
+    if (!session?.id) throw new Error("Unauthorized");
+
+    await deleteAnnouncement(slug, session.id);
 
     revalidatePath("/admin/announcements");
   } catch (err) {
