@@ -167,13 +167,13 @@ export default function ForgotPassword() {
   const getStepIcon = () => {
     switch (currentStep) {
       case "email":
-        return <Mail className="h-6 w-6 text-white" />;
+        return <Mail className="h-6 w-6 text-white hover:text-white" />;
       case "otp":
-        return <Shield className="h-6 w-6 text-white" />;
+        return <Shield className="h-6 w-6 text-white hover:text-white" />;
       case "reset":
-        return <Lock className="h-6 w-6 text-white" />;
+        return <Lock className="h-6 w-6 text-white hover:text-white" />;
       case "success":
-        return <Shield className="h-6 w-6 text-white  " />;
+        return <Shield className="h-6 w-6 text-white hover:text-white  " />;
     }
   };
 
@@ -211,7 +211,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="bg-[#94949440] z-[99] bg-cover bg-center rounded-[0.7rem] ring-0 ring-[#949494] bg-opacity-20">
-      <Card className="w-full md:min-w-[400px] max-w-md mx-auto border-none bg-transparent relative text-white text-black dark:text-white">
+      <Card className="w-full md:min-w-[400px] max-w-md mx-auto border-none bg-transparent relative text-white hover:text-white   dark:text-white  ">
         <CardHeader className="space-y-4 backdrop-blur-sm rounded-lg mb-0">
           <div className="flex items-center gap-3">
             {currentStep !== "email" && (
@@ -221,21 +221,21 @@ export default function ForgotPassword() {
                 onClick={goBack}
                 className="p-1 h-8 w-8 "
               >
-                <ArrowLeft className="h-4 w-4 text-white" />
+                <ArrowLeft className="h-4 w-4 text-white hover:text-white" />
               </Button>
             )}
             <div className="flex items-center gap-2">
               {getStepIcon()}
-              <CardTitle className="text-xl text-white">
+              <CardTitle className="text-xl text-white hover:text-white">
                 {getStepTitle()}
               </CardTitle>
             </div>
           </div>
-          <CardDescription className="text-sm text-muted-foreground text-white">
+          <CardDescription className="text-sm text-muted-foreground text-white hover:text-white">
             {getStepDescription()}
           </CardDescription>
         </CardHeader>
-        <CardContent className="backdrop-blur-sm rounded-lg text-white">
+        <CardContent className="backdrop-blur-sm rounded-lg text-white hover:text-white">
           {currentStep === "email" && (
             <form onSubmit={handleSendOTP} className="space-y-4">
               <div className="space-y-2">
@@ -245,7 +245,7 @@ export default function ForgotPassword() {
                   type="email"
                   placeholder="Enter your email"
                   value={email}
-                  className="placeholder:text-white/70"
+                  className="placeholder:text-white hover:text-white/70"
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
@@ -256,7 +256,7 @@ export default function ForgotPassword() {
               <div className="text-center mt-4">
                 <Link
                   href="/login"
-                  className="text-sm text-muted-foreground hover:text-primary text-white"
+                  className="text-sm text-muted-foreground hover:text-primary text-white hover:text-white"
                 >
                   Back to Login
                 </Link>
@@ -287,7 +287,7 @@ export default function ForgotPassword() {
                 </div>
                 <div className="text-center space-y-2">
                   {countdown > 0 && (
-                    <p className="text-sm text-muted-foreground text-white">
+                    <p className="text-sm text-muted-foreground text-white hover:text-white">
                       Resend OTP in {formatCountdown(countdown)}
                     </p>
                   )}
@@ -301,7 +301,7 @@ export default function ForgotPassword() {
                             preventDefault: () => {},
                           } as React.FormEvent)
                         }
-                        className="text-primary hover:underline text-white"
+                        className="text-primary hover:underline text-white hover:text-white"
                         disabled={isLoading}
                       >
                         Resend OTP
@@ -312,7 +312,7 @@ export default function ForgotPassword() {
               </div>
               <Button
                 type="submit"
-                className="w-full text-white"
+                className="w-full text-white hover:text-white"
                 disabled={isLoading}
               >
                 {isLoading ? "Verifying..." : "Verify OTP"}
@@ -328,7 +328,7 @@ export default function ForgotPassword() {
                   id="password"
                   type="password"
                   placeholder="Enter new password"
-                  className="placeholder:text-white/70"
+                  className="placeholder:text-white hover:text-white/70"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -340,13 +340,13 @@ export default function ForgotPassword() {
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirm new password"
-                  className="placeholder:text-white/70"
+                  className="placeholder:text-white hover:text-white/70"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>
-              <div className="text-xs text-muted-foreground text-white">
+              <div className="text-xs text-muted-foreground text-white hover:text-white">
                 <p>Password must be at least 8 characters long</p>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
