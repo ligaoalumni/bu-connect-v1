@@ -1,10 +1,9 @@
-// import { readEventsAction } from "@/actions";
-// import { InfiniteScroll } from "@/components";
-
 import { readEventsAction } from "@/actions";
 import { EmptyState } from "@/components";
-import EventCard from "@/components/custom/event-card";
 import ImagesMarquee from "../__components/images-marquee";
+import dynamic from "next/dynamic";
+
+const EventCard = dynamic(() => import("@/components/custom/event-card"));
 
 export default async function AllEvents() {
   const upcomingEvents = await readEventsAction({
@@ -49,6 +48,7 @@ export default async function AllEvents() {
         <h1 className="text-2xl md:text-3xl font-bold text-center ">
           Upcoming Events
         </h1>
+
         {ongoingEvents.data.length > 0 || upcomingEvents.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {ongoingEvents.data.length > 0 &&
@@ -72,6 +72,7 @@ export default async function AllEvents() {
         <h1 className="text-2xl mb-10 md:text-3xl font-bold text-center ">
           Past Event
         </h1>
+
         {pastEvents.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
             {pastEvents.data.map((event) => (

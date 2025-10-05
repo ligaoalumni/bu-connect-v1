@@ -1,9 +1,18 @@
-import { EventInfo } from "@/components/custom/event-info";
+import { LoaderComponent } from "@/components";
+
 import { getEventStatus } from "@/lib";
 import { readEvent } from "@/repositories";
 import { formatDate, isSameDay } from "date-fns";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import React from "react";
+
+const EventInfo = dynamic(
+  () => import("@/components/custom/event-info").then((mod) => mod.EventInfo),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,
