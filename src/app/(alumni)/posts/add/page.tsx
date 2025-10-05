@@ -1,8 +1,22 @@
-import { Button, Card, CardContent, CardHeader, CardTitle } from "@/components";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  LoaderComponent,
+} from "@/components";
 import React from "react";
-import { PostForm } from "../__components/post-form";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const PostForm = dynamic(
+  () => import("../__components/post-form").then((mod) => mod.PostForm),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default function Page() {
   return (

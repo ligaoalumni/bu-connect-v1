@@ -8,9 +8,24 @@ import { readPostsAction } from "@/actions";
 import { Button } from "../../../../components/ui/button";
 import { TPost } from "@/types";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  LoaderComponent,
+} from "@/components";
 import { useAuth, useContentData } from "@/contexts";
-import { MiniPostCard } from "@/components/custom/mini-post-card";
+import dynamic from "next/dynamic";
+
+const MiniPostCard = dynamic(
+  () =>
+    import("@/components/custom/mini-post-card").then(
+      (mod) => mod.MiniPostCard,
+    ),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export function PostsInfiniteScroll({
   defaultData,
