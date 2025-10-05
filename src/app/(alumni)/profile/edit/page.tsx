@@ -1,5 +1,10 @@
 import { getInformation } from "@/actions";
-import EditProfileForm from "./__components/form";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "@/components";
+
+const EditProfileForm = dynamic(() => import("./__components/form"), {
+  loading: LoaderComponent,
+});
 
 export default async function Page() {
   const user = await getInformation();

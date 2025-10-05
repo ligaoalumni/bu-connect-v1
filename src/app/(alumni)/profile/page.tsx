@@ -9,14 +9,31 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  QRCodeViewer,
-  ChangePassword,
-  LocationSharingModal,
 } from "@/components";
 import { formatAddress } from "@/lib";
 import { formatDate } from "date-fns";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+
+const LocationSharingModal = dynamic(
+  () => import("@/components").then((mod) => mod.LocationSharingModal),
+  {
+    loading: () => <div>Loading...</div>,
+  },
+);
+const QRCodeViewer = dynamic(
+  () => import("@/components").then((mod) => mod.QRCodeViewer),
+  {
+    loading: () => <div>Loading...</div>,
+  },
+);
+const ChangePassword = dynamic(
+  () => import("@/components").then((mod) => mod.ChangePassword),
+  {
+    loading: () => <div>Loading...</div>,
+  },
+);
 
 export default async function Page() {
   const user = await getInformation();

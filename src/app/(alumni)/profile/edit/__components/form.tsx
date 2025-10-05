@@ -21,19 +21,32 @@ import {
   SelectTrigger,
   SelectValue,
   Button,
-  LocationPicker,
 } from "@/components";
-import AvatarUpload from "@/components/custom/avatar-upload";
 import { alumniLabel } from "@/constant";
 import { ProfileSchema } from "@/lib";
 import type { AddressData, ProfileFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Gender, User } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+const LocationPicker = dynamic(
+  () => import("@/components").then((mod) => mod.LocationPicker),
+  {
+    loading: () => <div>Loading...</div>,
+  },
+);
+
+const AvatarUpload = dynamic(
+  () => import("@/components/custom/avatar-upload"),
+  {
+    loading: () => <div>Loading...</div>,
+  },
+);
 
 const currentYear = new Date().getFullYear() - 1; // Get the current year
 const years = Array.from({ length: 75 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
