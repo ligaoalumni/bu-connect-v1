@@ -1,8 +1,14 @@
-import { Suspense } from "react";
 import { TableSkeleton } from "../../_components/table-skeleton";
-import OldAlumniDataTable from "../../_components/old-alumni-data-table";
 import { Button } from "@/components";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const OldAlumniDataTable = dynamic(
+  () => import("../../_components/old-alumni-data-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default async function OldAlumniPage() {
   return (
@@ -18,9 +24,7 @@ export default async function OldAlumniPage() {
           <Link href="/admin/alumni/old/add">Add Old Alumni</Link>
         </Button>
       </div>
-      <Suspense fallback={<TableSkeleton />}>
-        <OldAlumniDataTable />
-      </Suspense>
+      <OldAlumniDataTable />
     </div>
   );
 }

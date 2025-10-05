@@ -3,12 +3,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, GraduationCap, Hash, Loader2 } from "lucide-react";
-import SystemInfoDisplay from "./system-info-display";
 import { formatDate } from "date-fns";
 import { useEffect, useState } from "react";
 import { readOldAccountByCurrentAccountAction } from "@/actions";
 import { OldAccount, User } from "@prisma/client";
-import { ScrollArea } from "@/components";
+import { LoaderComponent, ScrollArea } from "@/components";
+import dynamic from "next/dynamic";
+
+const SystemInfoDisplay = dynamic(() => import("./system-info-display"), {
+  ssr: false,
+  loading: LoaderComponent,
+});
 
 interface UserInfo {
   firstName: string;

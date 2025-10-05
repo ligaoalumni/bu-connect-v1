@@ -1,7 +1,25 @@
-import CSVUploader from "@/app/admin/_components/csv-uploader";
-import { OldAlumniForm } from "../../__components";
+import {
+  LoaderComponent,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components";
+import dynamic from "next/dynamic";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components";
+const CSVUploader = dynamic(
+  () => import("@/app/admin/_components/csv-uploader"),
+  {
+    loading: LoaderComponent,
+  },
+);
+
+const OldAlumniForm = dynamic(
+  () => import("../../__components").then((mod) => mod.OldAlumniForm),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 const AddOldAlumniPage = () => {
   return (

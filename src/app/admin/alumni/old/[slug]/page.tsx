@@ -1,7 +1,14 @@
-import {} from "@/repositories";
-import { OldAlumniForm } from "../../__components";
 import { readOldAccountAction } from "@/actions";
+import { LoaderComponent } from "@/components";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
+
+const OldAlumniForm = dynamic(
+  () => import("../../__components").then((mod) => mod.OldAlumniForm),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,

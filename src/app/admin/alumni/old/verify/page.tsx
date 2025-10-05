@@ -1,4 +1,12 @@
-import VerifyAccountDataTable from "../../__components/verify-account-table";
+import dynamic from "next/dynamic";
+import { TableSkeleton } from "@/app/admin/_components/table-skeleton";
+
+const VerifyAccountDataTable = dynamic(
+  () => import("../../__components/verify-account-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default function VerifyOldAlumniAccountPage() {
   return (

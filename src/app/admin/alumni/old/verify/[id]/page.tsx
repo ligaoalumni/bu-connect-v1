@@ -1,5 +1,16 @@
 import { readUserAction } from "@/actions";
-import { UserInfoDisplay } from "./__components/user-info-display";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "@/components";
+
+const UserInfoDisplay = dynamic(
+  () =>
+    import("./__components/user-info-display").then(
+      (mod) => mod.UserInfoDisplay,
+    ),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 // Example system record status - replace with your actual logic
 const systemRecordStatus: "found" | "not-found" | "already-connected" = "found";
