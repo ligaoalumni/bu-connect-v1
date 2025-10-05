@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, MouseEvent } from "react";
 
-export const BatchCard = (batch: Batch) => {
+export default function BatchCard(batch: Batch) {
   return (
     <div className="flex flex-col  ">
       <div className="flex items-center justify-between">
@@ -42,9 +42,9 @@ export const BatchCard = (batch: Batch) => {
       )}
     </div>
   );
-};
+}
 
-export default function ImageGallery({
+export function ImageGallery({
   batch,
   images,
 }: {

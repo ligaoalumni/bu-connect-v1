@@ -1,5 +1,7 @@
 import { readBatchesAction } from "@/actions";
-import { BatchCard } from "./__components/batch-card";
+import dynamic from "next/dynamic";
+
+const BatchCard = dynamic(() => import("./__components/batch-card"));
 
 export default async function Page() {
   const batches = await readBatchesAction();
