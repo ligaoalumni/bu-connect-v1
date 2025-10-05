@@ -1,7 +1,12 @@
 import { readAnnouncementAction } from "@/actions";
 import { notFound } from "next/navigation";
 import React from "react";
-import Announcement from "../__components/announcement";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "@/components";
+
+const Announcement = dynamic(() => import("../__components/announcement"), {
+  loading: LoaderComponent,
+});
 
 export default async function Page({
   params,

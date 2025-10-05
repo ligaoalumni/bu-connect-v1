@@ -1,5 +1,14 @@
 import { readAnnouncementAction } from "@/actions";
-import AnnouncementForm from "@/app/admin/announcements/__components/announcement-form";
+
+import { LoaderComponent } from "@/components";
+import dynamic from "next/dynamic";
+
+const AnnouncementForm = dynamic(
+  () => import("@/app/admin/announcements/__components/announcement-form"),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,

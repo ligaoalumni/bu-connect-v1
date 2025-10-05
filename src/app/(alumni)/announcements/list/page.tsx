@@ -1,8 +1,14 @@
-import AnnouncementsDataTable from "@/app/admin/_components/announcement-table";
 import { TableSkeleton } from "@/app/admin/_components/table-skeleton";
 import { Button } from "@/components";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Suspense } from "react";
+
+const AnnouncementsDataTable = dynamic(
+  () => import("@/app/admin/_components/announcement-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default function Page() {
   return (
@@ -18,9 +24,7 @@ export default function Page() {
       </div>
 
       <div className="px-5 md:px-10 mb-10">
-        <Suspense fallback={<TableSkeleton />}>
-          <AnnouncementsDataTable />
-        </Suspense>
+        <AnnouncementsDataTable />
       </div>
     </div>
   );

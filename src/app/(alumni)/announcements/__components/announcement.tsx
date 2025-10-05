@@ -2,14 +2,13 @@
 
 import { likeAnnouncementAction, unlikeAnnouncementAction } from "@/actions";
 import {
-  AnnouncementCommentsSection,
   Button,
   Card,
   CardContent,
   CardFooter,
   CardHeader,
+  LoaderComponent,
   Reactions,
-  RichTextEditor,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -23,6 +22,20 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const AnnouncementCommentsSection = dynamic(
+  () => import("@/components").then((mod) => mod.AnnouncementCommentsSection),
+  {
+    loading: LoaderComponent,
+  },
+);
+const RichTextEditor = dynamic(
+  () => import("@/components").then((mod) => mod.RichTextEditor),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default function Announcement({
   announcement,

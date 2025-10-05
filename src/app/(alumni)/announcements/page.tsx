@@ -1,6 +1,14 @@
 import { getInformation, readAnnouncementsAction } from "@/actions";
-import { AnnouncementsInfiniteScroll } from "@/components";
+import { LoaderComponent } from "@/components";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const AnnouncementsInfiniteScroll = dynamic(
+  () => import("@/components").then((mod) => mod.AnnouncementsInfiniteScroll),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page() {
   const user = await getInformation();
