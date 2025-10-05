@@ -33,12 +33,21 @@ import {
 import { programs } from "@/constant";
 import { OldAccount } from "@prisma/client";
 import { useState } from "react";
-import { TabsContent, TabsList, TabsTrigger } from "@/components";
+import {
+  LoaderComponent,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components";
 import { Tabs } from "@radix-ui/react-tabs";
-import CSVUploader from "../../_components/csv-uploader";
 import { createOldAccountAction, revalidatePathAction } from "@/actions";
 import { toast } from "sonner";
 import { sub } from "date-fns";
+import dynamic from "next/dynamic";
+
+const CSVUploader = dynamic(() => import("../../_components/csv-uploader"), {
+  loading: LoaderComponent,
+});
 
 const formSchema = z.object({
   studentID: z
