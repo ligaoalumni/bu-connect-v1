@@ -1,6 +1,16 @@
 import React from "react";
-import { Footer } from "@/components";
-import { Header } from "./__components";
+import dynamic from "next/dynamic";
+
+const Header = dynamic(
+  () => import("./__components/header").then((t) => t.Header),
+  {
+    loading: () => <div className="h-24 w-full bg-gray-200 animate-pulse" />,
+  },
+);
+
+const Footer = dynamic(() => import("@/components").then((mod) => mod.Footer), {
+  loading: () => <div className="h-24 w-full bg-gray-200 animate-pulse" />,
+});
 
 export default function AlumniLayout({
   children,

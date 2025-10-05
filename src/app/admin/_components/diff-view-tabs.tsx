@@ -16,14 +16,22 @@ import {
 } from "@/components";
 import { formatAddress } from "@/lib";
 import { BarChart3, Users } from "lucide-react";
-import { EngagementStatistics } from "./engagement-stats";
 import {
   getEmploymentStatisticsAction,
   getEngagementStatisticsAction,
 } from "@/actions/stats";
-import { EmploymentStatistics } from "./employment-stat";
 import { Suspense } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const EmploymentStatistics = dynamic(
+  () => import("./employment-stat").then((mod) => mod.EmploymentStatistics),
+  {},
+);
+const EngagementStatistics = dynamic(
+  () => import("./engagement-stats").then((mod) => mod.EngagementStatistics),
+  {},
+);
 
 async function EmploymentTab() {
   try {

@@ -1,13 +1,13 @@
-import { Suspense } from "react";
 import { TableSkeleton } from "../_components/table-skeleton";
-import JobsDataTable from "../_components/jobs-data-table";
+import dynamic from "next/dynamic";
+const JobsDataTable = dynamic(() => import("../_components/jobs-data-table"), {
+  loading: TableSkeleton,
+});
 
 export default async function Page() {
-	return (
-		<div>
-			<Suspense fallback={<TableSkeleton />}>
-				<JobsDataTable />
-			</Suspense>
-		</div>
-	);
+  return (
+    <div>
+      <JobsDataTable />
+    </div>
+  );
 }

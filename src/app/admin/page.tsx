@@ -1,10 +1,13 @@
 import { DashboardEventSectionSkeleton } from "./_components/dashboard-event-section";
-import { lazy, Suspense } from "react";
 import DashboardOverview from "./_components/dashboard-overview";
 import DiffViewTabs from "./_components/diff-view-tabs";
+import dynamic from "next/dynamic";
 
-const DashboardEventSection = lazy(
+const DashboardEventSection = dynamic(
   () => import("./_components/dashboard-event-section"),
+  {
+    loading: DashboardEventSectionSkeleton,
+  },
 );
 
 export default async function Dashboard() {
@@ -13,9 +16,7 @@ export default async function Dashboard() {
       <div className="flex-1">
         <div className="grid gap-3">
           {/* Today's Events Section */}
-          <Suspense fallback={<DashboardEventSectionSkeleton />}>
-            <DashboardEventSection />
-          </Suspense>
+          <DashboardEventSection />
 
           {/* Overview */}
           <DashboardOverview />
