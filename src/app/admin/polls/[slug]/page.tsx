@@ -1,7 +1,12 @@
 import { readPollAction } from "@/actions";
 import { notFound } from "next/navigation";
 import React from "react";
-import AdminPollDetailPage from "./__components/details";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "@/components";
+
+const AdminPollDetailPage = dynamic(() => import("./__components/details"), {
+  loading: LoaderComponent,
+});
 
 export default async function Page({
   params,

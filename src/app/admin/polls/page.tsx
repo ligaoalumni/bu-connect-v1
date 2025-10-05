@@ -1,13 +1,15 @@
-import { Suspense } from "react";
 import { TableSkeleton } from "../_components/table-skeleton";
-import { PollsDataTable } from "../_components";
+import dynamic from "next/dynamic";
+
+const PollsDataTable = dynamic(
+  () => import("../_components").then((mod) => mod.PollsDataTable),
+  { loading: TableSkeleton },
+);
 
 export default async function Page() {
-	return (
-		<div>
-			<Suspense fallback={<TableSkeleton />}>
-				<PollsDataTable />
-			</Suspense>
-		</div>
-	);
+  return (
+    <div>
+      <PollsDataTable />
+    </div>
+  );
 }

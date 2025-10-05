@@ -18,7 +18,11 @@ import {
 import { PollDetail, Poll } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
-import { ClosePollModal } from "./close-modal";
+import dynamic from "next/dynamic";
+
+const ClosePollModal = dynamic(() =>
+  import("./close-modal").then((mod) => mod.ClosePollModal),
+);
 
 interface AdminPollDetailPageProps {
   poll: PollDetail;

@@ -1,10 +1,18 @@
+import { LoaderComponent } from "@/components";
+import dynamic from "next/dynamic";
 import React from "react";
-import { PollForm } from "../__components/poll-form";
+
+const PollForm = dynamic(
+  () => import("../__components/poll-form").then((mod) => mod.PollForm),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default function Page() {
-	return (
-		<div className="min-h-[82dvh] flex items-center justify-center">
-			<PollForm />
-		</div>
-	);
+  return (
+    <div className="min-h-[82dvh] flex items-center justify-center">
+      <PollForm />
+    </div>
+  );
 }
