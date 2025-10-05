@@ -1,15 +1,24 @@
 import { readBatchesAction, readRecruitmentAction } from "@/actions";
-import RecruitmentInfo from "@/app/admin/recruitment/__components/recruitment-info";
+
 import {
   Button,
+  LoaderComponent,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components";
 import { ChevronLeft } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+const RecruitmentInfo = dynamic(
+  () => import("@/app/admin/recruitment/__components/recruitment-info"),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,

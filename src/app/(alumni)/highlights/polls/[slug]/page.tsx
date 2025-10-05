@@ -1,15 +1,24 @@
 import { readPollAction } from "@/actions";
 import { notFound } from "next/navigation";
-import { PollCard } from "../../__components/poll-card";
+
 import Link from "next/link";
 import {
   Button,
+  LoaderComponent,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components";
 import { ChevronLeft } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const PollCard = dynamic(
+  () => import("../../__components/poll-card").then((mod) => mod.PollCard),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,

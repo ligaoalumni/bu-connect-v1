@@ -3,11 +3,23 @@ import {
   readPollsAction,
   readRecruitmentListAction,
 } from "@/actions";
-import { EmptyState } from "@/components";
+import { EmptyState, LoaderComponent } from "@/components";
 import React from "react";
-import { PollCard } from "./__components/poll-card";
-import RecruitmentInfo from "@/app/admin/recruitment/__components/recruitment-info";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const RecruitmentInfo = dynamic(
+  () => import("@/app/admin/recruitment/__components/recruitment-info"),
+  {
+    loading: LoaderComponent,
+  },
+);
+const PollCard = dynamic(
+  () => import("./__components/poll-card").then((mod) => mod.PollCard),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page() {
   const polls = await readPollsAction({
