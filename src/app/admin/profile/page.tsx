@@ -9,11 +9,15 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  ChangePassword,
 } from "@/components";
 import { formatAddress } from "@/lib";
 import { formatDate } from "date-fns";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+const ChangePassword = dynamic(() =>
+  import("@/components").then((mod) => mod.ChangePassword),
+);
 
 export default async function Page() {
   const user = await getInformation();

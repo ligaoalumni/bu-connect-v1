@@ -28,12 +28,16 @@ import {
   SelectTrigger,
   SelectValue,
   Button,
-  LocationPicker,
 } from "@/components";
 import { alumniLabel } from "@/constant";
-import AvatarUpload from "@/components/custom/avatar-upload";
 import { updateProfileActions } from "@/actions";
 import type { Gender } from "@prisma/client";
+import dynamic from "next/dynamic";
+
+const AvatarUpload = dynamic(() => import("@/components/custom/avatar-upload"));
+const LocationPicker = dynamic(() =>
+  import("@/components").then((mod) => mod.LocationPicker),
+);
 
 interface ProfileFormProps {
   id: number;
