@@ -13,13 +13,6 @@ import {
   Loader,
 } from "lucide-react";
 
-// Import slide __components
-import EmploymentSlide from "./__components/employment-slide";
-import IndustrySlide from "./__components/industry-slide";
-import LocationSlide from "./__components/location-slide";
-import PersonalSlide from "./__components/personal-slide";
-import ReviewSlide from "./__components/review-slide";
-
 // Import types and validation
 import { type FormData, initialFormData } from "./types/form-data";
 import { validateStep } from "./utils/validation";
@@ -29,9 +22,35 @@ import { Gender, OccupationStatus } from "@prisma/client";
 import { getInformation, updateProfileStatusAction } from "@/actions";
 import { AddressData } from "@/types";
 import { formatAddress, parseAddress } from "@/lib";
-import PostStudiesSlide from "./__components/post-studies-slide";
 import Link from "next/link";
 import { toast } from "sonner";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "@/components";
+
+const EmploymentSlide = dynamic(
+  () => import("./__components/employment-slide"),
+  {
+    loading: LoaderComponent,
+  },
+);
+const LocationSlide = dynamic(() => import("./__components/location-slide"), {
+  loading: LoaderComponent,
+});
+const IndustrySlide = dynamic(() => import("./__components/industry-slide"), {
+  loading: LoaderComponent,
+});
+const PersonalSlide = dynamic(() => import("./__components/personal-slide"), {
+  loading: LoaderComponent,
+});
+const ReviewSlide = dynamic(() => import("./__components/review-slide"), {
+  loading: LoaderComponent,
+});
+const PostStudiesSlide = dynamic(
+  () => import("./__components/post-studies-slide"),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default function AlumniStatusUpdateForm() {
   const [currentStep, setCurrentStep] = useState(0);

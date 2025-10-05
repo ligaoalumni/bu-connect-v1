@@ -2,13 +2,21 @@
 
 import { Label } from "@/components/ui/label";
 
-import { LocationPicker } from "@/components";
+import { LoaderComponent } from "@/components";
 import { AddressData } from "@/types";
+import dynamic from "next/dynamic";
 
 interface LocationSlideProps {
   location: AddressData | undefined;
   handleUpdateLocaton: (data: AddressData) => void;
 }
+
+const LocationPicker = dynamic(
+  () => import("@/components").then((mod) => mod.LocationPicker),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default function LocationSlide({
   location,
