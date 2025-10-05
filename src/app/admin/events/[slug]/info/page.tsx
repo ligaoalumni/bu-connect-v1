@@ -1,44 +1,52 @@
-import { EventInfo } from "@/components/custom/event-info";
+import { LoaderComponent } from "@/components";
 import { getEventStatus } from "@/lib";
 import { readEvent } from "@/repositories";
 import { formatDate, isSameDay } from "date-fns";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
+const EventInfo = dynamic(
+  () => import("@/components/custom/event-info").then((mod) => mod.EventInfo),
+  {
+    loading: LoaderComponent,
+  },
+);
+
 async function getEvent(slug: string) {
-	const event = await readEvent(slug);
+  const event = await readEvent(slug);
 
-	if (!event) {
-		notFound();
-	}
+  if (!event) {
+    notFound();
+  }
 
-	return event;
+  return event;
 }
 
 export default async function Event({
-	params,
+  params,
 }: {
-	params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-	const { slug } = await params;
-	const event = await getEvent(slug);
+  const { slug } = await params;
+  const event = await getEvent(slug);
 
-	const isOneDay = isSameDay(
-		event.startDate,
-		event?.endDate || event.startDate
-	);
-	const startDate = formatDate(
-		event.startDate,
-		isOneDay ? "MMMM d, yyyy" : "MMMM d,"
-	);
-	const endDate = formatDate(event!.endDate!, "- MMMM dd, yyyy");
-	const date = `${startDate}${isOneDay ? "" : endDate}`;
+  const isOneDay = isSameDay(
+    event.startDate,
+    event?.endDate || event.startDate,
+  );
+  const startDate = formatDate(
+    event.startDate,
+    isOneDay ? "MMMM d, yyyy" : "MMMM d,",
+  );
+  const endDate = formatDate(event!.endDate!, "- MMMM dd, yyyy");
+  const date = `${startDate}${isOneDay ? "" : endDate}`;
 
-	const status = getEventStatus({
-		endDate: event.endDate || event.startDate,
-		startDate: event.startDate,
-		endTime: event.endTime,
-		startTime: event.startTime,
-	});
+  const status = getEventStatus({
+    endDate: event.endDate || event.startDate,
+    startDate: event.startDate,
+    endTime: event.endTime,
+    startTime: event.startTime,
+  });
 
-	return <EventInfo date={date} status={status} event={event} />;
+  return <EventInfo date={date} status={status} event={event} />;
 }

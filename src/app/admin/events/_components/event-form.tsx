@@ -10,20 +10,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  ImageUpload,
   Input,
-  RichTextEditor,
   TimePicker,
 } from "@/components";
 import { EventFormSchema } from "@/lib";
 import { EventFormData, EventFormProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+const RichTextEditor = dynamic(() =>
+  import("@/components").then((mod) => mod.RichTextEditor),
+);
+const ImageUpload = dynamic(() =>
+  import("@/components").then((mod) => mod.ImageUpload),
+);
 
 export default function EventForm({
   edit = false,

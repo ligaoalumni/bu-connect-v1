@@ -1,13 +1,17 @@
-import { Suspense } from "react";
-import EventsDataTable from "../_components/events-data-table";
 import { TableSkeleton } from "../_components/table-skeleton";
+import dynamic from "next/dynamic";
+
+const EventsDataTable = dynamic(
+  () => import("../_components/events-data-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default async function Page() {
-	return (
-		<div>
-			<Suspense fallback={<TableSkeleton />}>
-				<EventsDataTable />
-			</Suspense>
-		</div>
-	);
+  return (
+    <div>
+      <EventsDataTable />
+    </div>
+  );
 }
