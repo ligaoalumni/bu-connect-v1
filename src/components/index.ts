@@ -1,3 +1,5 @@
+export * from "./custom/loader";
+
 // SHADCN
 export * from "./custom/overlay-loader";
 export * from "./ui/alert-dialog";

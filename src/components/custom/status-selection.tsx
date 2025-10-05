@@ -23,7 +23,9 @@ interface StatusSelectionProps {
   initialValue?: OccupationStatus;
 }
 
-export function StatusSelection({ initialValue }: StatusSelectionProps) {
+export default function StatusSelection({
+  initialValue,
+}: StatusSelectionProps) {
   const [selectedStatus, setSelectedStatus] = useState<
     OccupationStatus | undefined
   >(initialValue);

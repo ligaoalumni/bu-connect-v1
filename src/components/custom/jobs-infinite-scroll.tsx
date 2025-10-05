@@ -1,10 +1,10 @@
 "use client";
 
+import { readJobsAction } from "@/actions";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { readJobsAction } from "@/actions";
 import {
   Select,
   SelectContent,

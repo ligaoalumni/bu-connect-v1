@@ -7,7 +7,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { readAnnouncementsAction } from "@/actions";
 import { Button } from "../ui/button";
 import { Announcement, User } from "@prisma/client";
-import { RichTextEditor } from "./rich-text-editor";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { Label } from "../ui/label";
@@ -22,6 +21,12 @@ import {
 } from "../ui/select";
 import Image from "next/image";
 import { useAuth } from "@/contexts";
+import dynamic from "next/dynamic";
+import { LoaderComponent } from "./loader";
+const RichTextEditor = dynamic(
+  () => import("@/components").then((mod) => mod.RichTextEditor),
+  { loading: LoaderComponent },
+);
 
 export function AnnouncementsInfiniteScroll({
   defaultData,

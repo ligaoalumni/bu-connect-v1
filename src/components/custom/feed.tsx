@@ -1,7 +1,4 @@
-// import { readEventsAction } from "@/actions";
 import { Icon } from "@iconify/react";
-// import { InfiniteScroll } from "@/components";
-
 import {
   getInformation,
   readAlumniMemoriesAction,
@@ -12,23 +9,33 @@ import {
   readPostsAction,
   readUserLocationAction,
 } from "@/actions";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  EmptyState,
-  MiniAnnouncementCard,
-} from "@/components";
-import EventCard from "@/components/custom/event-card";
-import AlumniMap from "@/components/custom/alumni-map";
-import { StarRating } from "./star-rating";
-import { StatusSelection } from "./status-selection";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { EmptyState, Button } from "@/components";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { Bell } from "lucide-react";
-import RecentPostsSection from "./recent-posts-section";
+import dynamic from "next/dynamic";
+import MiniAnnouncementCard from "./mini-announcment-card";
+
+// import   StarRating   from "./star-rating";
+// import { StatusSelection } from
+
+const StarRating = dynamic(() => import("./star-rating"), {
+  loading: () => <p>Loading...</p>,
+});
+const StatusSelection = dynamic(() => import("./status-selection"), {
+  loading: () => <p>Loading...</p>,
+});
+const AlumniMap = dynamic(() => import("./alumni-map"), {
+  loading: () => <p>Loading...</p>,
+});
+const EventCard = dynamic(() => import("./event-card"), {
+  loading: () => <p>Loading...</p>,
+});
+const RecentPostsSection = dynamic(() => import("./recent-posts-section"), {
+  loading: () => <p>Loading...</p>,
+});
 
 export async function Feed() {
   const user = await getInformation();
@@ -100,7 +107,7 @@ export async function Feed() {
             className="mx-auto lg:max-w-screen-md  flex items-start gap-5 lg:col-span-1 bg-white   rounded-md  shadow-md p-5 w-full"
           >
             <Avatar className="border border-gray-100">
-              <AvatarImage src={user?.avatar || ""} />
+              {/*{user?.avatar && <AvatarImage src={user?.avatar || ""} />}*/}
               <AvatarFallback className="capitalize">
                 {user?.firstName.charAt(0)}
                 {user?.lastName.charAt(0)}
