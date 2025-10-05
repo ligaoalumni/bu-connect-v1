@@ -8,13 +8,24 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  LoaderComponent,
 } from "@/components";
 import React from "react";
 import { notFound } from "next/navigation";
 import { readPostAction } from "@/actions";
-import { PostForm } from "@/app/(alumni)/posts/__components/post-form";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const PostForm = dynamic(
+  () =>
+    import("@/app/(alumni)/posts/__components/post-form").then(
+      (mod) => mod.PostForm,
+    ),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page({
   params,
