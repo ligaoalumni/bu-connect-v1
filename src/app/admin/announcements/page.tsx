@@ -1,8 +1,14 @@
-import { Suspense } from "react";
 import { TableSkeleton } from "../_components/table-skeleton";
-import AnnouncementsDataTable from "../_components/announcement-table";
 import { Button } from "@/components";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const AnnouncementsDataTable = dynamic(
+  () => import("../_components/announcement-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default async function Page() {
   return (
@@ -16,9 +22,8 @@ export default async function Page() {
           <Link href="/admin/announcements/add">Add Announcement</Link>
         </Button>
       </div>
-      <Suspense fallback={<TableSkeleton />}>
-        <AnnouncementsDataTable />
-      </Suspense>
+
+      <AnnouncementsDataTable />
     </div>
   );
 }

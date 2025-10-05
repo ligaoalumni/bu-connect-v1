@@ -11,9 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  ImageUpload,
   Input,
-  RichTextEditor,
+  LoaderComponent,
 } from "@/components";
 import { useAuth } from "@/contexts";
 import { AnnouncementSchema } from "@/lib";
@@ -22,11 +21,25 @@ import { AnnouncementFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Announcement } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+const RichTextEditor = dynamic(
+  () => import("@/components").then((mod) => mod.RichTextEditor),
+  {
+    loading: LoaderComponent,
+  },
+);
+const ImageUpload = dynamic(
+  () => import("@/components").then((mod) => mod.ImageUpload),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 interface AnnouncementFormProps {
   edit?: boolean;
