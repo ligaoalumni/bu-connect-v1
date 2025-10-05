@@ -1,13 +1,17 @@
-import { Suspense } from "react";
 import { TableSkeleton } from "../_components/table-skeleton";
-import AdminsDataTable from "../_components/admins-data-table";
+import dynamic from "next/dynamic";
+
+const AdminsDataTable = dynamic(
+  () => import("../_components/admins-data-table"),
+  {
+    loading: TableSkeleton,
+  },
+);
 
 export default async function AdminsPage() {
-	return (
-		<div>
-			<Suspense fallback={<TableSkeleton />}>
-				<AdminsDataTable />
-			</Suspense>
-		</div>
-	);
+  return (
+    <div>
+      <AdminsDataTable />
+    </div>
+  );
 }
