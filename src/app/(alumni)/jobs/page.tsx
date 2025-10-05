@@ -1,6 +1,17 @@
 import { readJobsAction } from "@/actions";
-import { JobsInfiniteScroll } from "@/components/custom/jobs-infinite-scroll";
+import { LoaderComponent } from "@/components";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const JobsInfiniteScroll = dynamic(
+  () =>
+    import("@/components/custom/jobs-infinite-scroll").then(
+      (mod) => mod.JobsInfiniteScroll,
+    ),
+  {
+    loading: LoaderComponent,
+  },
+);
 
 export default async function Page() {
   const jobs = await readJobsAction({

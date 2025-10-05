@@ -1,8 +1,13 @@
-import JobsDataTable from "@/app/admin/_components/jobs-data-table";
 import { TableSkeleton } from "@/app/admin/_components/table-skeleton";
 import { Button } from "@/components";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React from "react";
+
+const JobsDataTable = dynamic(
+  () => import("@/app/admin/_components/jobs-data-table"),
+  { loading: TableSkeleton },
+);
 
 export default function Page() {
   return (
@@ -15,9 +20,7 @@ export default function Page() {
           </Link>
         </Button>
       </div>
-      <Suspense fallback={<TableSkeleton />}>
-        <JobsDataTable managedByAlumni />
-      </Suspense>
+      <JobsDataTable managedByAlumni />
     </div>
   );
 }

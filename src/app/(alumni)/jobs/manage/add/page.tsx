@@ -1,5 +1,9 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import JobForm from "../../../../../components/custom/job-form";
+
+const JobForm = dynamic(
+  () => import("../../../../../components/custom/job-form"),
+);
 
 export default function Page() {
   return (
