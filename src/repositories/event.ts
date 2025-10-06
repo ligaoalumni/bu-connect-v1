@@ -71,8 +71,13 @@ export const createEvent = async (
   const randomPart = Math.random().toString(36).substring(2, 10); // random string (base 36)
   const name = data.name.toLowerCase().replace(/ /g, "-");
   const generatedSlug = slug(name);
-  const slugString =
-    `${name}-${timestamp}-${randomPart}-${generatedSlug}`.replace(/#/g, "");
+  const slugString = `${name}-${timestamp}-${randomPart}-${generatedSlug}`
+    .toLowerCase()
+    .normalize("NFD") // Remove diacritics (e.g. é → e)
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric chars with hyphens
+    .replace(/^-+|-+$/g, "") // Trim leading/trailing hyphens
+    .replace(/-{2,}/g, "-"); // Collapse multiple hyphens
 
   const newEvent = await prisma.event.create({
     data: {
