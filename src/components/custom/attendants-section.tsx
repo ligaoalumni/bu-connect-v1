@@ -1,12 +1,19 @@
 "use client";
-import { readAttendantsAction } from "@/actions";
+import {
+  generateAttendantsReportActions,
+  readAttendantsAction,
+} from "@/actions";
 import type { Attendant, PaginationResult } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { RefreshCw, UserX, Users } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { jsPDF } from "jspdf";
+import { autoTable } from "jspdf-autotable";
+import { format, formatDate, isSameDay } from "date-fns";
+import { useAuth } from "@/contexts";
 
 interface AttendantsSectionProps {
   eventSlug: string;
@@ -20,6 +27,7 @@ export default function AttendantsSection({
     data: [],
     hasMore: false,
   });
+  const { user } = useAuth();
   const [loading, setLoading] = useState({
     initialFetch: true,
     fetchingMore: false,
@@ -77,6 +85,128 @@ export default function AttendantsSection({
     }
   };
 
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleDownloadPDF = useCallback(async () => {
+    setIsGenerating(true);
+    try {
+      const doc = new jsPDF();
+
+      const event = await generateAttendantsReportActions(eventSlug);
+
+      // Add title
+      doc.setFontSize(20);
+      doc.setTextColor(37, 99, 235); // Blue color
+      doc.text(event.name, 14, 20);
+
+      const isOneDay = isSameDay(
+        event.startDate,
+        event?.endDate || event.startDate,
+      );
+      const startDate = formatDate(
+        event.startDate,
+        isOneDay ? "MMMM d, yyyy" : "MMMM d,",
+      );
+      const endDate = formatDate(event!.endDate!, "- MMMM dd, yyyy");
+      const date = `${startDate}${isOneDay ? "" : endDate}`;
+
+      // Add event details
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Date: ${date}`, 14, 30);
+
+      doc.text(
+        `Time: ${format(event.startTime, "HH:mm a")} - ${format(event.endTime, "hh:mm a")}`,
+        14,
+        36,
+      );
+
+      doc.text(`Location: ${event.location}`, 14, 42);
+      doc.text(`Total Attendees: ${event.alumni.length || 0}`, 14, 48);
+
+      // Add description
+      // doc.setFontSize(9);
+      // const splitContent = doc.splitTextToSize(event.content, 180);
+      // doc.text(splitContent, 14, 56);
+
+      // Add attendees table
+      if (event.alumni.length === 0) {
+        // Set box dimensions
+        const boxX = 14;
+        const boxY = 55;
+        const boxWidth = 180; // use full page width minus margins
+        const boxHeight = 30;
+
+        // Background fill (light gray)
+        doc.setFillColor(249, 250, 251); // Light gray background
+        doc.rect(boxX, boxY, boxWidth, boxHeight, "F");
+
+        // Border
+        doc.setDrawColor(229, 231, 235); // Border color
+        doc.rect(boxX, boxY, boxWidth, boxHeight, "S");
+
+        // Centered text
+        doc.setFontSize(12);
+        doc.setTextColor(107, 114, 128); // Gray text
+
+        const text = "No attendees registered for this event yet.";
+
+        // Calculate center of the box
+        const centerX = boxX + boxWidth / 2;
+        const centerY = boxY + boxHeight / 2;
+
+        // Add text centered
+        doc.text(text, centerX, centerY, {
+          align: "center",
+          baseline: "middle",
+        });
+      } else {
+        // Add attendees table
+        const tableData = event.alumni.map((attendee) => [
+          `${attendee.firstName} ${attendee.lastName}`,
+          attendee.studentId || "-",
+          attendee.course || "-",
+          attendee.batch || "-",
+          attendee.jobTitle || "-",
+          attendee.company || "-",
+        ]);
+
+        autoTable(doc, {
+          startY: 55,
+          head: [
+            ["Name", "Student ID", "Course", "Batch", "Job Title", "Company"],
+          ],
+          body: tableData,
+          theme: "striped",
+          headStyles: {
+            fillColor: [37, 99, 235],
+            textColor: [255, 255, 255],
+            fontStyle: "bold",
+          },
+          styles: {
+            fontSize: 8,
+            cellPadding: 3,
+          },
+          columnStyles: {
+            0: { cellWidth: 35 },
+            1: { cellWidth: 30 },
+            2: { cellWidth: 35 },
+            3: { cellWidth: 15 },
+            4: { cellWidth: 35 },
+            5: { cellWidth: 35 },
+          },
+        });
+      }
+      // Save the PDF
+      doc.save(`${event.slug}-attendees.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [eventSlug]);
+
   const handleRefresh = () => {
     setPagination({
       limit: 10,
@@ -102,21 +232,35 @@ export default function AttendantsSection({
           )}
         </h1>
         {!loading.initialFetch && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={loading.fetchingMore || loading.initialFetch}
-          >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${
-                loading.initialFetch || loading.fetchingMore
-                  ? "animate-spin"
-                  : ""
-              }`}
-            />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={
+                loading.fetchingMore || loading.initialFetch || isGenerating
+              }
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${
+                  loading.initialFetch || loading.fetchingMore
+                    ? "animate-spin"
+                    : ""
+                }`}
+              />
+              Refresh
+            </Button>
+            {user?.role === "ALUMNI" ? null : (
+              <Button
+                disabled={
+                  loading.fetchingMore || loading.initialFetch || isGenerating
+                }
+                onClick={handleDownloadPDF}
+              >
+                {isGenerating ? "Generating..." : "Generate Report"}{" "}
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
@@ -179,7 +323,7 @@ export default function AttendantsSection({
                   <Button
                     variant="outline"
                     className={`w-full max-w-xs `}
-                    disabled={loading.fetchingMore}
+                    disabled={loading.fetchingMore || isGenerating}
                     onClick={() => handleFetchMore({ fetchMore: true })}
                   >
                     {loading.fetchingMore ? (
