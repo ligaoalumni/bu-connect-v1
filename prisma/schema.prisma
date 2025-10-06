@@ -42,7 +42,7 @@ model User {
   bio      String? @default("")
 
   isOldAccount Boolean?    @default(false)
-  oldAccount   OldAccount? @relation(fields: [oldAccountId], references: [id])
+  oldAccount   OldAccount? @relation(fields: [oldAccountId], references: [id], onDelete: SetNull)
   oldAccountId Int?        @unique
 
   // Personal Info
@@ -179,7 +179,7 @@ model Notification {
   link       String?
 
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@map("notifications")
@@ -205,9 +205,10 @@ model EventComment {
   id      Int    @id @default(autoincrement())
   comment String
 
-  eventId     Int
-  event       Event @relation(fields: [eventId], references: [id])
-  commentBy   User  @relation(fields: [commentById], references: [id])
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  commentBy   User @relation(fields: [commentById], references: [id], onDelete: NoAction)
   commentById Int
 
   createdAt DateTime @default(now())
@@ -220,8 +221,8 @@ model AnnouncementComment {
 
   comment        String
   announcementId Int
-  announcement   Announcement @relation(fields: [announcementId], references: [id])
-  commentBy      User         @relation(fields: [commentById], references: [id])
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  commentBy      User         @relation(fields: [commentById], references: [id], onDelete: NoAction)
   commentById    Int
 
   createdAt DateTime @default(now())
@@ -237,7 +238,7 @@ model Announcement {
   image   String? @default("")
 
   createdById Int
-  createdBy   User @relation(fields: [createdById], references: [id])
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: NoAction)
 
   likedBy  User[]                @relation("AnnouncementLikes") // Many-to-many with alumni
   comments AnnouncementComment[]
@@ -268,7 +269,7 @@ model Post {
   likedBy  User[]        @relation("PostLikes") // Many-to-many with alumni
 
   postedById Int
-  postedBy   User @relation("Posted By", fields: [postedById], references: [id])
+  postedBy   User @relation("Posted By", fields: [postedById], references: [id], onDelete: NoAction)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -281,9 +282,9 @@ model PostComment {
   comment String
 
   postId   Int
-  postedBy Post @relation(fields: [postId], references: [id])
+  postedBy Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  commentBy   User @relation(fields: [commentById], references: [id])
+  commentBy   User @relation(fields: [commentById], references: [id], onDelete: NoAction)
   commentById Int
 
   createdAt DateTime @default(now())
@@ -381,9 +382,8 @@ model Vote {
 }
 
 model Batch {
-  id    Int @id @default(autoincrement())
-  batch Int @unique
-
+  id     Int      @id @default(autoincrement())
+  batch  Int      @unique
   images String[]
 
   @@map("batches")

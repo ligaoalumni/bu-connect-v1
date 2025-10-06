@@ -121,6 +121,7 @@ export function MiniPostCard({
         await deleteMyPostAction(toDelete);
       });
 
+      return;
       window.location.reload();
       // setPosts((prevPosts) => prevPosts.filter((p) => p.id !== toDelete));
       // Close modal first

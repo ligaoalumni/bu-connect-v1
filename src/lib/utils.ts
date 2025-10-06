@@ -79,7 +79,7 @@ export function getNotificationMessage(type: NotificationType): string {
     case "ANNOUNCEMENT":
       return "A new announcement is available. Check it out!";
     case "LIKE_ANNOUNCEMENT":
-      return "Your comment received a new like!";
+      return "Your announcement received a new like!";
     case "POST":
       return "A new post has been shared.";
     case "POST_COMMENT":

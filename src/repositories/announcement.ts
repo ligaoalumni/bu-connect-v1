@@ -275,7 +275,7 @@ export const likeAnnouncement = async ({
   if (!announcement) throw new Error("Failed to like announcement");
   const users = await getAdmins();
 
-  const link = `/announcements/${announcement.id}`;
+  const link = `/announcements/${announcement.slug}`;
 
   const notifications = users.map((user) => ({
     userId: user.id,

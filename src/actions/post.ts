@@ -181,7 +181,11 @@ export const deleteMyPostAction = async (postId: number) => {
 
     if (!session?.id) throw new Error("Unauthorized");
 
-    return await deletePost(postId, session.id);
+    const post = await deletePost(postId, session.id);
+
+    revalidatePath("/my-posts");
+
+    return post;
   } catch (error) {
     throw new Error((error as Error)?.message || "Failed to fetch posts");
   }
