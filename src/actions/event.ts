@@ -1,6 +1,6 @@
 "use server";
 
-import { EventFormSchema } from "@/lib";
+import { EventFormSchema, prisma } from "@/lib";
 import { decrypt } from "@/lib/session";
 import {
   addEventAttendant,
@@ -172,5 +172,34 @@ export const writeEventCommentAction = async ({
     revalidatePath(`/events/${slug}`);
   } catch {
     throw new Error("Failed to fetch interested alumni");
+  }
+};
+
+export const generateAttendantsReportActions = async (slug: string) => {
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        alumni: {
+          select: {
+            jobTitle: true,
+            company: true,
+            studentId: true,
+            firstName: true,
+            lastName: true,
+            batch: true,
+            course: true,
+          },
+        },
+      },
+    });
+
+    if (!event) throw new Error("Event not found");
+
+    return event;
+  } catch (error) {
+    throw new Error((error as Error).message || "Failed to generate report");
   }
 };
