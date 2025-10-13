@@ -170,7 +170,7 @@ export default function Announcement({
                 {createdBy?.role === "ALUMNI" ? (
                   <span className="font-bold">
                     <Link
-                      href={`/batch/${createdBy.batch}/alumni/${createdBy.id}`}
+                      href={`/memories/${createdBy.batch}/alumni/${createdBy.id}`}
                     >
                       {createdBy.firstName} {createdBy.lastName}
                     </Link>

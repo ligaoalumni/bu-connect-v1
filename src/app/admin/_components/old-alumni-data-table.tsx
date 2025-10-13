@@ -152,7 +152,10 @@ export default function OldAlumniDataTable() {
   ];
 
   const handleFetchData = useCallback(
-    async ({ filter, batch }: { filter?: string; batch?: string } = {}) => {
+    async ({
+      filter,
+      batch: fBatch,
+    }: { filter?: string; batch?: string } = {}) => {
       try {
         setLoading(true);
         const users = await readOldAccountsAction({
@@ -161,7 +164,7 @@ export default function OldAlumniDataTable() {
             limit: pagination.pageSize,
             page: pagination.pageIndex,
           },
-          batch: batch === "all" ? undefined : batch,
+          batch: fBatch === "all" ? undefined : Number(fBatch),
         });
 
         setData(users.data);

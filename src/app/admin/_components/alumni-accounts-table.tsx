@@ -9,6 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components";
 import {
   ArrowUpDown,
@@ -19,10 +26,16 @@ import {
 import { toast } from "sonner";
 import AlumniDetailsSheet from "./alumni-details-sheet";
 import { readAlumniAccounts } from "@/actions/alumni-account";
-import { AlumniDataTableColumns } from "@/types";
+import { AlumniDataTableColumns, UpdatedAlumniData } from "@/types";
 import { User } from "@prisma/client";
 import { DeleteModal } from "./delete-modal";
 import { deleteAlumniAction } from "@/actions";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { generatedUpdateAlumniReport } from "@/actions/report";
+
+const currentYear = new Date().getFullYear() - 1; // Get the current year
+const years = Array.from({ length: 75 }, (_, i) => currentYear - i); // Create a range of years for the last 50 years
 
 export default function AlumniAccountsDataTable() {
   const [data, setData] = useState<User[]>([]);
@@ -31,10 +44,13 @@ export default function AlumniAccountsDataTable() {
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size
   });
+  const [generatingPdf, setGeneratingPdf] = useState(false);
+  const [toPrintData, setToPrintData] = useState<UpdatedAlumniData[]>([]);
   const [alumniAccount, setAlumniAccount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [toDelete, setToDelete] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [selectedBatch, setSelectedBatch] = useState<string>("all");
 
   const columns: ColumnDef<AlumniDataTableColumns>[] = [
     {
@@ -266,8 +282,13 @@ export default function AlumniAccountsDataTable() {
             limit: pagination.pageSize,
             page: pagination.pageIndex,
           },
+          batch: selectedBatch !== "all" ? Number(selectedBatch) : undefined,
         });
+        const udpatedData = await generatedUpdateAlumniReport(
+          selectedBatch !== "all" ? Number(selectedBatch) : undefined,
+        );
 
+        setToPrintData(udpatedData);
         setData(data.data);
         setTotal(data.count);
       } catch (error) {
@@ -281,15 +302,219 @@ export default function AlumniAccountsDataTable() {
         setLoading(false);
       }
     },
-    [pagination],
+    [pagination, selectedBatch],
   );
 
   useEffect(() => {
     handleFetchData();
   }, [handleFetchData]);
 
+  function generateAlumniPDF(alumniData: UpdatedAlumniData[]) {
+    setGeneratingPdf(true);
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 20;
+
+    // Header
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text("Alumni Information Report", pageWidth / 2, yPosition, {
+      align: "center",
+    });
+
+    yPosition += 10;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(
+      `Generated on: ${new Date().toLocaleDateString()}`,
+      pageWidth / 2,
+      yPosition,
+      { align: "center" },
+    );
+
+    yPosition += 15;
+
+    // Summary Section
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0);
+    doc.text("Summary", 14, yPosition);
+
+    yPosition += 7;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Total Alumni: ${alumniData.length}`, 14, yPosition);
+
+    yPosition += 6;
+    const uniqueBatches = new Set(alumniData.map((a) => a.batch)).size;
+    doc.text(`Total Batches: ${uniqueBatches}`, 14, yPosition);
+
+    yPosition += 6;
+    const uniqueIndustries = new Set(alumniData.map((a) => a.industry)).size;
+    doc.text(`Total Industries: ${uniqueIndustries}`, 14, yPosition);
+
+    yPosition += 12;
+
+    // Table Section
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Alumni Details", 14, yPosition);
+
+    yPosition += 5;
+
+    // Create table data
+    const tableData = alumniData.map((alumni) => [
+      alumni.name,
+      alumni.batch,
+      alumni.course,
+      alumni.company,
+      alumni.jobTitle,
+      alumni.industry,
+      `${alumni.years} yrs`,
+    ]);
+
+    autoTable(doc, {
+      startY: yPosition,
+      head: [
+        [
+          "Name",
+          "Batch",
+          "Course",
+          "Company",
+          "Job Title",
+          "Industry",
+          "Yrs(To get the job)",
+        ],
+      ],
+      body: tableData,
+      theme: "striped",
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        fontStyle: "bold",
+        fontSize: 9,
+      },
+      bodyStyles: {
+        fontSize: 8,
+        textColor: 50,
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+      margin: { top: 10, left: 14, right: 14 },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 18 },
+        2: { cellWidth: 35 },
+        3: { cellWidth: 30 },
+        4: { cellWidth: 30 },
+        5: { cellWidth: 25 },
+        6: { cellWidth: 15 },
+      },
+    });
+
+    // Add new page for detailed information
+    doc.addPage();
+    yPosition = 20;
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Detailed Alumni Information", 14, yPosition);
+
+    yPosition += 10;
+
+    // Detailed information for each alumni
+    alumniData.forEach((alumni, index) => {
+      // Check if we need a new page
+      if (yPosition > pageHeight - 60) {
+        doc.addPage();
+        yPosition = 20;
+      }
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${index + 1}. ${alumni.name}`, 14, yPosition);
+
+      yPosition += 6;
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+
+      const details = [
+        `Batch: ${alumni.batch}`,
+        `Course: ${alumni.course}`,
+        `Current Occupation: ${alumni.currentOccupation}`,
+        `Job Title: ${alumni.jobTitle}`,
+        `Company: ${alumni.company}`,
+        `Industry: ${alumni.industry}`,
+        `Post-Study University: ${alumni.postStudyUniversity}`,
+        `Years of Experience: ${alumni.years}`,
+      ];
+
+      details.forEach((detail) => {
+        doc.text(detail, 20, yPosition);
+        yPosition += 5;
+      });
+
+      yPosition += 5;
+    });
+
+    // Add page numbers
+    const pageCount = doc.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, {
+        align: "center",
+      });
+    }
+
+    // Save the PDF
+    doc.save(`Alumni_Report_${new Date().toISOString().split("T")[0]}.pdf`);
+    setGeneratingPdf(false);
+  }
+
   return (
     <>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-medium">Alumni Data</h1>
+          <p className="text-gray-400">Manage Alumni data.</p>
+        </div>
+
+        <div className="flex gap-2">
+          <Select
+            disabled={generatingPdf || loading}
+            value={selectedBatch}
+            onValueChange={setSelectedBatch}
+          >
+            <SelectTrigger className="lg:w-[180px]">
+              <SelectValue placeholder="Filter by batch" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Batch</SelectLabel>
+                <SelectItem key={"all"} value={"all"}>
+                  All Batches
+                </SelectItem>
+                {years.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Button
+            disabled={loading || generatingPdf}
+            onClick={() => generateAlumniPDF(toPrintData)}
+          >
+            {generatingPdf ? "Generating..." : "Generate Report"}
+          </Button>
+        </div>
+      </div>
       <DataTable
         pagination={pagination}
         setPagination={setPagination}

@@ -1,32 +1,109 @@
+"use client";
 import { LucideIcon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components";
+import { generatedUpdateAlumniReport } from "@/actions/report";
+import { useState } from "react";
+import {
+  getEmploymentStatisticsAction,
+  getEngagementStatisticsAction,
+} from "@/actions/stats";
+import {
+  exportEmploymentStatsToPDF,
+  generateAlumniPDF,
+  exportEngagementToPDF,
+} from "@/lib/export-pdf";
+import { toast } from "sonner";
 
-export default async function DashboardOverview() {
-  // const overview = await dashboardOverviewAction();
+export default function DashboardOverview() {
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerateAlumniPDF = async () => {
+    try {
+      setLoading(true);
+      const data = await generatedUpdateAlumniReport();
+      generateAlumniPDF(data);
+    } catch {
+      toast.error("Failed to generate PDF", {
+        description: "Please try again later.",
+        duration: 5000,
+        position: "top-right",
+        richColors: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateEmploymentPDF = async () => {
+    try {
+      setLoading(true);
+      const data = await getEmploymentStatisticsAction();
+      exportEmploymentStatsToPDF(data);
+    } catch {
+      toast.error("Failed to generate PDF", {
+        description: "Please try again later.",
+        duration: 5000,
+        position: "top-right",
+        richColors: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateEngagementPDF = async () => {
+    try {
+      setLoading(true);
+      const data = await getEngagementStatisticsAction();
+      exportEngagementToPDF(data);
+    } catch {
+      toast.error("Failed to generate PDF", {
+        description: "Please try again later.",
+        duration: 5000,
+        position: "top-right",
+        richColors: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <section className="mt-6">
+    <section className="mt-6 flex justify-between items-center">
       <h2 className="text-2xl font-bold tracking-tight mb-4">Overview</h2>
-      <div className="grid gap-4 md:grid-cols-3">
-        {/* <OverviewCard
-					Icon={GraduationCap}
-					title="Total Alumni Rec"
-					change={`${overview.alumniRecord.percentage}%: has accounts`}
-					value={overview.alumniRecord.total.toString()}
-				/>
-				<OverviewCard
-					Icon={Users}
-					title="Alumni"
-					change={`+${overview.alumni.percentage}%: from last month`}
-					value={overview.alumni.total.toString()}
-				/>
-				<OverviewCard
-					Icon={GraduationCap}
-					title="Events"
-					change={`+${overview.events.percentage}%: from last month`}
-					value={overview.events.total.toFixed(2)}
-				/> */}
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button disabled={loading} variant="outline">
+            {loading ? "Generating..." : "Generate Reports"}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end">
+          <DropdownMenuLabel>Reports</DropdownMenuLabel>
+          <DropdownMenuItem onClick={handleGenerateAlumniPDF}>
+            Updated Alumni Report
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleGenerateEngagementPDF}>
+            Engagement Report
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleGenerateEmploymentPDF}>
+            Employment Report
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </section>
   );
 }

@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 
 const links = [
   "/",
-  "/batch",
+  "/memories",
   "/events",
   "/jobs",
   "/announcements",

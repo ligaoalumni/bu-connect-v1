@@ -114,7 +114,7 @@ export default async function DiffViewTabs() {
   const recentAlumni = await readUsersUpdatedInLastDaysAction();
 
   return (
-    <section className="mt-6">
+    <section className="mt-2">
       <Tabs defaultValue="recent">
         <div className="flex items-center justify-between mb-4">
           <TabsList>
