@@ -22,9 +22,7 @@ export const createOldAccountAction = async (data: OldAlumniDataInput) => {
 };
 
 export const readOldAccountsAction = async (
-  data: PaginationArgs<never, never> & {
-    batch?: string;
-  },
+  data: PaginationArgs<never, never>,
 ) => {
   try {
     return await readOldAccounts(data);

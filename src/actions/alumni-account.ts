@@ -9,6 +9,7 @@ export const readAlumniAccounts = async ({
   order,
   orderBy,
   pagination,
+  batch,
 }: PaginationArgs<never, never> = {}): Promise<PaginationResult<User>> => {
   let where: Prisma.UserWhereInput = {};
 
@@ -16,6 +17,10 @@ export const readAlumniAccounts = async ({
     where = {
       id: filter,
     };
+  }
+
+  if (batch) {
+    where.batch = batch;
   }
 
   if (typeof filter === "string") {
