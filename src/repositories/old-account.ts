@@ -47,9 +47,9 @@ export const readOldAccounts = async ({
   filter,
   pagination,
   batch,
-}: PaginationArgs<never, never> & {
-  batch?: string;
-} = {}): Promise<PaginationResult<OldAccount>> => {
+}: PaginationArgs<never, never> = {}): Promise<
+  PaginationResult<OldAccount>
+> => {
   let where: Prisma.OldAccountWhereInput = {};
 
   if (filter && filter.toString().trim() !== "") {
@@ -64,7 +64,7 @@ export const readOldAccounts = async ({
     };
   }
 
-  if (batch && batch.trim() !== "" && !isNaN(Number(batch.trim()))) {
+  if (batch && !isNaN(Number(batch))) {
     where = {
       AND: [{ ...where }, { batch: Number(batch) }],
     };
