@@ -10,6 +10,18 @@ export type UserTableData = Omit<
   rate?: number;
 };
 
+export interface UpdatedAlumniData {
+  name: string;
+  batch: string | number;
+  course: string;
+  company: string;
+  currentOccupation: string;
+  jobTitle: string;
+  industry: string;
+  postStudyUniversity: string;
+  years: string | number;
+}
+
 export interface UpdateProfileData {
   address?: AddressData;
   avatar?: string;

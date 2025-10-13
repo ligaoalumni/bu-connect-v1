@@ -106,6 +106,7 @@ export type PaginationArgs<TStatus, SRole> = {
   order?: "asc" | "desc";
   status?: TStatus[];
   role?: SRole[];
+  batch?: number;
 };
 
 export interface EventDateTime {
