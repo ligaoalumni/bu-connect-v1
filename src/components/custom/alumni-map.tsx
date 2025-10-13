@@ -137,7 +137,7 @@ export default function AlumniMap({
               <Popup closeButton={false} className="custom-popup">
                 <Link
                   target="_blank"
-                  href={`/batch/${user.batch}/alumni/${user.id}`}
+                  href={`/memories/${user.batch}/alumni/${user.id}`}
                 >
                   <div
                     style={{

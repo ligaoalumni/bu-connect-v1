@@ -209,7 +209,7 @@ export function AnnouncementsInfiniteScroll({
                       <span className="font-bold">
                         {announcement.createdBy.role === "ALUMNI" ? (
                           <Link
-                            href={`/batch/${announcement.createdBy.batch}/alumni`}
+                            href={`/memories/${announcement.createdBy.batch}/alumni`}
                           >
                             {announcement.createdBy.firstName}{" "}
                             {announcement.createdBy.lastName}

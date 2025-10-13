@@ -168,7 +168,7 @@ export function MiniPostCard({
               <div className="flex-1">
                 <div className="space-y-0.5">
                   <Link
-                    href={`/batch/${post.batch}/alumni/${postedById}`}
+                    href={`/memories/${post.batch}/alumni/${postedById}`}
                     className="font-bold leading-none text-[#EC9848] capitalize"
                   >
                     {post.name}
