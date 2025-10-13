@@ -44,8 +44,8 @@ const nextConfig: NextConfig = {
         permanent: false, // Set to true for a permanent redirect (301), false for temporary (302)
       },
       {
-        source: "/batch/:slug",
-        destination: "/batch/:slug/gallery",
+        source: "/memories/:slug",
+        destination: "/memories/:slug/gallery",
         has: [
           {
             type: "query",
