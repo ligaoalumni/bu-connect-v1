@@ -161,10 +161,10 @@ export function exportEmploymentStatsToPDF(data: EmploymentStats) {
   }
 
   // Save the PDF
-  // doc.save(
-  //   `employment-statistics-${new Date().toISOString().split("T")[0]}.pdf`,
-  // );
-  doc.output("dataurlnewwindow");
+  doc.save(
+    `employment-statistics-${new Date().toISOString().split("T")[0]}.pdf`,
+  );
+  // doc.output("dataurlnewwindow");
 }
 
 export function generateAlumniPDF(alumniData: UpdatedAlumniData[]) {
@@ -329,8 +329,8 @@ export function generateAlumniPDF(alumniData: UpdatedAlumniData[]) {
   }
 
   // Save the PDF
-  // doc.save(`Alumni_Report_${new Date().toISOString().split("T")[0]}.pdf`);
-  doc.output("dataurlnewwindow");
+  doc.save(`Alumni_Report_${new Date().toISOString().split("T")[0]}.pdf`);
+  // doc.output("dataurlnewwindow");
 }
 
 export function exportEngagementToPDF(data: EngagementStats) {
@@ -502,6 +502,6 @@ export function exportEngagementToPDF(data: EngagementStats) {
   }
 
   // Save the PDF
-  // doc.save(`engagement-report-${new Date().toISOString().split("T")[0]}.pdf`);
-  doc.output("dataurlnewwindow");
+  doc.save(`engagement-report-${new Date().toISOString().split("T")[0]}.pdf`);
+  // doc.output("dataurlnewwindow");
 }
